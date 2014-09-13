@@ -1,12 +1,18 @@
 namespace kg
 {
-	enum ComponentId
+	namespace ComponentId
 	{
-		PositionComponent
-	};
+		enum
+		{
+			PositionComponent
+		};
+	}
 
-	enum ComponentUpdateImportance
+	namespace ComponentUpdateImportance
 	{
-		PositionComponent
-	};
+		enum
+		{
+			PositionComponent
+		};
+	}
 }
