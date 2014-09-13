@@ -11,9 +11,8 @@ namespace kg
 	public:
 		// If this function returns true a system of type T has already been registered.
 		// This function overwrites the old system with the parameter of this function.
-		// system->init() will be called
 		template<class T>
-		bool addSystem( Engine& engine, std::shared_ptr<System>& system )
+		bool addSystem( std::shared_ptr<System>& system )
 		{
 			size_t typeId = typeid(T).hash_code();
 			double updateImportance = system->getUpdateImportance();
@@ -23,11 +22,11 @@ namespace kg
 			m_systemsByType[typeId] = system;
 			m_systemsByUpdateImportance[updateImportance] = system;
 
-			system->init( engine, *this );
-
 			//it != m_systemsByType.end(); means that a system has been overwritten
 			return it != m_systemsByType.end();
 		};
+
+		void initSystems( Engine& engine );
 
 		template<class T>
 		std::shared_ptr<System>& getSystem()
@@ -46,9 +45,5 @@ namespace kg
 		};
 
 		void updateAllSystemsByImportance( Engine& engine, World& world );
-		bool addSystem(SystemManager& systemManager, Engine& engine, std::shared_ptr<System>& system){
-
-			return false;
-		}
 	};
 }

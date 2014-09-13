@@ -10,8 +10,6 @@ namespace kg
 	{
 		Engine m_engine;
 		World m_client;
-private:
-		World m_world;
 
 
 	public:

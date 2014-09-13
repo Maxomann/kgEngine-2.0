@@ -13,7 +13,7 @@ namespace kg
 		// This function overwrites the old system with the parameter of this function
 		// component->init() will be called
 		template<class T>
-		bool addComponent( Engine& engine, std::shared_ptr<Component>& component )
+		bool addComponent( std::shared_ptr<Component>& component )
 		{
 			size_t typeId = typeid(T).hash_code();
 			double updateImportance = component->getUpdateImportance();
@@ -23,11 +23,11 @@ namespace kg
 			m_componentsByType[typeId] = component;
 			m_componentsByUpdateImportance[updateImportance] = component;
 
-			component->init( engine, *this );
-
 			//it != m_systemsByType.end(); means that a system has been overwritten
 			return it != m_componentsByType.end();
 		};
+
+		void initComponents( Engine& engine );
 
 		template<class T>
 		std::shared_ptr<Component>& getComponent()

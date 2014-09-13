@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Headerdateien\Exceptions">
+      <UniqueIdentifier>{dfeb575d-eba1-4e2d-9982-0c6c06d43b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Systems">
+      <UniqueIdentifier>{19bd1617-7843-4a36-9467-c95f03d63bea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Components">
+      <UniqueIdentifier>{bd1141b1-c508-4ce5-9e22-53acb7d65422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Engine">
+      <UniqueIdentifier>{9ac4b11d-d367-4f22-8427-cffd45b0cceb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -36,15 +48,18 @@
     <ClCompile Include="EntityManager.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="PluginManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="PositionComponent.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Core.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="System.h">
@@ -66,6 +81,27 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="EntityManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Headerdateien\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PluginManager.h">
+      <Filter>Headerdateien\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PluginFactory.h">
+      <Filter>Headerdateien\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PluginRegistrationException.h">
+      <Filter>Headerdateien\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="PluginRequestException.h">
+      <Filter>Headerdateien\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionComponent.h">
+      <Filter>Headerdateien\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="_id.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

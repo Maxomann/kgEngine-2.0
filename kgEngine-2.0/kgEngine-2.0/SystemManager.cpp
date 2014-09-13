@@ -9,4 +9,10 @@ namespace kg
 			el.second->update( engine, world, *this );
 	}
 
+	void SystemManager::initSystems( Engine& engine )
+	{
+		for( auto& system : m_systemsByType )
+			system.second->init( engine,*this );
+	}
+
 }
