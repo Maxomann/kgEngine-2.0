@@ -1,16 +1,16 @@
-#include "EntityContainer.h"
+#include "EntityManager.h"
 
 namespace kg
 {
-	Entity::Id EntityContainer::highestUniqueId = 0;
+	Entity::Id EntityManager::highestUniqueId = 0;
 
-	Entity::Id EntityContainer::getUniqueEntityId()
+	Entity::Id EntityManager::getUniqueEntityId()
 	{
 		highestUniqueId++;
 		return highestUniqueId --;
 	}
 
-	bool EntityContainer::addEntity( std::shared_ptr<Entity>& entity )
+	bool EntityManager::addEntity( std::shared_ptr<Entity>& entity )
 	{
 		auto id = entity->getId();
 
@@ -22,7 +22,7 @@ namespace kg
 		return it == m_entities.end();
 	}
 
-	bool EntityContainer::removeEntity( const Entity::Id& id )
+	bool EntityManager::removeEntity( const Entity::Id& id )
 	{
 		bool didExist = m_entities.find( id )!=m_entities.end();
 		m_entities.erase( id );
@@ -30,7 +30,7 @@ namespace kg
 		return didExist;
 	}
 
-	std::shared_ptr<Entity> EntityContainer::getEntity( const Entity::Id& id )
+	std::shared_ptr<Entity> EntityManager::getEntity( const Entity::Id& id )
 	{
 		auto it = m_entities.find( id );
 		if( it == m_entities.end() )
@@ -39,7 +39,7 @@ namespace kg
 			return it->second;
 	}
 
-	void EntityContainer::updateEntities( Engine& engine, World& world )
+	void EntityManager::updateEntities( Engine& engine, World& world )
 	{
 		for( auto& entity : m_entities )
 			entity.second->updateAllComponentsByImportance( engine, world );

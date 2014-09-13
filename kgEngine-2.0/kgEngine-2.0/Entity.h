@@ -11,7 +11,7 @@ namespace kg
 
 	private:
 
-		const Id m_id;
+		const Entity::Id m_id;
 
 	public:
 		Entity( const Id& id );

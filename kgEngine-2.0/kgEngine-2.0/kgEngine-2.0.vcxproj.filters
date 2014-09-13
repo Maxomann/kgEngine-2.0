@@ -33,7 +33,7 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="EntityContainer.cpp">
+    <ClCompile Include="EntityManager.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,7 +65,7 @@
     <ClInclude Include="Entity.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="EntityContainer.h">
+    <ClInclude Include="EntityManager.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

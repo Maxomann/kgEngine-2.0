@@ -1,11 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "SystemManager.h"
-#include "EntityContainer.h"
+#include "EntityManager.h"
 
 namespace kg
 {
-	class World : public SystemManager, public EntityContainer
+	class World : public SystemManager, public EntityManager
 	{
 
 	};

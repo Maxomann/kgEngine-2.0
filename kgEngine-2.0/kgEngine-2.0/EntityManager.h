@@ -4,7 +4,7 @@
 
 namespace kg
 {
-	class EntityContainer
+	class EntityManager
 	{
 		std::unordered_map<Entity::Id, std::shared_ptr<Entity>> m_entities;
 
