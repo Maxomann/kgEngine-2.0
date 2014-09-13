@@ -7,8 +7,7 @@ using namespace kg;
 int main()
 {
 	Core core;
+	core.init();
 	while( !core.shouldTerminate() )
 		core.update();
-
-	system( "pause" );
 }

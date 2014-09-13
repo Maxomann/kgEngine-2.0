@@ -5,6 +5,7 @@ namespace kg
 {
 	struct Engine
 	{
-		bool m_shouldTerminate = false;
+		bool shouldTerminate = false;
+		sf::RenderWindow renderWindow;
 	};
 }

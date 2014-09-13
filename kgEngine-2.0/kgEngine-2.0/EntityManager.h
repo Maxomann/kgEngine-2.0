@@ -10,6 +10,7 @@ namespace kg
 
 		static Entity::Id highestUniqueId;
 
+
 	public:
 		//not guaranteed to be unique between servers/clients
 		static Entity::Id getUniqueEntityId();
@@ -24,6 +25,20 @@ namespace kg
 
 		// returns nullptr if Entity with id does not exist
 		std::shared_ptr<Entity> getEntity( const Entity::Id& id );
+
+
+		//returns all entities that have all components, given in the template parameter, registered
+		template<class variadic ComponentType>
+		std::vector<std::shared_ptr<Entity>> getEntitiesThatHaveComponent()
+		{
+			std::vector< std::shared_ptr<Entity>> returnValue;
+
+			for( auto& entity : m_entities )
+				if( entity.second->hasComponent<ComponentType>() )
+					returnValue.push_back( entity.second );
+
+			return returnValue;
+		};
 
 		void updateEntities( Engine& engine, World& world );
 	};

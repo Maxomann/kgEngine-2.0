@@ -18,6 +18,5 @@ namespace kg
 
 		const Id& getId()const;
 		
-
 	};
 }
