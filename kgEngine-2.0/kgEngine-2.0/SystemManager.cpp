@@ -6,7 +6,7 @@ namespace kg
 	void SystemManager::updateAllSystemsByImportance( Engine& engine, World& world )
 	{
 		for( auto& el : m_systemsByType )
-			el.second->update( engine, world, *this );
+			el.second->update( engine, world );
 	}
 
 	void SystemManager::initSystems( Engine& engine )

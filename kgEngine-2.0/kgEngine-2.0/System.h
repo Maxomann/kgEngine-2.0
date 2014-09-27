@@ -11,7 +11,7 @@ namespace kg
 	{
 	public:
 		virtual void init( Engine& engine, SystemManager& systemManager ) = 0;
-		virtual void update( Engine& engine, World& world, SystemManager& systemManager )=0;
+		virtual void update( Engine& engine, World& world )=0;
 		virtual double getUpdateImportance()const=0;
 	};
 }

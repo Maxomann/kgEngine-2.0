@@ -7,6 +7,9 @@ namespace kg
 	void Core::init()
 	{
 		m_engine.renderWindow.create( sf::VideoMode( 1080, 720 ), "kgEngine 2.0" );
+
+		//init systems
+		m_client.initSystems( m_engine );
 	}
 
 	bool Core::shouldTerminate() const

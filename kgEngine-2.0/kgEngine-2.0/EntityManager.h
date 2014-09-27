@@ -12,7 +12,7 @@ namespace kg
 
 
 	public:
-		//not guaranteed to be unique between servers/clients
+		//not unique between servers/clients
 		static Entity::Id getUniqueEntityId();
 
 		// overwrites entity if it already exists
@@ -25,7 +25,6 @@ namespace kg
 
 		// returns nullptr if Entity with id does not exist
 		std::shared_ptr<Entity> getEntity( const Entity::Id& id );
-
 
 		//returns all entities that have all components, given in the template parameter, registered
 		template<class variadic ComponentType>
