@@ -22,10 +22,7 @@ int main()
 	manager.parse( lines );
 	manager.link();
 
-	auto& entities = manager.getEntitiesByName();
-
-	cout << entities.at( "LavaTile" ).getValue( "Graphics", "textureRectX" ).second.toIntWithUnit().first << endl;
-	cout << entities.at( "LavaTile" ).getValue( "Graphics", "textureRectX" ).second.toIntWithUnit().second << endl;
+	auto& entities = manager.getEntitiesById();
 
 	system( "pause" );
 
