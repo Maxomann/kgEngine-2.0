@@ -11,6 +11,7 @@
 #include <sstream>
 #include <tuple>
 #include <cctype>
+#include <fstream>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
@@ -20,11 +21,5 @@
 #include <SFML/Audio.hpp>
 
 #define variadic ...
-
-//checks if string a contains string b
-bool contains( std::string&a, std::string b )
-{
-	return a.find( b ) != std::string::npos;
-}
 
 #endif//STDAFX_H

@@ -9,12 +9,21 @@ namespace kg
 		{
 			if( line.size() == NULL )
 				return true;
+			else if( line.at( 0 ) == '#' )
+				return true;//line is commented out. handle as empty
 			else
 				for( const auto& ch : line )
 					if( !std::isspace( ch ) )
 						return false;
 			return true;
 		}
+
+		//checks if string a contains string b
+		bool contains( const std::string&a, const std::string b )
+		{
+			return a.find( b ) != std::string::npos;
+		}
+
 
 		class ParsingError : public std::exception
 		{
@@ -31,16 +40,31 @@ namespace kg
 			};
 		};
 
+		class LinkingError : public std::exception
+		{
+			std::string m_blueprintName;
+		public:
+			LinkingError( std::string blueprintName )
+				:m_blueprintName( blueprintName )
+			{ };
+
+			const char* what()const override
+			{
+				return ("linking error to blueprint:" + m_blueprintName).c_str();
+			};
+
+		};
+
 		template<class T>
 		class Command
 		{
 		public:
 			//first:nextLine second:Object
 			virtual std::pair<unsigned int, T> execute( unsigned int firstLine,
-														std::vector<std::string>& lines ) = 0;
+														const std::vector<std::string>& lines ) = 0;
 
 			virtual bool canExecuteOn( unsigned int line,
-									   std::vector<std::string>& lines ) = 0;
+									   const std::vector<std::string>& lines ) = 0;
 		};
 
 
@@ -50,28 +74,30 @@ namespace kg
 			std::string m_rawValue;
 
 		public:
+			Value()
+			{ };
 			Value( std::string& name,
 				   std::string& rawValue )
 				   :m_name(name),
 				   m_rawValue(rawValue)
 			{ };
 
-			std::string& getName()
+			const std::string& getName()const
 			{
 				return m_name;
 			};
 
-			int toInt()
+			int toInt()const
 			{
 				( int )toDouble();
 			};
-			std::pair<int, std::string> toIntWithUnit()
+			std::pair<int, std::string> toIntWithUnit()const
 			{
 				auto retVal = toDoubleWithUnit();
 				return std::pair<int, std::string>( ( int )retVal.first, retVal.second );
 			};
 
-			double toDouble()
+			double toDouble()const
 			{
 				std::istringstream i( m_rawValue );
 				double d = 0;
@@ -79,7 +105,7 @@ namespace kg
 					d = 0;
 				return d;
 			};
-			std::pair<double, std::string> toDoubleWithUnit()
+			std::pair<double, std::string> toDoubleWithUnit()const
 			{
 				std::string number;
 				std::string unit;
@@ -89,7 +115,7 @@ namespace kg
 				{
 					if( !afterNumber )
 					{
-						if( std::isalnum( ch ) || ch == '.' )
+						if( std::isdigit( ch ) || ch == '.' )
 							number.push_back( ch );
 						else
 						{
@@ -111,11 +137,11 @@ namespace kg
 				return std::pair<double, std::string>( d, unit );
 			};
 
-			std::string toString()
+			std::string toString()const
 			{
 				return m_rawValue;
 			};
-			std::string toStringWithoutBraces()
+			std::string toStringWithoutBraces()const
 			{
 				auto retVal = m_rawValue;
 				retVal.erase( 0 );
@@ -127,13 +153,32 @@ namespace kg
 		class Blueprint
 		{
 			std::string m_name;
-			std::map<std::string, std::vector<Value>> m_componentValues;
+			std::map<std::string, std::map<std::string, Value>> m_componentValues;
 		public:
-			Blueprint( std::string& name,
-					   std::map<std::string, std::vector<Value>>& componentValues )
-					   :m_name( name ),
-					   m_componentValues( componentValues )
+			Blueprint()
 			{ };
+			Blueprint( std::string& name,
+					   std::map<std::string, std::map<std::string, Value>>& componentValuesByNameByComponent )
+					   :m_name( name ),
+					   m_componentValues( componentValuesByNameByComponent )
+			{ };
+
+			const std::pair<bool, Value> getValue( const std::string& componentName, const std::string& valueName )const
+			{
+				auto it = m_componentValues.find( componentName );
+				if( it != m_componentValues.end() )
+				{
+					auto it2=it->second.find( valueName );
+					if( it2 != it->second.end() )
+						return std::pair<bool, Value>( true, it2->second );
+				}
+				return std::pair<bool, Value>( false, Value() );
+			}
+
+			std::string getName()const
+			{
+				return m_name;
+			};
 
 		};
 
@@ -141,18 +186,62 @@ namespace kg
 		{
 			unsigned int m_id;
 			std::string m_name;
-			std::vector<std::string> m_inheritsFrom;
-			std::map<std::string, std::vector<Value>> m_componentValues;
+			std::vector<std::string> m_inheritsFrom;//in ascending override importance
+			std::vector<Blueprint*> m_inheritedBlueprints;//in ascending override importance
+			std::map<std::string, std::map<std::string, Value>> m_componentValues;
 		public:
+			Entity()
+			{ };
 			Entity( const unsigned int& id,
 					std::string& name,
 					std::vector<std::string>& inheritsFrom,
-					std::map<std::string, std::vector<Value>>& componentValues )
+					std::map<std::string, std::map<std::string, Value>>& componentValuesByNameByComponent )
 					:m_id( id ),
 					m_name( name ),
 					m_inheritsFrom( inheritsFrom ),
-					m_componentValues( componentValues )
+					m_componentValues( componentValuesByNameByComponent )
 			{ };
+
+			const std::pair<bool, Value> getValue( const std::string& componentName, const std::string& valueName )const
+			{
+				//search for value internally
+				auto it = m_componentValues.find( componentName );
+				if( it != m_componentValues.end() )
+				{
+					auto it2 = it->second.find( valueName );
+					if( it2 != it->second.end() )
+						return std::pair<bool, Value>(true, it2->second);
+				}
+				//search for value in inherited blueprints
+				for( auto it = m_inheritedBlueprints.rbegin(); it != m_inheritedBlueprints.rend(); ++it )
+				{
+					auto value = (*it)->getValue( componentName, valueName );
+					if( value.first == true )
+						return std::pair<bool, Value>( true, value.second);
+				}
+				return std::pair<bool, Value>( false, Value() );
+			}
+
+			void connectToBlueprints( std::map<std::string, Blueprint>& blueprintsByName )
+			{
+				for( const auto& el : m_inheritsFrom )
+				{
+					try
+					{
+						m_inheritedBlueprints.push_back( &blueprintsByName.at( el ));
+					}
+					catch( std::exception& e )
+					{
+						throw LinkingError( el );
+					}
+				}
+					
+			};
+
+			std::string getName()const
+			{
+				return m_name;
+			};
 		};
 
 
@@ -164,7 +253,7 @@ namespace kg
 		{
 		public:
 			virtual std::pair<unsigned int, std::string> execute( unsigned int firstLine,
-																  std::vector<std::string>& lines )
+																  const std::vector<std::string>& lines )
 			{
 				auto retVal = std::make_pair<unsigned int, std::string>( firstLine + 1, std::string() );
 				for( const auto& ch : lines.at( firstLine ) )
@@ -175,7 +264,7 @@ namespace kg
 
 			//can execute on any line that is not empty and does only contain alphanumeric characters
 			virtual bool canExecuteOn( unsigned int line,
-									   std::vector<std::string>& lines )
+									   const std::vector<std::string>& lines )
 			{
 				if( isLineEmpty( lines.at( line ) ) )
 					return false;
@@ -190,7 +279,7 @@ namespace kg
 		{
 		public:
 			virtual std::pair<unsigned int, Value> execute( unsigned int firstLine,
-															std::vector<std::string>& lines )
+															const std::vector<std::string>& lines )
 			{
 				std::string name;
 				std::string value;
@@ -215,7 +304,8 @@ namespace kg
 			}
 
 			//can execute on any line that is not empty and does contain at least one double point
-			virtual bool canExecuteOn( unsigned int line, std::vector<std::string>& lines )
+			virtual bool canExecuteOn( unsigned int line,
+									   const std::vector<std::string>& lines )
 			{
 				if( isLineEmpty( lines.at( line ) ) )
 					return false;
@@ -233,10 +323,10 @@ namespace kg
 		{
 		public:
 			virtual std::pair<unsigned int, std::pair<std::string, std::vector<Value> >> execute( unsigned int firstLine,
-																								  std::vector<std::string>& lines )
+																								  const std::vector<std::string>& lines )
 			{
 				unsigned int line = firstLine;
-				auto& lineVal = lines.at( line );
+				auto lineVal = lines.at( line );
 
 				std::string componentName;
 				std::vector<Value> componentValues;
@@ -272,9 +362,16 @@ namespace kg
 						break;
 					else
 					{
-						auto retVal = ValueDeclaration().execute( line, lines );
-						line = retVal.first;
-						componentValues.push_back( retVal.second );
+						if( isLineEmpty( lines.at(line) ) )
+						{
+							line++;
+						}
+						else
+						{
+							auto retVal = ValueDeclaration().execute( line, lines );
+							line = retVal.first;
+							componentValues.push_back( retVal.second );
+						}
 					}
 				}
 				line++;
@@ -286,7 +383,7 @@ namespace kg
 			}
 
 			virtual bool canExecuteOn( unsigned int line,
-									   std::vector<std::string>& lines )
+									   const std::vector<std::string>& lines )
 			{
 				auto& lineValue = lines.at( line );
 				if( isLineEmpty( lineValue ) )
@@ -304,7 +401,8 @@ namespace kg
 		class InheritanceDeclaration : public Command < std::string >
 		{
 		public:
-			virtual std::pair<unsigned int, std::string> execute( unsigned int firstLine, std::vector<std::string>& lines )
+			virtual std::pair<unsigned int, std::string> execute( unsigned int firstLine,
+																  const std::vector<std::string>& lines )
 			{
 				auto& lineVal = lines.at( firstLine );
 
@@ -334,9 +432,13 @@ namespace kg
 				return std::pair<unsigned int, std::string>( firstLine + 1, entityName );
 			}
 
-			virtual bool canExecuteOn( unsigned int line, std::vector<std::string>& lines )
+			virtual bool canExecuteOn( unsigned int line,
+									   const std::vector<std::string>& lines )
 			{
-				return contains( lines.at( line ), "INHERIT" );
+				if( isLineEmpty( lines.at( line ) ) )
+					return false;
+				else
+					return contains( lines.at( line ), "INHERIT" );
 			}
 
 		};
@@ -344,13 +446,14 @@ namespace kg
 		class BlueprintDeclaration :public Command < Blueprint >
 		{
 		public:
-			virtual std::pair<unsigned int, Blueprint> execute( unsigned int firstLine, std::vector<std::string>& lines )
+			virtual std::pair<unsigned int, Blueprint> execute( unsigned int firstLine,
+																const std::vector<std::string>& lines )
 			{
 				unsigned int line = firstLine;
-				auto& lineVal = lines.at( line );
+				auto lineVal = lines.at( line );
 
 				std::string blueprintName;
-				std::map<std::string, std::vector<Value>> componentValues;
+				std::map<std::string, std::map<std::string, Value>> componentValues;
 
 				bool afterFirstSpaces = false;
 				bool afterComponent = false;
@@ -392,7 +495,7 @@ namespace kg
 					{
 						if( isLineEmpty( lineVal ) )
 						{
-
+							line++;
 						}
 						else if( ComponentDefinition().canExecuteOn( line, lines ) )
 						{
@@ -400,7 +503,7 @@ namespace kg
 							line = retVal.first;
 							for( auto& el : retVal.second.second )
 							{
-								componentValues[retVal.second.first].push_back( el );
+								componentValues[retVal.second.first][el.getName()]=el;
 							}
 						}
 						else if( ComponentDeclaration().canExecuteOn( line, lines ) )
@@ -422,9 +525,13 @@ namespace kg
 														   );
 			}
 
-			virtual bool canExecuteOn( unsigned int line, std::vector<std::string>& lines )
+			virtual bool canExecuteOn( unsigned int line,
+									   const std::vector<std::string>& lines )
 			{
-				return contains( lines.at( line ), "BLUEPRINT" );
+				if( isLineEmpty( lines.at( line ) ) )
+					return false;
+				else
+					return contains( lines.at( line ), "BLUEPRINT" );
 			}
 
 		};
@@ -432,14 +539,15 @@ namespace kg
 		class EntityDeclaration :public Command < Entity >
 		{
 		public:
-			virtual std::pair<unsigned int, Entity> execute( unsigned int firstLine, std::vector<std::string>& lines )
+			virtual std::pair<unsigned int, Entity> execute( unsigned int firstLine,
+															 const std::vector<std::string>& lines )
 			{
 				unsigned int line = firstLine;
-				auto& lineVal = lines.at( line );
+				auto lineVal = lines.at( line );
 
 				std::string entityName;
 				std::string entityId;
-				std::map<std::string, std::vector<Value>> componentValues;
+				std::map<std::string, std::map<std::string, Value>> componentValues;
 				std::vector<std::string> inheritsFrom;
 
 				bool afterFirstSpaces = false;
@@ -475,7 +583,7 @@ namespace kg
 					}
 					else
 					{
-						if( std::isalnum( ch ) )
+						if( std::isdigit( ch ) )
 							entityId.push_back( ch );
 					}
 				}
@@ -491,7 +599,7 @@ namespace kg
 					{
 						if( isLineEmpty( lineVal ) )
 						{
-
+							line++;
 						}
 						else if( InheritanceDeclaration().canExecuteOn( line, lines ) )
 						{
@@ -505,7 +613,7 @@ namespace kg
 							line = retVal.first;
 							for( auto& el : retVal.second.second )
 							{
-								componentValues[retVal.second.first].push_back( el );
+								componentValues[retVal.second.first][el.getName()] = el;
 							}
 						}
 						else if( ComponentDeclaration().canExecuteOn( line, lines ) )
@@ -527,26 +635,63 @@ namespace kg
 														) );
 			}
 
-			virtual bool canExecuteOn( unsigned int line, std::vector<std::string>& lines )
+			virtual bool canExecuteOn( unsigned int line,
+									   const std::vector<std::string>& lines )
 			{
-				return contains( lines.at( line ), "BLUEPRINT" );
+				return contains( lines.at( line ), "ENTITY" );
 			}
 
 		};
 
-		class File
+		class BlueprintManager
 		{
 			std::map<std::string, Blueprint> m_blueprintsByName;
 			std::map<std::string, Entity> m_entitiesByName;
 
 		public:
-			File( std::vector<std::string>&lines )
+			// can throw parsing error
+			void parse( const std::vector<std::string>&lines )
 			{
-				//parse here
+				unsigned int line = 0;
+
+				while( line < lines.size() )
+				{
+					if( isLineEmpty( lines.at( line ) ))
+					{
+						line++;
+					}
+					else if( EntityDeclaration().canExecuteOn( line, lines ) )
+					{
+						auto retVal = EntityDeclaration().execute( line, lines );
+						line = retVal.first;
+						m_entitiesByName[retVal.second.getName()] = retVal.second;
+					}
+					else if( BlueprintDeclaration().canExecuteOn( line, lines ) )
+					{
+						auto retVal = BlueprintDeclaration().execute( line, lines );
+						line = retVal.first;
+						m_blueprintsByName[retVal.second.getName()] = retVal.second;
+					}
+				}
 			};
 
-			const std::map<std::string, Blueprint> getBlueprintsByName()const;
-			const std::map<std::string, Entity> getEntitiesByName()const;
+			// should be called after all files have been parsed
+			// links entities to blueprints
+			// can throw linking error
+			void link()
+			{
+				for( auto& entity : m_entitiesByName )
+						entity.second.connectToBlueprints( m_blueprintsByName );	
+			}
+
+			const std::map<std::string, Blueprint>& getBlueprintsByName()const
+			{
+				return m_blueprintsByName;
+			};
+			const std::map<std::string, Entity>& getEntitiesByName()const
+			{
+				return m_entitiesByName;
+			};
 
 		};
 	}

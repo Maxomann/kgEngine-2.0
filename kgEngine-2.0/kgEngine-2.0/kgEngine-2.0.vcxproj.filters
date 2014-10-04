@@ -107,7 +107,7 @@
     <ClInclude Include="_id.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="Interpreter.h">
+    <ClInclude Include="Blueprint.h">
       <Filter>Headerdateien\FileAccess</Filter>
     </ClInclude>
   </ItemGroup>
