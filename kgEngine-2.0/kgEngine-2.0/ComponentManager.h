@@ -12,19 +12,25 @@ namespace kg
 		// If this function returns true a system of type T has already been registered.
 		// This function overwrites the old system with the parameter of this function
 		// component->init() will be called
-		template<class T>
-		bool addComponent( std::shared_ptr<Component>& component )
+		
+		bool addComponent( std::shared_ptr<Component>& component, size_t realTypeHashCode )
 		{
-			size_t typeId = typeid(T).hash_code();
 			double updateImportance = component->getUpdateImportance();
 
-			auto it = m_componentsByType.find( typeId );
+			auto it = m_componentsByType.find( realTypeHashCode );
 
-			m_componentsByType[typeId] = component;
+			m_componentsByType[realTypeHashCode] = component;
 			m_componentsByUpdateImportance[updateImportance] = component;
 
 			//it != m_systemsByType.end(); means that a system has been overwritten
 			return it != m_componentsByType.end();
+		}
+
+		template<class T>
+		bool addComponent( std::shared_ptr<Component>& component )
+		{
+			size_t typeId = typeid(T).hash_code();
+			addComponent( component, typeId );
 		};
 
 		void initComponents( Engine& engine );

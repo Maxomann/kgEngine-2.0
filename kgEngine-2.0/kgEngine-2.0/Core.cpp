@@ -6,7 +6,12 @@ namespace kg
 
 	void Core::init()
 	{
+		m_engine.pluginManager.addSystemPlugin(std::make_shared<PluginFactory<System, Foo>>( 200 ));
+
 		m_engine.renderWindow.create( sf::VideoMode( 1080, 720 ), "kgEngine 2.0" );
+
+		for( auto& el : m_engine.pluginManager.createEverySystemAvailable() )
+			m_client.addSystem( std::get<2>(el), std::get<1>(el) );
 
 		//init systems
 		m_client.initSystems( m_engine );

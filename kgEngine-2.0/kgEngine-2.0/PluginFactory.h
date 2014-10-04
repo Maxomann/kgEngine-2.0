@@ -19,18 +19,26 @@ namespace kg
 		};
 
 		virtual std::shared_ptr<T> create()const = 0;
+
+		virtual size_t getRealTypeHashCode()const = 0;
 	};
 
 	template<class FakeType, class RealType>
-	class PluginFactory : PluginFactoryInterface<FakeType>
+	class PluginFactory : public PluginFactoryInterface<FakeType>
 	{
-		const int m_pluginId = -1;
-
 	public:
+		PluginFactory(const int& pluginId) :PluginFactoryInterface(pluginId)
+		{ }
 
-		std::shared_ptr<FakeType> create()
+		virtual std::shared_ptr<FakeType> create()const
 		{
 			return std::static_pointer_cast<FakeType>( std::make_shared<RealType>() );
 		};
+
+		virtual size_t getRealTypeHashCode() const
+		{
+			return typeid(RealType).hash_code();
+		}
+
 	};
 }

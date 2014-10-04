@@ -50,4 +50,22 @@ namespace kg
 		}
 	}
 
+	std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> PluginManager::createEverySystemAvailable()const
+	{
+		std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> returnValue;
+
+		for( const auto& el : m_systemPluginFactorys )
+		{
+			std::tuple<int, size_t, std::shared_ptr<System>> tempRetVal;
+
+			std::get<0>( tempRetVal ) = el.second->getId();
+			std::get<1>( tempRetVal ) = el.second->getRealTypeHashCode();
+			std::get<2>( tempRetVal ) = el.second->create();
+
+			returnValue.push_back( tempRetVal );
+		}
+
+		return returnValue;
+	}
+
 }

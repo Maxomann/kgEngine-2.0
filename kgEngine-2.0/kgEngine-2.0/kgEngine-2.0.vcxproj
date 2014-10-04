@@ -90,6 +90,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="Interpreter.h" />
     <ClInclude Include="PluginFactory.h" />
     <ClInclude Include="PluginManager.h" />
     <ClInclude Include="PluginRegistrationException.h" />

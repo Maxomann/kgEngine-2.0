@@ -7,7 +7,7 @@ namespace kg
 	Entity::Id EntityManager::getUniqueEntityId()
 	{
 		highestUniqueId++;
-		return highestUniqueId --;
+		return highestUniqueId--;
 	}
 
 	bool EntityManager::addEntity( std::shared_ptr<Entity>& entity )
@@ -15,11 +15,12 @@ namespace kg
 		auto id = entity->getId();
 
 		auto it = m_entities.find( id );
+		auto end = m_entities.end();
 
 		m_entities[id] = entity;
 
 		//return false if Entity already existed
-		return it == m_entities.end();
+		return it != end;
 	}
 
 	bool EntityManager::removeEntity( const Entity::Id& id )

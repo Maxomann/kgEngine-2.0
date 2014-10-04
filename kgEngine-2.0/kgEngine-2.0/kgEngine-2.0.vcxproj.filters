@@ -25,6 +25,9 @@
     <Filter Include="Headerdateien\Engine">
       <UniqueIdentifier>{9ac4b11d-d367-4f22-8427-cffd45b0cceb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\FileAccess">
+      <UniqueIdentifier>{a022310f-a164-4d4e-82c8-f746ed2e0af6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="_id.h">
       <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Interpreter.h">
+      <Filter>Headerdateien\FileAccess</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

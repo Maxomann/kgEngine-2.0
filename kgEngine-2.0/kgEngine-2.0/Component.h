@@ -17,6 +17,8 @@ namespace kg
 		//Id should be the same for all instances of the same component
 		virtual int getId()=0;
 
+		virtual std::string getName() = 0;
+
 		virtual double getUpdateImportance()const=0;
 
 	};

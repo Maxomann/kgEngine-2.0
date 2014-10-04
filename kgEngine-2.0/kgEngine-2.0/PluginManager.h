@@ -21,5 +21,7 @@ namespace kg
 		std::shared_ptr<Component> createComponentPlugin( const int& pluginId );
 		std::shared_ptr<System> createSystemPlugin( const int& pluginId );
 
+		//systemId; realTypeHashCode; System;
+		std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> createEverySystemAvailable()const;
 	};
 }

@@ -22,5 +22,7 @@ namespace kg
 
 		virtual double getUpdateImportance() const;
 
+		virtual std::string getName();
+
 	};
 }

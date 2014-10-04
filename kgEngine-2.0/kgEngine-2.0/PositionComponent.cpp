@@ -34,4 +34,9 @@ namespace kg
 		return ComponentUpdateImportance::PositionComponent;
 	}
 
+	std::string PositionComponent::getName()
+	{
+		throw std::logic_error( "The method or operation is not implemented." );
+	}
+
 }
