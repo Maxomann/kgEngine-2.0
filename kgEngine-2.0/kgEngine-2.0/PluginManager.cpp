@@ -12,6 +12,7 @@ namespace kg
 			throw PluginRegistrationException( id );
 
 		m_componentPluginFactorys[id] = componentPluginFactory;
+		m_componentPluginFactorysByName[componentPluginFactory->getName()] = componentPluginFactory;
 	}
 
 	void PluginManager::addSystemPlugin( const std::shared_ptr<PluginFactoryInterface<System>>& systemPluginFactory )
@@ -22,13 +23,16 @@ namespace kg
 			throw PluginRegistrationException( id );
 
 		m_systemPluginFactorys[id] = systemPluginFactory;
+		m_systemPluginFactorysByName[systemPluginFactory->getName()] = systemPluginFactory;
 	}
 
-	std::shared_ptr<Component> PluginManager::createComponentPlugin( const int& pluginId )
+	std::tuple<int, size_t, std::shared_ptr<Component>> PluginManager::createComponentPlugin( const int& pluginId )
 	{
 		try
 		{
-			return m_componentPluginFactorys.at( pluginId )->create();
+			auto& componentPluginFactory = m_componentPluginFactorys.at( pluginId );
+
+			return std::make_tuple( componentPluginFactory->getId(), componentPluginFactory->getRealTypeHashCode(), componentPluginFactory->create());
 		}
 		catch (std::out_of_range& e)
 		{
@@ -37,16 +41,48 @@ namespace kg
 		}
 	}
 
-	std::shared_ptr<System> PluginManager::createSystemPlugin( const int& pluginId )
+	std::tuple<int, size_t, std::shared_ptr<Component>> PluginManager::createComponentPlugin( const std::string& pluginName )
 	{
 		try
 		{
-			return m_systemPluginFactorys.at( pluginId )->create();
+			auto& componentPluginFactory = m_componentPluginFactorysByName.at( pluginName );
+
+			return std::make_tuple( componentPluginFactory->getId(), componentPluginFactory->getRealTypeHashCode(), componentPluginFactory->create() );
+		}
+		catch( std::out_of_range& e )
+		{
+			e;//to get rid of annoying warning C4101
+			throw PluginRequestException( pluginName );
+		}
+	}
+
+	std::tuple<int, size_t, std::shared_ptr<System>> PluginManager::createSystemPlugin( const int& pluginId )
+	{
+		try
+		{
+			auto& systemPluginFactory = m_systemPluginFactorys.at( pluginId );
+
+			return std::make_tuple( systemPluginFactory->getId(), systemPluginFactory->getRealTypeHashCode(), systemPluginFactory->create() );
 		}
 		catch( std::out_of_range& e )
 		{
 			e;//to get rid of annoying warning C4101
 			throw PluginRequestException( pluginId );
+		}
+	}
+
+	std::tuple<int, size_t, std::shared_ptr<System>> PluginManager::createSystemPlugin( const std::string& pluginName )
+	{
+		try
+		{
+			auto& systemPluginFactory = m_systemPluginFactorysByName.at( pluginName );
+
+			return std::make_tuple( systemPluginFactory->getId(), systemPluginFactory->getRealTypeHashCode(), systemPluginFactory->create() );
+		}
+		catch( std::out_of_range& e )
+		{
+			e;//to get rid of annoying warning C4101
+			throw PluginRequestException( pluginName );
 		}
 	}
 

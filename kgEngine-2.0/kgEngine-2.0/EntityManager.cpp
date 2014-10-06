@@ -46,4 +46,12 @@ namespace kg
 			entity.second->updateAllComponentsByImportance( engine, world );
 	}
 
+	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine, const blueprint::Entity& entity )
+	{
+		auto returnValue = std::make_shared<Entity>( EntityManager::getUniqueEntityId() );
+		returnValue->initFromBlueprint( engine, entity );
+
+		return returnValue;
+	}
+
 }

@@ -42,6 +42,10 @@ INHERIT AnimatedTile
 	COMPONENT DamageDealer
 		damagePerSecond:2
 	END
+	COMPONENT Animation
+		frames:6
+		states:10
+	END
 	
 END ENTITY
 

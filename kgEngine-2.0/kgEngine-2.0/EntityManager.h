@@ -40,5 +40,9 @@ namespace kg
 		};
 
 		void updateEntities( Engine& engine, World& world );
+
+
+		//helper function for creating a new Entity with a unique id
+		static std::shared_ptr<Entity> createEntity( Engine& engine, const blueprint::Entity& entity );
 	};
 }

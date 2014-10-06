@@ -14,7 +14,7 @@ namespace kg
 
 		virtual const char* what()const
 		{
-			return ("plugin with id" + std::to_string(m_id) + "already exists").c_str();
+			return ("plugin with id" + std::to_string(m_id) + "is already registered").c_str();
 		};
 	};
 }

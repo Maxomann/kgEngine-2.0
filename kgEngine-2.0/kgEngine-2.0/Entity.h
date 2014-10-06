@@ -1,6 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "ComponentManager.h"
+#include "Blueprint.h"
+#include "Engine.h"
 
 namespace kg
 {
@@ -16,7 +18,8 @@ namespace kg
 	public:
 		Entity( const Id& id );
 
+		void initFromBlueprint( Engine& engine, const blueprint::Entity& entity );
+
 		const Id& getId()const;
-		
 	};
 }

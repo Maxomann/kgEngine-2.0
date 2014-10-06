@@ -7,16 +7,22 @@ namespace kg
 	class PluginFactoryInterface
 	{
 		const int m_pluginId = -1;
+		const std::string m_name = "-1";
 
 	public:
 		PluginFactoryInterface( const int& pluginId )
 			:m_pluginId( pluginId )
-		{ };
+		{ }
 
 		int getId()const
 		{
 			return m_pluginId;
-		};
+		}
+
+		std::string getName()const
+		{
+			return m_name;
+		}
 
 		virtual std::shared_ptr<T> create()const = 0;
 
