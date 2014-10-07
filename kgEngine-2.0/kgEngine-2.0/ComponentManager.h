@@ -12,11 +12,11 @@ namespace kg
 			vec.push_back( typeid(T).hash_code() );
 		}
 
-		template <typename T1, typename T2, typename... Tn>
+		template <typename T1, typename T2, typename variadic Tn>
 		void fill( std::vector<size_t>& vec )
 		{
 			fill<T1>( vec );
-			fill<T2, Tn...>( vec );
+			fill<T2, Tn>( vec );
 		}
 	}
 

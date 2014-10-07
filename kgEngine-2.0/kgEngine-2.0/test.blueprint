@@ -6,7 +6,7 @@ END BLUEPRINT
 ENTITY One : 100
 	
 	COMPONENT Position
-		x:200
+		x:600
 		y:200
 	END
 	COMPONENT Sprite
