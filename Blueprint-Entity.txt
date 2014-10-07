@@ -1,0 +1,39 @@
+BLUEPRINT {blueprintName}:{blueprintId:int}
+	{ComponentName}
+	...
+	{ComponentName}//comment
+	COMPONENT {ComponentName}
+		{parameterName}:{parameterValue}
+		...
+		{parameterName}:{parameterValue}
+	COMPONENT END
+BLUEPRINT END
+
+
+BLUEPRINT Tile:1000
+	Position
+	BoundingBox
+	Graphics
+	COMPONENT BoundingBox
+		sizeX:32px
+		sizeY:32px
+	COMPONENT END
+	COMPONENT Graphics
+		scaleToX:32px
+		scaleToY:32px
+	COMPONENT END
+BLUEPRINT END
+
+ENTITY Dirt:0001
+INHERIT Tile
+	COMPONENT BoundingBox
+		sizeY:16px//overrides inherited value
+		offsetY:16px
+	COMPONENT END
+	COMPONENT Graphics
+		path:testpackage/tileGraphics/dirt.png
+		textureRectWidth:64px
+		textureRectHeigth:64px
+	COMPONENT END
+ENTITY END
+	

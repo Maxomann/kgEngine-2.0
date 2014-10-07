@@ -28,6 +28,9 @@
     <Filter Include="Headerdateien\FileAccess">
       <UniqueIdentifier>{a022310f-a164-4d4e-82c8-f746ed2e0af6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\Test">
+      <UniqueIdentifier>{e18c792c-74ee-4170-9d4a-3ff8ef0d354f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -52,9 +55,6 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="PluginManager.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="PositionComponent.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Blueprint.cpp">
@@ -104,14 +104,17 @@
     <ClInclude Include="PluginRequestException.h">
       <Filter>Headerdateien\Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="PositionComponent.h">
-      <Filter>Headerdateien\Components</Filter>
-    </ClInclude>
     <ClInclude Include="_id.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Blueprint.h">
       <Filter>Headerdateien\FileAccess</Filter>
+    </ClInclude>
+    <ClInclude Include="TestSystems.h">
+      <Filter>Headerdateien\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="TestComponents.h">
+      <Filter>Headerdateien\Test</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

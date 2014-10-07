@@ -1,10 +1,14 @@
+#pragma once
+
 namespace kg
 {
 	namespace ComponentId
 	{
 		enum
 		{
-			PositionComponent
+			PositionComponent,
+			SpriteComponent,
+			LAST_ELEMENT
 		};
 	}
 
@@ -12,7 +16,24 @@ namespace kg
 	{
 		enum
 		{
-			PositionComponent
+			PositionComponent,
+			SpriteComponent
+		};
+	}
+
+	namespace SystemId
+	{
+		enum
+		{
+			CameraSystem = ComponentId::LAST_ELEMENT
+		};
+	}
+
+	namespace SystemUpdateImportance
+	{
+		enum
+		{
+			CameraSystem
 		};
 	}
 }

@@ -24,25 +24,23 @@ namespace kg
 		}
 
 
-		blueprint::ParsingError::ParsingError( unsigned int line ) :m_line( line )
-		{
-
-		}
+		blueprint::ParsingError::ParsingError( unsigned int line )
+			:m_msg( "parsing error on line:" + std::to_string( line ) )
+		{ }
 
 		const char* blueprint::ParsingError::what() const
 		{
-			return ("parsing error on line:" + std::to_string( m_line )).c_str();
+			return m_msg.c_str();
 		}
 
 
-		blueprint::LinkingError::LinkingError( std::string blueprintName ) :m_blueprintName( blueprintName )
-		{
-
-		}
+		blueprint::LinkingError::LinkingError( std::string blueprintName )
+			:m_msg( "linking error to blueprint:" + blueprintName )
+		{}
 
 		const char* blueprint::LinkingError::what() const
 		{
-			return ("linking error to blueprint:" + m_blueprintName).c_str();
+			return m_msg.c_str();
 		}
 
 
@@ -57,17 +55,17 @@ namespace kg
 
 		}
 
-		std::string blueprint::Value::toStringWithoutBraces() const
+		std::string blueprint::Value::toStringWithBraces() const
 		{
-			auto retVal = m_rawValue;
-			retVal.erase( 0 );
-			retVal.pop_back();
-			return retVal;
+			return m_rawValue;
 		}
 
 		std::string blueprint::Value::toString() const
 		{
-			return m_rawValue;
+			std::string retVal = m_rawValue;
+			retVal.erase( 0,1 );
+			retVal.pop_back();
+			return retVal;
 		}
 
 		std::pair<double, std::string> blueprint::Value::toDoubleWithUnit() const
@@ -177,6 +175,7 @@ namespace kg
 				}
 				catch( std::exception& e )
 				{
+					e;
 					throw LinkingError( el );
 				}
 			}
@@ -525,6 +524,9 @@ namespace kg
 				}
 			}
 
+			if( entityId == "" )
+				throw ParsingError( line );
+
 			line++;
 			while( true )
 			{
@@ -643,11 +645,11 @@ namespace kg
 
 		std::map<std::string, Value> Entity::getComponentValues( const std::string componentName ) const
 		{
-			std::map<std::string, Value> returnValue = m_componentValues.at(componentName);
+			std::map<std::string, Value> returnValue = m_componentValues.at( componentName );
 
 			for( auto it = m_inheritedBlueprints.rbegin(); it != m_inheritedBlueprints.rend(); ++it )
 			{
-				auto componentValues=(*it)->getComponentValues(componentName);
+				auto componentValues = (*it)->getComponentValues( componentName );
 				for( const auto& el : componentValues )
 					returnValue[el.first] = el.second;
 			}
@@ -658,7 +660,7 @@ namespace kg
 
 		const std::map<std::string, Value>& Blueprint::getComponentValues( const std::string& componentName ) const
 		{
-			return m_componentValues.at(componentName);
+			return m_componentValues.at( componentName );
 		}
 
 

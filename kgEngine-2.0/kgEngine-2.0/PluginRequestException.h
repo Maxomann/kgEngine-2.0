@@ -5,27 +5,19 @@ namespace kg
 {
 	class PluginRequestException : public std::exception
 	{
-		const int m_id=-1;
-		const std::string m_name="-1";
+		const std::string m_msg;
 
 	public:
 		PluginRequestException( const int& pluginId )
-			:m_id( pluginId )
+			:m_msg( "plugin with id: " + std::to_string( pluginId ) + " does not exist" )
 		{ };
 		PluginRequestException( const std::string& pluginName )
-			:m_name(pluginName)
-		{}
+			:m_msg( "plugin with name: " + pluginName + " does not exist" )
+		{ }
 
-		virtual const char* what()const
+		virtual const char* what()const override
 		{
-			if( m_id == -1 )
-			{
-				return ("plugin with name" + m_name + "does not exist").c_str();
-			}
-			else
-			{
-				return ("plugin with id" + std::to_string( m_id ) + "does not exist").c_str();
-			}
+			return m_msg.c_str();
 		};
 	};
 }

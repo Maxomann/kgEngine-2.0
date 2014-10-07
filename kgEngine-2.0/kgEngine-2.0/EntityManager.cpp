@@ -7,7 +7,7 @@ namespace kg
 	Entity::Id EntityManager::getUniqueEntityId()
 	{
 		highestUniqueId++;
-		return highestUniqueId--;
+		return highestUniqueId-1;
 	}
 
 	bool EntityManager::addEntity( std::shared_ptr<Entity>& entity )
@@ -25,7 +25,7 @@ namespace kg
 
 	bool EntityManager::removeEntity( const Entity::Id& id )
 	{
-		bool didExist = m_entities.find( id )!=m_entities.end();
+		bool didExist = m_entities.find( id ) != m_entities.end();
 		m_entities.erase( id );
 
 		return didExist;
@@ -46,10 +46,10 @@ namespace kg
 			entity.second->updateAllComponentsByImportance( engine, world );
 	}
 
-	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine, const blueprint::Entity& entity )
+	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine, const int& entityBlueprintId )
 	{
 		auto returnValue = std::make_shared<Entity>( EntityManager::getUniqueEntityId() );
-		returnValue->initFromBlueprint( engine, entity );
+		returnValue->initFromBlueprint( engine, engine.blueprint.getEntityById( entityBlueprintId ) );
 
 		return returnValue;
 	}

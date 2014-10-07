@@ -13,7 +13,7 @@ namespace kg
 
 		class ParsingError : public std::exception
 		{
-			unsigned int m_line;
+			const std::string m_msg;
 
 		public:
 			ParsingError( unsigned int line );
@@ -23,7 +23,7 @@ namespace kg
 
 		class LinkingError : public std::exception
 		{
-			std::string m_blueprintName;
+			std::string m_msg;
 		public:
 			LinkingError( std::string blueprintName );
 
@@ -63,7 +63,7 @@ namespace kg
 			std::pair<double, std::string> toDoubleWithUnit()const;
 
 			std::string toString()const;
-			std::string toStringWithoutBraces()const;
+			std::string toStringWithBraces()const;
 		};
 
 		class Blueprint

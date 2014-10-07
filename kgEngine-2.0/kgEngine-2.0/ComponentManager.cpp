@@ -5,7 +5,9 @@ namespace kg
 
 	void ComponentManager::updateAllComponentsByImportance( Engine& engine, World& world )
 	{
-		for( auto& el : m_componentsByType )
+		// the lower the importance, the earlier the component gets updated
+		// this is due to sorting from low to high key values in std::Map
+		for( auto& el : m_componentsByUpdateImportance )
 			el.second->update( engine, world, *this );
 	}
 

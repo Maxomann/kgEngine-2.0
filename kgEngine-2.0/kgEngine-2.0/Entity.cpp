@@ -21,7 +21,7 @@ namespace kg
 		{
 			auto createdComponent = engine.pluginManager.createComponentPlugin( name );
 			auto component = std::get<2>( createdComponent );
-			component->preInit( entity );
+			component->preInit( entity.getComponentValues(name) );
 			addComponent( component, std::get<1>( createdComponent ) );
 		}
 		initComponents( engine );

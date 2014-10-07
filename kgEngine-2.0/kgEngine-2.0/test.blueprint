@@ -1,61 +1,16 @@
-BLUEPRINT Tile
+BLUEPRINT MyTestBlueprint
 	Position
-	Graphics
-	BoundingBox
-	
-	COMPONENT Graphics
-		finalSizeX:64px
-		finalSizeY:64px
-		textureRectX:64px
-		textureRextY:64px
-		texturePath:"-1"
-	END
-	COMPONENT BoundingBox
-		sizeX:64px
-		sizeY:64px
-	END
-	
+	Sprite
 END BLUEPRINT
 
-
-BLUEPRINT AnimatedTile
-	Animation
+ENTITY One : 100
 	
-	COMPONENT Animation
-		textureRectX:64px
-		textureRectY:64px
-		frameTime:0.1s
+	COMPONENT Position
+		x:200
+		y:200
 	END
-	
-END BLUEPRINT
-
-
-ENTITY LavaTile:1000
-INHERIT Tile
-INHERIT AnimatedTile
-
-	DamageDealer
-
-	COMPONENT Graphics
-		texturePath:"assets/tile1000.png"
-	END
-	COMPONENT DamageDealer
-		damagePerSecond:2
-	END
-	COMPONENT Animation
-		frames:6
-		states:10
+	COMPONENT Sprite
+		path:"./testimage.png"
 	END
 	
-END ENTITY
-
-
-ENTITY Script
-	ScriptExecuter
-	
-	COMPONENT ScriptExecuter
-		executeOn:"initialize"
-		path
-	END
-
 END ENTITY

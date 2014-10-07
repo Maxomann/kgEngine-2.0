@@ -1,0 +1,29 @@
+//package.txt//
+PACKAGE MyPackageForTheEngine
+INCLUDE blueprints.entity
+INCLUDE tiles.entity
+INCLUDE cars.entity
+
+
+//blueprints.entity//
+BLUEPRINT Tile:1000
+	Position
+	BoundingBox
+	Graphics
+	COMPONENT BoundingBox
+		sizeX:32px
+		sizeY:32px
+	COMPONENT END
+	COMPONENT Graphics
+		scaleToX:32px
+		scaleToY:32px
+	COMPONENT END
+BLUEPRINT END
+
+BLUEPRINT Car:2000
+	CarComponents
+BLEPRINT END
+
+//tiles.entity//
+ENTITY Grass:0001
+INHERIT Tile

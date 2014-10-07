@@ -7,8 +7,20 @@ using namespace kg;
 
 int main()
 {
-	Core core;
-	core.init();
-	while( !core.shouldTerminate() )
-		core.update();
+#ifndef _DEBUG
+	try
+	{
+#endif
+		Core core;
+		core.init();
+		while( !core.shouldTerminate() )
+			core.update();
+#ifndef _DEBUG
+	}
+	catch( std::exception& e )
+	{
+		cout << e.what() << endl;
+		system( "pause" );
+	}
+#endif
 }

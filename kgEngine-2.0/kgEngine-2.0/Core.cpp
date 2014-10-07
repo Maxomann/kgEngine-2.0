@@ -2,12 +2,19 @@
 
 namespace kg
 {
-
-
 	void Core::init()
 	{
+		//Add Components here
+		m_engine.pluginManager.addComponentPlugin(
+			std::make_shared<PluginFactory<Component, PositionComponent>>( ComponentId::PositionComponent, "Position" ) );
+		m_engine.pluginManager.addComponentPlugin(
+			std::make_shared<PluginFactory<Component, SpriteComponent>>( ComponentId::SpriteComponent, "Sprite" ) );
+
 		//Add Systems here
-		//m_engine.pluginManager.addSystemPlugin(std::make_shared<PluginFactory<System, Foo>>( 200 ));
+		m_engine.pluginManager.addSystemPlugin(
+			std::make_shared<PluginFactory<System, CameraSystem>>( SystemId::CameraSystem, "CameraSystem" ) );
+
+
 
 		m_engine.renderWindow.create( sf::VideoMode( 1080, 720 ), "kgEngine 2.0" );
 
@@ -19,7 +26,9 @@ namespace kg
 		//init systems
 		m_client.initSystems( m_engine );
 
-		m_client.addEntity( EntityManager::createEntity( m_engine, m_engine.blueprint.getEntityById( 0 ) ) );
+
+
+		m_client.addEntity( EntityManager::createEntity( m_engine, 100 ) );
 	}
 
 	bool Core::shouldTerminate() const
@@ -29,6 +38,8 @@ namespace kg
 
 	void Core::update()
 	{
+		m_engine.renderWindow.clear( sf::Color::Green );
+
 		m_client.updateEntities( m_engine, m_client );
 		m_client.updateAllSystemsByImportance( m_engine, m_client );
 
@@ -41,7 +52,6 @@ namespace kg
 				m_engine.shouldTerminate = true;
 		}
 
-		m_engine.renderWindow.clear( sf::Color::Green );
 		//draw here
 		m_engine.renderWindow.display();
 	}

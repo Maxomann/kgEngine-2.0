@@ -10,8 +10,9 @@ namespace kg
 		const std::string m_name = "-1";
 
 	public:
-		PluginFactoryInterface( const int& pluginId )
-			:m_pluginId( pluginId )
+		PluginFactoryInterface( const int& pluginId, const std::string& pluginName )
+			:m_pluginId( pluginId ),
+			m_name( pluginName )
 		{ }
 
 		int getId()const
@@ -33,7 +34,8 @@ namespace kg
 	class PluginFactory : public PluginFactoryInterface<FakeType>
 	{
 	public:
-		PluginFactory(const int& pluginId) :PluginFactoryInterface(pluginId)
+		PluginFactory( const int& pluginId, const std::string& pluginName )
+			: PluginFactoryInterface( pluginId, pluginName )
 		{ }
 
 		virtual std::shared_ptr<FakeType> create()const
@@ -43,7 +45,8 @@ namespace kg
 
 		virtual size_t getRealTypeHashCode() const
 		{
-			return typeid(RealType).hash_code();
+			auto retVal = typeid(RealType).hash_code();
+			return retVal;
 		}
 
 	};

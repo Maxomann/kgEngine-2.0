@@ -1,0 +1,56 @@
+BLUEPRINT Tile
+	Position
+	Graphics
+	BoundingBox
+	
+	COMPONENT Graphics
+		finalSizeX:64px
+		finalSizeY:64px
+		textureRectX:64px
+		textureRextY:64px
+		texturePath:"-1"
+	END COMPONENT
+	COMPONENT BoundingBox
+		sizeX:64px
+		sizeY:64px
+	END COMPONENT
+	
+END BLUEPRINT
+
+BLUEPRINT AnimatedTile
+	Animation
+	
+	COMPONENT Animation
+		textureRectX:64px
+		textureRectY:64px
+		frameTime:0.1s
+	END COMPONENT
+	
+END BLUEPRINT
+
+
+ENTITY LavaTile:1000
+INHERIT Tile
+INHERIT AnimatedTile
+
+	DamageDealer
+
+	COMPONENT Graphics
+		texturePath:"assets/tile1000.png"
+	END COMPONENT
+	COMPONENT DamageDealer
+		damagePerSecond:2
+	END COMPONENT
+	
+END ENTITY
+
+EXTENSION LavaTilePushback
+DEST LavaTile
+
+	Pushback
+	
+	COMPONENT Pushback
+		Force:6
+	END
+
+END EXTENSION

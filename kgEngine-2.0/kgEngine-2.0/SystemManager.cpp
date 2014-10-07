@@ -5,7 +5,9 @@ namespace kg
 
 	void SystemManager::updateAllSystemsByImportance( Engine& engine, World& world )
 	{
-		for( auto& el : m_systemsByType )
+		// the lower the importance, the earlier the system gets updated
+		// this is due to sorting from low to high key values in std::Map
+		for( auto& el : m_systemsByUpdateImportance )
 			el.second->update( engine, world );
 	}
 

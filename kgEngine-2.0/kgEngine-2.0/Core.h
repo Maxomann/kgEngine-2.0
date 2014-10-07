@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "World.h"
 #include "Engine.h"
+#include "TestSystems.h"
 
 namespace kg
 {

@@ -12,6 +12,8 @@
 #include <tuple>
 #include <cctype>
 #include <fstream>
+#include <typeinfo>
+#include <typeindex>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

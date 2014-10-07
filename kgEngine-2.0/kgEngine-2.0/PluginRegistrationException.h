@@ -5,16 +5,16 @@ namespace kg
 {
 	class PluginRegistrationException : public std::exception
 	{
-		int m_id;
+		const std::string m_msg;
 
 	public:
 		PluginRegistrationException( const int& pluginId )
-			:m_id( pluginId )
+			:m_msg( std::to_string(pluginId) )
 		{ };
 
 		virtual const char* what()const
 		{
-			return ("plugin with id" + std::to_string(m_id) + "is already registered").c_str();
+			return m_msg.c_str();
 		};
 	};
 }

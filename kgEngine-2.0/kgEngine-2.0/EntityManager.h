@@ -27,10 +27,10 @@ namespace kg
 		std::shared_ptr<Entity> getEntity( const Entity::Id& id );
 
 		//returns all entities that have all components, given in the template parameter, registered
-		template<class variadic ComponentType>
+		template<class /*variadic*/ ComponentType>
 		std::vector<std::shared_ptr<Entity>> getEntitiesThatHaveComponent()
 		{
-			std::vector< std::shared_ptr<Entity>> returnValue;
+			std::vector<std::shared_ptr<Entity>> returnValue;
 
 			for( auto& entity : m_entities )
 				if( entity.second->hasComponent<ComponentType>() )
@@ -43,6 +43,6 @@ namespace kg
 
 
 		//helper function for creating a new Entity with a unique id
-		static std::shared_ptr<Entity> createEntity( Engine& engine, const blueprint::Entity& entity );
+		static std::shared_ptr<Entity> createEntity( Engine& engine, const int& entityBlueprintId );
 	};
 }
