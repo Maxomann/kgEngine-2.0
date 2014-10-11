@@ -1,0 +1,30 @@
+core.exe
+[dlls]
+[Folder]Packages
+	[Folder]YourPackageName
+		[Folder]Resource
+			example.png
+		[xxx].blueprint
+		...
+		[yyy].blueprint
+		[xxx].dll
+		...
+		[yyy].dll
+		*optional*YourPackageName.txt
+		
+		
+
+		
+Example:
+core.exe
+[dlls]
+[Folder]Packages
+	[Folder]TestPackage
+		[Folder]Resource
+			example.png
+			myImage.png
+		TestPackage.blueprint
+		Additional.blueprint
+		hereAreMyPlugins.dll
+		anotherDll.dll
+		TestPackage.txt

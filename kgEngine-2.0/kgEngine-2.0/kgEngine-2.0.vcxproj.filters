@@ -16,20 +16,14 @@
     <Filter Include="Headerdateien\Exceptions">
       <UniqueIdentifier>{dfeb575d-eba1-4e2d-9982-0c6c06d43b54}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headerdateien\Systems">
-      <UniqueIdentifier>{19bd1617-7843-4a36-9467-c95f03d63bea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headerdateien\Components">
-      <UniqueIdentifier>{bd1141b1-c508-4ce5-9e22-53acb7d65422}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headerdateien\Engine">
       <UniqueIdentifier>{9ac4b11d-d367-4f22-8427-cffd45b0cceb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headerdateien\FileAccess">
       <UniqueIdentifier>{a022310f-a164-4d4e-82c8-f746ed2e0af6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headerdateien\Test">
-      <UniqueIdentifier>{e18c792c-74ee-4170-9d4a-3ff8ef0d354f}</UniqueIdentifier>
+    <Filter Include="Headerdateien\Toolset">
+      <UniqueIdentifier>{80d96a5c-3d9e-44eb-a705-71f938d6bf7a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -107,20 +101,17 @@
     <ClInclude Include="PluginRequestException.h">
       <Filter>Headerdateien\Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="_id.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="Blueprint.h">
       <Filter>Headerdateien\FileAccess</Filter>
     </ClInclude>
-    <ClInclude Include="TestSystems.h">
-      <Filter>Headerdateien\Test</Filter>
+    <ClInclude Include="ResourceManagement.h">
+      <Filter>Headerdateien\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="TestComponents.h">
-      <Filter>Headerdateien\Test</Filter>
+    <ClInclude Include="_PluginCreator.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Callback.h">
-      <Filter>Headerdateien\Engine</Filter>
+      <Filter>Headerdateien\Toolset</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

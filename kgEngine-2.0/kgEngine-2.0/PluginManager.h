@@ -4,6 +4,16 @@
 #include "PluginRegistrationException.h"
 #include "PluginRequestException.h"
 
+// USAGE EXAMPLE:
+//
+// m_engine.pluginManager.addComponentPlugin(
+//	make_shared<PluginFactory<Component, PositionComponent>>( ComponentId::PositionComponent, "Position" ) );
+// m_engine.pluginManager.addComponentPlugin(
+//	make_shared<PluginFactory<Component, SpriteComponent>>( ComponentId::SpriteComponent, "Sprite" ) );
+//
+// m_engine.pluginManager.addSystemPlugin(
+//	make_shared<PluginFactory<System, CameraSystem>>( SystemId::CameraSystem, "CameraSystem" ) );
+
 namespace kg
 {
 	class Component;

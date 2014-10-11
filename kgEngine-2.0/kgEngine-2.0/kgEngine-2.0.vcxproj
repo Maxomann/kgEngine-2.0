@@ -97,13 +97,12 @@
     <ClInclude Include="PluginManager.h" />
     <ClInclude Include="PluginRegistrationException.h" />
     <ClInclude Include="PluginRequestException.h" />
+    <ClInclude Include="ResourceManagement.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="SystemManager.h" />
-    <ClInclude Include="TestComponents.h" />
-    <ClInclude Include="TestSystems.h" />
     <ClInclude Include="World.h" />
-    <ClInclude Include="_id.h" />
+    <ClInclude Include="_PluginCreator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

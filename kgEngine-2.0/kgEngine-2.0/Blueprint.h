@@ -5,6 +5,8 @@ namespace kg
 {
 	namespace blueprint
 	{
+		const std::string file_extension = ".blueprint";
+
 		bool isLineEmpty( const std::string& line );
 
 		//checks if string a contains string b

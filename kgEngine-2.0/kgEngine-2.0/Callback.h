@@ -48,7 +48,7 @@ namespace kg
 		std::map<int, CallbackList> m_callbacksById;
 
 	protected:
-		template<class ... T>
+		template<class variadic T>
 		void triggerCallback( const int callbackID, T... args )
 		{
 			auto& list = m_callbacksById[callbackID];
@@ -86,7 +86,7 @@ namespace kg
 
 	public:
 		//if you register a callback twice it will be called twice
-		template<class ... T>
+		template<class variadic T>
 		void registerCallback( int callbackId,
 							   const CallbackReciever* thisPointer,
 							   std::shared_ptr< std::function<void( int, T... )> > callbackFunction )
@@ -97,7 +97,7 @@ namespace kg
 		};
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class ... T>
+		template<class ClassName, class variadic T>
 		void registerCallback_0( int callbackId,
 								 ClassName* thisPointer,
 								 void(ClassName::* mem_fn_ptr) (int, T...) )
@@ -112,7 +112,7 @@ namespace kg
 		}
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class ... T>
+		template<class ClassName, class variadic T>
 		void registerCallback_1( int callbackId,
 								 ClassName* thisPointer,
 								 void(ClassName::* mem_fn_ptr) (int, T...) )
@@ -128,7 +128,7 @@ namespace kg
 		}
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class ... T>
+		template<class ClassName, class variadic T>
 		void registerCallback_2( int callbackId,
 								 ClassName* thisPointer,
 								 void(ClassName::* mem_fn_ptr) (int, T...) )
@@ -145,7 +145,7 @@ namespace kg
 		}
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class ... T>
+		template<class ClassName, class variadic T>
 		void registerCallback_3( int callbackId,
 								 ClassName* thisPointer,
 								 void(ClassName::* mem_fn_ptr) (int, T...) )
@@ -163,7 +163,7 @@ namespace kg
 		}
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class ... T>
+		template<class ClassName, class variadic T>
 		void registerCallback_4( int callbackId,
 								 ClassName* thisPointer,
 								 void(ClassName::* mem_fn_ptr) (int, T...) )
@@ -182,7 +182,7 @@ namespace kg
 		}
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class ... T>
+		template<class ClassName, class variadic T>
 		void registerCallback_5( int callbackId,
 								 ClassName* thisPointer,
 								 void(ClassName::* mem_fn_ptr) (int, T...) )
@@ -202,7 +202,7 @@ namespace kg
 		}
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class ... T>
+		template<class ClassName, class variadic T>
 		void registerCallback_6( int callbackId,
 								 ClassName* thisPointer,
 								 void(ClassName::* mem_fn_ptr) (int, T...) )
@@ -223,7 +223,7 @@ namespace kg
 		}
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class ... T>
+		template<class ClassName, class variadic T>
 		void registerCallback_7( int callbackId,
 								 ClassName* thisPointer,
 								 void(ClassName::* mem_fn_ptr) (int, T...) )
@@ -245,7 +245,7 @@ namespace kg
 		}
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class ... T>
+		template<class ClassName, class variadic T>
 		void registerCallback_8( int callbackId,
 								 ClassName* thisPointer,
 								 void(ClassName::* mem_fn_ptr) (int, T...) )
@@ -268,7 +268,7 @@ namespace kg
 		}
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class ... T>
+		template<class ClassName, class variadic T>
 		void registerCallback_9( int callbackId,
 								 ClassName* thisPointer,
 								 void(ClassName::* mem_fn_ptr) (int, T...) )
