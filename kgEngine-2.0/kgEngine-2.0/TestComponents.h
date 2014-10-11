@@ -14,8 +14,8 @@ namespace kg
 	public:
 		virtual void preInit( const std::map<std::string, blueprint::Value>& blueprintValues )
 		{
-			m_position.x = blueprintValues.at( "x" ).toIntWithUnit().first;
-			m_position.y = blueprintValues.at( "y" ).toIntWithUnit().first;
+			//m_position.x = blueprintValues.at( "x" ).toIntWithUnit().first;
+			//m_position.y = blueprintValues.at( "y" ).toIntWithUnit().first;
 		}
 
 		virtual void init( Engine& engine, ComponentManager& componentManager )

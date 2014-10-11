@@ -639,13 +639,19 @@ namespace kg
 
 			for( const auto& el : m_componentValues )
 				returnValue.push_back( el.first );
+			for( const auto& el : m_inheritedBlueprints )
+				for( const auto& componentName : el->getComponentNames() )
+					if( std::find(returnValue.begin(), returnValue.end(), componentName)==returnValue.end() )
+						returnValue.push_back( componentName );
 
 			return returnValue;
 		}
 
 		std::map<std::string, Value> Entity::getComponentValues( const std::string componentName ) const
 		{
-			std::map<std::string, Value> returnValue = m_componentValues.at( componentName );
+			std::map<std::string, Value> returnValue;
+			if( m_componentValues.find(componentName)!=m_componentValues.end())
+				returnValue = m_componentValues.at( componentName );
 
 			for( auto it = m_inheritedBlueprints.rbegin(); it != m_inheritedBlueprints.rend(); ++it )
 			{
@@ -658,9 +664,22 @@ namespace kg
 		}
 
 
-		const std::map<std::string, Value>& Blueprint::getComponentValues( const std::string& componentName ) const
+		const std::map<std::string, Value> Blueprint::getComponentValues( const std::string& componentName ) const
 		{
-			return m_componentValues.at( componentName );
+			if( m_componentValues.find( componentName ) != m_componentValues.end() )
+				return m_componentValues.at( componentName );
+			else
+				return std::map<std::string, Value>();
+		}
+
+		std::vector<std::string> Blueprint::getComponentNames() const
+		{
+			std::vector<std::string> returnValue;
+
+			for( const auto& el : m_componentValues )
+				returnValue.push_back( el.first );
+
+			return returnValue;
 		}
 
 

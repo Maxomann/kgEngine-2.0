@@ -4,11 +4,8 @@ BLUEPRINT MyTestBlueprint
 END BLUEPRINT
 
 ENTITY One : 100
-	
-	COMPONENT Position
-		x:600
-		y:200
-	END
+INHERIT MyTestBlueprint
+
 	COMPONENT Sprite
 		path:"./testimage.png"
 	END

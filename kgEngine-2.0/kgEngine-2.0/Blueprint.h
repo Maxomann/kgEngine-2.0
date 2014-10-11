@@ -77,7 +77,9 @@ namespace kg
 
 			const std::pair<bool, Value> getValue( const std::string& componentName, const std::string& valueName )const;
 
-			const std::map<std::string, Value>& getComponentValues( const std::string& componentName )const;
+			const std::map<std::string, Value> getComponentValues( const std::string& componentName )const;
+
+			std::vector<std::string> getComponentNames()const;
 
 			std::string getName()const;
 

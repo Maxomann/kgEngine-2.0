@@ -60,6 +60,9 @@
     <ClCompile Include="Blueprint.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Callback.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -115,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="TestComponents.h">
       <Filter>Headerdateien\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Callback.h">
+      <Filter>Headerdateien\Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

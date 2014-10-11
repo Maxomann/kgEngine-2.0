@@ -16,8 +16,9 @@ namespace kg
 		static Entity::Id getUniqueEntityId();
 
 		// overwrites entity if it already exists
-		// returns false in that case
-		bool addEntity( std::shared_ptr<Entity>& entity );
+		// first: returns false in that case
+		// second: EntityId of the added Entity
+		std::pair<bool, std::shared_ptr<Entity>> addEntity( std::shared_ptr<Entity>& entity );
 
 		// ensures that the entity with id parameter:id does not exist anymore
 		// returns false if entity with id did not exist

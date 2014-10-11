@@ -19,6 +19,7 @@ namespace kg
 		m_engine.renderWindow.create( sf::VideoMode( 1080, 720 ), "kgEngine 2.0" );
 
 		m_engine.blueprint.parse( "./test.blueprint" );
+		m_engine.blueprint.link();
 
 		for( auto& el : m_engine.pluginManager.createEverySystemAvailable() )
 			m_client.addSystem( std::get<2>( el ), std::get<1>( el ) );
@@ -28,7 +29,9 @@ namespace kg
 
 
 
-		m_client.addEntity( EntityManager::createEntity( m_engine, 100 ) );
+		m_client.addEntity( EntityManager::createEntity( m_engine, 100 ) ).second->getComponent<PositionComponent>()->setPosition( { 0, 0 } );
+		m_client.addEntity( EntityManager::createEntity( m_engine, 100 ) ).second->getComponent<PositionComponent>()->setPosition( { 400, 0 } );
+		m_client.addEntity( EntityManager::createEntity( m_engine, 100 ) ).second->getComponent<PositionComponent>()->setPosition( { 36, 400 } );
 	}
 
 	bool Core::shouldTerminate() const

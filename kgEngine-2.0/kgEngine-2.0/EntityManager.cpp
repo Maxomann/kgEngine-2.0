@@ -10,7 +10,7 @@ namespace kg
 		return highestUniqueId-1;
 	}
 
-	bool EntityManager::addEntity( std::shared_ptr<Entity>& entity )
+	std::pair<bool, std::shared_ptr<Entity>> EntityManager::addEntity( std::shared_ptr<Entity>& entity )
 	{
 		auto id = entity->getId();
 
@@ -20,7 +20,7 @@ namespace kg
 		m_entities[id] = entity;
 
 		//return false if Entity already existed
-		return it != end;
+		return std::pair<bool, std::shared_ptr<Entity>>( it != end, entity );
 	}
 
 	bool EntityManager::removeEntity( const Entity::Id& id )

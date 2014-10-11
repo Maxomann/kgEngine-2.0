@@ -14,6 +14,7 @@
 #include <fstream>
 #include <typeinfo>
 #include <typeindex>
+#include <functional>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

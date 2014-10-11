@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Core.h"
 #include "Blueprint.h"
+#include "Callback.h"
 
 using namespace std;
 using namespace kg;
