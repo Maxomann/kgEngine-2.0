@@ -4,16 +4,17 @@
 
 namespace kg
 {
-	class EntityManager
+	class DLL_EXPORT EntityManager
 	{
 		std::unordered_map<Entity::Id, std::shared_ptr<Entity>> m_entities;
 
-		static Entity::Id highestUniqueId;
+		Entity::Id m_highestUniqueId=0;
 
 
 	public:
 		//not unique between servers/clients
-		static Entity::Id getUniqueEntityId();
+		Entity::Id getUniqueEntityId();
+		void setLowestUniqueEntityId( const Entity::Id& id );
 
 		// overwrites entity if it already exists
 		// first: returns false in that case
@@ -44,6 +45,6 @@ namespace kg
 
 
 		//helper function for creating a new Entity with a unique id
-		static std::shared_ptr<Entity> createEntity( Engine& engine, const int& entityBlueprintId );
+		std::shared_ptr<Entity> createEntity( Engine& engine, const int& entityBlueprintId );
 	};
 }

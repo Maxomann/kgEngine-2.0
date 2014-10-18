@@ -104,4 +104,12 @@ namespace kg
 		return returnValue;
 	}
 
+	const std::pair<int, std::string> PluginManager::getPlugininformationByRealTypeHashCode( size_t hashCode )const
+	{
+		for( const auto& el : m_componentPluginFactorys )
+			if( el.second->getRealTypeHashCode() == hashCode )
+				return std::pair<int, std::string>( el.second->getId(), el.second->getName() );
+		return std::pair<int, std::string>( -1, "getPlugininformationByRealTypeHashCode::NOT_FOUND. HashCode: " + std::to_string( hashCode ) );
+	}
+
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "Plugin.h"
 
 namespace kg
 {
@@ -7,7 +8,7 @@ namespace kg
 	class SystemManager;
 	class World;
 
-	class System
+	class DLL_EXPORT System : public Plugin
 	{
 	public:
 		virtual void init( Engine& engine, SystemManager& systemManager ) = 0;

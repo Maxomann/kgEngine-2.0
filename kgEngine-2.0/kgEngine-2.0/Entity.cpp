@@ -24,6 +24,21 @@ namespace kg
 			component->preInit( entity.getComponentValues(name) );
 			addComponent( component, std::get<1>( createdComponent ) );
 		}
+		for( const auto& component : getAllComponentsByTypeHash() )
+		{
+			for( const auto& requieredComponentHash : component.second->getRequieredComponents() )
+			{
+				if( !hasComponent( { requieredComponentHash } ) )
+				{
+					auto information = engine.pluginManager.getPlugininformationByRealTypeHashCode( requieredComponentHash );
+					throw ComponentMissingException( component.second->getPluginName(),
+													 component.second->getPluginId(),
+													 information.second,
+													 information.first );
+				}
+			}
+		}
+
 		initComponents( engine );
 	}
 }

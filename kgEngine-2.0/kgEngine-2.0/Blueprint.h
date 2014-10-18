@@ -46,7 +46,7 @@ namespace kg
 		};
 
 
-		class Value
+		class DLL_EXPORT Value
 		{
 			std::string m_name;
 			std::string m_rawValue;
@@ -68,7 +68,7 @@ namespace kg
 			std::string toStringWithBraces()const;
 		};
 
-		class Blueprint
+		class DLL_EXPORT Blueprint
 		{
 			std::string m_name;
 			std::map<std::string, std::map<std::string, Value>> m_componentValues;
@@ -87,7 +87,7 @@ namespace kg
 
 		};
 
-		class Entity
+		class DLL_EXPORT Entity
 		{
 			unsigned int m_id;
 			std::string m_name;
@@ -203,11 +203,11 @@ namespace kg
 			// can throw linking error
 			void link();
 
-			const std::map<std::string, Blueprint>& getBlueprintsByName()const;
-			const std::map<unsigned int, Entity>& getEntitiesById()const;
+			DLL_EXPORT const std::map<std::string, Blueprint>& getBlueprintsByName()const;
+			DLL_EXPORT const std::map<unsigned int, Entity>& getEntitiesById()const;
 
-			const Blueprint& getBlueprintByName(const std::string& name)const;
-			const Entity& getEntityById(const int id)const;
+			DLL_EXPORT const Blueprint& getBlueprintByName( const std::string& name )const;
+			DLL_EXPORT const Entity& getEntityById( const int id )const;
 
 		};
 	}

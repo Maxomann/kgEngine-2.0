@@ -20,7 +20,7 @@ namespace kg
 		}
 	}
 
-	class ComponentManager
+	class DLL_EXPORT ComponentManager
 	{
 		std::map<size_t, std::shared_ptr<Component>> m_componentsByType;
 		std::map<double, std::shared_ptr<Component>> m_componentsByUpdateImportance;
@@ -61,12 +61,6 @@ namespace kg
 				return std::static_pointer_cast< T >(it->second);
 		};
 
-		// 		template<class T>
-		// 		std::shared_ptr<CastTo>& getComponentWithCast()
-		// 		{
-		// 			return std::static_pointer_cast< T >(getComponent<T>());
-		// 		};
-
 		void updateAllComponentsByImportance( Engine& engine, World& world );
 
 		//returns true if all components of type ComponentType are registered
@@ -82,10 +76,12 @@ namespace kg
 			workaround::fill<ComponentType>( componentTypes );
 
 
-			for( const auto& type : componentTypes )
-				if( m_componentsByType.find( type ) == m_componentsByType.end() )
-					return false;
-			return true;
+			hasComponent( componentTypes );
 		};
+
+		//returns true if all components of type ComponentType are registered
+		bool hasComponent( const std::vector<size_t>& componentTypes );
+
+		const std::map<size_t, std::shared_ptr<Component>>& getAllComponentsByTypeHash()const;
 	};
 }

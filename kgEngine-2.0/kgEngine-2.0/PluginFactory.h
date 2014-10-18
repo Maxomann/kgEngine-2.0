@@ -4,7 +4,7 @@
 namespace kg
 {
 	template<class T>
-	class PluginFactoryInterface
+	class DLL_EXPORT PluginFactoryInterface
 	{
 		const int m_pluginId = -1;
 		const std::string m_name = "-1";
@@ -31,7 +31,7 @@ namespace kg
 	};
 
 	template<class FakeType, class RealType>
-	class PluginFactory : public PluginFactoryInterface<FakeType>
+	class DLL_EXPORT PluginFactory : public PluginFactoryInterface<FakeType>
 	{
 	public:
 		PluginFactory( const int& pluginId, const std::string& pluginName )

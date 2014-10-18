@@ -17,4 +17,17 @@ namespace kg
 			component.second->init( engine, *this );
 	}
 
+	bool ComponentManager::hasComponent( const std::vector<size_t>& componentTypes )
+	{
+		for( const auto& type : componentTypes )
+			if( m_componentsByType.find( type ) == m_componentsByType.end() )
+				return false;
+		return true;
+	}
+
+	const std::map<size_t, std::shared_ptr<Component>>& ComponentManager::getAllComponentsByTypeHash() const
+	{
+		return m_componentsByType;
+	}
+
 }

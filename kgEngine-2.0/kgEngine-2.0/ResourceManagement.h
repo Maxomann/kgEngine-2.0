@@ -3,13 +3,13 @@
 
 namespace kg
 {
-	class Resource
+	class DLL_EXPORT Resource
 	{
 	public:
 		virtual bool loadFromFile( const std::string& path ) = 0;
 	};
 
-	class ResourceManagement
+	class DLL_EXPORT ResourceManagement
 	{
 	private:
 		std::unordered_map< std::string, std::unordered_map<size_t, std::shared_ptr<void>> >m_resources;

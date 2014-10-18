@@ -113,5 +113,11 @@
     <ClInclude Include="Callback.h">
       <Filter>Headerdateien\Toolset</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentMissingException.h">
+      <Filter>Headerdateien\Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugin.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

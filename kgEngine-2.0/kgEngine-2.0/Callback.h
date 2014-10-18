@@ -29,7 +29,7 @@
 
 namespace kg
 {
-	class CallbackReciever
+	class DLL_EXPORT CallbackReciever
 	{
 		// this pointer is used in aCallbackSender to check
 		// if the Object, which member function should be called, still exists
@@ -42,7 +42,7 @@ namespace kg
 	};
 
 	//T=AdditionalCallbackArguments
-	class CallbackSender
+	class DLL_EXPORT CallbackSender
 	{
 		typedef std::list<std::pair<std::weak_ptr<bool>, std::pair<std::shared_ptr<void>/*std::function<void( int&, T... )>*/, size_t> > > CallbackList;
 		std::map<int, CallbackList> m_callbacksById;

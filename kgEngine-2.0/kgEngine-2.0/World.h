@@ -5,7 +5,7 @@
 
 namespace kg
 {
-	class World : public SystemManager, public EntityManager
+	class DLL_EXPORT World : public SystemManager, public EntityManager
 	{
 
 	};

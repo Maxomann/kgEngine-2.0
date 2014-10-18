@@ -4,7 +4,7 @@
 
 namespace kg
 {
-	class SystemManager
+	class DLL_EXPORT SystemManager
 	{
 		std::map<size_t, std::shared_ptr<System>> m_systemsByType;
 		std::map<double, std::shared_ptr<System>> m_systemsByUpdateImportance;

@@ -43,5 +43,8 @@ namespace kg
 
 		//systemId; realTypeHashCode; System;
 		std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> createEverySystemAvailable()const;
+
+		//first:pluginId second:pluginName
+		const std::pair<int, std::string> getPlugininformationByRealTypeHashCode( size_t hashCode )const;
 	};
 }

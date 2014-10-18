@@ -6,7 +6,7 @@
 
 namespace kg
 {
-	struct Engine
+	struct DLL_EXPORT Engine
 	{
 		bool shouldTerminate = false;
 		sf::RenderWindow renderWindow;

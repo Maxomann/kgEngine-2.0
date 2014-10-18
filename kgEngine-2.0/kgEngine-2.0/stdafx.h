@@ -25,11 +25,12 @@
 #include <SFML/Audio.hpp>
 
 #ifdef _WIN32
-
+#include<windows.h>
 #elif
 #error TARGET_PLATFORM_NOT_SUPPORTED
 #endif
-#include<windows.h>
+
 #define variadic ...
+#define DLL_EXPORT __declspec(dllexport)
 
 #endif//STDAFX_H

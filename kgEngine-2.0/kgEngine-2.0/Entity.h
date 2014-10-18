@@ -3,10 +3,11 @@
 #include "ComponentManager.h"
 #include "Blueprint.h"
 #include "Engine.h"
+#include "ComponentMissingException.h"
 
 namespace kg
 {
-	class Entity : public ComponentManager
+	class DLL_EXPORT Entity : public ComponentManager
 	{
 	public:
 		typedef unsigned long long Id;
