@@ -3,7 +3,7 @@
 
 namespace kg
 {
-	class ComponentMissingException : public std::exception
+	class DLL_EXPORT ComponentMissingException : public std::exception
 	{
 		std::string m_msg;
 

@@ -6,6 +6,5 @@
 namespace kg
 {
 	class DLL_EXPORT World : public SystemManager, public EntityManager
-	{
-	};
+	{ };
 }

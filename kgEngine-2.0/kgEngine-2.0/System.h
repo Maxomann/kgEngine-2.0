@@ -12,8 +12,11 @@ namespace kg
 	{
 	public:
 		virtual void init( Engine& engine, SystemManager& systemManager ) = 0;
+
 		// sfml event loop is forwarded before update() is called
 		virtual void sfmlEvent( const sf::Event& sfEvent ) = 0;
+
+		// components get updated before systems
 		virtual void update( Engine& engine, World& world ) = 0;
 
 		// the lower the importance, the earlier this component gets updated, initialized, sfmlForwarded

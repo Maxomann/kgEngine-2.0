@@ -30,7 +30,7 @@ namespace kg
 				for( const auto& el : (*additionalComponentValues).second )
 					componentValues[el.first] = el.second;
 
-			component->preInit( componentValues );
+			component->preInit( engine, componentValues );
 			addComponent( component, std::get<1>( createdComponent ) );
 		}
 		// check component requirements of each component
@@ -57,5 +57,4 @@ namespace kg
 	{
 		return m_additionalComponentValues;
 	}
-
 }

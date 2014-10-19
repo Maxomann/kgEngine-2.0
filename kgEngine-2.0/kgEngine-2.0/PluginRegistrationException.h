@@ -3,7 +3,7 @@
 
 namespace kg
 {
-	class PluginRegistrationException : public std::exception
+	class DLL_EXPORT PluginRegistrationException : public std::exception
 	{
 		const std::string m_msg;
 

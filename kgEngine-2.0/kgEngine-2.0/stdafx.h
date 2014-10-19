@@ -16,6 +16,7 @@
 #include <typeindex>
 #include <functional>
 #include <filesystem>
+#include <cstdint>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

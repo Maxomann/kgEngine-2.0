@@ -1,5 +1,6 @@
 #pragma once
 #include"stdafx.h"
+#include "PathNotAvailableException.h"
 
 namespace kg
 {
@@ -22,7 +23,7 @@ namespace kg
 		// void bool T::loadFromFile(const std::string& path)
 		// YOU CAN INHERIT Resource FOR THAT
 		template< class T >
-		T& getResource( const std::string& path )
+		std::shared_ptr<T> getResource( const std::string& path )
 		{
 			const size_t typeID = typeid(T).hash_code();
 
@@ -35,8 +36,8 @@ namespace kg
 				//neues element und signatur einfügen
 				m_resources[path][typeID] = std::static_pointer_cast< void >(res);
 				if( !res->loadFromFile( path ) )
-					REPORT_ERROR( "File: " + path + "could not be loaded" );
-				return *res.get();
+					new PathNotAvailableException( path );
+				return res;
 			}
 			//wenn Path vorhanden
 			else
@@ -50,20 +51,20 @@ namespace kg
 					//neuen Typ (kein neues Path) einfügen
 					it->second[typeID] = std::static_pointer_cast< void >(res);
 					if( !res->loadFromFile( path ) )
-						REPORT_ERROR( "File: " + path + "could not be loaded" );
-					return *res.get();
+						new PathNotAvailableException( path );
+					return res;
 				}
 				//wenn Path und Typ vorhanden
 				else
 				{
-					return *(std::static_pointer_cast< T >(secondIt->second).get());
+					return std::static_pointer_cast< T >(secondIt->second);
 				}
 			}
 		}
 
 		// same as getResource but loadFromFile will be called in every case
 		template< class T >
-		T& reloadResource( const std::string& path )
+		std::shared_ptr<T> reloadResource( const std::string& path )
 		{
 			const size_t typeID = typeid(T).hash_code();
 
@@ -76,8 +77,8 @@ namespace kg
 				//neues element und signatur einfügen
 				m_resources[path][typeID] = std::static_pointer_cast< void >(res);
 				if( !res->loadFromFile( path ) )
-					REPORT_ERROR( "File: " + path + "could not be loaded" );
-				return *res.get();
+					new PathNotAvailableException( path );
+				return res;
 			}
 			//wenn Path vorhanden
 			else
@@ -91,13 +92,13 @@ namespace kg
 					//neuen Typ (kein neues Path) einfügen
 					it->second[typeID] = std::static_pointer_cast< void >(res);
 					if( !res->loadFromFile( path ) )
-						REPORT_ERROR( "File: " + path + "could not be loaded" );
-					return *res.get();
+						new PathNotAvailableException( path );
+					return res;
 				}
 				//wenn Path und Typ vorhanden
 				else
 				{
-					auto& obj = *(std::static_pointer_cast< T >(secondIt->second).get());
+					auto& obj = std::static_pointer_cast< T >(secondIt->second);
 					obj.loadFromFile( path );
 					return obj;
 				}
@@ -116,7 +117,7 @@ namespace kg
 		//
 		// resourcePath is relative to the packages 'Resource' folder
 		template< class T >
-		T& getResource( const std::string& packageName, const std::string& resourcePath )
+		std::shared_ptr<T> getResource( const std::string& packageName, const std::string& resourcePath )
 		{
 			return getResource<T>( "./Packages/" + packageName + "Resource" + resourcePath );
 		}
@@ -125,7 +126,7 @@ namespace kg
 		//
 		// resourcePath is relative to the packages 'Resource' folder
 		template< class T >
-		T& reloadResource( const std::string& packageName, const std::string& resourcePath )
+		std::shared_ptr<T> reloadResource( const std::string& packageName, const std::string& resourcePath )
 		{
 			return reloadResource<T>( "./Packages/" + packageName + "Resource" + resourcePath );
 		}

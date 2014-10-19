@@ -94,6 +94,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Blueprint.h" />
+    <ClInclude Include="PathNotAvailableException.h" />
     <ClInclude Include="Plugin.h" />
     <ClInclude Include="PluginFactory.h" />
     <ClInclude Include="PluginManager.h" />

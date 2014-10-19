@@ -17,12 +17,13 @@ namespace kg
 	{
 	public:
 		// get values from blueprint Entity
-		virtual void preInit( const std::map<std::string, blueprint::Value>& blueprintValues ) = 0;
+		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues ) = 0;
 
 		// it is guaranteed that all components of the entity are loaded at this point
 		// their init function is not guaranteed to have been called
 		virtual void init( Engine& engine, ComponentManager& componentManager ) = 0;
 
+		// components get updated before systems
 		virtual void update( Engine& engine, World& world, ComponentManager& componentManager ) = 0;
 
 		//the lower the importance, the earlier this component gets updated

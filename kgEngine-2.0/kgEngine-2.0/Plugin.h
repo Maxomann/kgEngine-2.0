@@ -7,6 +7,6 @@ namespace kg
 	{
 	public:
 		virtual const std::string& getPluginName()const = 0;
-		virtual const int getPluginId()const = 0;
+		virtual int getPluginId()const = 0;
 	};
 }

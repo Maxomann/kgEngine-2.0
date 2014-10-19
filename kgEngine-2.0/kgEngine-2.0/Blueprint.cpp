@@ -41,13 +41,11 @@ namespace kg
 		}
 
 		blueprint::Value::Value()
-		{
-		}
+		{ }
 
 		blueprint::Value::Value( std::string& name, std::string& rawValue ) :m_name( name ),
 			m_rawValue( rawValue )
-		{
-		}
+		{ }
 
 		std::string blueprint::Value::toStringWithBraces() const
 		{
@@ -96,11 +94,7 @@ namespace kg
 
 		double blueprint::Value::toDouble() const
 		{
-			std::istringstream i( m_rawValue );
-			double d = 0;
-			if( !(i >> d) )
-				d = 0;
-			return d;
+			return toDoubleWithUnit().first;
 		}
 
 		std::pair<int, std::string> blueprint::Value::toIntWithUnit() const
@@ -138,12 +132,10 @@ namespace kg
 
 		blueprint::Blueprint::Blueprint( std::string& name, ComponentValuesByNameByComponentMap& componentValuesByNameByComponent ) :m_name( name ),
 			m_componentValues( componentValuesByNameByComponent )
-		{
-		}
+		{ }
 
 		blueprint::Blueprint::Blueprint()
-		{
-		}
+		{ }
 
 		std::string blueprint::Entity::getName() const
 		{
@@ -195,12 +187,10 @@ namespace kg
 			m_name( name ),
 			m_inheritsFrom( inheritsFrom ),
 			m_componentValues( componentValuesByNameByComponent )
-		{
-		}
+		{ }
 
 		blueprint::Entity::Entity()
-		{
-		}
+		{ }
 
 		bool blueprint::ComponentDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
 		{

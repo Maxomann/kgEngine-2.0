@@ -38,7 +38,7 @@ namespace kg
 	public:
 		CallbackReciever();
 
-		std::weak_ptr<bool> aGetWeakPointer()const;
+		std::weak_ptr<bool> getWeakPointer()const;
 	};
 
 	//T=AdditionalCallbackArguments
@@ -92,7 +92,7 @@ namespace kg
 							   std::shared_ptr< std::function<void( int, T... )> > callbackFunction )
 		{
 			m_callbacksById[callbackId].push_back(
-				std::make_pair( thisPointer->aGetWeakPointer(),
+				std::make_pair( thisPointer->getWeakPointer(),
 				std::make_pair( std::static_pointer_cast< void >(callbackFunction), typeid(callbackFunction).hash_code() ) ) );
 		};
 
