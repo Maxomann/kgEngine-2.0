@@ -10,7 +10,7 @@
 // 		triggerCallback<const sf::Vector2i&, int>( 100, sf::Vector2i( 50, 66 ), 5235 );
 // 	};
 // };
-// 
+//
 // class Bar : public CallbackReciever
 // {
 // public:
@@ -18,7 +18,7 @@
 // 	{
 // 		cout << myVector.x << endl << myVector.y << endl << test << endl;
 // 	}
-// 
+//
 // 	void registerCallback( CallbackSender& sender )
 // 	{
 // 		sender.registerCallback_2<Bar, const sf::Vector2i&, int>( 100,
@@ -44,7 +44,7 @@ namespace kg
 	//T=AdditionalCallbackArguments
 	class DLL_EXPORT CallbackSender
 	{
-		typedef std::list<std::pair<std::weak_ptr<bool>, std::pair<std::shared_ptr<void>/*std::function<void( int&, T... )>*/, size_t> > > CallbackList;
+		typedef std::list<std::pair<std::weak_ptr<bool>, std::pair<std::shared_ptr<void>/*std::function<void( int, T... )>*/, size_t> > > CallbackList;
 		std::map<int, CallbackList> m_callbacksById;
 
 	protected:

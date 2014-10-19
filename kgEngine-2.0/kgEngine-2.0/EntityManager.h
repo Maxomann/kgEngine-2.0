@@ -8,8 +8,7 @@ namespace kg
 	{
 		std::unordered_map<Entity::Id, std::shared_ptr<Entity>> m_entities;
 
-		Entity::Id m_highestUniqueId=0;
-
+		Entity::Id m_highestUniqueId = 0;
 
 	public:
 		//not unique between servers/clients
@@ -43,8 +42,10 @@ namespace kg
 
 		void updateEntities( Engine& engine, World& world );
 
-
 		//helper function for creating a new Entity with a unique id
-		std::shared_ptr<Entity> createEntity( Engine& engine, const int& entityBlueprintId );
+		std::shared_ptr<Entity> createEntity( Engine& engine,
+											  const int& entityBlueprintId,
+											  const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues
+											  = blueprint::ComponentValuesByNameByComponentMap() );//componentValuesByNameByComponent
 	};
 }

@@ -9,7 +9,7 @@ namespace kg
 
 	public:
 		PluginRegistrationException( const int& pluginId )
-			:m_msg( std::to_string(pluginId) )
+			:m_msg( std::to_string( pluginId ) )
 		{ };
 
 		virtual const char* what()const

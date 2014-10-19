@@ -19,7 +19,7 @@ namespace kg
 	class Component;
 	class System;
 
-	class PluginManager
+	class DLL_EXPORT PluginManager
 	{
 		std::map<int, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorys;
 		std::map<int, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorys;

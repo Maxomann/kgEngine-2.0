@@ -49,7 +49,7 @@ namespace kg
 			addComponent( component, typeId );
 		};
 
-		void initComponents( Engine& engine );
+		void initComponentsByImportance( Engine& engine );
 
 		template<class T>
 		std::shared_ptr<T> getComponent()
@@ -70,11 +70,9 @@ namespace kg
 			//INTERNAL COMPILER ERROR : COMPILER BUG
 			// 			std::vector<size_t> componentTypes { (typeid(ComponentType).hash_code())... };
 
-
 			//WORKAROUND
 			std::vector<size_t> componentTypes;// { typeid(ComponentType).hash_code() };
 			workaround::fill<ComponentType>( componentTypes );
-
 
 			hasComponent( componentTypes );
 		};

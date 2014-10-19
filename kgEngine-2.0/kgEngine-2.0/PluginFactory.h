@@ -31,7 +31,7 @@ namespace kg
 	};
 
 	template<class FakeType, class RealType>
-	class DLL_EXPORT PluginFactory : public PluginFactoryInterface<FakeType>
+	class DLL_EXPORT PluginFactory : public PluginFactoryInterface < FakeType >
 	{
 	public:
 		PluginFactory( const int& pluginId, const std::string& pluginName )
@@ -40,7 +40,7 @@ namespace kg
 
 		virtual std::shared_ptr<FakeType> create()const
 		{
-			return std::static_pointer_cast<FakeType>( std::make_shared<RealType>() );
+			return std::static_pointer_cast< FakeType >(std::make_shared<RealType>());
 		};
 
 		virtual size_t getRealTypeHashCode() const
@@ -48,6 +48,5 @@ namespace kg
 			auto retVal = typeid(RealType).hash_code();
 			return retVal;
 		}
-
 	};
 }

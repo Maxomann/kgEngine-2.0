@@ -2,7 +2,6 @@
 
 namespace kg
 {
-
 	void SystemManager::updateAllSystemsByImportance( Engine& engine, World& world )
 	{
 		// the lower the importance, the earlier the system gets updated
@@ -11,10 +10,15 @@ namespace kg
 			el.second->update( engine, world );
 	}
 
-	void SystemManager::initSystems( Engine& engine )
+	void SystemManager::initSystemsByImportance( Engine& engine )
 	{
-		for( auto& system : m_systemsByType )
-			system.second->init( engine,*this );
+		for( auto& system : m_systemsByUpdateImportance )
+			system.second->init( engine, *this );
 	}
 
+	void SystemManager::forwardSfmlEventByImportance( const sf::Event& sfEvent )
+	{
+		for( const auto& el : m_systemsByUpdateImportance )
+			el.second->sfmlEvent( sfEvent );
+	}
 }

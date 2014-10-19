@@ -2,7 +2,6 @@
 
 namespace kg
 {
-
 	void ComponentManager::updateAllComponentsByImportance( Engine& engine, World& world )
 	{
 		// the lower the importance, the earlier the component gets updated
@@ -11,9 +10,9 @@ namespace kg
 			el.second->update( engine, world, *this );
 	}
 
-	void ComponentManager::initComponents( Engine& engine )
+	void ComponentManager::initComponentsByImportance( Engine& engine )
 	{
-		for( auto& component : m_componentsByType )
+		for( auto& component : m_componentsByUpdateImportance )
 			component.second->init( engine, *this );
 	}
 
@@ -29,5 +28,4 @@ namespace kg
 	{
 		return m_componentsByType;
 	}
-
 }

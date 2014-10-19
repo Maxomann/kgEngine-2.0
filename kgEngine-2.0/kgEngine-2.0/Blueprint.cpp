@@ -4,7 +4,6 @@ namespace kg
 {
 	namespace blueprint
 	{
-
 		bool blueprint::isLineEmpty( const std::string& line )
 		{
 			if( line.size() == NULL )
@@ -23,7 +22,6 @@ namespace kg
 			return a.find( b ) != std::string::npos;
 		}
 
-
 		blueprint::ParsingError::ParsingError( unsigned int line )
 			:m_msg( "parsing error on line:" + std::to_string( line ) )
 		{ }
@@ -33,26 +31,22 @@ namespace kg
 			return m_msg.c_str();
 		}
 
-
 		blueprint::LinkingError::LinkingError( std::string blueprintName )
 			:m_msg( "linking error to blueprint:" + blueprintName )
-		{}
+		{ }
 
 		const char* blueprint::LinkingError::what() const
 		{
 			return m_msg.c_str();
 		}
 
-
 		blueprint::Value::Value()
 		{
-
 		}
 
 		blueprint::Value::Value( std::string& name, std::string& rawValue ) :m_name( name ),
 			m_rawValue( rawValue )
 		{
-
 		}
 
 		std::string blueprint::Value::toStringWithBraces() const
@@ -63,7 +57,7 @@ namespace kg
 		std::string blueprint::Value::toString() const
 		{
 			std::string retVal = m_rawValue;
-			retVal.erase( 0,1 );
+			retVal.erase( 0, 1 );
 			retVal.pop_back();
 			return retVal;
 		}
@@ -125,7 +119,6 @@ namespace kg
 			return m_name;
 		}
 
-
 		std::string blueprint::Blueprint::getName() const
 		{
 			return m_name;
@@ -143,17 +136,14 @@ namespace kg
 			return std::pair<bool, Value>( false, Value() );
 		}
 
-		blueprint::Blueprint::Blueprint( std::string& name, std::map<std::string, std::map<std::string, Value>>& componentValuesByNameByComponent ) :m_name( name ),
+		blueprint::Blueprint::Blueprint( std::string& name, ComponentValuesByNameByComponentMap& componentValuesByNameByComponent ) :m_name( name ),
 			m_componentValues( componentValuesByNameByComponent )
 		{
-
 		}
 
 		blueprint::Blueprint::Blueprint()
 		{
-
 		}
-
 
 		std::string blueprint::Entity::getName() const
 		{
@@ -183,6 +173,13 @@ namespace kg
 
 		const std::pair<bool, Value> blueprint::Entity::getValue( const std::string& componentName, const std::string& valueName ) const
 		{
+			//search for value in inherited blueprints
+			for( auto it = m_inheritedBlueprints.rbegin(); it != m_inheritedBlueprints.rend(); ++it )
+			{
+				auto value = (*it)->getValue( componentName, valueName );
+				if( value.first == true )
+					return std::pair<bool, Value>( true, value.second );
+			}
 			//search for value internally
 			auto it = m_componentValues.find( componentName );
 			if( it != m_componentValues.end() )
@@ -191,29 +188,19 @@ namespace kg
 				if( it2 != it->second.end() )
 					return std::pair<bool, Value>( true, it2->second );
 			}
-			//search for value in inherited blueprints
-			for( auto it = m_inheritedBlueprints.rbegin(); it != m_inheritedBlueprints.rend(); ++it )
-			{
-				auto value = (*it)->getValue( componentName, valueName );
-				if( value.first == true )
-					return std::pair<bool, Value>( true, value.second );
-			}
 			return std::pair<bool, Value>( false, Value() );
 		}
 
-		blueprint::Entity::Entity( const unsigned int& id, std::string& name, std::vector<std::string>& inheritsFrom, std::map<std::string, std::map<std::string, Value>>& componentValuesByNameByComponent ) :m_id( id ),
+		blueprint::Entity::Entity( const unsigned int& id, std::string& name, std::vector<std::string>& inheritsFrom, ComponentValuesByNameByComponentMap& componentValuesByNameByComponent ) :m_id( id ),
 			m_name( name ),
 			m_inheritsFrom( inheritsFrom ),
 			m_componentValues( componentValuesByNameByComponent )
 		{
-
 		}
 
 		blueprint::Entity::Entity()
 		{
-
 		}
-
 
 		bool blueprint::ComponentDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
 		{
@@ -233,7 +220,6 @@ namespace kg
 					retVal.second.push_back( ch );
 			return retVal;
 		}
-
 
 		bool blueprint::ValueDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
 		{
@@ -270,7 +256,6 @@ namespace kg
 
 			return std::make_pair<unsigned int, Value>( firstLine + 1, Value( name, value ) );
 		}
-
 
 		bool blueprint::ComponentDefinition::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
 		{
@@ -344,7 +329,6 @@ namespace kg
 				);
 		}
 
-
 		bool blueprint::InheritanceDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
 		{
 			if( isLineEmpty( lines.at( line ) ) )
@@ -383,7 +367,6 @@ namespace kg
 			return std::pair<unsigned int, std::string>( firstLine + 1, entityName );
 		}
 
-
 		bool blueprint::BlueprintDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
 		{
 			if( isLineEmpty( lines.at( line ) ) )
@@ -398,7 +381,7 @@ namespace kg
 			auto lineVal = lines.at( line );
 
 			std::string blueprintName;
-			std::map<std::string, std::map<std::string, Value>> componentValues;
+			ComponentValuesByNameByComponentMap componentValues;
 
 			bool afterFirstSpaces = false;
 			bool afterComponent = false;
@@ -470,7 +453,6 @@ namespace kg
 													   );
 		}
 
-
 		bool blueprint::EntityDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
 		{
 			return contains( lines.at( line ), "ENTITY" );
@@ -483,7 +465,7 @@ namespace kg
 
 			std::string entityName;
 			std::string entityId;
-			std::map<std::string, std::map<std::string, Value>> componentValues;
+			ComponentValuesByNameByComponentMap componentValues;
 			std::vector<std::string> inheritsFrom;
 
 			bool afterFirstSpaces = false;
@@ -574,7 +556,6 @@ namespace kg
 													) );
 		}
 
-
 		const std::map<unsigned int, Entity>& blueprint::BlueprintManager::getEntitiesById() const
 		{
 			return m_entitiesById;
@@ -632,7 +613,6 @@ namespace kg
 			parse( lines );
 		}
 
-
 		std::vector<std::string> Entity::getComponentNames() const
 		{
 			std::vector<std::string> returnValue;
@@ -641,7 +621,7 @@ namespace kg
 				returnValue.push_back( el.first );
 			for( const auto& el : m_inheritedBlueprints )
 				for( const auto& componentName : el->getComponentNames() )
-					if( std::find(returnValue.begin(), returnValue.end(), componentName)==returnValue.end() )
+					if( std::find( returnValue.begin(), returnValue.end(), componentName ) == returnValue.end() )
 						returnValue.push_back( componentName );
 
 			return returnValue;
@@ -650,7 +630,7 @@ namespace kg
 		std::map<std::string, Value> Entity::getComponentValues( const std::string componentName ) const
 		{
 			std::map<std::string, Value> returnValue;
-			if( m_componentValues.find(componentName)!=m_componentValues.end())
+			if( m_componentValues.find( componentName ) != m_componentValues.end() )
 				returnValue = m_componentValues.at( componentName );
 
 			for( auto it = m_inheritedBlueprints.rbegin(); it != m_inheritedBlueprints.rend(); ++it )
@@ -662,7 +642,6 @@ namespace kg
 
 			return returnValue;
 		}
-
 
 		const std::map<std::string, Value> Blueprint::getComponentValues( const std::string& componentName ) const
 		{
@@ -682,7 +661,6 @@ namespace kg
 			return returnValue;
 		}
 
-
 		const Blueprint& BlueprintManager::getBlueprintByName( const std::string& name ) const
 		{
 			return m_blueprintsByName.at( name );
@@ -692,6 +670,5 @@ namespace kg
 		{
 			return m_entitiesById.at( id );
 		}
-
 	}
 }

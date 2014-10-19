@@ -104,7 +104,6 @@ namespace kg
 			}
 		}
 
-
 	public:
 
 		// Template argument is the type, NOT A POINTER TO IT!!!
@@ -123,13 +122,12 @@ namespace kg
 		}
 
 		// same as getResource but loadFromFile will be called in every case
-		// 
+		//
 		// resourcePath is relative to the packages 'Resource' folder
 		template< class T >
 		T& reloadResource( const std::string& packageName, const std::string& resourcePath )
 		{
 			return reloadResource<T>( "./Packages/" + packageName + "Resource" + resourcePath );
 		}
-
 	};
 }

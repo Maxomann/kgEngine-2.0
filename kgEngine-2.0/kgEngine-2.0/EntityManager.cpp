@@ -2,11 +2,10 @@
 
 namespace kg
 {
-
 	Entity::Id EntityManager::getUniqueEntityId()
 	{
 		m_highestUniqueId++;
-		return m_highestUniqueId-1;
+		return m_highestUniqueId - 1;
 	}
 
 	std::pair<bool, std::shared_ptr<Entity>> EntityManager::addEntity( std::shared_ptr<Entity>& entity )
@@ -45,10 +44,12 @@ namespace kg
 			entity.second->updateAllComponentsByImportance( engine, world );
 	}
 
-	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine, const int& entityBlueprintId )
+	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine,
+														 const int& entityBlueprintId,
+														 const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues )
 	{
 		auto returnValue = std::make_shared<Entity>( getUniqueEntityId() );
-		returnValue->initFromBlueprint( engine, engine.blueprint.getEntityById( entityBlueprintId ) );
+		returnValue->initFromBlueprint( engine, engine.blueprint.getEntityById( entityBlueprintId ), additionalBlueprintValues );
 
 		return returnValue;
 	}
@@ -57,5 +58,4 @@ namespace kg
 	{
 		m_highestUniqueId = id;
 	}
-
 }

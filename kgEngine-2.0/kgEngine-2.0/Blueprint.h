@@ -5,13 +5,15 @@ namespace kg
 {
 	namespace blueprint
 	{
+		class Value;
+		typedef std::map<std::string, std::map<std::string, Value>> ComponentValuesByNameByComponentMap;
+
 		const std::string file_extension = ".blueprint";
 
 		bool isLineEmpty( const std::string& line );
 
 		//checks if string a contains string b
 		bool contains( const std::string&a, const std::string b );
-
 
 		class ParsingError : public std::exception
 		{
@@ -30,7 +32,6 @@ namespace kg
 			LinkingError( std::string blueprintName );
 
 			const char* what()const override;
-
 		};
 
 		template<class T>
@@ -44,7 +45,6 @@ namespace kg
 			virtual bool canExecuteOn( unsigned int line,
 									   const std::vector<std::string>& lines ) = 0;
 		};
-
 
 		class DLL_EXPORT Value
 		{
@@ -71,11 +71,11 @@ namespace kg
 		class DLL_EXPORT Blueprint
 		{
 			std::string m_name;
-			std::map<std::string, std::map<std::string, Value>> m_componentValues;
+			ComponentValuesByNameByComponentMap m_componentValues;
 		public:
 			Blueprint();
 			Blueprint( std::string& name,
-					   std::map<std::string, std::map<std::string, Value>>& componentValuesByNameByComponent );
+					   ComponentValuesByNameByComponentMap& componentValuesByNameByComponent );
 
 			const std::pair<bool, Value> getValue( const std::string& componentName, const std::string& valueName )const;
 
@@ -84,7 +84,6 @@ namespace kg
 			std::vector<std::string> getComponentNames()const;
 
 			std::string getName()const;
-
 		};
 
 		class DLL_EXPORT Entity
@@ -93,18 +92,18 @@ namespace kg
 			std::string m_name;
 			std::vector<std::string> m_inheritsFrom;//in ascending override importance
 			std::vector<Blueprint*> m_inheritedBlueprints;//in ascending override importance
-			std::map<std::string, std::map<std::string, Value>> m_componentValues;
+			ComponentValuesByNameByComponentMap m_componentValues;//componentValuesByNameByComponent
 		public:
 			Entity();
 			Entity( const unsigned int& id,
 					std::string& name,
 					std::vector<std::string>& inheritsFrom,
-					std::map<std::string, std::map<std::string, Value>>& componentValuesByNameByComponent );
+					ComponentValuesByNameByComponentMap& componentValuesByNameByComponent );
 
 			const std::pair<bool, Value> getValue( const std::string& componentName, const std::string& valueName )const;
 
 			std::vector<std::string> getComponentNames()const;
-			std::map<std::string, Value> getComponentValues(const std::string componentName)const;
+			std::map<std::string, Value> getComponentValues( const std::string componentName )const;
 
 			void connectToBlueprints( std::map<std::string, Blueprint>& blueprintsByName );
 
@@ -113,10 +112,8 @@ namespace kg
 			std::string getName()const;
 		};
 
-
 		///////////////////////////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////
-
 
 		class ComponentDeclaration : public Command < std::string >
 		{
@@ -138,7 +135,6 @@ namespace kg
 			//can execute on any line that is not empty and does contain at least one double point
 			virtual bool canExecuteOn( unsigned int line,
 									   const std::vector<std::string>& lines );
-
 		};
 
 		class ComponentDefinition : public Command < std::pair<std::string, std::vector<Value> > >
@@ -149,7 +145,6 @@ namespace kg
 
 			virtual bool canExecuteOn( unsigned int line,
 									   const std::vector<std::string>& lines );
-
 		};
 
 		class InheritanceDeclaration : public Command < std::string >
@@ -160,7 +155,6 @@ namespace kg
 
 			virtual bool canExecuteOn( unsigned int line,
 									   const std::vector<std::string>& lines );
-
 		};
 
 		class BlueprintDeclaration :public Command < Blueprint >
@@ -171,7 +165,6 @@ namespace kg
 
 			virtual bool canExecuteOn( unsigned int line,
 									   const std::vector<std::string>& lines );
-
 		};
 
 		class EntityDeclaration :public Command < Entity >
@@ -182,7 +175,6 @@ namespace kg
 
 			virtual bool canExecuteOn( unsigned int line,
 									   const std::vector<std::string>& lines );
-
 		};
 
 		class BlueprintManager
@@ -208,7 +200,6 @@ namespace kg
 
 			DLL_EXPORT const Blueprint& getBlueprintByName( const std::string& name )const;
 			DLL_EXPORT const Entity& getEntityById( const int id )const;
-
 		};
 	}
 }

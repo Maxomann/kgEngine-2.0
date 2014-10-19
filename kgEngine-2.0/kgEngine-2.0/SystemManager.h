@@ -11,7 +11,7 @@ namespace kg
 	public:
 		// If this function returns true a system of type T has already been registered.
 		// This function overwrites the old system with the parameter of this function.
-		
+
 		bool addSystem( std::shared_ptr<System>& system, size_t realTypeHashCode )
 		{
 			double updateImportance = system->getUpdateImportance();
@@ -32,7 +32,7 @@ namespace kg
 			addSystem( system, typeId );
 		};
 
-		void initSystems( Engine& engine );
+		void initSystemsByImportance( Engine& engine );
 
 		template<class T>
 		std::shared_ptr<System>& getSystem()
@@ -50,6 +50,7 @@ namespace kg
 			return std::static_pointer_cast< CastTo >(getSystem<T>());
 		};
 
+		void forwardSfmlEventByImportance( const sf::Event& sfEvent );
 		void updateAllSystemsByImportance( Engine& engine, World& world );
 	};
 }

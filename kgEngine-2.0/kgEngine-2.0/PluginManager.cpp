@@ -2,8 +2,6 @@
 
 namespace kg
 {
-
-
 	void PluginManager::addComponentPlugin( const std::shared_ptr<PluginFactoryInterface<Component>>& componentPluginFactory )
 	{
 		int id = componentPluginFactory->getId();
@@ -32,9 +30,9 @@ namespace kg
 		{
 			auto& componentPluginFactory = m_componentPluginFactorys.at( pluginId );
 
-			return std::make_tuple( componentPluginFactory->getId(), componentPluginFactory->getRealTypeHashCode(), componentPluginFactory->create());
+			return std::make_tuple( componentPluginFactory->getId(), componentPluginFactory->getRealTypeHashCode(), componentPluginFactory->create() );
 		}
-		catch (std::out_of_range& e)
+		catch( std::out_of_range& e )
 		{
 			e;//to get rid of annoying warning C4101
 			throw PluginRequestException( pluginId );
@@ -111,5 +109,4 @@ namespace kg
 				return std::pair<int, std::string>( el.second->getId(), el.second->getName() );
 		return std::pair<int, std::string>( -1, "getPlugininformationByRealTypeHashCode::NOT_FOUND. HashCode: " + std::to_string( hashCode ) );
 	}
-
 }

@@ -9,7 +9,7 @@ namespace kg
 {
 	void Core::init()
 	{
-		m_engine.renderWindow.create( sf::VideoMode( 1080, 720 ), "kgEngine 2.0" );
+		m_engine.renderWindow.create( sf::VideoMode( 1080, 720 ), "kgEngine 2.0 - Window not initialized" );
 
 		loadPackages();
 		m_engine.blueprint.link();
@@ -18,7 +18,7 @@ namespace kg
 			m_world.addSystem( get<2>( el ), get<1>( el ) );
 
 		//init systems
-		m_world.initSystems( m_engine );
+		m_world.initSystemsByImportance( m_engine );
 	}
 
 	bool Core::shouldTerminate() const
@@ -30,17 +30,18 @@ namespace kg
 	{
 		m_engine.renderWindow.clear( Color::Green );
 
-		m_world.updateEntities( m_engine, m_world );
-		m_world.updateAllSystemsByImportance( m_engine, m_world );
-
-
 		Event event;
 		while( m_engine.renderWindow.pollEvent( event ) )
 		{
 			// "close requested" event: we close the window
 			if( event.type == Event::Closed )
 				m_engine.shouldTerminate = true;
+
+			m_world.forwardSfmlEventByImportance( event );
 		}
+
+		m_world.updateEntities( m_engine, m_world );
+		m_world.updateAllSystemsByImportance( m_engine, m_world );
 
 		//draw here
 		m_engine.renderWindow.display();
@@ -48,7 +49,7 @@ namespace kg
 
 	void Core::loadPackages()
 	{
-		auto packagesFolderPath = path("./");
+		auto packagesFolderPath = path( "./" );
 
 		std::vector<path> dllsToLoad;
 		std::vector<path> blueprintsToParse;
@@ -69,7 +70,7 @@ namespace kg
 		for( const auto& el : dllsToLoad )
 		{
 #ifdef _WIN32
-			HMODULE dllHandle = LoadLibrary( std::string(el).c_str() );
+			HMODULE dllHandle = LoadLibrary( std::string( el ).c_str() );
 			CONNECT connectFunction = ( CONNECT )GetProcAddress( dllHandle, "kgConnect" );
 			if( connectFunction )
 				connectFunction( m_engine.pluginManager );

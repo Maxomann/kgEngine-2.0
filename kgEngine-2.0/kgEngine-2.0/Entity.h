@@ -15,11 +15,17 @@ namespace kg
 	private:
 
 		const Entity::Id m_id;
+		blueprint::ComponentValuesByNameByComponentMap m_additionalComponentValues;
 
 	public:
 		Entity( const Id& id );
 
-		void initFromBlueprint( Engine& engine, const blueprint::Entity& entity );
+		void initFromBlueprint( Engine& engine,
+								const blueprint::Entity& entity,
+								const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues
+								= blueprint::ComponentValuesByNameByComponentMap() );//componentValuesByNameByComponent
+
+		const blueprint::ComponentValuesByNameByComponentMap& getAdditionalComponentValues()const;
 
 		const Id& getId()const;
 	};
