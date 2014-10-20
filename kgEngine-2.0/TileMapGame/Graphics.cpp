@@ -33,16 +33,21 @@ namespace kg
 		if( it != blueprintValues.end() )
 			textureRect.left = it->second.toInt();
 		m_sprite.setTextureRect( textureRect );
-
-		centerOrigin();
 	}
 
 	void Graphics::init( Engine& engine, ComponentManager& componentManager )
 	{
-		componentManager.getComponent<Position>()->registerCallback_1<Graphics, const sf::Vector2i&>(
-			( int )Position::CallbackId::CHANGED,
+		r_position = componentManager.getComponent<Position>().get();
+		r_boundingBox = componentManager.getComponent<BoundingBox>().get();
+
+		r_boundingBox->registerCallback_1<Graphics, const sf::IntRect&>(
+			( int )BoundingBox::CallbackId::CHANGED,
 			this,
-			&Graphics::onPositionChanged );
+			&Graphics::onBoundingBoxChanged );
+
+		centerOrigin();
+		scaleToBoundingBox();
+
 		return;
 	}
 
@@ -63,7 +68,7 @@ namespace kg
 
 	const std::string& Graphics::getPluginName() const
 	{
-		return "Graphics";
+		return PLUGIN_NAME;
 	}
 
 	int Graphics::getPluginId() const
@@ -86,9 +91,10 @@ namespace kg
 		return m_sprite.getTextureRect();
 	}
 
-	void Graphics::onPositionChanged( int callbackId, const sf::Vector2i& position )
+	void Graphics::onBoundingBoxChanged( int callbackId, const sf::IntRect& rect )
 	{
-		m_sprite.setPosition( sf::Vector2f( position ) );
+		m_sprite.setPosition(sf::Vector2f(r_position->get()));
+		scaleToBoundingBox();
 	}
 
 	void Graphics::centerOrigin()
@@ -96,13 +102,24 @@ namespace kg
 		m_sprite.setOrigin( sf::Vector2f( m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2 ) );
 	}
 
+	void Graphics::scaleToBoundingBox()
+	{
+		auto globalBounds = m_sprite.getGlobalBounds();
+
+ 		m_sprite.scale( sf::Vector2f(
+ 			r_boundingBox->get().width / globalBounds.width,
+ 			r_boundingBox->get().height / globalBounds.height) );
+	}
+
+	const std::string Graphics::PLUGIN_NAME = "Graphics";
+
 	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_LEFT = "texrect_left";
 
 	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_TOP = "texrect_top";
 
-	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_HEIGHT = "texrect_left";
+	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_HEIGHT = "texrect_height";
 
-	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_WIDTH = "texrect_left";
+	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_WIDTH = "texrect_width";
 
 	const std::string Graphics::BLUEPRINT_TEXTURE_PATH = "path";
 

@@ -31,7 +31,9 @@ namespace kg
 
 		void setSize( const sf::Vector2i& size );
 		sf::Vector2i getSize()const;
-		const sf::IntRect& getBoundingBox()const;
+		const sf::IntRect& get()const;
+
+		int getFeetPosition();//returns top+height
 
 		enum class CallbackId : int
 		{
@@ -40,6 +42,8 @@ namespace kg
 
 		static const std::string BLUEPRINT_WIDTH;
 		static const std::string BLUEPRINT_HEIGHT;
+
+		static const std::string PLUGIN_NAME;
 
 	};
 }

@@ -16,7 +16,7 @@ namespace kg
 			component.second->init( engine, *this );
 	}
 
-	bool ComponentManager::hasComponent( const std::vector<size_t>& componentTypes )
+	bool ComponentManager::hasComponent( const std::vector<size_t>& componentTypes )const
 	{
 		for( const auto& type : componentTypes )
 			if( m_componentsByType.find( type ) == m_componentsByType.end() )

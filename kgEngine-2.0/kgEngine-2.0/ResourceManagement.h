@@ -119,7 +119,7 @@ namespace kg
 		template< class T >
 		std::shared_ptr<T> getResource( const std::string& packageName, const std::string& resourcePath )
 		{
-			return getResource<T>( "./Packages/" + packageName + "Resource" + resourcePath );
+			return getResource<T>( "./Packages/" + packageName + "/Resource/" + resourcePath );
 		}
 
 		// same as getResource but loadFromFile will be called in every case
@@ -128,7 +128,7 @@ namespace kg
 		template< class T >
 		std::shared_ptr<T> reloadResource( const std::string& packageName, const std::string& resourcePath )
 		{
-			return reloadResource<T>( "./Packages/" + packageName + "Resource" + resourcePath );
+			return reloadResource<T>( "./Packages/" + packageName + "/Resource/" + resourcePath );
 		}
 	};
 }

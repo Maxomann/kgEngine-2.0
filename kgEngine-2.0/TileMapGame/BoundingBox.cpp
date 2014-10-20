@@ -41,7 +41,7 @@ namespace kg
 
 	const std::string& BoundingBox::getPluginName() const
 	{
-		return "BoundingBox";
+		return PLUGIN_NAME;
 	}
 
 	int BoundingBox::getPluginId() const
@@ -73,10 +73,17 @@ namespace kg
 		triggerCallback<const sf::IntRect&>( ( int )CallbackId::CHANGED, m_boundingBox );
 	}
 
-	const sf::IntRect& BoundingBox::getBoundingBox() const
+	const sf::IntRect& BoundingBox::get() const
 	{
 		return m_boundingBox;
 	}
+
+	int BoundingBox::getFeetPosition()
+	{
+		return m_boundingBox.top + m_boundingBox.height;
+	}
+
+	const std::string BoundingBox::PLUGIN_NAME = "BoundingBox";
 
 	const std::string BoundingBox::BLUEPRINT_WIDTH = "width";
 	const std::string BoundingBox::BLUEPRINT_HEIGHT = "height";

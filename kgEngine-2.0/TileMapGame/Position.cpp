@@ -32,7 +32,7 @@ namespace kg
 
 	const std::string& Position::getPluginName() const
 	{
-		return "Position";
+		return PLUGIN_NAME;
 	}
 
 	int Position::getPluginId() const
@@ -50,5 +50,12 @@ namespace kg
 	{
 		return m_position;
 	}
+
+	void Position::move( const sf::Vector2i& offset )
+	{
+		set( m_position + offset );
+	}
+
+	const std::string Position::PLUGIN_NAME = "Position";
 
 }

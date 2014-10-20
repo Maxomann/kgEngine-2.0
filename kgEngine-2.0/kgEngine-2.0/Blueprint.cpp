@@ -54,10 +54,15 @@ namespace kg
 
 		std::string blueprint::Value::toString() const
 		{
-			std::string retVal = m_rawValue;
-			retVal.erase( 0, 1 );
-			retVal.pop_back();
-			return retVal;
+			if( m_rawValue.at( 0 ) == '"' && *m_rawValue.rbegin() == '"' )
+			{
+				std::string retVal = m_rawValue;
+				retVal.erase( 0, 1 );
+				retVal.pop_back();
+				return retVal;
+			}
+			else
+				return m_rawValue;
 		}
 
 		std::pair<double, std::string> blueprint::Value::toDoubleWithUnit() const
@@ -590,7 +595,7 @@ namespace kg
 		void blueprint::BlueprintManager::parse( const std::string& path )
 		{
 			std::ifstream file;
-			file.open( "test.blueprint" );
+			file.open( path );
 
 			std::vector<std::string> lines;
 

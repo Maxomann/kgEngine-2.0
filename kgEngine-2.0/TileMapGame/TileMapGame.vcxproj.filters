@@ -33,6 +33,9 @@
     <ClCompile Include="Graphics.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="GraphicsSystem.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="Graphics.h">
       <Filter>Headerdateien\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsSystem.h">
+      <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

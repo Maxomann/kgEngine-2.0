@@ -27,9 +27,13 @@ namespace kg
 
 		const sf::Vector2i& get()const;
 
+		void move( const sf::Vector2i& offset );
+
 		enum class CallbackId : int
 		{
 			CHANGED//T: const sf::Vector2i&
 		};
+
+		static const std::string PLUGIN_NAME;
 	};
 }

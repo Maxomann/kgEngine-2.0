@@ -79,11 +79,13 @@
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="connect.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="Position.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="id.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="stdafx.h" />

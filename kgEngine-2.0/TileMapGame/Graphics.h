@@ -5,13 +5,17 @@
 
 namespace kg
 {
-	class Graphics : public Component, public CallbackReciever, sf::Drawable
+	class Graphics : public Component, public CallbackReciever, public sf::Drawable
 	{
+		Position* r_position;
+		BoundingBox* r_boundingBox;
+
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;
 		sf::Sprite m_sprite;
 
-		void onPositionChanged( int callbackId, const sf::Vector2i& position );
+		void onBoundingBoxChanged( int callbackId, const sf::IntRect& rect );
 		void centerOrigin();
+		void scaleToBoundingBox();
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
@@ -40,5 +44,6 @@ namespace kg
 		static const std::string BLUEPRINT_TEXTURE_RECT_TOP;
 		static const std::string BLUEPRINT_TEXTURE_RECT_LEFT;
 
+		static const std::string PLUGIN_NAME;
 	};
 }

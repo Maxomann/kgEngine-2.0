@@ -41,7 +41,7 @@ namespace kg
 			{
 				if( !hasComponent( { requieredComponentHash } ) )
 				{
-					auto information = engine.pluginManager.getPlugininformationByRealTypeHashCode( requieredComponentHash );
+					auto information = engine.pluginManager.getPluginInformationByRealTypeHashCode( requieredComponentHash );
 					throw ComponentMissingException( component.second->getPluginName(),
 													 component.second->getPluginId(),
 													 information.second,

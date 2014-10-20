@@ -74,11 +74,11 @@ namespace kg
 			std::vector<size_t> componentTypes;// { typeid(ComponentType).hash_code() };
 			workaround::fill<ComponentType>( componentTypes );
 
-			hasComponent( componentTypes );
+			return hasComponent( componentTypes );
 		};
 
 		//returns true if all components of type ComponentType are registered
-		bool hasComponent( const std::vector<size_t>& componentTypes );
+		bool hasComponent( const std::vector<size_t>& componentTypes )const;
 
 		const std::map<size_t, std::shared_ptr<Component>>& getAllComponentsByTypeHash()const;
 	};

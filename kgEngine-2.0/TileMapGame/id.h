@@ -6,7 +6,7 @@ namespace kg
 		{
 			FIRST_ELEMENT,
 
-
+			GRAPHICS_SYSTEM,
 
 			LAST_ELEMENT
 		};
@@ -26,7 +26,7 @@ namespace kg
 		{
 			FIRST_ELEMENT,
 
-
+			GRAPHICS_SYSTEM,
 
 			LAST_ELEMENT
 		};
