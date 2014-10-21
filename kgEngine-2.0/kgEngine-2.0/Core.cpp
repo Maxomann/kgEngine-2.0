@@ -19,7 +19,7 @@ namespace kg
 			m_world.addSystem( get<2>( el ), get<1>( el ) );
 
 		//init systems
-		m_world.initSystemsByImportance( m_engine );
+		m_world.initSystemsByImportance( m_engine, m_world );
 	}
 
 	bool Core::shouldTerminate() const
@@ -29,7 +29,7 @@ namespace kg
 
 	void Core::update()
 	{
-		m_engine.renderWindow.clear( Color::Green );
+		m_engine.renderWindow.clear( Color::Red );
 
 		Event event;
 		while( m_engine.renderWindow.pollEvent( event ) )

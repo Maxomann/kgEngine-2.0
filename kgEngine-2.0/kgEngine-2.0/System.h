@@ -11,7 +11,7 @@ namespace kg
 	class DLL_EXPORT System : public Plugin
 	{
 	public:
-		virtual void init( Engine& engine, SystemManager& systemManager ) = 0;
+		virtual void init( Engine& engine, World& world ) = 0;
 
 		// sfml event loop is forwarded before update() is called
 		virtual void sfmlEvent( const sf::Event& sfEvent ) = 0;

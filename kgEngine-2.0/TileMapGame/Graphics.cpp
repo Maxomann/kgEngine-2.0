@@ -40,8 +40,12 @@ namespace kg
 		r_position = componentManager.getComponent<Position>().get();
 		r_boundingBox = componentManager.getComponent<BoundingBox>().get();
 
-		r_boundingBox->registerCallback_1<Graphics, const sf::IntRect&>(
-			( int )BoundingBox::CallbackId::CHANGED,
+		r_position->registerCallback_1<Graphics, const sf::Vector2i&>(
+			( int )Position::CallbackId::CHANGED,
+			this,
+			&Graphics::onPositionChanged );
+		r_boundingBox->registerCallback_1<Graphics, const sf::Vector2i&>(
+			( int )BoundingBox::CallbackId::SIZE_CHANGED,
 			this,
 			&Graphics::onBoundingBoxChanged );
 
@@ -91,9 +95,8 @@ namespace kg
 		return m_sprite.getTextureRect();
 	}
 
-	void Graphics::onBoundingBoxChanged( int callbackId, const sf::IntRect& rect )
+	void Graphics::onBoundingBoxChanged( int callbackId, const sf::Vector2i& newSize )
 	{
-		m_sprite.setPosition(sf::Vector2f(r_position->get()));
 		scaleToBoundingBox();
 	}
 
@@ -109,6 +112,11 @@ namespace kg
  		m_sprite.scale( sf::Vector2f(
  			r_boundingBox->get().width / globalBounds.width,
  			r_boundingBox->get().height / globalBounds.height) );
+	}
+
+	void Graphics::onPositionChanged( int callbackId, const sf::Vector2i& newPosition )
+	{
+		m_sprite.setPosition( sf::Vector2f(newPosition) );
 	}
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";

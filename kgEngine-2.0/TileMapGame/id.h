@@ -18,6 +18,7 @@ namespace kg
 			POSITION,
 			BOUNDING_BOX,
 			GRAPHICS,
+			CAMERA,
 
 			LAST_ELEMENT
 		};
@@ -38,6 +39,7 @@ namespace kg
 			POSITION,
 			BOUNDING_BOX,
 			GRAPHICS,
+			CAMERA,
 
 			LAST_ELEMENT
 		};

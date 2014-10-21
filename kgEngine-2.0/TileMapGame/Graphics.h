@@ -13,7 +13,8 @@ namespace kg
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;
 		sf::Sprite m_sprite;
 
-		void onBoundingBoxChanged( int callbackId, const sf::IntRect& rect );
+		void onPositionChanged( int callbackId, const sf::Vector2i& newPosition );
+		void onBoundingBoxChanged( int callbackId, const sf::Vector2i& newSize );
 		void centerOrigin();
 		void scaleToBoundingBox();
 

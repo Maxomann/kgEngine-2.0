@@ -10,10 +10,10 @@ namespace kg
 			el.second->update( engine, world );
 	}
 
-	void SystemManager::initSystemsByImportance( Engine& engine )
+	void SystemManager::initSystemsByImportance( Engine& engine, World& world )
 	{
 		for( auto& system : m_systemsByUpdateImportance )
-			system.second->init( engine, *this );
+			system.second->init( engine, world );
 	}
 
 	void SystemManager::forwardSfmlEventByImportance( const sf::Event& sfEvent )

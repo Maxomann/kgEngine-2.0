@@ -37,7 +37,7 @@ namespace kg
 
 		enum class CallbackId : int
 		{
-			CHANGED//T: const sf:IntRect&
+			SIZE_CHANGED//T: const sf::Vector2i& newSize
 		};
 
 		static const std::string BLUEPRINT_WIDTH;

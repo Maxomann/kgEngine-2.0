@@ -36,6 +36,9 @@
     <ClCompile Include="GraphicsSystem.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="GraphicsSystem.h">
       <Filter>Headerdateien\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Headerdateien\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

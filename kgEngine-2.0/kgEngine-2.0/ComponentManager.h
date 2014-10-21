@@ -46,7 +46,7 @@ namespace kg
 		bool addComponent( std::shared_ptr<Component>& component )
 		{
 			size_t typeId = typeid(T).hash_code();
-			addComponent( component, typeId );
+			return addComponent( component, typeId );
 		};
 
 		void initComponentsByImportance( Engine& engine );

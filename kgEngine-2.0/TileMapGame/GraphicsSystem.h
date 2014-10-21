@@ -1,16 +1,17 @@
 #pragma once
 #include "stdafx.h"
 #include "Graphics.h"
+#include "Camera.h"
 
 namespace kg
 {
 	class GraphicsSystem : public System
 	{
-// 		sf::Vector2i position;
-// 		std::shared_ptr<Entity> myEntity;
+		std::shared_ptr<Entity> m_camera;
+		std::shared_ptr<Entity> m_test;
 
 	public:
-		virtual void init( Engine& engine, SystemManager& systemManager );
+		virtual void init( Engine& engine, World& world );
 
 		virtual void sfmlEvent( const sf::Event& sfEvent );
 
@@ -23,6 +24,8 @@ namespace kg
 		virtual int getPluginId() const;
 
 		static const std::string PLUGIN_NAME;
+
+
 
 	};
 }

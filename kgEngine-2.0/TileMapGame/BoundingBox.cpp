@@ -59,6 +59,7 @@ namespace kg
 		m_boundingBox.width = size.x;
 		m_boundingBox.height = size.y;
 		setCenter( r_position->get() );
+		triggerCallback<const sf::Vector2i&>( ( int )CallbackId::SIZE_CHANGED, sf::Vector2i(m_boundingBox.width, m_boundingBox.height) );
 	}
 
 	sf::Vector2i BoundingBox::getSize() const
@@ -70,7 +71,6 @@ namespace kg
 	{
 		m_boundingBox.left = position.x - m_boundingBox.width / 2;
 		m_boundingBox.top = position.y - m_boundingBox.height / 2;
-		triggerCallback<const sf::IntRect&>( ( int )CallbackId::CHANGED, m_boundingBox );
 	}
 
 	const sf::IntRect& BoundingBox::get() const
