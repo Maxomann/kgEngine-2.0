@@ -4,14 +4,9 @@
 
 namespace kg
 {
-	class BoundingBox : public Component, public CallbackSender, public CallbackReciever
+	class Size : public Component, public CallbackSender, public CallbackReciever
 	{
-		Position* r_position;
-
-		sf::IntRect m_boundingBox;
-
-		void onPositionChanged(int CallbackId, const sf::Vector2i& position);
-		void setCenter( const sf::Vector2i& position );
+		sf::Vector2i m_size;
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
@@ -29,15 +24,12 @@ namespace kg
 		virtual int getPluginId() const;
 
 
-		void setSize( const sf::Vector2i& size );
-		sf::Vector2i getSize()const;
-		const sf::IntRect& get()const;
-
-		int getFeetPosition();//returns top+height
+		void set( const sf::Vector2i& size );
+		sf::Vector2i get()const;
 
 		enum class CallbackId : int
 		{
-			SIZE_CHANGED//T: const sf::Vector2i& newSize
+			CHANGED//T: const sf::Vector2i& newSize
 		};
 
 		static const std::string BLUEPRINT_WIDTH;

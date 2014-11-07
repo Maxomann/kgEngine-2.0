@@ -1,3 +1,5 @@
+#pragma once
+
 namespace kg
 {
 	namespace id
@@ -7,6 +9,7 @@ namespace kg
 			FIRST_ELEMENT,
 
 			GRAPHICS_SYSTEM,
+			GAME,
 
 			LAST_ELEMENT
 		};
@@ -16,7 +19,9 @@ namespace kg
 			FIRST_ELEMENT = ( int )SystemPluginId::LAST_ELEMENT,
 
 			POSITION,
-			BOUNDING_BOX,
+			SIZE,
+			ROTATION,
+			GLOBAL_BOUNDS,
 			GRAPHICS,
 			CAMERA,
 
@@ -28,6 +33,7 @@ namespace kg
 			FIRST_ELEMENT,
 
 			GRAPHICS_SYSTEM,
+			GAME,
 
 			LAST_ELEMENT
 		};
@@ -37,7 +43,9 @@ namespace kg
 			FIRST_ELEMENT,
 
 			POSITION,
-			BOUNDING_BOX,
+			SIZE,
+			ROTATION,
+			GLOBAL_BOUNDS,
 			GRAPHICS,
 			CAMERA,
 

@@ -1,10 +1,13 @@
 #include<_PluginCreator.h>
 
 #include "Position.h"
-#include "BoundingBox.h"
+#include "Size.h"
 #include "Graphics.h"
+#include "Rotation.h"
+#include "GlobalBounds.h"
 
 #include "GraphicsSystem.h"
+#include "Game.h"
 
 using namespace std;
 using namespace kg;
@@ -19,13 +22,21 @@ extern "C"
 			( int )id::ComponentPluginId::POSITION,
 			Position::PLUGIN_NAME ) );
 		pluginManager.addComponentPlugin(
-			std::make_shared<PluginFactory<Component, BoundingBox>>(
-			( int )id::ComponentPluginId::BOUNDING_BOX,
-			BoundingBox::PLUGIN_NAME ) );
+			std::make_shared<PluginFactory<Component, Size>>(
+			( int )id::ComponentPluginId::SIZE,
+			Size::PLUGIN_NAME ) );
 		pluginManager.addComponentPlugin(
 			std::make_shared<PluginFactory<Component, Graphics>>(
 			( int )id::ComponentPluginId::GRAPHICS,
 			Graphics::PLUGIN_NAME ) );
+		pluginManager.addComponentPlugin(
+			std::make_shared<PluginFactory<Component, Rotation>>(
+			( int )id::ComponentPluginId::ROTATION,
+			Rotation::PLUGIN_NAME ) );
+		pluginManager.addComponentPlugin(
+			std::make_shared<PluginFactory<Component, GlobalBounds>>(
+			( int )id::ComponentPluginId::GLOBAL_BOUNDS,
+			GlobalBounds::PLUGIN_NAME ) );
 		//Camera not registered as a plugin. A camera entity is created in the GraphicsSystem
 
 
@@ -34,5 +45,9 @@ extern "C"
 			std::make_shared<PluginFactory<System, GraphicsSystem>>(
 			( int )id::SystemPluginId::GRAPHICS_SYSTEM,
 			GraphicsSystem::PLUGIN_NAME ) );
+		pluginManager.addSystemPlugin(
+			std::make_shared<PluginFactory<System, Game>>(
+			( int )id::SystemPluginId::GAME,
+			Game::PLUGIN_NAME ) );
 	}
 }

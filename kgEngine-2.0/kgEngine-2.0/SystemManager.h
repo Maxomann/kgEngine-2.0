@@ -35,13 +35,13 @@ namespace kg
 		void initSystemsByImportance( Engine& engine, World& world );
 
 		template<class T>
-		std::shared_ptr<System>& getSystem()
+		std::shared_ptr<T> getSystem()
 		{
 			auto it = m_systemsByType.find( typeid(T).hash_code() );
 			if( it == m_systemsByType.end() )
-				return nullptr;
+				return std::static_pointer_cast< T >(std::shared_ptr<void>());
 			else
-				return it->second;
+				return static_pointer_cast<T>(it->second);
 		};
 
 		template<class T, class CastTo>

@@ -11,6 +11,7 @@ namespace kg
 	class DLL_EXPORT System : public Plugin
 	{
 	public:
+		//other systems are not guaranteed to be initialized
 		virtual void init( Engine& engine, World& world ) = 0;
 
 		// sfml event loop is forwarded before update() is called

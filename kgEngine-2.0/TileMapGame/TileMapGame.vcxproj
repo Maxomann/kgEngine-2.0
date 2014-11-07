@@ -76,16 +76,22 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="GlobalBounds.cpp" />
+    <ClCompile Include="Rotation.cpp" />
+    <ClCompile Include="Size.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="connect.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="Position.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="GlobalBounds.h" />
+    <ClInclude Include="Rotation.h" />
+    <ClInclude Include="Size.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="id.h" />

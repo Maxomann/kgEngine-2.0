@@ -64,10 +64,24 @@ namespace kg
 				{
 					//call callback
 					//pass callbackId
-					auto function = std::static_pointer_cast< std::function<void( int, T... )> >(it->second.first);
-					if( it->second.second != typeid(function).hash_code() )
-						throw std::bad_function_call( "CallbackSender::triggerCallback wrong callback signature" );
-					(*function)(callbackID, args...);
+					if( it->second.second == typeid(std::shared_ptr<std::function<void( int )>>).hash_code() )
+					{
+						//if callback function should ignore callback arguments
+						auto function = std::static_pointer_cast< std::function<void( int )> >(it->second.first);
+						(*function)(callbackID);
+					}
+					else
+					{
+						auto function = std::static_pointer_cast< std::function<void( int, T... )> >(it->second.first);
+						if( it->second.second != typeid(function).hash_code() )
+						{
+							//if callback function has wrong signature
+							throw std::bad_function_call( "CallbackSender::triggerCallback wrong callback signature" );
+						}
+
+						//if callback function has correct
+						(*function)(callbackID, args...);
+					}
 				}
 				//object has been deleted
 				else
@@ -97,14 +111,14 @@ namespace kg
 		};
 
 		//number behind functionName is the number of additional arguments
-		template<class ClassName, class variadic T>
+		template<class ClassName>
 		void registerCallback_0( int callbackId,
 								 ClassName* thisPointer,
-								 void(ClassName::* mem_fn_ptr) (int, T...) )
+								 void(ClassName::* mem_fn_ptr) (int) )
 		{
 			registerCallback( callbackId,
 							  thisPointer,
-							  std::make_shared<std::function<void( int, T... )> >(
+							  std::make_shared<std::function<void( int )> >(
 							  std::bind(
 							  mem_fn_ptr,
 							  thisPointer,

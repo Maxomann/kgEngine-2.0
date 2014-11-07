@@ -15,16 +15,17 @@ namespace kg
 	void Camera::init( Engine& engine, ComponentManager& componentManager )
 	{
 		r_position = componentManager.getComponent<Position>().get();
-		r_boundingBox = componentManager.getComponent<BoundingBox>().get();
+		r_size = componentManager.getComponent<Size>().get();
+		r_globalBounds = componentManager.getComponent<GlobalBounds>().get();
 
 		r_position->registerCallback_1<Camera, const sf::Vector2i&>(
 			( int )Position::CallbackId::CHANGED,
 			this,
 			&Camera::onPositionChanged );
-		r_boundingBox->registerCallback_1<Camera, const sf::Vector2i&>(
-			( int )BoundingBox::CallbackId::SIZE_CHANGED,
+		r_size->registerCallback_1<Camera, const sf::Vector2i&>(
+			( int )Size::CallbackId::CHANGED,
 			this,
-			&Camera::onBoundingBoxChanged );
+			&Camera::onSizeChanged );
 	}
 
 	void Camera::update( Engine& engine, World& world, ComponentManager& componentManager )
@@ -33,14 +34,20 @@ namespace kg
 		m_texture.setView( m_view );
 
 		auto toDraw = world.getEntitiesThatHaveComponent<Graphics>();
-		map<int, std::vector<shared_ptr<Entity>>> sortedByFeetPosition;
+		map<int, std::vector<shared_ptr<Entity>>> sortedByZValue;
 		for( auto& el : toDraw )
 		{
-			auto feetPosition = el->getComponent<BoundingBox>()->getFeetPosition();
-			sortedByFeetPosition[feetPosition].push_back( el );
+			auto graphics = el->getComponent<Graphics>();
+			auto globalBounds = el->getComponent<GlobalBounds>();
+
+			if( globalBounds->get().intersects( r_globalBounds->get() ) )//only add if visible on this camera
+			{
+				auto zValue = graphics->getZValue();
+				sortedByZValue[zValue].push_back( el );
+			}
 		}
 
-		for( const auto& el : sortedByFeetPosition )
+		for( const auto& el : sortedByZValue )
 			for( const auto& entity : el.second )
 				m_texture.draw( *entity->getComponent<Graphics>() );
 
@@ -56,7 +63,7 @@ namespace kg
 
 	std::vector<size_t> Camera::getRequieredComponents() const
 	{
-		return{ typeid(Position).hash_code(), typeid(BoundingBox).hash_code() };
+		return{ typeid(Position).hash_code(), typeid(Size).hash_code(), typeid(GlobalBounds).hash_code() };
 	}
 
 	const std::string& Camera::getPluginName() const
@@ -87,7 +94,7 @@ namespace kg
 		m_view.setCenter( sf::Vector2f( newPosition ) );
 	}
 
-	void Camera::onBoundingBoxChanged( int callbacId, const sf::Vector2i& newSize )
+	void Camera::onSizeChanged( int callbacId, const sf::Vector2i& newSize )
 	{
 		m_view.setSize( sf::Vector2f( newSize ) );
 		m_texture.create( newSize.x, newSize.y );

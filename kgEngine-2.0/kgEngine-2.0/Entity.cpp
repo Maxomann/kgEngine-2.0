@@ -25,10 +25,10 @@ namespace kg
 
 			auto componentValues = entity.getComponentValues( name );
 			//add additional component values to the map
-			auto additionalComponentValues = additionalBlueprintValues.find( name );
-			if( additionalComponentValues != additionalBlueprintValues.end() )
-				for( const auto& el : (*additionalComponentValues).second )
-					componentValues[el.first] = el.second;
+			auto additionalComponentValuesForComponent = additionalBlueprintValues.find( name );
+			if( additionalComponentValuesForComponent != additionalBlueprintValues.end() )
+				for( const auto& el : (*additionalComponentValuesForComponent).second )
+					componentValues[el.first] = el.second;//override existing value (if it exists)
 
 			component->preInit( engine, componentValues );
 			addComponent( component, std::get<1>( createdComponent ) );
@@ -42,8 +42,10 @@ namespace kg
 				if( !hasComponent( { requieredComponentHash } ) )
 				{
 					auto information = engine.pluginManager.getPluginInformationByRealTypeHashCode( requieredComponentHash );
-					throw ComponentMissingException( component.second->getPluginName(),
-													 component.second->getPluginId(),
+					auto name = component.second->getPluginName();
+					auto id = component.second->getPluginId();
+					throw ComponentMissingException( name,
+													 id,
 													 information.second,
 													 information.first );
 				}

@@ -1,9 +1,10 @@
 ENTITY MyFirstEntity:100
 	Position
-	BoundingBox
+	Size
+	GlobalBounds
 	Graphics
 	
-	COMPONENT BoundingBox
+	COMPONENT Size
 		width:256px
 		height:256px
 	END

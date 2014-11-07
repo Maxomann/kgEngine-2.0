@@ -7,7 +7,8 @@ namespace kg
 	class Camera : public Component, public sf::Drawable, public CallbackReciever
 	{
 		Position* r_position;
-		BoundingBox* r_boundingBox;
+		Size* r_size;
+		GlobalBounds* r_globalBounds;
 
 		sf::View m_view;
 		sf::RenderTexture m_texture;
@@ -15,7 +16,7 @@ namespace kg
 		sf::Vector2i m_screenOffset;
 
 		void onPositionChanged( int callbackId, const sf::Vector2i& newPosition );
-		void onBoundingBoxChanged( int callbacId, const sf::Vector2i& newSize );
+		void onSizeChanged( int callbacId, const sf::Vector2i& newSize );
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
@@ -45,6 +46,7 @@ namespace kg
 		// the offset that will be applied to the rendered image of the camera before drawing on the screen
 		void setScreenOffset( const sf::Vector2i& offset );
 		const sf::Vector2i& getScreenOffset()const;
+
 
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 

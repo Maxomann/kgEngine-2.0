@@ -24,6 +24,32 @@ namespace kg
 		m_systemPluginFactorysByName[systemPluginFactory->getName()] = systemPluginFactory;
 	}
 
+	std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> PluginManager::createEverySystemAvailable()const
+	{
+		std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> returnValue;
+
+		for( const auto& el : m_systemPluginFactorys )
+		{
+			std::tuple<int, size_t, std::shared_ptr<System>> tempRetVal;
+
+			std::get<0>( tempRetVal ) = el.second->getId();
+			std::get<1>( tempRetVal ) = el.second->getRealTypeHashCode();
+			std::get<2>( tempRetVal ) = el.second->create();
+
+			returnValue.push_back( tempRetVal );
+		}
+
+		return returnValue;
+	}
+
+	const std::pair<int, std::string> PluginManager::getPluginInformationByRealTypeHashCode( size_t hashCode )const
+	{
+		for( const auto& el : m_componentPluginFactorys )
+			if( el.second->getRealTypeHashCode() == hashCode )
+				return std::pair<int, std::string>( el.second->getId(), el.second->getName() );
+		return std::pair<int, std::string>( -1, "getPluginInformationByRealTypeHashCode::NOT_FOUND. HashCode: " + std::to_string( hashCode ) );
+	}
+
 	std::tuple<int, size_t, std::shared_ptr<Component>> PluginManager::createComponentPlugin( const int& pluginId )
 	{
 		try
@@ -82,31 +108,5 @@ namespace kg
 			e;//to get rid of annoying warning C4101
 			throw PluginRequestException( pluginName );
 		}
-	}
-
-	std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> PluginManager::createEverySystemAvailable()const
-	{
-		std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> returnValue;
-
-		for( const auto& el : m_systemPluginFactorys )
-		{
-			std::tuple<int, size_t, std::shared_ptr<System>> tempRetVal;
-
-			std::get<0>( tempRetVal ) = el.second->getId();
-			std::get<1>( tempRetVal ) = el.second->getRealTypeHashCode();
-			std::get<2>( tempRetVal ) = el.second->create();
-
-			returnValue.push_back( tempRetVal );
-		}
-
-		return returnValue;
-	}
-
-	const std::pair<int, std::string> PluginManager::getPluginInformationByRealTypeHashCode( size_t hashCode )const
-	{
-		for( const auto& el : m_componentPluginFactorys )
-			if( el.second->getRealTypeHashCode() == hashCode )
-				return std::pair<int, std::string>( el.second->getId(), el.second->getName() );
-		return std::pair<int, std::string>( -1, "getPluginInformationByRealTypeHashCode::NOT_FOUND. HashCode: " + std::to_string( hashCode ) );
 	}
 }

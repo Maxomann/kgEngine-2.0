@@ -37,20 +37,27 @@ namespace kg
 
 	void Graphics::init( Engine& engine, ComponentManager& componentManager )
 	{
-		r_position = componentManager.getComponent<Position>().get();
-		r_boundingBox = componentManager.getComponent<BoundingBox>().get();
+		auto position = componentManager.getComponent<Position>().get();
+		r_size = componentManager.getComponent<Size>().get();
+		auto rotation = componentManager.getComponent<Rotation>().get();
+		r_globalBounds = componentManager.getComponent<GlobalBounds>().get();
 
-		r_position->registerCallback_1<Graphics, const sf::Vector2i&>(
+		position->registerCallback_1(
 			( int )Position::CallbackId::CHANGED,
 			this,
 			&Graphics::onPositionChanged );
-		r_boundingBox->registerCallback_1<Graphics, const sf::Vector2i&>(
-			( int )BoundingBox::CallbackId::SIZE_CHANGED,
+		r_size->registerCallback_1(
+			( int )Size::CallbackId::CHANGED,
 			this,
 			&Graphics::onBoundingBoxChanged );
+		if( rotation )
+			rotation->registerCallback_1(
+			( int )Rotation::CallbackId::CHANGED,
+			this,
+			&Graphics::onRotationChanged );
 
 		centerOrigin();
-		scaleToBoundingBox();
+		scaleToObjectSize();
 
 		return;
 	}
@@ -67,7 +74,7 @@ namespace kg
 
 	std::vector<size_t> Graphics::getRequieredComponents() const
 	{
-		return{ typeid(Position).hash_code(), typeid(BoundingBox).hash_code() };
+		return{ typeid(Position).hash_code(), typeid(Size).hash_code(), typeid(GlobalBounds).hash_code() };
 	}
 
 	const std::string& Graphics::getPluginName() const
@@ -97,7 +104,7 @@ namespace kg
 
 	void Graphics::onBoundingBoxChanged( int callbackId, const sf::Vector2i& newSize )
 	{
-		scaleToBoundingBox();
+		scaleToObjectSize();
 	}
 
 	void Graphics::centerOrigin()
@@ -105,18 +112,29 @@ namespace kg
 		m_sprite.setOrigin( sf::Vector2f( m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2 ) );
 	}
 
-	void Graphics::scaleToBoundingBox()
+	void Graphics::scaleToObjectSize()
 	{
 		auto globalBounds = m_sprite.getGlobalBounds();
 
- 		m_sprite.scale( sf::Vector2f(
- 			r_boundingBox->get().width / globalBounds.width,
- 			r_boundingBox->get().height / globalBounds.height) );
+		m_sprite.scale( sf::Vector2f(
+			r_size->get().x / globalBounds.width,
+			r_size->get().y / globalBounds.height ) );
 	}
 
 	void Graphics::onPositionChanged( int callbackId, const sf::Vector2i& newPosition )
 	{
-		m_sprite.setPosition( sf::Vector2f(newPosition) );
+		m_sprite.setPosition( sf::Vector2f( newPosition ) );
+	}
+
+	void Graphics::onRotationChanged( int callbackId, const float newRotation )
+	{
+		m_sprite.setRotation( newRotation );
+	}
+
+	float Graphics::getZValue() const
+	{
+		auto bounds = r_globalBounds->get();
+		return bounds.top + bounds.height;
 	}
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";
