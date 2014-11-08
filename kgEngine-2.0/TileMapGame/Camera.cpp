@@ -4,8 +4,6 @@ using namespace sf;
 
 namespace kg
 {
-
-
 	void Camera::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
 	{
 		//Should never be called since camera is created in GraphicsSystem
@@ -52,6 +50,9 @@ namespace kg
 				m_texture.draw( *entity->getComponent<Graphics>() );
 
 		m_texture.display();
+
+
+		engine.renderWindow.draw( *this );
 
 		return;
 	}
@@ -120,6 +121,21 @@ namespace kg
 		return m_screenOffset;
 	}
 
+	std::shared_ptr<Entity> Camera::emplaceToWorld( Engine& engine, World& world )
+	{
+		auto camera = std::make_shared<Entity>( world.getUniqueEntityId() );
+		camera->addComponent<Position>( static_pointer_cast< Component >(make_shared<Position>()) );
+		camera->addComponent<Size>( static_pointer_cast< Component >(make_shared<Size>()) );
+		camera->addComponent<Camera>( static_pointer_cast< Component >(make_shared<Camera>()) );
+		camera->addComponent<Rotation>( static_pointer_cast< Component >(make_shared<Rotation>()) );
+		camera->addComponent<GlobalBounds>( static_pointer_cast< Component >(make_shared<GlobalBounds>()) );
+		camera->initComponentsByImportance( engine );
+		camera->getComponent<Position>()->set( sf::Vector2i( 0, 0 ) );
+		camera->getComponent<Size>()->set( sf::Vector2i( engine.renderWindow.getSize() ) );
+		camera->getComponent<Camera>()->setFinalSize( engine.renderWindow.getSize() );
+		camera->getComponent<Camera>()->setScreenOffset( sf::Vector2i( 0, 0 ) );
+		world.addEntity( camera );
+		return camera;
+	}
 	const std::string Camera::PLUGIN_NAME = "Camera";
-
 }

@@ -30,13 +30,7 @@
     <ClCompile Include="Graphics.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicsSystem.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Size.cpp">
@@ -46,6 +40,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="GlobalBounds.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="GameController.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,14 +59,8 @@
     <ClInclude Include="Graphics.h">
       <Filter>Headerdateien\Components</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsSystem.h">
-      <Filter>Headerdateien\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Headerdateien\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
     <ClInclude Include="Size.h">
       <Filter>Headerdateien\Components</Filter>
@@ -79,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="GlobalBounds.h">
       <Filter>Headerdateien\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameController.h">
+      <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

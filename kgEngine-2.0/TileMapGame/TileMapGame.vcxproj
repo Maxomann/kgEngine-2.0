@@ -81,9 +81,8 @@
     <ClCompile Include="Size.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="connect.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameController.cpp" />
     <ClCompile Include="Graphics.cpp" />
-    <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="Position.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -91,9 +90,8 @@
     <ClInclude Include="Rotation.h" />
     <ClInclude Include="Size.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameController.h" />
     <ClInclude Include="Graphics.h" />
-    <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="id.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="stdafx.h" />

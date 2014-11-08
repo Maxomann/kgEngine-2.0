@@ -1,8 +1,8 @@
 ENTITY MyFirstEntity:100
 	Position
 	Size
-	GlobalBounds
 	Graphics
+	GlobalBounds
 	
 	COMPONENT Size
 		width:256px

@@ -51,5 +51,8 @@ namespace kg
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
 		static const std::string PLUGIN_NAME;
+
+		//creates a new camera, adds it to the world and returns a pointer to it
+		static std::shared_ptr<Entity> emplaceToWorld( Engine& engine, World& world );
 	};
 }

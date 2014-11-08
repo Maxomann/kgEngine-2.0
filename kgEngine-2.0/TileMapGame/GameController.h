@@ -1,12 +1,13 @@
 #pragma once
 #include "stdafx.h"
-#include "GraphicsSystem.h"
+#include "Camera.h"
 
 namespace kg
 {
-	class Game : public System
+	class GameController : public System
 	{
 		std::shared_ptr<Entity> m_test;
+		std::shared_ptr<Entity> m_camera;
 
 	public:
 		virtual void init( Engine& engine, World& world );
