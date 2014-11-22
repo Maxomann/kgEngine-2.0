@@ -81,5 +81,6 @@ namespace kg
 		bool hasComponent( const std::vector<size_t>& componentTypes )const;
 
 		const std::map<size_t, std::shared_ptr<Component>>& getAllComponentsByTypeHash()const;
+
 	};
 }

@@ -126,8 +126,8 @@ namespace kg
 		m_sprite.setPosition( sf::Vector2f( newPosition ) );
 	}
 
-	void Graphics::onRotationChanged( int callbackId, const float newRotation )
-	{
+	void Graphics::onRotationChanged( int callbackId, const float& newRotation )
+{
 		m_sprite.setRotation( newRotation );
 	}
 

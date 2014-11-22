@@ -16,11 +16,11 @@ namespace kg
 		r_size = componentManager.getComponent<Size>().get();
 		r_globalBounds = componentManager.getComponent<GlobalBounds>().get();
 
-		r_position->registerCallback_1<Camera, const sf::Vector2i&>(
+		r_position->registerCallback_1(
 			( int )Position::CallbackId::CHANGED,
 			this,
 			&Camera::onPositionChanged );
-		r_size->registerCallback_1<Camera, const sf::Vector2i&>(
+		r_size->registerCallback_1(
 			( int )Size::CallbackId::CHANGED,
 			this,
 			&Camera::onSizeChanged );
@@ -36,9 +36,10 @@ namespace kg
 		for( auto& el : toDraw )
 		{
 			auto graphics = el->getComponent<Graphics>();
-			auto globalBounds = el->getComponent<GlobalBounds>();
+			auto toDrawGlobalBounds = el->getComponent<GlobalBounds>();
+			auto cameraRect = r_globalBounds->get();
 
-			if( globalBounds->get().intersects( r_globalBounds->get() ) )//only add if visible on this camera
+			if( toDrawGlobalBounds->get().intersects( cameraRect ) )//only add if visible on this camera
 			{
 				auto zValue = graphics->getZValue();
 				sortedByZValue[zValue].push_back( el );
@@ -91,12 +92,12 @@ namespace kg
 	}
 
 	void Camera::onPositionChanged( int callbackId, const sf::Vector2i& newPosition )
-	{
+{
 		m_view.setCenter( sf::Vector2f( newPosition ) );
 	}
 
-	void Camera::onSizeChanged( int callbacId, const sf::Vector2i& newSize )
-	{
+	void Camera::onSizeChanged( int callbackId, const sf::Vector2i& newSize )
+{
 		m_view.setSize( sf::Vector2f( newSize ) );
 		m_texture.create( newSize.x, newSize.y );
 	}
@@ -121,7 +122,7 @@ namespace kg
 		return m_screenOffset;
 	}
 
-	std::shared_ptr<Entity> Camera::emplaceToWorld( Engine& engine, World& world )
+	std::shared_ptr<Entity> Camera::CREATE( Engine& engine, World& world )
 	{
 		auto camera = std::make_shared<Entity>( world.getUniqueEntityId() );
 		camera->addComponent<Position>( static_pointer_cast< Component >(make_shared<Position>()) );
@@ -131,7 +132,7 @@ namespace kg
 		camera->addComponent<GlobalBounds>( static_pointer_cast< Component >(make_shared<GlobalBounds>()) );
 		camera->initComponentsByImportance( engine );
 		camera->getComponent<Position>()->set( sf::Vector2i( 0, 0 ) );
-		camera->getComponent<Size>()->set( sf::Vector2i( engine.renderWindow.getSize() ) );
+		camera->getComponent<Size>()->set( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
 		camera->getComponent<Camera>()->setFinalSize( engine.renderWindow.getSize() );
 		camera->getComponent<Camera>()->setScreenOffset( sf::Vector2i( 0, 0 ) );
 		world.addEntity( camera );

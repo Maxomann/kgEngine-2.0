@@ -16,7 +16,7 @@ namespace kg
 		sf::Vector2i m_screenOffset;
 
 		void onPositionChanged( int callbackId, const sf::Vector2i& newPosition );
-		void onSizeChanged( int callbacId, const sf::Vector2i& newSize );
+		void onSizeChanged( int callbackId, const sf::Vector2i& newSize );
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
@@ -53,6 +53,6 @@ namespace kg
 		static const std::string PLUGIN_NAME;
 
 		//creates a new camera, adds it to the world and returns a pointer to it
-		static std::shared_ptr<Entity> emplaceToWorld( Engine& engine, World& world );
+		static std::shared_ptr<Entity> CREATE( Engine& engine, World& world );
 	};
 }

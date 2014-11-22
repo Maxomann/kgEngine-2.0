@@ -12,7 +12,7 @@ namespace kg
 		Size* r_size = nullptr;
 		Rotation* r_rotation = nullptr;
 
-		void onTranformationChanged( int callbackId );
+		void onTransformationChanged( int callbackId );
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
@@ -31,7 +31,7 @@ namespace kg
 
 
 
-		sf::FloatRect get()const;
+		const sf::FloatRect get()const;
 
 		enum class CallbackId : int
 		{

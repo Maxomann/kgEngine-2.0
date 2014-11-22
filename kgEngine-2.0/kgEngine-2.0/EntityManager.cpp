@@ -17,6 +17,8 @@ namespace kg
 
 		m_entities[id] = entity;
 
+		triggerCallback( ( int )CallbackId::ENTITY_ADDED, entity );
+
 		//return false if Entity already existed
 		return std::pair<bool, std::shared_ptr<Entity>>( it != end, entity );
 	}

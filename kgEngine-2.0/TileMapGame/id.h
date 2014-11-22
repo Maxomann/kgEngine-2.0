@@ -8,7 +8,8 @@ namespace kg
 		{
 			FIRST_ELEMENT,
 
-			GAME,
+			CHUNK_SYSTEM,
+			GAME_CONTROLLER,
 
 			LAST_ELEMENT
 		};
@@ -31,7 +32,8 @@ namespace kg
 		{
 			FIRST_ELEMENT,
 
-			GAME,
+			CHUNK_SYSTEM,
+			GAME_CONTROLLER,
 
 			LAST_ELEMENT
 		};

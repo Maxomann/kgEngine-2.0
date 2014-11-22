@@ -45,6 +45,9 @@
     <ClCompile Include="GameController.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="ChunkSystem.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
@@ -72,6 +75,9 @@
       <Filter>Headerdateien\Components</Filter>
     </ClInclude>
     <ClInclude Include="GameController.h">
+      <Filter>Headerdateien\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkSystem.h">
       <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
   </ItemGroup>

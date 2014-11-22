@@ -17,7 +17,7 @@ namespace kg
 
 		void onPositionChanged( int callbackId, const sf::Vector2i& newPosition );
 		void onBoundingBoxChanged( int callbackId, const sf::Vector2i& newSize );
-		void onRotationChanged( int callbackId, const float newRotation );
+		void onRotationChanged( int callbackId, const float& newRotation );
 
 		void centerOrigin();
 		void scaleToObjectSize();

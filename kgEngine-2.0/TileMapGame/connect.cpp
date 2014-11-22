@@ -42,7 +42,7 @@ extern "C"
 		//Systems
 		pluginManager.addSystemPlugin(
 			std::make_shared<PluginFactory<System, GameController>>(
-			( int )id::SystemPluginId::GAME,
+			( int )id::SystemPluginId::GAME_CONTROLLER,
 			GameController::PLUGIN_NAME ) );
 	}
 }

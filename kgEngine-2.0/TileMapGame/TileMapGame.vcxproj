@@ -45,6 +45,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../SFML-Visual_Studio2013x32/include;../kgEngine-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -63,6 +65,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../SFML-Visual_Studio2013x32/include;../kgEngine-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -76,6 +79,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ChunkSystem.cpp" />
     <ClCompile Include="GlobalBounds.cpp" />
     <ClCompile Include="Rotation.cpp" />
     <ClCompile Include="Size.cpp" />
@@ -86,6 +90,7 @@
     <ClCompile Include="Position.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChunkSystem.h" />
     <ClInclude Include="GlobalBounds.h" />
     <ClInclude Include="Rotation.h" />
     <ClInclude Include="Size.h" />

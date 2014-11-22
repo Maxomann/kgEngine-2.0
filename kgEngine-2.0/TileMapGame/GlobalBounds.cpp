@@ -19,14 +19,14 @@ namespace kg
 
 		r_position->registerCallback_0( ( int )Position::CallbackId::CHANGED,
 										this,
-										&GlobalBounds::onTranformationChanged );
+										&GlobalBounds::onTransformationChanged );
 		r_size->registerCallback_0( ( int )Size::CallbackId::CHANGED,
 									this,
-									&GlobalBounds::onTranformationChanged );
+									&GlobalBounds::onTransformationChanged );
 		if( r_rotation != nullptr )
 			r_rotation->registerCallback_0( ( int )Rotation::CallbackId::CHANGED,
 			this,
-			&GlobalBounds::onTranformationChanged );
+			&GlobalBounds::onTransformationChanged );
 
 
 		return;
@@ -57,8 +57,8 @@ namespace kg
 		return (int)id::ComponentPluginId::GLOBAL_BOUNDS;
 	}
 
-	sf::FloatRect GlobalBounds::get() const
-	{
+	const sf::FloatRect GlobalBounds::get() const
+{
 		auto position = r_position->get();
 		auto size = r_size->get();
 		float rotation = 0;
@@ -68,16 +68,16 @@ namespace kg
 		RectangleShape shape;
 		shape.setSize( sf::Vector2f( size ) );
 		shape.setOrigin( sf::Vector2f( static_cast<float>(size.x) / 2, static_cast<float>(size.y) / 2 ) );
+		shape.setPosition( sf::Vector2f(position) );
 		shape.setRotation( rotation );
 
 		return shape.getGlobalBounds();
 	}
 
-	void GlobalBounds::onTranformationChanged( int callbackId )
+	void GlobalBounds::onTransformationChanged( int callbackId )
 	{
 		triggerCallback( ( int )CallbackId::CHANGED, get() );
 	}
 
 	const std::string GlobalBounds::PLUGIN_NAME = "GlobalBounds";
-
 }

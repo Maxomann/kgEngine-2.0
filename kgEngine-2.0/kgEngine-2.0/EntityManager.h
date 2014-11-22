@@ -1,10 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "Entity.h"
+#include "Callback.h"
 
 namespace kg
 {
-	class DLL_EXPORT EntityManager
+	class DLL_EXPORT EntityManager : public CallbackSender
 	{
 		std::unordered_map<Entity::Id, std::shared_ptr<Entity>> m_entities;
 
@@ -47,5 +48,10 @@ namespace kg
 											  const int& entityBlueprintId,
 											  const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues
 											  = blueprint::ComponentValuesByNameByComponentMap() );//componentValuesByNameByComponent
+
+		enum class CallbackId : int
+		{
+			ENTITY_ADDED// std::shared_ptr<Entity>
+		};
 	};
 }

@@ -47,7 +47,7 @@ namespace kg
 	void Size::set( const sf::Vector2i& size )
 	{
 		m_size = size;
-		triggerCallback<const sf::Vector2i&>( ( int )CallbackId::CHANGED, m_size );
+		triggerCallback( ( int )CallbackId::CHANGED, size );
 	}
 
 	sf::Vector2i Size::get() const

@@ -43,7 +43,7 @@ namespace kg
 	void Position::set( const sf::Vector2i& position )
 	{
 		m_position = position;
-		triggerCallback<const sf::Vector2i&>( ( int )CallbackId::CHANGED, m_position );
+		triggerCallback( ( int )CallbackId::CHANGED, position );
 	}
 
 	const sf::Vector2i& Position::get() const

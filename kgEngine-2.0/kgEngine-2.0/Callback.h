@@ -1,5 +1,8 @@
 #pragma once
 #include "stdafx.h"
+#include "WrongCallbackSignatureException.h"
+
+using namespace std;
 
 // EXAMPLE OF USAGE:
 // class Foo : public CallbackSender
@@ -7,25 +10,35 @@
 // public:
 // 	void go()
 // 	{
-// 		triggerCallback<const sf::Vector2i&, int>( 100, sf::Vector2i( 50, 66 ), 5235 );
+// 		triggerCallback<sf::Vector2i&, int>( 100, sf::Vector2i( 50, 66 ), 5235 );
 // 	};
 // };
 //
 // class Bar : public CallbackReciever
 // {
 // public:
-// 	void functionToCallback( int callbackId, const sf::Vector2i& myVector, int test )
+// 	void functionToCallback( int callbackId, sf::Vector2i& myVector, int test )
 // 	{
 // 		cout << myVector.x << endl << myVector.y << endl << test << endl;
 // 	}
 //
 // 	void registerCallback( CallbackSender& sender )
 // 	{
-// 		sender.registerCallback_2<Bar, const sf::Vector2i&, int>( 100,
-// 																  this,
-// 																  &Bar::functionToCallback );
+// 		sender.registerCallback_2<Bar, sf::Vector2i, int>( 100,
+// 															this,
+// 															&Bar::functionToCallback );
 // 	}
 // };
+
+// CALLBACK ARGUMENTS ARE ALLWAYS PASSED AS NON CONST REFERENCE
+// DO NOT WRITE
+// sender.registerCallback_2<Bar, const sf::Vector2i>
+// OR
+// sender.registerCallback_2<Bar, sf::Vector2i&>
+//
+// ALWAYS USE:
+// callbackFuntion(int callbackId, sf::Vector2i&)
+// sender.registerCallback_2<Bar, sf::Vector2i>(100, this, &Class::CallbackFuntion);
 
 namespace kg
 {
@@ -44,12 +57,12 @@ namespace kg
 	//T=AdditionalCallbackArguments
 	class DLL_EXPORT CallbackSender
 	{
-		typedef std::list<std::pair<std::weak_ptr<bool>, std::pair<std::shared_ptr<void>/*std::function<void( int, T... )>*/, size_t> > > CallbackList;
+		typedef std::list<std::pair<std::weak_ptr<bool>, std::pair<std::shared_ptr<void>/*std::function<void( int, T&... )>*/, size_t> > > CallbackList;
 		std::map<int, CallbackList> m_callbacksById;
 
 	protected:
 		template<class variadic T>
-		void triggerCallback( const int callbackID, T... args )
+		void triggerCallback( const int callbackID, T&... args )
 		{
 			auto& list = m_callbacksById[callbackID];
 			std::vector < CallbackList::const_iterator > invalidReferences;
@@ -72,14 +85,15 @@ namespace kg
 					}
 					else
 					{
-						auto function = std::static_pointer_cast< std::function<void( int, T... )> >(it->second.first);
+						auto function = std::static_pointer_cast< std::function<void( int, T&... )> >(it->second.first);
 						if( it->second.second != typeid(function).hash_code() )
 						{
 							//if callback function has wrong signature
-							throw std::bad_function_call( "CallbackSender::triggerCallback wrong callback signature" );
+							auto expectedSignature = typeid(function).name();
+							throw WrongCallbackSignatureException( expectedSignature );
 						}
 
-						//if callback function has correct
+						//if callback function has correct signature
 						(*function)(callbackID, args...);
 					}
 				}
@@ -103,7 +117,7 @@ namespace kg
 		template<class variadic T>
 		void registerCallback( int callbackId,
 							   const CallbackReciever* thisPointer,
-							   std::shared_ptr< std::function<void( int, T... )> > callbackFunction )
+							   std::shared_ptr< std::function<void( int, T&... )> > callbackFunction )
 		{
 			m_callbacksById[callbackId].push_back(
 				std::make_pair( thisPointer->getWeakPointer(),
@@ -129,11 +143,11 @@ namespace kg
 		template<class ClassName, class variadic T>
 		void registerCallback_1( int callbackId,
 								 ClassName* thisPointer,
-								 void(ClassName::* mem_fn_ptr) (int, T...) )
+								 void(ClassName::* mem_fn_ptr) (int, T&...) )
 		{
 			registerCallback( callbackId,
 							  thisPointer,
-							  std::make_shared<std::function<void( int, T... )> >(
+							  std::make_shared<std::function<void( int, T&... )> >(
 							  std::bind(
 							  mem_fn_ptr,
 							  thisPointer,
@@ -145,11 +159,11 @@ namespace kg
 		template<class ClassName, class variadic T>
 		void registerCallback_2( int callbackId,
 								 ClassName* thisPointer,
-								 void(ClassName::* mem_fn_ptr) (int, T...) )
+								 void(ClassName::* mem_fn_ptr) (int, T&...) )
 		{
 			registerCallback( callbackId,
 							  thisPointer,
-							  std::make_shared<std::function<void( int, T... )> >(
+							  std::make_shared<std::function<void( int, T&... )> >(
 							  std::bind(
 							  mem_fn_ptr,
 							  thisPointer,
@@ -162,11 +176,11 @@ namespace kg
 		template<class ClassName, class variadic T>
 		void registerCallback_3( int callbackId,
 								 ClassName* thisPointer,
-								 void(ClassName::* mem_fn_ptr) (int, T...) )
+								 void(ClassName::* mem_fn_ptr) (int, T&...) )
 		{
 			registerCallback( callbackId,
 							  thisPointer,
-							  std::make_shared<std::function<void( int, T... )> >(
+							  std::make_shared<std::function<void( int, T&... )> >(
 							  std::bind(
 							  mem_fn_ptr,
 							  thisPointer,
@@ -180,11 +194,11 @@ namespace kg
 		template<class ClassName, class variadic T>
 		void registerCallback_4( int callbackId,
 								 ClassName* thisPointer,
-								 void(ClassName::* mem_fn_ptr) (int, T...) )
+								 void(ClassName::* mem_fn_ptr) (int, T&...) )
 		{
 			registerCallback( callbackId,
 							  thisPointer,
-							  std::make_shared<std::function<void( int, T... )> >(
+							  std::make_shared<std::function<void( int, T&... )> >(
 							  std::bind(
 							  mem_fn_ptr,
 							  thisPointer,
@@ -199,11 +213,11 @@ namespace kg
 		template<class ClassName, class variadic T>
 		void registerCallback_5( int callbackId,
 								 ClassName* thisPointer,
-								 void(ClassName::* mem_fn_ptr) (int, T...) )
+								 void(ClassName::* mem_fn_ptr) (int, T&...) )
 		{
 			registerCallback( callbackId,
 							  thisPointer,
-							  std::make_shared<std::function<void( int, T... )> >(
+							  std::make_shared<std::function<void( int, T&... )> >(
 							  std::bind(
 							  mem_fn_ptr,
 							  thisPointer,
@@ -219,11 +233,11 @@ namespace kg
 		template<class ClassName, class variadic T>
 		void registerCallback_6( int callbackId,
 								 ClassName* thisPointer,
-								 void(ClassName::* mem_fn_ptr) (int, T...) )
+								 void(ClassName::* mem_fn_ptr) (int, T&...) )
 		{
 			registerCallback( callbackId,
 							  thisPointer,
-							  std::make_shared<std::function<void( int, T... )> >(
+							  std::make_shared<std::function<void( int, T&... )> >(
 							  std::bind(
 							  mem_fn_ptr,
 							  thisPointer,
@@ -240,11 +254,11 @@ namespace kg
 		template<class ClassName, class variadic T>
 		void registerCallback_7( int callbackId,
 								 ClassName* thisPointer,
-								 void(ClassName::* mem_fn_ptr) (int, T...) )
+								 void(ClassName::* mem_fn_ptr) (int, T&...) )
 		{
 			registerCallback( callbackId,
 							  thisPointer,
-							  std::make_shared<std::function<void( int, T... )> >(
+							  std::make_shared<std::function<void( int, T&... )> >(
 							  std::bind(
 							  mem_fn_ptr,
 							  thisPointer,
@@ -262,11 +276,11 @@ namespace kg
 		template<class ClassName, class variadic T>
 		void registerCallback_8( int callbackId,
 								 ClassName* thisPointer,
-								 void(ClassName::* mem_fn_ptr) (int, T...) )
+								 void(ClassName::* mem_fn_ptr) (int, T&...) )
 		{
 			registerCallback( callbackId,
 							  thisPointer,
-							  std::make_shared<std::function<void( int, T... )> >(
+							  std::make_shared<std::function<void( int, T&... )> >(
 							  std::bind(
 							  mem_fn_ptr,
 							  thisPointer,
@@ -285,11 +299,11 @@ namespace kg
 		template<class ClassName, class variadic T>
 		void registerCallback_9( int callbackId,
 								 ClassName* thisPointer,
-								 void(ClassName::* mem_fn_ptr) (int, T...) )
+								 void(ClassName::* mem_fn_ptr) (int, T&...) )
 		{
 			registerCallback( callbackId,
 							  thisPointer,
-							  std::make_shared<std::function<void( int, T... )> >(
+							  std::make_shared<std::function<void( int, T&... )> >(
 							  std::bind(
 							  mem_fn_ptr,
 							  thisPointer,

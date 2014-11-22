@@ -122,5 +122,8 @@
     <ClInclude Include="PathNotAvailableException.h">
       <Filter>Headerdateien\Exceptions</Filter>
     </ClInclude>
+    <ClInclude Include="WrongCallbackSignatureException.h">
+      <Filter>Headerdateien\Exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
