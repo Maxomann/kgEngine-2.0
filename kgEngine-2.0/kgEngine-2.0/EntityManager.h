@@ -51,7 +51,8 @@ namespace kg
 
 		enum class CallbackId : int
 		{
-			ENTITY_ADDED// std::shared_ptr<Entity>
+			ENTITY_ADDED,// std::shared_ptr<Entity>
+			ENTITY_REMOVED// std::shared_ptr<Entity>
 		};
 	};
 }

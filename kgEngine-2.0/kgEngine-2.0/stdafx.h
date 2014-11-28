@@ -17,6 +17,8 @@
 #include <functional>
 #include <filesystem>
 #include <cstdint>
+#include <list>
+#include <forward_list>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

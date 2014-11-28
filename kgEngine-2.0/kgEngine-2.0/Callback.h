@@ -124,6 +124,19 @@ namespace kg
 				std::make_pair( std::static_pointer_cast< void >(callbackFunction), typeid(callbackFunction).hash_code() ) ) );
 		};
 
+		//if you register a callback twice it will be called twice
+		template<class variadic T>
+		void registerCallback( int callbackId,
+							   const CallbackReciever* thisPointer,
+							   const std::function<void( int, T&... )>& callbackFunction )
+		{
+			auto callbackPointer = std::make_shared<std::function<void( int, T&... )>>( callbackFunction );
+
+			m_callbacksById[callbackId].push_back(
+				std::make_pair( thisPointer->getWeakPointer(),
+				std::make_pair( std::static_pointer_cast< void >(callbackPointer), typeid(callbackPointer).hash_code() ) ) );
+		};
+
 		//number behind functionName is the number of additional arguments
 		template<class ClassName>
 		void registerCallback_0( int callbackId,

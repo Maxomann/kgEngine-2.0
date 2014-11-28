@@ -7,6 +7,7 @@
 #include "GlobalBounds.h"
 
 #include "GameController.h"
+#include "ChunkSystem.h"
 
 using namespace std;
 using namespace kg;
@@ -44,5 +45,9 @@ extern "C"
 			std::make_shared<PluginFactory<System, GameController>>(
 			( int )id::SystemPluginId::GAME_CONTROLLER,
 			GameController::PLUGIN_NAME ) );
+		pluginManager.addSystemPlugin(
+			std::make_shared<PluginFactory<System, ChunkSystem>>(
+			( int )id::SystemPluginId::CHUNK_SYSTEM,
+			ChunkSystem::PLUGIN_NAME ) );
 	}
 }
