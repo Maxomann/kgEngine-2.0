@@ -16,9 +16,9 @@ namespace kg
 			system.second->init( engine, world );
 	}
 
-	void SystemManager::forwardSfmlEventByImportance( const sf::Event& sfEvent )
-	{
+	void SystemManager::forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent )
+{
 		for( const auto& el : m_systemsByUpdateImportance )
-			el.second->sfmlEvent( sfEvent );
+			el.second->sfmlEvent( engine, sfEvent );
 	}
 }

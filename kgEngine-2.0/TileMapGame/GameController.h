@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Camera.h"
+#include "ChunkSystem.h"
 
 namespace kg
 {
@@ -12,7 +13,7 @@ namespace kg
 	public:
 		virtual void init( Engine& engine, World& world );
 
-		virtual void sfmlEvent( const sf::Event& sfEvent );
+		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent );
 
 		virtual void update( Engine& engine, World& world );
 

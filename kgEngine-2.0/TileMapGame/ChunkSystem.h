@@ -6,8 +6,12 @@ namespace kg
 {
 	class ChunkSystem : public System, public CallbackReciever
 	{
-		std::map < sf::Vector2i, std::list<std::shared_ptr<Entity>>> m_chunkData;
+		typedef std::vector<std::shared_ptr<Entity>> EntityContainer;
+
+		//int x, int y
+		std::map< int, std::map<int, EntityContainer >> m_chunkData;
 		std::map< std::shared_ptr<Entity>, sf::Vector2i > m_entityData;
+		const EntityContainer m_emptyList = EntityContainer();//only for returnValue in getEntitiesInChunk()
 
 		void m_refreshChunkInformation( std::shared_ptr<Entity>& entity );
 
@@ -19,7 +23,7 @@ namespace kg
 
 		virtual void init( Engine& engine, World& world );
 
-		virtual void sfmlEvent( const sf::Event& sfEvent );
+		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent );
 
 		virtual void update( Engine& engine, World& world );
 
@@ -31,11 +35,13 @@ namespace kg
 
 		static const std::string PLUGIN_NAME;
 
-		static const int CHUNK_DIAMETER = 2000;//pixel
 
 
 		// returns a reference to the internal container
-		const std::list<std::shared_ptr<Entity>>& getEntitiesInChunk( const sf::Vector2i& chunk )const;
+		const EntityContainer& getEntitiesInChunk( const sf::Vector2i& chunk )const;
+
+		//entity must be registered in world
+		const sf::Vector2i& getChunkOfEntity( const std::shared_ptr<Entity>& entity );
 
 		// get entities from every chunk between from and to
 		// returns a copy of the internal container
@@ -43,5 +49,7 @@ namespace kg
 															   const sf::Vector2i& to )const;*/
 
 		static sf::Vector2i calculateChunkForPosition( const sf::Vector2i& position );
+
+		static const int CHUNK_SIZE = 640;
 	};
 }

@@ -34,11 +34,7 @@ namespace kg
 		Event event;
 		while( m_engine.renderWindow.pollEvent( event ) )
 		{
-			// "close requested" event: we close the window
-			if( event.type == Event::Closed )
-				m_engine.shouldTerminate = true;
-
-			m_world.forwardSfmlEventByImportance( event );
+			m_world.forwardSfmlEventByImportance( m_engine, event );
 		}
 
 		m_world.updateEntities( m_engine, m_world );

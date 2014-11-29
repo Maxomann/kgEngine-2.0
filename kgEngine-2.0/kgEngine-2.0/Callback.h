@@ -85,7 +85,7 @@ namespace kg
 					}
 					else
 					{
-						auto function = std::static_pointer_cast< std::function<void( int, T&... )> >(it->second.first);
+						std::shared_ptr< std::function<void( int, T&... )> > function = std::static_pointer_cast< std::function<void( int, T&... )> >(it->second.first);
 						if( it->second.second != typeid(function).hash_code() )
 						{
 							//if callback function has wrong signature

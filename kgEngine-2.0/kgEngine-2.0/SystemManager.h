@@ -44,13 +44,13 @@ namespace kg
 				return static_pointer_cast<T>(it->second);
 		};
 
-		template<class T, class CastTo>
+		/*template<class T, class CastTo>
 		std::shared_ptr<CastTo>& getSystemWithCast()
 		{
 			return std::static_pointer_cast< CastTo >(getSystem<T>());
-		};
+		};*/
 
-		void forwardSfmlEventByImportance( const sf::Event& sfEvent );
+		void forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent );
 		void updateAllSystemsByImportance( Engine& engine, World& world );
 	};
 }
