@@ -42,7 +42,7 @@ namespace kg
 	void Rotation::set( const float rotationInDegree )
 	{
 		m_rotationInDegree = rotationInDegree;
-		triggerCallback( ( int )CallbackId::CHANGED, rotationInDegree );
+		s_changed( rotationInDegree );
 	}
 
 	float Rotation::get() const

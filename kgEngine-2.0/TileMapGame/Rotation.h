@@ -4,7 +4,7 @@
 
 namespace kg
 {
-	class Rotation : public Component, public CallbackSender
+	class Rotation : public Component
 	{
 		float m_rotationInDegree = 0;
 
@@ -30,10 +30,8 @@ namespace kg
 
 		void rotate( const float offsetInDegree );
 
-		enum class CallbackId : int
-		{
-			CHANGED//T: const float&
-		};
+		signals:
+		Signal<const float&> s_changed;
 
 		static const std::string PLUGIN_NAME;
 	};

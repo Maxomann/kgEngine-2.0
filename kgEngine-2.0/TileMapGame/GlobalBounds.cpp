@@ -15,16 +15,22 @@ namespace kg
 		r_size = componentManager.getComponent<Size>().get();
 		r_rotation = componentManager.getComponent<Rotation>().get();
 
-		r_position->registerCallback_0( ( int )Position::CallbackId::CHANGED,
-										this,
-										&GlobalBounds::onTransformationChanged );
-		r_size->registerCallback_0( ( int )Size::CallbackId::CHANGED,
-									this,
-									&GlobalBounds::onTransformationChanged );
+		//register callbacks:
+		m_connectToSignal( r_position->s_changed, std::function<void( const sf::Vector2i& )>( [&]( const sf::Vector2i& )
+		{
+			onTransformationChanged();
+		} ) );
+		m_connectToSignal( r_size->s_changed, std::function<void( const sf::Vector2i& )>( [&]( const sf::Vector2i& )
+		{
+			onTransformationChanged();
+		} ) );
 		if( r_rotation != nullptr )
-			r_rotation->registerCallback_0( ( int )Rotation::CallbackId::CHANGED,
-			this,
-			&GlobalBounds::onTransformationChanged );
+		{
+			m_connectToSignal( r_rotation->s_changed, std::function<void( const float& )>( [&]( const float& )
+			{
+				onTransformationChanged();
+			} ) );
+		}
 
 		return;
 	}
@@ -71,9 +77,9 @@ namespace kg
 		return shape.getGlobalBounds();
 	}
 
-	void GlobalBounds::onTransformationChanged( int callbackId )
+	void GlobalBounds::onTransformationChanged()
 	{
-		triggerCallback( ( int )CallbackId::CHANGED, get() );
+		s_changed( get() );
 	}
 
 	const std::string GlobalBounds::PLUGIN_NAME = "GlobalBounds";

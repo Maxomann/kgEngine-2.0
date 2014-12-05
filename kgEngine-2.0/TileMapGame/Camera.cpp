@@ -16,14 +16,8 @@ namespace kg
 		r_size = componentManager.getComponent<Size>().get();
 		r_globalBounds = componentManager.getComponent<GlobalBounds>().get();
 
-		r_position->registerCallback_1(
-			( int )Position::CallbackId::CHANGED,
-			this,
-			&Camera::onPositionChanged );
-		r_size->registerCallback_1(
-			( int )Size::CallbackId::CHANGED,
-			this,
-			&Camera::onSizeChanged );
+		m_connectToSignal( r_position->s_changed, &Camera::onPositionChanged );
+		m_connectToSignal( r_size->s_changed, &Camera::onSizeChanged );
 	}
 
 	void Camera::update( Engine& engine, World& world, ComponentManager& componentManager )
@@ -90,13 +84,13 @@ namespace kg
 		target.draw( sprite );
 	}
 
-	void Camera::onPositionChanged( int callbackId, const sf::Vector2i& newPosition )
-	{
+	void Camera::onPositionChanged( const sf::Vector2i& newPosition )
+{
 		m_view.setCenter( sf::Vector2f( newPosition ) );
 	}
 
-	void Camera::onSizeChanged( int callbackId, const sf::Vector2i& newSize )
-	{
+	void Camera::onSizeChanged( const sf::Vector2i& newSize )
+{
 		m_view.setSize( sf::Vector2f( newSize ) );
 		m_texture.create( newSize.x, newSize.y );
 	}

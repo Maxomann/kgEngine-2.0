@@ -17,7 +17,7 @@ namespace kg
 
 		m_entities[id] = entity;
 
-		triggerCallback( ( int )CallbackId::ENTITY_ADDED, entity );
+		s_entity_added( entity );
 
 		//return false if Entity already existed
 		return std::pair<bool, std::shared_ptr<Entity>>( it != end, entity );
@@ -25,10 +25,16 @@ namespace kg
 
 	bool EntityManager::removeEntity( const Entity::Id& id )
 	{
-		triggerCallback( ( int )CallbackId::ENTITY_REMOVED, m_entities.at( id ) );
+		auto it = m_entities.find( id );
 
-		bool didExist = m_entities.find( id ) != m_entities.end();
-		m_entities.erase( id );
+		bool didExist=false;
+
+		if( it != m_entities.end() )
+		{
+			s_entity_removed( it->second );
+			didExist = true;
+			m_entities.erase( id );
+		}
 
 		return didExist;
 	}

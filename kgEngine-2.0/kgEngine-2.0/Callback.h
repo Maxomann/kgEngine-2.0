@@ -6,9 +6,6 @@
 #include <type_traits>
 #include <utility>
 
-using namespace std;
-using namespace placeholders;
-
 template <std::size_t... Is>
 struct indices
 { };
@@ -47,34 +44,42 @@ auto easy_bind( std::function<R( FArgs... )> const& f, Args&&... args )
 	return detail::easy_bind( build_indices < sizeof...( FArgs )-sizeof...(Args) > {}, f, std::forward<Args>( args )... );
 }
 
-class CallbackReciever
+namespace kg
 {
-	const std::shared_ptr<int > thisWeakPointer = std::make_shared<int>( 0 );
+#define signals public
 
-protected:
-	template<class returnType, class ... parameterType >
-	void m_connectToSignal(
-		boost::signals2::signal<returnType( parameterType... )>& signal,
-		const std::function<returnType( parameterType... )>& function )
+	template< class ... parameterType >
+	using Signal = boost::signals2::signal < void( parameterType... ) > ;
+
+	class CallbackReciever
 	{
-		signal.connect( boost::signals2::signal<returnType( parameterType ... )>
-						::slot_type( function ).track_foreign( thisWeakPointer ) );
+		const std::shared_ptr<int> thisWeakPointer = std::make_shared<int>( 0 );
+
+	protected:
+		template<class returnType, class ... parameterType >
+		void m_connectToSignal(
+			boost::signals2::signal<returnType( parameterType... )>& signal,
+			std::function<returnType( parameterType... )>& function )
+		{
+			signal.connect( boost::signals2::signal<returnType( parameterType ... )>
+							::slot_type( function ).track_foreign( thisWeakPointer ) );
+		};
+
+		template<class className, class returnType, class ... parameterType >
+		void m_connectToSignal(
+			boost::signals2::signal<returnType( parameterType... )>& signal,
+			returnType( className::* mem_fn_ptr ) (parameterType...) )
+		{
+			std::function<returnType( className*, parameterType... )> f1 = std::mem_fn( mem_fn_ptr );
+			std::function<returnType( parameterType... )> f2 = easy_bind( f1, static_cast< className* >(this) );
+
+			m_connectToSignal( signal, f2 );
+		};
 	};
-
-	template<class className, class returnType, class ... parameterType >
-	void m_connectToSignal(
-		boost::signals2::signal<returnType( parameterType... )>& signal,
-		returnType( className::* mem_fn_ptr ) (parameterType...) )
-	{
-		std::function<returnType( className*, parameterType... )> f1 = std::mem_fn( mem_fn_ptr );
-		std::function<returnType( parameterType... )> f2 = easy_bind( f1, static_cast< className* >(this) );
-
-		m_connectToSignal( signal, f2 );
-	};
-};
+}
 
 
-#ifdef DEBUG KG_OLD_CALLBACK_SYSTEM
+#ifdef KG_OLD_CALLBACK_SYSTEM
 
 #include "stdafx.h"
 #include "WrongCallbackSignatureException.h"

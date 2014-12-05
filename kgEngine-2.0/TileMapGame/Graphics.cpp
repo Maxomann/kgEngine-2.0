@@ -41,19 +41,10 @@ namespace kg
 		auto rotation = componentManager.getComponent<Rotation>().get();
 		r_globalBounds = componentManager.getComponent<GlobalBounds>().get();
 
-		position->registerCallback_1(
-			( int )Position::CallbackId::CHANGED,
-			this,
-			&Graphics::onPositionChanged );
-		r_size->registerCallback_1(
-			( int )Size::CallbackId::CHANGED,
-			this,
-			&Graphics::onBoundingBoxChanged );
+		m_connectToSignal(position->s_changed, &Graphics::onPositionChanged );
+		m_connectToSignal(r_size->s_changed, &Graphics::onSizeChanged );
 		if( rotation )
-			rotation->registerCallback_1(
-			( int )Rotation::CallbackId::CHANGED,
-			this,
-			&Graphics::onRotationChanged );
+			m_connectToSignal(rotation->s_changed, &Graphics::onRotationChanged );
 
 		centerOrigin();
 		scaleToObjectSize();
@@ -101,8 +92,8 @@ namespace kg
 		return m_sprite.getTextureRect();
 	}
 
-	void Graphics::onBoundingBoxChanged( int callbackId, const sf::Vector2i& newSize )
-	{
+	void Graphics::onSizeChanged( const sf::Vector2i& newSize )
+{
 		scaleToObjectSize();
 	}
 
@@ -120,13 +111,13 @@ namespace kg
 			r_size->get().y / globalBounds.height ) );
 	}
 
-	void Graphics::onPositionChanged( int callbackId, const sf::Vector2i& newPosition )
-	{
+	void Graphics::onPositionChanged( const sf::Vector2i& newPosition )
+{
 		m_sprite.setPosition( sf::Vector2f( newPosition ) );
 	}
 
-	void Graphics::onRotationChanged( int callbackId, const float& newRotation )
-	{
+	void Graphics::onRotationChanged( const float& newRotation )
+{
 		m_sprite.setRotation( newRotation );
 	}
 

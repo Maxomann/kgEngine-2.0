@@ -15,8 +15,8 @@ namespace kg
 		sf::Vector2u m_finalSize;
 		sf::Vector2i m_screenOffset;
 
-		void onPositionChanged( int callbackId, const sf::Vector2i& newPosition );
-		void onSizeChanged( int callbackId, const sf::Vector2i& newSize );
+		void onPositionChanged( const sf::Vector2i& newPosition );
+		void onSizeChanged( const sf::Vector2i& newSize );
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );

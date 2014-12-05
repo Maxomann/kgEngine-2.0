@@ -4,7 +4,7 @@
 
 namespace kg
 {
-	class Size : public Component, public CallbackSender, public CallbackReciever
+	class Size : public Component
 	{
 		sf::Vector2i m_size;
 
@@ -26,11 +26,11 @@ namespace kg
 		void set( const sf::Vector2i& size );
 		sf::Vector2i get()const;
 
-		enum class CallbackId : int
-		{
-			CHANGED//T: const sf::Vector2i& newSize
-		};
 
+	signals:
+		Signal<const sf::Vector2i&> s_changed;
+
+		
 		static const std::string BLUEPRINT_WIDTH;
 		static const std::string BLUEPRINT_HEIGHT;
 

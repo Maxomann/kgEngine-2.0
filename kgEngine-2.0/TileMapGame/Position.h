@@ -3,7 +3,7 @@
 
 namespace kg
 {
-	class Position : public Component, public CallbackSender
+	class Position : public Component
 	{
 		sf::Vector2i m_position;//the CENTER of the Object
 
@@ -28,10 +28,8 @@ namespace kg
 
 		void move( const sf::Vector2i& offset );
 
-		enum class CallbackId : int
-		{
-			CHANGED//T: const sf::Vector2i&
-		};
+	signals:
+		Signal<const sf::Vector2i&> s_changed;
 
 		static const std::string PLUGIN_NAME;
 	};

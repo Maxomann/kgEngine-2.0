@@ -6,13 +6,13 @@
 
 namespace kg
 {
-	class GlobalBounds : public Component, public CallbackReciever, public CallbackSender
+	class GlobalBounds : public Component, public CallbackReciever
 	{
 		Position* r_position = nullptr;
 		Size* r_size = nullptr;
 		Rotation* r_rotation = nullptr;
 
-		void onTransformationChanged( int callbackId );
+		void onTransformationChanged();
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
@@ -31,10 +31,8 @@ namespace kg
 
 		const sf::FloatRect get()const;
 
-		enum class CallbackId : int
-		{
-			CHANGED//T: const sf::FloatRect&
-		};
+	signals:
+		Signal<const sf::FloatRect&> s_changed;
 
 		static const std::string PLUGIN_NAME;
 	};

@@ -69,11 +69,16 @@ protected:
 	};
 };
 
+template<class ... parameterType >
+using Signal = boost::signals2::signal < void( parameterType... ) >;
+
+
+
 class Foo
 {
 public:
 
-	boost::signals2::signal<void( string, string, int )> mySignal;
+	Signal<string, string, int> mySignal;
 };
 
 class Bar : public CallbackReciever

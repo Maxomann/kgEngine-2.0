@@ -5,7 +5,7 @@
 
 namespace kg
 {
-	class DLL_EXPORT EntityManager : public CallbackSender
+	class DLL_EXPORT EntityManager
 	{
 		std::unordered_map<Entity::Id, std::shared_ptr<Entity>> m_entities;
 
@@ -49,10 +49,9 @@ namespace kg
 											  const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues
 											  = blueprint::ComponentValuesByNameByComponentMap() );//componentValuesByNameByComponent
 
-		enum class CallbackId : int
-		{
-			ENTITY_ADDED,// std::shared_ptr<Entity>
-			ENTITY_REMOVED// std::shared_ptr<Entity>
-		};
+	signals:
+		Signal<std::shared_ptr<Entity>&> s_entity_added;
+		Signal<std::shared_ptr<Entity>&> s_entity_removed;
+
 	};
 }
