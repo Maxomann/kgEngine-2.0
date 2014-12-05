@@ -6,8 +6,8 @@ namespace kg
 {
 	void ChunkSystem::init( Engine& engine, World& world )
 	{
-		m_connectToSignal(world.s_entity_added, &ChunkSystem::m_onEntityAddedToWorld );
-		m_connectToSignal(world.s_entity_removed, &ChunkSystem::m_onEntityRemovedFromWorld );
+		m_connectToSignal( world.s_entity_added, &ChunkSystem::m_onEntityAddedToWorld );
+		m_connectToSignal( world.s_entity_removed, &ChunkSystem::m_onEntityRemovedFromWorld );
 
 		return;
 	}
@@ -38,15 +38,15 @@ namespace kg
 	}
 
 	void ChunkSystem::m_onEntityAddedToWorld( std::shared_ptr<Entity>& entity )
-{
+	{
 		if( entity->hasComponent<Position>() )
 		{
 			m_connectToSignal( entity->getComponent<Position>()->s_changed,
-							   std::function<void(const sf::Vector2i&)>(
+							   std::function<void( const sf::Vector2i& )>(
 							   std::bind( &ChunkSystem::m_onEntityPositionChanged,
 							   this,
 							   entity,
-							   std::placeholders::_1 )));
+							   std::placeholders::_1 ) ) );
 
 			m_refreshChunkInformation( entity );
 		}
@@ -61,15 +61,18 @@ namespace kg
 		{
 			//entity is already registered
 			auto oldChunk = findResult->second;
-			//update entityData
-			m_entityData.at( entity ) = newChunk;
+			if( oldChunk != newChunk )//only update if the chunk changed
+			{
+				//update entityData
+				m_entityData.at( entity ) = newChunk;
 
-			//remove from old chunk
-			auto oldChunkData = m_chunkData.at( oldChunk.x ).at( oldChunk.y );
-			oldChunkData.erase( std::find( oldChunkData.begin(), oldChunkData.end(), entity ) );
+				//remove from old chunk
+				auto oldChunkData = m_chunkData.at( oldChunk.x ).at( oldChunk.y );
+				oldChunkData.erase( std::find( oldChunkData.begin(), oldChunkData.end(), entity ) );
 
-			//add to new chunk
-			m_chunkData[newChunk.x][newChunk.y].push_back( entity );
+				//add to new chunk
+				m_chunkData[newChunk.x][newChunk.y].push_back( entity );
+			}
 		}
 		else
 		{
@@ -80,13 +83,13 @@ namespace kg
 		}
 	}
 
-	void ChunkSystem::m_onEntityPositionChanged(std::shared_ptr<Entity>& entity, const sf::Vector2i& newPosition)
-{
+	void ChunkSystem::m_onEntityPositionChanged( std::shared_ptr<Entity>& entity, const sf::Vector2i& newPosition )
+	{
 		m_refreshChunkInformation( entity );
 	}
 
 	void ChunkSystem::m_onEntityRemovedFromWorld( std::shared_ptr<Entity>& entity )
-{
+	{
 		auto currentChunk = m_entityData.at( entity );
 		auto chunkData = m_chunkData.at( currentChunk.x ).at( currentChunk.y );
 		chunkData.erase( std::find( chunkData.begin(), chunkData.end(), entity ) );

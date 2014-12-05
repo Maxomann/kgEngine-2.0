@@ -30,7 +30,7 @@ namespace kg
 
 		void rotate( const float offsetInDegree );
 
-		signals:
+	signals:
 		Signal<const float&> s_changed;
 
 		static const std::string PLUGIN_NAME;

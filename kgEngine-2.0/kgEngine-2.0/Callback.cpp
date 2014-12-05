@@ -14,4 +14,3 @@ namespace kg
 }
 
 #endif
-

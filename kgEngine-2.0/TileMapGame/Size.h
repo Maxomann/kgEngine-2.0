@@ -26,11 +26,9 @@ namespace kg
 		void set( const sf::Vector2i& size );
 		sf::Vector2i get()const;
 
-
 	signals:
 		Signal<const sf::Vector2i&> s_changed;
 
-		
 		static const std::string BLUEPRINT_WIDTH;
 		static const std::string BLUEPRINT_HEIGHT;
 

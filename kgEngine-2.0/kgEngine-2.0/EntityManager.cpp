@@ -27,7 +27,7 @@ namespace kg
 	{
 		auto it = m_entities.find( id );
 
-		bool didExist=false;
+		bool didExist = false;
 
 		if( it != m_entities.end() )
 		{

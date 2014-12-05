@@ -52,6 +52,5 @@ namespace kg
 	signals:
 		Signal<std::shared_ptr<Entity>&> s_entity_added;
 		Signal<std::shared_ptr<Entity>&> s_entity_removed;
-
 	};
 }

@@ -85,12 +85,12 @@ namespace kg
 	}
 
 	void Camera::onPositionChanged( const sf::Vector2i& newPosition )
-{
+	{
 		m_view.setCenter( sf::Vector2f( newPosition ) );
 	}
 
 	void Camera::onSizeChanged( const sf::Vector2i& newSize )
-{
+	{
 		m_view.setSize( sf::Vector2f( newSize ) );
 		m_texture.create( newSize.x, newSize.y );
 	}

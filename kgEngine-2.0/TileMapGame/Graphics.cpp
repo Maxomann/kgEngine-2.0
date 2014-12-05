@@ -41,10 +41,10 @@ namespace kg
 		auto rotation = componentManager.getComponent<Rotation>().get();
 		r_globalBounds = componentManager.getComponent<GlobalBounds>().get();
 
-		m_connectToSignal(position->s_changed, &Graphics::onPositionChanged );
-		m_connectToSignal(r_size->s_changed, &Graphics::onSizeChanged );
+		m_connectToSignal( position->s_changed, &Graphics::onPositionChanged );
+		m_connectToSignal( r_size->s_changed, &Graphics::onSizeChanged );
 		if( rotation )
-			m_connectToSignal(rotation->s_changed, &Graphics::onRotationChanged );
+			m_connectToSignal( rotation->s_changed, &Graphics::onRotationChanged );
 
 		centerOrigin();
 		scaleToObjectSize();
@@ -93,7 +93,7 @@ namespace kg
 	}
 
 	void Graphics::onSizeChanged( const sf::Vector2i& newSize )
-{
+	{
 		scaleToObjectSize();
 	}
 
@@ -112,12 +112,12 @@ namespace kg
 	}
 
 	void Graphics::onPositionChanged( const sf::Vector2i& newPosition )
-{
+	{
 		m_sprite.setPosition( sf::Vector2f( newPosition ) );
 	}
 
 	void Graphics::onRotationChanged( const float& newRotation )
-{
+	{
 		m_sprite.setRotation( newRotation );
 	}
 

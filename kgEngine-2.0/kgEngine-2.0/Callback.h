@@ -78,7 +78,6 @@ namespace kg
 	};
 }
 
-
 #ifdef KG_OLD_CALLBACK_SYSTEM
 
 #include "stdafx.h"
