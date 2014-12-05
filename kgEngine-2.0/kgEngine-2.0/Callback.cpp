@@ -1,3 +1,5 @@
+#ifdef DEBUG KG_OLD_CALLBACK_SYSTEM
+
 #include "Callback.h"
 
 namespace kg
@@ -10,3 +12,6 @@ namespace kg
 		return m_CallbackRecieverDummyObject;
 	}
 }
+
+#endif
+

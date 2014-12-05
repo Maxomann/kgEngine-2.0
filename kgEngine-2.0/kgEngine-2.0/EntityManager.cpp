@@ -25,7 +25,7 @@ namespace kg
 
 	bool EntityManager::removeEntity( const Entity::Id& id )
 	{
-		triggerCallback( ( int )CallbackId::ENTITY_REMOVED, m_entities.at(id) );
+		triggerCallback( ( int )CallbackId::ENTITY_REMOVED, m_entities.at( id ) );
 
 		bool didExist = m_entities.find( id ) != m_entities.end();
 		m_entities.erase( id );

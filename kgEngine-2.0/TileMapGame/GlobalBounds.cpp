@@ -4,8 +4,6 @@ using namespace sf;
 
 namespace kg
 {
-
-
 	void GlobalBounds::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
 	{
 		return;
@@ -28,7 +26,6 @@ namespace kg
 			this,
 			&GlobalBounds::onTransformationChanged );
 
-
 		return;
 	}
 
@@ -39,7 +36,7 @@ namespace kg
 
 	double GlobalBounds::getUpdateImportance() const
 	{
-		return (double)id::ComponentUpdateImportance::GLOBAL_BOUNDS;
+		return ( double )id::ComponentUpdateImportance::GLOBAL_BOUNDS;
 	}
 
 	std::vector<size_t> GlobalBounds::getRequieredComponents() const
@@ -54,11 +51,11 @@ namespace kg
 
 	int GlobalBounds::getPluginId() const
 	{
-		return (int)id::ComponentPluginId::GLOBAL_BOUNDS;
+		return ( int )id::ComponentPluginId::GLOBAL_BOUNDS;
 	}
 
 	const sf::FloatRect GlobalBounds::get() const
-{
+	{
 		auto position = r_position->get();
 		auto size = r_size->get();
 		float rotation = 0;
@@ -67,8 +64,8 @@ namespace kg
 
 		RectangleShape shape;
 		shape.setSize( sf::Vector2f( size ) );
-		shape.setOrigin( sf::Vector2f( static_cast<float>(size.x) / 2, static_cast<float>(size.y) / 2 ) );
-		shape.setPosition( sf::Vector2f(position) );
+		shape.setOrigin( sf::Vector2f( static_cast< float >(size.x) / 2, static_cast< float >(size.y) / 2 ) );
+		shape.setPosition( sf::Vector2f( position ) );
 		shape.setRotation( rotation );
 
 		return shape.getGlobalBounds();

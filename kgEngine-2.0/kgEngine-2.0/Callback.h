@@ -1,4 +1,81 @@
 #pragma once
+#include <boost/signals2.hpp>
+
+#include <cstddef>
+#include <functional>
+#include <type_traits>
+#include <utility>
+
+using namespace std;
+using namespace placeholders;
+
+template <std::size_t... Is>
+struct indices
+{ };
+
+template <std::size_t N, std::size_t... Is>
+struct build_indices
+	: build_indices < N - 1, N - 1, Is... >
+{ };
+
+template <std::size_t... Is>
+struct build_indices<0, Is...> : indices < Is... > { };
+
+template<int I> struct placeholder
+{ };
+
+namespace std
+{
+	template<int I>
+	struct is_placeholder< ::placeholder<I>> : std::integral_constant < int, I > { };
+} // std::
+
+namespace detail
+{
+	template<std::size_t... Is, class F, class... Args>
+	auto easy_bind( indices<Is...>, F const& f, Args&&... args )
+		-> decltype(std::bind( f, std::forward<Args>( args )..., placeholder < 1 + Is > {}... ))
+	{
+		return std::bind( f, std::forward<Args>( args )..., placeholder < 1 + Is > {}... );
+	}
+} // detail::
+
+template<class R, class... FArgs, class... Args>
+auto easy_bind( std::function<R( FArgs... )> const& f, Args&&... args )
+-> decltype(detail::easy_bind( build_indices < sizeof...( FArgs )-sizeof...(Args) > {}, f, std::forward<Args>( args )... ))
+{
+	return detail::easy_bind( build_indices < sizeof...( FArgs )-sizeof...(Args) > {}, f, std::forward<Args>( args )... );
+}
+
+class CallbackReciever
+{
+	const std::shared_ptr<int > thisWeakPointer = std::make_shared<int>( 0 );
+
+protected:
+	template<class returnType, class ... parameterType >
+	void m_connectToSignal(
+		boost::signals2::signal<returnType( parameterType... )>& signal,
+		const std::function<returnType( parameterType... )>& function )
+	{
+		signal.connect( boost::signals2::signal<returnType( parameterType ... )>
+						::slot_type( function ).track_foreign( thisWeakPointer ) );
+	};
+
+	template<class className, class returnType, class ... parameterType >
+	void m_connectToSignal(
+		boost::signals2::signal<returnType( parameterType... )>& signal,
+		returnType( className::* mem_fn_ptr ) (parameterType...) )
+	{
+		std::function<returnType( className*, parameterType... )> f1 = std::mem_fn( mem_fn_ptr );
+		std::function<returnType( parameterType... )> f2 = easy_bind( f1, static_cast< className* >(this) );
+
+		m_connectToSignal( signal, f2 );
+	};
+};
+
+
+#ifdef DEBUG KG_OLD_CALLBACK_SYSTEM
+
 #include "stdafx.h"
 #include "WrongCallbackSignatureException.h"
 
@@ -42,6 +119,8 @@ using namespace std;
 
 namespace kg
 {
+	class Entity;
+
 	class DLL_EXPORT CallbackReciever
 	{
 		// this pointer is used in aCallbackSender to check
@@ -132,10 +211,125 @@ namespace kg
 		{
 			auto callbackPointer = std::make_shared<std::function<void( int, T&... )>>( callbackFunction );
 
-			m_callbacksById[callbackId].push_back(
-				std::make_pair( thisPointer->getWeakPointer(),
-				std::make_pair( std::static_pointer_cast< void >(callbackPointer), typeid(callbackPointer).hash_code() ) ) );
+			registerCallback( callbackId, thisPointer, callbackPointer );
 		};
+
+		template<class ClassName>
+		void registerCallback_0_entity( int callbackId,
+										ClassName* thisPointer,
+										std::shared_ptr<Entity>& entity,
+										void(ClassName::* mem_fn_ptr) (int) )
+		{
+			auto func = std::make_shared<std::function<void( int )> >( std::bind(
+				mem_fn_ptr,
+				this,
+				placeholders::_1,
+				entity ) );
+
+			registerCallback( callbackId,
+							  thisPointer,
+							  func );
+		}
+
+		template<class ClassName, class variadic T>
+		void registerCallback_1_entity( int callbackId,
+										ClassName* thisPointer,
+										std::shared_ptr<Entity>& entity,
+										void(ClassName::* mem_fn_ptr) (int, std::shared_ptr<Entity>&, T&...) )
+		{
+			auto func = std::make_shared<std::function<void( int, T&... )> >( std::bind(
+				mem_fn_ptr,
+				thisPointer,
+				placeholders::_1,
+				entity,
+				placeholders::_2 ) );
+
+			registerCallback<T...>( callbackId,
+									thisPointer,
+									func );
+		}
+
+		template<class ClassName, class variadic T>
+		void registerCallback_2_entity( int callbackId,
+										ClassName* thisPointer,
+										std::shared_ptr<Entity>& entity,
+										void(ClassName::* mem_fn_ptr) (int, std::shared_ptr<Entity>&, T&...) )
+		{
+			auto func = std::make_shared<std::function<void( int, T&... )> >( std::bind(
+				mem_fn_ptr,
+				thisPointer,
+				placeholders::_1,
+				entity,
+				placeholders::_2,
+				placeholders::_3 ) );
+
+			registerCallback<T...>( callbackId,
+									thisPointer,
+									func );
+		}
+
+		template<class ClassName, class variadic T>
+		void registerCallback_3_entity( int callbackId,
+										ClassName* thisPointer,
+										std::shared_ptr<Entity>& entity,
+										void(ClassName::* mem_fn_ptr) (int, std::shared_ptr<Entity>&, T&...) )
+		{
+			auto func = std::make_shared<std::function<void( int, T&... )> >( std::bind(
+				mem_fn_ptr,
+				thisPointer,
+				placeholders::_1,
+				entity,
+				placeholders::_2,
+				placeholders::_3,
+				placeholders::_4 ) );
+
+			registerCallback<T...>( callbackId,
+									thisPointer,
+									func );
+		}
+
+		template<class ClassName, class variadic T>
+		void registerCallback_4_entity( int callbackId,
+										ClassName* thisPointer,
+										std::shared_ptr<Entity>& entity,
+										void(ClassName::* mem_fn_ptr) (int, std::shared_ptr<Entity>&, T&...) )
+		{
+			auto func = std::make_shared<std::function<void( int, T&... )> >( std::bind(
+				mem_fn_ptr,
+				thisPointer,
+				placeholders::_1,
+				entity,
+				placeholders::_2,
+				placeholders::_3,
+				placeholders::_4,
+				placeholders::_5 ) );
+
+			registerCallback<T...>( callbackId,
+									thisPointer,
+									func );
+		}
+
+		template<class ClassName, class variadic T>
+		void registerCallback_5_entity( int callbackId,
+										ClassName* thisPointer,
+										std::shared_ptr<Entity>& entity,
+										void(ClassName::* mem_fn_ptr) (int, std::shared_ptr<Entity>&, T&...) )
+		{
+			auto func = std::make_shared<std::function<void( int, T&... )> >( std::bind(
+				mem_fn_ptr,
+				thisPointer,
+				placeholders::_1,
+				entity,
+				placeholders::_2,
+				placeholders::_3,
+				placeholders::_4,
+				placeholders::_5,
+				placeholders::_6 ) );
+
+			registerCallback<T...>( callbackId,
+									thisPointer,
+									func );
+		}
 
 		//number behind functionName is the number of additional arguments
 		template<class ClassName>
@@ -333,3 +527,5 @@ namespace kg
 		}
 	};
 }
+
+#endif

@@ -21,7 +21,7 @@ namespace kg
 	}
 
 	void GameController::sfmlEvent( Engine& engine, const sf::Event& sfEvent )
-{
+	{
 		if( sfEvent.type == Event::Closed )
 			engine.shouldTerminate = true;
 		return;
@@ -41,7 +41,6 @@ namespace kg
 			m_camera->getComponent<Position>()->move( sf::Vector2i( 10, 0 ) );
 
 		auto chunk = world.getSystem<ChunkSystem>()->getChunkOfEntity( m_camera );
-		cout << chunk.x << "---" << chunk.y << endl;
 
 		return;
 	}
@@ -61,5 +60,5 @@ namespace kg
 		return ( int )id::SystemPluginId::GAME_CONTROLLER;
 	}
 
-	const std::string GameController::PLUGIN_NAME="GAME_CORE";
+	const std::string GameController::PLUGIN_NAME = "GAME_CORE";
 }

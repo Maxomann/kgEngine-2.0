@@ -21,7 +21,7 @@ namespace kg
 
 	double Rotation::getUpdateImportance() const
 	{
-		return (double)id::ComponentUpdateImportance::ROTATION;
+		return ( double )id::ComponentUpdateImportance::ROTATION;
 	}
 
 	std::vector<size_t> Rotation::getRequieredComponents() const
@@ -55,6 +55,5 @@ namespace kg
 		set( get() + offsetInDegree );
 	}
 
-	const std::string Rotation::PLUGIN_NAME="Rotation";
-
+	const std::string Rotation::PLUGIN_NAME = "Rotation";
 }

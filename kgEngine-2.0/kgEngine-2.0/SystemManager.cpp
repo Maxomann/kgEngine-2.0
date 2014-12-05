@@ -17,7 +17,7 @@ namespace kg
 	}
 
 	void SystemManager::forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent )
-{
+	{
 		for( const auto& el : m_systemsByUpdateImportance )
 			el.second->sfmlEvent( engine, sfEvent );
 	}

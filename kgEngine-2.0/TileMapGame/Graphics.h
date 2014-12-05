@@ -9,7 +9,7 @@ namespace kg
 {
 	class Graphics : public Component, public CallbackReciever, public sf::Drawable
 	{
-		Size* r_size=nullptr;
+		Size* r_size = nullptr;
 		GlobalBounds* r_globalBounds;
 
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;
@@ -36,7 +36,6 @@ namespace kg
 		virtual const std::string& getPluginName() const;
 
 		virtual int getPluginId() const;
-
 
 		void setTextureRect( const sf::IntRect& rect );
 		const sf::IntRect& getTextureRect()const;

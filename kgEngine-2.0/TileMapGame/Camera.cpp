@@ -52,7 +52,6 @@ namespace kg
 
 		m_texture.display();
 
-
 		engine.renderWindow.draw( *this );
 
 		return;
@@ -81,8 +80,8 @@ namespace kg
 	void Camera::draw( RenderTarget& target, RenderStates states ) const
 	{
 		Sprite sprite;
-		sprite.setTexture(m_texture.getTexture());
-		sprite.setPosition( sf::Vector2f(m_screenOffset ));
+		sprite.setTexture( m_texture.getTexture() );
+		sprite.setPosition( sf::Vector2f( m_screenOffset ) );
 		sprite.scale( sf::Vector2f(
 			m_finalSize.x / sprite.getGlobalBounds().width,
 			m_finalSize.y / sprite.getGlobalBounds().height
@@ -92,12 +91,12 @@ namespace kg
 	}
 
 	void Camera::onPositionChanged( int callbackId, const sf::Vector2i& newPosition )
-{
+	{
 		m_view.setCenter( sf::Vector2f( newPosition ) );
 	}
 
 	void Camera::onSizeChanged( int callbackId, const sf::Vector2i& newSize )
-{
+	{
 		m_view.setSize( sf::Vector2f( newSize ) );
 		m_texture.create( newSize.x, newSize.y );
 	}

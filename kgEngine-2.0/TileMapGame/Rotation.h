@@ -6,7 +6,7 @@ namespace kg
 {
 	class Rotation : public Component, public CallbackSender
 	{
-		float m_rotationInDegree=0;
+		float m_rotationInDegree = 0;
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
@@ -23,7 +23,6 @@ namespace kg
 
 		virtual int getPluginId() const;
 
-
 		void set( const float rotationInDegree );
 
 		//in degree
@@ -37,6 +36,5 @@ namespace kg
 		};
 
 		static const std::string PLUGIN_NAME;
-
 	};
 }

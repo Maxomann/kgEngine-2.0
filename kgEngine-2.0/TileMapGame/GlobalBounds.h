@@ -29,8 +29,6 @@ namespace kg
 
 		virtual int getPluginId() const;
 
-
-
 		const sf::FloatRect get()const;
 
 		enum class CallbackId : int

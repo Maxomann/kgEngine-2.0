@@ -41,13 +41,13 @@ namespace kg
 			if( it == m_systemsByType.end() )
 				return std::static_pointer_cast< T >(std::shared_ptr<void>());
 			else
-				return static_pointer_cast<T>(it->second);
+				return static_pointer_cast< T >(it->second);
 		};
 
 		/*template<class T, class CastTo>
 		std::shared_ptr<CastTo>& getSystemWithCast()
 		{
-			return std::static_pointer_cast< CastTo >(getSystem<T>());
+		return std::static_pointer_cast< CastTo >(getSystem<T>());
 		};*/
 
 		void forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent );

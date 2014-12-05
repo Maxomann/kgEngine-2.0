@@ -9,7 +9,7 @@ namespace kg
 
 	public:
 		WrongCallbackSignatureException( const char* expectedCallbackSignature )
-			:m_msg( "CallbackSender::triggerCallback wrong callback signature. Expected Signature:" + std::string(expectedCallbackSignature) )
+			:m_msg( "CallbackSender::triggerCallback wrong callback signature. Expected Signature:" + std::string( expectedCallbackSignature ) )
 		{ }
 
 		virtual const char* what()const override

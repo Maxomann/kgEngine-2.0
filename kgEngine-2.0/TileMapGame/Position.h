@@ -22,7 +22,6 @@ namespace kg
 
 		virtual int getPluginId() const;
 
-
 		void set( const sf::Vector2i& position );
 
 		const sf::Vector2i& get()const;

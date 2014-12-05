@@ -35,8 +35,6 @@ namespace kg
 
 		static const std::string PLUGIN_NAME;
 
-
-
 		// returns a reference to the internal container
 		const EntityContainer& getEntitiesInChunk( const sf::Vector2i& chunk )const;
 
@@ -48,6 +46,8 @@ namespace kg
 		/*std::list<std::shared_ptr<Entity>> getEntitiesInChunk( const sf::Vector2i& from,
 															   const sf::Vector2i& to )const;*/
 
+		// returns the position in chunks for the position of an entity
+		// never returns {0,0}
 		static sf::Vector2i calculateChunkForPosition( const sf::Vector2i& position );
 
 		static const int CHUNK_SIZE = 640;

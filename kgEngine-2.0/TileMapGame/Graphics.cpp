@@ -4,7 +4,6 @@ using namespace sf;
 
 namespace kg
 {
-
 	void Graphics::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
 	{
 		string texturePackage;
@@ -127,7 +126,7 @@ namespace kg
 	}
 
 	void Graphics::onRotationChanged( int callbackId, const float& newRotation )
-{
+	{
 		m_sprite.setRotation( newRotation );
 	}
 
@@ -150,5 +149,4 @@ namespace kg
 	const std::string Graphics::BLUEPRINT_TEXTURE_PATH = "path";
 
 	const std::string Graphics::BLUEPRINT_PACKAGE_NAME = "package";
-
 }

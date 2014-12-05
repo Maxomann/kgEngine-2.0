@@ -4,8 +4,6 @@ using namespace sf;
 
 namespace kg
 {
-
-
 	void ChunkSystem::init( Engine& engine, World& world )
 	{
 		world.registerCallback_1( ( int )EntityManager::CallbackId::ENTITY_ADDED,
@@ -19,7 +17,7 @@ namespace kg
 	}
 
 	void ChunkSystem::sfmlEvent( Engine& engine, const sf::Event& sfEvent )
-{
+	{
 		return;
 	}
 
@@ -47,23 +45,14 @@ namespace kg
 	{
 		if( entity->hasComponent<Position>() )
 		{
-
-			//bind entity for later usage
-			auto func = std::make_shared<std::function<void( int, const sf::Vector2i& )> >( std::bind(
-				&ChunkSystem::m_onEntityPositionChanged,
-				this,
-				placeholders::_1,
-				entity,
-				placeholders::_2 ) );
-			entity->getComponent<Position>()->registerCallback<const sf::Vector2i>( ( int )Position::CallbackId::CHANGED,
-																					(CallbackReciever*)this,
-																					func );
+			entity->getComponent<Position>()->registerCallback_1_entity<ChunkSystem, const sf::Vector2i>( ( int )Position::CallbackId::CHANGED,
+																										  this,
+																										  entity,
+																										  &ChunkSystem::m_onEntityPositionChanged );
 
 			m_refreshChunkInformation( entity );
 		}
 	}
-
-
 
 	void ChunkSystem::m_refreshChunkInformation( std::shared_ptr<Entity>& entity )
 	{
@@ -107,7 +96,7 @@ namespace kg
 	}
 
 	const ChunkSystem::EntityContainer& ChunkSystem::getEntitiesInChunk( const sf::Vector2i& chunk ) const
-{
+	{
 		auto findResult = m_chunkData.find( chunk.x );
 		if( findResult != m_chunkData.end() )
 		{
@@ -122,21 +111,32 @@ namespace kg
 
 	sf::Vector2i ChunkSystem::calculateChunkForPosition( const sf::Vector2i& position )
 	{
-		return position / CHUNK_SIZE;
+		auto chunk = position / CHUNK_SIZE;
+		if( position.x < 0 )
+			chunk.x -= 1;
+		else
+			chunk.x += 1;
+
+		if( position.y < 0 )
+			chunk.y -= 1;
+		else
+			chunk.y += 1;
+
+		return chunk;
 	}
 
 	const sf::Vector2i& ChunkSystem::getChunkOfEntity( const std::shared_ptr<Entity>& entity )
 	{
-			auto& retVal = m_entityData.at( entity );
-			return retVal;
-			// out_of_range:
-			// entity is not registered in ChunkSystem
-			// possible reasons:
-			// entity has not been added to World
-			// or
-			// entity is not in world anymore
-			// or
-			// its a bug -.-
+		auto& retVal = m_entityData.at( entity );
+		return retVal;
+		// out_of_range:
+		// entity is not registered in ChunkSystem
+		// possible reasons:
+		// entity has not been added to World
+		// or
+		// entity is not in world anymore
+		// or
+		// its a bug -.-
 	}
 
 	const std::string ChunkSystem::PLUGIN_NAME = "ChunkSystem";

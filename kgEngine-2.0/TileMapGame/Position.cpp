@@ -4,7 +4,6 @@ using namespace sf;
 
 namespace kg
 {
-
 	void Position::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
 	{
 		return;
@@ -57,5 +56,4 @@ namespace kg
 	}
 
 	const std::string Position::PLUGIN_NAME = "Position";
-
 }

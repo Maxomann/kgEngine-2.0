@@ -33,20 +33,18 @@ namespace kg
 
 		virtual int getPluginId() const;
 
-
 		// the size in pixel that this camera will render on the screen
 		// for a window of size 800x600 choose sf::Vector2u(800,600)
 		// if this is the only camera you want to draw to the window.
 		// This is not the size of the bounding box. The bounding box is the
 		// size of the area rendered from the world. Final size is the size that the rendered
 		// area will get scaled to before being drawn to the screen
-		void setFinalSize(const sf::Vector2u& size);
+		void setFinalSize( const sf::Vector2u& size );
 		const sf::Vector2u& getFinalSize()const;
 
 		// the offset that will be applied to the rendered image of the camera before drawing on the screen
 		void setScreenOffset( const sf::Vector2i& offset );
 		const sf::Vector2i& getScreenOffset()const;
-
 
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
