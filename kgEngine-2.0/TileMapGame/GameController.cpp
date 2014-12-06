@@ -5,7 +5,9 @@ using namespace sf;
 namespace kg
 {
 	void GameController::init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile )
-{
+	{
+		r_graphicsSystem = world.getSystem<GraphicsSystem>().get();
+
 		m_test = world.addEntity( world.createEntity( engine, 100 ) ).second;
 
 		for( int x = 0; x < 10; ++x )
@@ -15,8 +17,6 @@ namespace kg
 				entity->getComponent<Position>()->set( sf::Vector2i( x * 64, y * 64 ) );
 			}
 
-		m_camera = Camera::CREATE( engine, world );
-		m_camera->getComponent<Size>()->set( sf::Vector2i( 1080, 720 ) );
 		return;
 	}
 
@@ -29,18 +29,18 @@ namespace kg
 
 	void GameController::update( Engine& engine, World& world )
 	{
+		auto camera = r_graphicsSystem->getCamera( 0 );
+
 		if( Keyboard::isKeyPressed( Keyboard::Escape ) )
 			engine.shouldTerminate = true;
 		if( Keyboard::isKeyPressed( Keyboard::W ) )
-			m_camera->getComponent<Position>()->move( sf::Vector2i( 0, -10 ) );
+			camera->getComponent<Position>()->move( sf::Vector2i( 0, -10 ) );
 		if( Keyboard::isKeyPressed( Keyboard::S ) )
-			m_camera->getComponent<Position>()->move( sf::Vector2i( 0, 10 ) );
+			camera->getComponent<Position>()->move( sf::Vector2i( 0, 10 ) );
 		if( Keyboard::isKeyPressed( Keyboard::A ) )
-			m_camera->getComponent<Position>()->move( sf::Vector2i( -10, 0 ) );
+			camera->getComponent<Position>()->move( sf::Vector2i( -10, 0 ) );
 		if( Keyboard::isKeyPressed( Keyboard::D ) )
-			m_camera->getComponent<Position>()->move( sf::Vector2i( 10, 0 ) );
-
-		auto chunk = world.getSystem<ChunkSystem>()->getChunkOfEntity( m_camera );
+			camera->getComponent<Position>()->move( sf::Vector2i( 10, 0 ) );
 
 		return;
 	}

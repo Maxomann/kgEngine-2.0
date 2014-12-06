@@ -10,6 +10,7 @@ namespace kg
 
 			CHUNK_SYSTEM,
 			GAME_CONTROLLER,
+			GRAPHICS_SYSTEM,
 
 			LAST_ELEMENT
 		};
@@ -34,6 +35,7 @@ namespace kg
 
 			CHUNK_SYSTEM,
 			GAME_CONTROLLER,
+			GRAPHICS_SYSTEM,
 
 			LAST_ELEMENT
 		};

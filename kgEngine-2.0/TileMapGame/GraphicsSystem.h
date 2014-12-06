@@ -1,16 +1,15 @@
 #pragma once
 #include "stdafx.h"
+#include "id.h"
 #include "Camera.h"
-#include "ChunkSystem.h"
-#include "GraphicsSystem.h"
 
 namespace kg
 {
-	class GameController : public System
+	class GraphicsSystem : public System
 	{
-		GraphicsSystem* r_graphicsSystem;
+		std::vector<std::shared_ptr<Entity>> m_cameras;
 
-		std::shared_ptr<Entity> m_test;
+		std::shared_ptr<ConfigFile> m_configFile;
 
 	public:
 		virtual void init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile );
@@ -24,6 +23,13 @@ namespace kg
 		virtual const std::string& getPluginName() const;
 
 		virtual int getPluginId() const;
+
+
+		std::shared_ptr<Entity>& getCamera( int index );
+
+		/*void setWindowSize( const sf::Vector2i& size );
+		void setWindowTitle( const std::string& title );*/
+
 
 		static const std::string PLUGIN_NAME;
 	};
