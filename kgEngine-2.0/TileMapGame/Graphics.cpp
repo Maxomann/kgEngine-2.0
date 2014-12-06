@@ -124,7 +124,7 @@ namespace kg
 	float Graphics::getZValue() const
 	{
 		auto bounds = r_globalBounds->get();
-		return bounds.top + bounds.height;
+		return bounds.top + bounds.height;//feet position
 	}
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";

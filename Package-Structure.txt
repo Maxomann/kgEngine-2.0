@@ -1,30 +1,25 @@
-core.exe
-[dlls]
-[Folder]Packages
-	[Folder]YourPackageName
-		[Folder]Resource
+[Packages]
+	[YourPackageName]
+		[Resource]
 			example.png
-		[xxx].blueprint
-		...
-		[yyy].blueprint
-		[xxx].dll
-		...
-		[yyy].dll
+		xxx.blueprint
+		yyy.dll
 		*optional*YourPackageName.txt
-		
-		
+[Saves]
+	[SavegameName]
+		Global.save
+		[Chunks]
+			x#y.chunk//chunkPosition.x, chunkPosition.y
 
-		
-Example:
+[Settings]
+	SystemName.ini
+
 core.exe
-[dlls]
-[Folder]Packages
-	[Folder]TestPackage
-		[Folder]Resource
-			example.png
-			myImage.png
-		TestPackage.blueprint
-		Additional.blueprint
-		hereAreMyPlugins.dll
-		anotherDll.dll
-		TestPackage.txt
+sfml-audio-2.dll
+sfml-graphics-2.dll
+sfml-network-2.dll
+sfml-system-2.dll
+sfml-window-2.dll
+tgui.dll
+readme.txt
+license.txt
