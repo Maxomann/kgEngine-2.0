@@ -4,8 +4,8 @@ using namespace sf;
 
 namespace kg
 {
-	void ChunkSystem::init( Engine& engine, World& world )
-	{
+	void ChunkSystem::init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile )
+{
 		m_connectToSignal( world.s_entity_added, &ChunkSystem::m_onEntityAddedToWorld );
 		m_connectToSignal( world.s_entity_removed, &ChunkSystem::m_onEntityRemovedFromWorld );
 

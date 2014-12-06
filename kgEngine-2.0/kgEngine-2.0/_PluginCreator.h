@@ -4,5 +4,6 @@
 
 #include "core.h"
 #include "Callback.h"
+#include "ConfigFile.h"
 
 #endif

@@ -98,8 +98,8 @@ namespace kg
 				//wenn Path und Typ vorhanden
 				else
 				{
-					auto& obj = std::static_pointer_cast< T >(secondIt->second);
-					obj.loadFromFile( path );
+					auto obj = std::static_pointer_cast< T >(secondIt->second);
+					obj->loadFromFile( path );
 					return obj;
 				}
 			}
@@ -129,6 +129,12 @@ namespace kg
 		std::shared_ptr<T> reloadResource( const std::string& packageName, const std::string& resourcePath )
 		{
 			return reloadResource<T>( "./Packages/" + packageName + "/Resource/" + resourcePath );
+		}
+
+		template< class T >
+		std::shared_ptr<T> getConfigFile( const std::string& systemName )
+		{
+			return reloadResource<T>( "./Config/" + systemName + ".ini" );
 		}
 	};
 }

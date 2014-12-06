@@ -11,7 +11,7 @@ namespace kg
 		std::shared_ptr<Entity> m_camera;
 
 	public:
-		virtual void init( Engine& engine, World& world );
+		virtual void init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile );
 
 		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent );
 

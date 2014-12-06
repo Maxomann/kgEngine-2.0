@@ -4,8 +4,8 @@ using namespace sf;
 
 namespace kg
 {
-	void GameController::init( Engine& engine, World& world )
-	{
+	void GameController::init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile )
+{
 		m_test = world.addEntity( world.createEntity( engine, 100 ) ).second;
 
 		for( int x = 0; x < 10; ++x )
@@ -60,5 +60,5 @@ namespace kg
 		return ( int )id::SystemPluginId::GAME_CONTROLLER;
 	}
 
-	const std::string GameController::PLUGIN_NAME = "GAME_CORE";
+	const std::string GameController::PLUGIN_NAME = "GameControllerSystem";
 }

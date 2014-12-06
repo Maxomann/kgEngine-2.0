@@ -21,7 +21,7 @@ namespace kg
 
 	public:
 
-		virtual void init( Engine& engine, World& world );
+		virtual void init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile );
 
 		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent );
 

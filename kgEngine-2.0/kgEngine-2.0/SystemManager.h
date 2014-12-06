@@ -1,6 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "System.h"
+#include "Engine.h"
+#include "ConfigFile.h"
 
 namespace kg
 {
@@ -9,9 +11,9 @@ namespace kg
 		std::map<size_t, std::shared_ptr<System>> m_systemsByType;
 		std::map<double, std::shared_ptr<System>> m_systemsByUpdateImportance;
 	public:
-		// If this function returns true a system of type T has already been registered.
-		// This function overwrites the old system with the parameter of this function.
 
+		// If this function returns true a system of type T has already been registered.
+		// This function overwrites the old system with this system parameter.
 		bool addSystem( std::shared_ptr<System>& system, size_t realTypeHashCode )
 		{
 			double updateImportance = system->getUpdateImportance();
