@@ -102,16 +102,7 @@ public:
 
 int main()
 {
-	Foo sender;
-
-	if( true )
-	{
-		auto reciever = make_shared<Bar>();
-		reciever->connectIt( sender );
-		sender.mySignal( "Hello", " world!", 500 );
-	}
-
-	sender.mySignal( "Hello", " world!", 500 );
+	cout << std::atoi( "ga435ga" ) << endl;
 
 	system( "pause" );
 }

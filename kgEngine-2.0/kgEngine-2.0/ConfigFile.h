@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "PathNotAvailableException.h"
+#include "Blueprint.h"
 
 namespace kg
 {
@@ -27,8 +28,8 @@ namespace kg
 		DLL_EXPORT void saveToFile( const std::string& path );
 		DLL_EXPORT std::string toString()const;
 
-		DLL_EXPORT const std::map<std::string, std::string>& getAllData();
-		DLL_EXPORT const std::string& getData( const std::string& identifier );
+		/*DLL_EXPORT const std::map<std::string, std::string>& getAllData(); - unused method*/
+		DLL_EXPORT blueprint::Value getData( const std::string& identifier );
 		DLL_EXPORT void setData( const std::string& identifier, const std::string& data );
 	};
 }

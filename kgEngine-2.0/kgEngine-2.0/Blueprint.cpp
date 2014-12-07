@@ -43,11 +43,21 @@ namespace kg
 		blueprint::Value::Value()
 		{ }
 
-		blueprint::Value::Value( std::string& name, std::string& rawValue ) :m_name( name ),
+		blueprint::Value::Value( const std::string& name, const std::string& rawValue ) :
+			m_name( name ),
 			m_rawValue( rawValue )
-		{ }
+		{
+			for( const auto& el : rawValue )
+			{
+				if( !std::isspace( el ) )
+				{
+					m_isValid = true;
+					break;
+				}
+			}
+		}
 
-		std::string blueprint::Value::toStringWithBraces() const
+		std::string blueprint::Value::getRawValue() const
 		{
 			return m_rawValue;
 		}
@@ -665,5 +675,32 @@ namespace kg
 		{
 			return m_entitiesById.at( id );
 		}
+
+		bool Value::isValid() const
+		{
+			return m_isValid;
+		}
+
+		Value::operator bool() const
+		{
+			return isValid();
+		}
+
+		bool Value::toBool() const
+		{
+			if( atoi( m_rawValue.c_str() ) != 0 )
+			{
+				return true;
+			}
+			else
+			{
+				auto rawValueCopy = m_rawValue;
+				std::transform( rawValueCopy.begin(), rawValueCopy.end(), rawValueCopy.begin(), ::tolower );
+				if( rawValueCopy == "true" )
+					return true;
+			}
+			return false;
+		}
+
 	}
 }

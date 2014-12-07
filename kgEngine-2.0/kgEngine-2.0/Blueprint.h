@@ -48,15 +48,18 @@ namespace kg
 
 		class DLL_EXPORT Value
 		{
-			std::string m_name;
-			std::string m_rawValue;
+			/*const*/ std::string m_name = "standart constructor has been called - object not initialized";
+			/*const*/ std::string m_rawValue = "standart constructor has been called - object not initialized";
+			bool m_isValid = false;
 
 		public:
 			Value();
-			Value( std::string& name,
-				   std::string& rawValue );
+			Value( const std::string& name,
+				   const std::string& rawValue );
 
 			const std::string& getName()const;
+
+			bool toBool()const;
 
 			int toInt()const;
 			std::pair<int, std::string> toIntWithUnit()const;
@@ -65,7 +68,11 @@ namespace kg
 			std::pair<double, std::string> toDoubleWithUnit()const;
 
 			std::string toString()const;
-			std::string toStringWithBraces()const;
+
+			std::string getRawValue()const;
+
+			bool isValid()const;
+			operator bool()const;
 		};
 
 		class DLL_EXPORT Blueprint

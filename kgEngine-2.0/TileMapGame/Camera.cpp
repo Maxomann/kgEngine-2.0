@@ -92,7 +92,6 @@ namespace kg
 	void Camera::onSizeChanged( const sf::Vector2i& newSize )
 	{
 		m_view.setSize( sf::Vector2f( newSize ) );
-		m_texture.create( newSize.x, newSize.y );
 	}
 
 	void Camera::setFinalSize( const sf::Vector2u& size )
@@ -126,10 +125,22 @@ namespace kg
 		camera->initComponentsByImportance( engine );
 		camera->getComponent<Position>()->set( sf::Vector2i( 0, 0 ) );
 		camera->getComponent<Size>()->set( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
+		camera->getComponent<Camera>()->setRenderResolution( engine.renderWindow.getSize() );
 		camera->getComponent<Camera>()->setFinalSize( engine.renderWindow.getSize() );
 		camera->getComponent<Camera>()->setScreenOffset( sf::Vector2i( 0, 0 ) );
 		world.addEntity( camera );
 		return camera;
 	}
+
+	void Camera::setRenderResolution( const sf::Vector2u& resolution )
+	{
+		m_texture.create( resolution.x, resolution.y );
+	}
+
+	sf::Vector2u Camera::getRenderResolution() const
+	{
+		return m_texture.getSize();
+	}
+
 	const std::string Camera::PLUGIN_NAME = "Camera";
 }

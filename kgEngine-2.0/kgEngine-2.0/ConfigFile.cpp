@@ -1,6 +1,7 @@
 #include "ConfigFile.h"
 using namespace std;
 using namespace sf;
+using namespace kg::blueprint;
 
 namespace kg
 {
@@ -25,10 +26,18 @@ namespace kg
 			{
 				std::string identifier;
 				bool afterBreak = false; //afer ':'
+				bool afterFirstValueChar = false;
 				for( const auto& el : line )
 				{
 					if( afterBreak )
-						m_data[identifier].push_back( el );
+					{
+						if( !afterFirstValueChar && !std::isspace( el ) )
+							afterFirstValueChar = true;
+						if( afterFirstValueChar )
+						{
+							m_data[identifier].push_back( el );
+						}
+					}
 					else if( el == ':' )
 						afterBreak = true;
 					else
@@ -40,9 +49,9 @@ namespace kg
 		return true;
 	}
 
-	DLL_EXPORT const std::string& ConfigFile::getData( const std::string& identifier )
+	DLL_EXPORT blueprint::Value ConfigFile::getData( const std::string& identifier )
 	{
-		return m_data[identifier];
+		return Value( identifier, m_data[identifier] );
 	}
 
 	DLL_EXPORT void ConfigFile::saveToFile()
@@ -66,10 +75,13 @@ namespace kg
 		std::string str;
 		for( const auto& el : m_data )
 		{
-			str += el.first;
-			str += ":";
-			str += el.second;
-			str += "\n";
+			if( el.second != "" )
+			{
+				str += el.first;
+				str += ": ";
+				str += el.second;
+				str += "\n";
+			}
 		}
 		return str;
 	}
@@ -79,10 +91,10 @@ namespace kg
 		m_data[identifier] = data;
 	}
 
-	DLL_EXPORT const std::map<std::string, std::string>& ConfigFile::getAllData()
+	/*DLL_EXPORT const std::map<std::string, std::string>& ConfigFile::getAllData()
 	{
 		return m_data;
-	}
+	}*/
 
 	ConfigFile::~ConfigFile()
 	{

@@ -32,5 +32,25 @@ namespace kg
 
 
 		static const std::string PLUGIN_NAME;
+
+
+		//configuration values:
+		static const std::string ANTIALIASING;//
+		static const std::string FULLSCREEN;//
+		static const std::string WINDOW_RESX;//only in windowed mode
+		static const std::string WINDOW_RESY;//only in windowed mode
+		static const std::string RENDER_RESX;//only in fullscreen mode (otherwise set to window size)
+		static const std::string RENDER_RESY;//only in fullscreen mode (otherwise set to window size)
+		static const std::string VSYNC;//
+		static const std::string WINDOW_NAME;//
+
+		static const std::string ANTIALIASING_DEFAULT;
+		static const std::string FULLSCREEN_DEFAULT;
+		static const std::string WINDOW_RESX_DEFAULT;
+		static const std::string WINDOW_RESY_DEFAULT;
+		static const std::string RENDER_RESX_DEFAULT;
+		static const std::string RENDER_RESY_DEFAULT;
+		static const std::string VSYNC_DEFAULT;
+		static const std::string WINDOW_NAME_DEFAULT;
 	};
 }
