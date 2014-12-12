@@ -31,7 +31,7 @@ namespace kg
 
 		static const std::string PLUGIN_NAME;
 
-		//configuration values:
+		//configuration default values:
 		static const std::string ANTIALIASING;//
 		static const std::string FULLSCREEN;//
 		static const std::string WINDOW_RESX;//only in windowed mode
