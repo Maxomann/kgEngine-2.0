@@ -30,6 +30,7 @@ namespace kg
 
 		/*DLL_EXPORT const std::map<std::string, std::string>& getAllData(); - unused method*/
 		DLL_EXPORT blueprint::Value getData( const std::string& identifier );
-		DLL_EXPORT void setData( const std::string& identifier, const std::string& data );
+		//returns a reference to parameter: const std::string& data
+		DLL_EXPORT const std::string& setData( const std::string& identifier, const std::string& data );
 	};
 }

@@ -86,14 +86,15 @@ namespace kg
 		return str;
 	}
 
-	DLL_EXPORT void ConfigFile::setData( const std::string& identifier, const std::string& data )
+	DLL_EXPORT const std::string& ConfigFile::setData( const std::string& identifier, const std::string& data )
 	{
 		m_data[identifier] = data;
+		return data;
 	}
 
 	/*DLL_EXPORT const std::map<std::string, std::string>& ConfigFile::getAllData()
 	{
-		return m_data;
+	return m_data;
 	}*/
 
 	ConfigFile::~ConfigFile()

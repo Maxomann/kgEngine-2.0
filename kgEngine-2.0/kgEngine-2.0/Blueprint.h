@@ -73,6 +73,8 @@ namespace kg
 
 			bool isValid()const;
 			operator bool()const;
+
+			Value& operator=(const std::string& rhs);
 		};
 
 		class DLL_EXPORT Blueprint

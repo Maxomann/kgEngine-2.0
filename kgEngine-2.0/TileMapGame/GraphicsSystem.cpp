@@ -21,45 +21,23 @@ namespace kg
 
 		//set them if invalid ( and retrieve them a second time )
 		if( !antialiasing )
-		{
-			configFile->setData( ANTIALIASING, ANTIALIASING_DEFAULT );
-			antialiasing = configFile->getData( ANTIALIASING );
-		}
+			antialiasing = configFile->setData( ANTIALIASING, ANTIALIASING_DEFAULT );
 		if( !fullscreen )
-		{
-			configFile->setData( FULLSCREEN, FULLSCREEN_DEFAULT );
-			fullscreen = configFile->getData( FULLSCREEN );
-		}
+			fullscreen = configFile->setData( FULLSCREEN, FULLSCREEN_DEFAULT );
 		if( !window_resx )
-		{
-			configFile->setData( WINDOW_RESX, WINDOW_RESX_DEFAULT );
-			window_resx = configFile->getData( WINDOW_RESX );
-		}
+			window_resx = configFile->setData( WINDOW_RESX, WINDOW_RESX_DEFAULT );
 		if( !window_resy )
-		{
-			configFile->setData( WINDOW_RESY, WINDOW_RESY_DEFAULT );
-			window_resy = configFile->getData( WINDOW_RESY );
-		}
+			window_resy = configFile->setData( WINDOW_RESY, WINDOW_RESY_DEFAULT );
 		if( !render_resx )
-		{
-			configFile->setData( RENDER_RESX, RENDER_RESX_DEFAULT );
-			render_resx = configFile->getData( RENDER_RESX );
-		}
+			render_resx = configFile->setData( RENDER_RESX, RENDER_RESX_DEFAULT );
 		if( !render_resy )
-		{
-			configFile->setData( RENDER_RESY, RENDER_RESY_DEFAULT );
-			render_resy = configFile->getData( RENDER_RESY );
-		}
+			render_resy = configFile->setData( RENDER_RESY, RENDER_RESY_DEFAULT );
 		if( !vsync )
-		{
-			configFile->setData( VSYNC, VSYNC_DEFAULT );
-			vsync = configFile->getData( VSYNC );
-		}
+			vsync = configFile->setData( VSYNC, VSYNC_DEFAULT );
 		if( !window_name )
-		{
-			configFile->setData( WINDOW_NAME, WINDOW_NAME_DEFAULT );
-			window_name = configFile->getData( WINDOW_NAME );
-		}
+			window_name = configFile->setData( WINDOW_NAME, WINDOW_NAME_DEFAULT );
+
+
 
 
 		//init window
@@ -137,9 +115,9 @@ namespace kg
 
 	const std::string GraphicsSystem::VSYNC_DEFAULT = "true";
 
-	const std::string GraphicsSystem::RENDER_RESY_DEFAULT = "720px";
+	const std::string GraphicsSystem::RENDER_RESY_DEFAULT = "1080px";
 
-	const std::string GraphicsSystem::RENDER_RESX_DEFAULT = "1080px";
+	const std::string GraphicsSystem::RENDER_RESX_DEFAULT = "1920px";
 
 	const std::string GraphicsSystem::WINDOW_RESY_DEFAULT = "720px";
 
