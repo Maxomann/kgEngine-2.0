@@ -41,7 +41,7 @@ namespace kg
 			return returnValue;
 		};
 
-		void updateEntities( Engine& engine, World& world );
+		void updateEntities( Engine& engine, World& world, const sf::Time& frameTime );
 
 		//helper function for creating a new Entity with a unique id
 		std::shared_ptr<Entity> createEntity( Engine& engine,

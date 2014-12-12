@@ -34,12 +34,12 @@ namespace kg
 		m_sprite.setTextureRect( textureRect );
 	}
 
-	void Graphics::init( Engine& engine, ComponentManager& componentManager )
-	{
-		auto position = componentManager.getComponent<Position>().get();
-		r_size = componentManager.getComponent<Size>().get();
-		auto rotation = componentManager.getComponent<Rotation>().get();
-		r_globalBounds = componentManager.getComponent<GlobalBounds>().get();
+	void Graphics::init( Engine& engine, ComponentManager& thisEntity )
+{
+		auto position = thisEntity.getComponent<Position>().get();
+		r_size = thisEntity.getComponent<Size>().get();
+		auto rotation = thisEntity.getComponent<Rotation>().get();
+		r_globalBounds = thisEntity.getComponent<GlobalBounds>().get();
 
 		m_connectToSignal( position->s_changed, &Graphics::onPositionChanged );
 		m_connectToSignal( r_size->s_changed, &Graphics::onSizeChanged );
@@ -52,8 +52,8 @@ namespace kg
 		return;
 	}
 
-	void Graphics::update( Engine& engine, World& world, ComponentManager& componentManager )
-	{
+	void Graphics::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
+{
 		return;
 	}
 

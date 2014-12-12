@@ -9,11 +9,11 @@ namespace kg
 		return;
 	}
 
-	void GlobalBounds::init( Engine& engine, ComponentManager& componentManager )
-	{
-		r_position = componentManager.getComponent<Position>().get();
-		r_size = componentManager.getComponent<Size>().get();
-		r_rotation = componentManager.getComponent<Rotation>().get();
+	void GlobalBounds::init( Engine& engine, ComponentManager& thisEntity )
+{
+		r_position = thisEntity.getComponent<Position>().get();
+		r_size = thisEntity.getComponent<Size>().get();
+		r_rotation = thisEntity.getComponent<Rotation>().get();
 
 		//register callbacks:
 		m_connectToSignal( r_position->s_changed, std::function<void( const sf::Vector2i& )>( [&]( const sf::Vector2i& )
@@ -35,8 +35,8 @@ namespace kg
 		return;
 	}
 
-	void GlobalBounds::update( Engine& engine, World& world, ComponentManager& componentManager )
-	{
+	void GlobalBounds::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
+{
 		return;
 	}
 

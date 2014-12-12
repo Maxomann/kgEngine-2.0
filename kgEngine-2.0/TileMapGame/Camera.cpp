@@ -10,18 +10,18 @@ namespace kg
 		throw new bad_function_call();
 	}
 
-	void Camera::init( Engine& engine, ComponentManager& componentManager )
-	{
-		r_position = componentManager.getComponent<Position>().get();
-		r_size = componentManager.getComponent<Size>().get();
-		r_globalBounds = componentManager.getComponent<GlobalBounds>().get();
+	void Camera::init( Engine& engine, ComponentManager& thisEntity )
+{
+		r_position = thisEntity.getComponent<Position>().get();
+		r_size = thisEntity.getComponent<Size>().get();
+		r_globalBounds = thisEntity.getComponent<GlobalBounds>().get();
 
 		m_connectToSignal( r_position->s_changed, &Camera::onPositionChanged );
 		m_connectToSignal( r_size->s_changed, &Camera::onSizeChanged );
 	}
 
-	void Camera::update( Engine& engine, World& world, ComponentManager& componentManager )
-	{
+	void Camera::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
+{
 		m_texture.clear( Color::Green );
 		m_texture.setView( m_view );
 

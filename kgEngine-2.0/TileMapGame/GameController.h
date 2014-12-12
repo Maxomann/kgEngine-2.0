@@ -17,7 +17,7 @@ namespace kg
 
 		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent );
 
-		virtual void update( Engine& engine, World& world );
+		virtual void update( Engine& engine, World& world, const sf::Time& frameTime );
 
 		virtual double getUpdateImportance() const;
 

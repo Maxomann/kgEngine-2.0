@@ -15,6 +15,8 @@ namespace kg
 		Engine m_engine;
 		World m_world;
 
+		sf::Clock m_frameTimeClock;
+
 		void loadPackages();
 
 	public:

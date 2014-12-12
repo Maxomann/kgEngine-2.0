@@ -17,8 +17,8 @@ namespace kg
 		return;
 	}
 
-	void ChunkSystem::update( Engine& engine, World& world )
-	{
+	void ChunkSystem::update( Engine& engine, World& world, const sf::Time& frameTime )
+{
 		return;
 	}
 

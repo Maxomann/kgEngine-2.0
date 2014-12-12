@@ -17,9 +17,9 @@ namespace kg
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
 
-		virtual void init( Engine& engine, ComponentManager& componentManager );
+		virtual void init( Engine& engine, ComponentManager& thisEntity );
 
-		virtual void update( Engine& engine, World& world, ComponentManager& componentManager );
+		virtual void update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime );
 
 		virtual double getUpdateImportance() const;
 

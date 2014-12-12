@@ -27,8 +27,8 @@ namespace kg
 		return;
 	}
 
-	void GameController::update( Engine& engine, World& world )
-	{
+	void GameController::update( Engine& engine, World& world, const sf::Time& frameTime )
+{
 		auto camera = r_graphicsSystem->getCamera( 0 );
 
 		if( Keyboard::isKeyPressed( Keyboard::Escape ) )

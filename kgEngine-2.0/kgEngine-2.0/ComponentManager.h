@@ -61,7 +61,7 @@ namespace kg
 				return std::static_pointer_cast< T >(it->second);
 		};
 
-		void updateAllComponentsByImportance( Engine& engine, World& world );
+		void updateAllComponentsByImportance( Engine& engine, World& world, const sf::Time& frameTime );
 
 		//returns true if all components of type ComponentType are registered
 		template<class /*variadic*/ ComponentType>

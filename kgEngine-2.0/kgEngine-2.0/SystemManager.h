@@ -53,6 +53,6 @@ namespace kg
 		};*/
 
 		void forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent );
-		void updateAllSystemsByImportance( Engine& engine, World& world );
+		void updateAllSystemsByImportance( Engine& engine, World& world, const sf::Time& frameTime );
 	};
 }

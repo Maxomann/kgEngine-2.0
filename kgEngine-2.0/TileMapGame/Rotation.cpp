@@ -9,13 +9,13 @@ namespace kg
 		return;
 	}
 
-	void Rotation::init( Engine& engine, ComponentManager& componentManager )
-	{
+	void Rotation::init( Engine& engine, ComponentManager& thisEntity )
+{
 		return;
 	}
 
-	void Rotation::update( Engine& engine, World& world, ComponentManager& componentManager )
-	{
+	void Rotation::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
+{
 		return;
 	}
 

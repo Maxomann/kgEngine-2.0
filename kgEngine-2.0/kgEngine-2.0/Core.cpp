@@ -30,6 +30,9 @@ namespace kg
 	void Core::update()
 	{
 		m_engine.renderWindow.clear( Color::Red );
+		sf::Time frameTime = m_frameTimeClock.restart();
+		if( m_engine.isPaused )
+			frameTime = sf::microseconds( 0 );
 
 		Event event;
 		while( m_engine.renderWindow.pollEvent( event ) )
@@ -37,8 +40,9 @@ namespace kg
 			m_world.forwardSfmlEventByImportance( m_engine, event );
 		}
 
-		m_world.updateEntities( m_engine, m_world );
-		m_world.updateAllSystemsByImportance( m_engine, m_world );
+		if( !m_engine.isPaused )//if engine is not paused, update entities
+			m_world.updateEntities( m_engine, m_world, frameTime);
+		m_world.updateAllSystemsByImportance( m_engine, m_world, frameTime );
 
 		//draw here
 		m_engine.renderWindow.display();

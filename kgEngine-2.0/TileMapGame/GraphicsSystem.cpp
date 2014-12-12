@@ -86,8 +86,8 @@ namespace kg
 		return;
 	}
 
-	void GraphicsSystem::update( Engine& engine, World& world )
-	{
+	void GraphicsSystem::update( Engine& engine, World& world, const sf::Time& frameTime )
+{
 		return;
 	}
 

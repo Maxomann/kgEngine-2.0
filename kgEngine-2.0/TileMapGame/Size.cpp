@@ -14,13 +14,13 @@ namespace kg
 			m_size.y = it->second.toInt();
 	}
 
-	void Size::init( Engine& engine, ComponentManager& componentManager )
-	{
+	void Size::init( Engine& engine, ComponentManager& thisEntity )
+{
 		return;
 	}
 
-	void Size::update( Engine& engine, World& world, ComponentManager& componentManager )
-	{
+	void Size::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
+{
 		return;
 	}
 

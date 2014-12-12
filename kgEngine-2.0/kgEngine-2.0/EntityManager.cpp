@@ -48,10 +48,10 @@ namespace kg
 			return it->second;
 	}
 
-	void EntityManager::updateEntities( Engine& engine, World& world )
-	{
+	void EntityManager::updateEntities( Engine& engine, World& world, const sf::Time& frameTime )
+{
 		for( auto& entity : m_entities )
-			entity.second->updateAllComponentsByImportance( engine, world );
+			entity.second->updateAllComponentsByImportance( engine, world, frameTime );
 	}
 
 	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine,

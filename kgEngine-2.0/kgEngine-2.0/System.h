@@ -20,7 +20,8 @@ namespace kg
 		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent ) = 0;
 
 		// components get updated before systems
-		virtual void update( Engine& engine, World& world ) = 0;
+		// frame time is 0 when Engine::isPaused == true
+		virtual void update( Engine& engine, World& world, const sf::Time& frameTime ) = 0;
 
 		// the lower the importance, the earlier this component gets updated, initialized, sfmlForwarded
 		virtual double getUpdateImportance()const = 0;
