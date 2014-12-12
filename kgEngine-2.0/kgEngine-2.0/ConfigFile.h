@@ -16,7 +16,7 @@ namespace kg
 	class ConfigFile
 	{
 		std::map<std::string, std::string> m_data;
-		std::string m_path="ConfigFile -1";
+		std::string m_path = "ConfigFile -1";
 
 	public:
 		//save on close

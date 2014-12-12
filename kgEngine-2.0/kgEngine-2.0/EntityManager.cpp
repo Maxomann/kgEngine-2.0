@@ -49,7 +49,7 @@ namespace kg
 	}
 
 	void EntityManager::updateEntities( Engine& engine, World& world, const sf::Time& frameTime )
-{
+	{
 		for( auto& entity : m_entities )
 			entity.second->updateAllComponentsByImportance( engine, world, frameTime );
 	}

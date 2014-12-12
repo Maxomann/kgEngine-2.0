@@ -10,7 +10,7 @@ namespace kg
 	}
 
 	void GlobalBounds::init( Engine& engine, ComponentManager& thisEntity )
-{
+	{
 		r_position = thisEntity.getComponent<Position>().get();
 		r_size = thisEntity.getComponent<Size>().get();
 		r_rotation = thisEntity.getComponent<Rotation>().get();
@@ -36,7 +36,7 @@ namespace kg
 	}
 
 	void GlobalBounds::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
-{
+	{
 		return;
 	}
 

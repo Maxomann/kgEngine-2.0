@@ -161,8 +161,6 @@ namespace kg
 			return *this;
 		}
 
-		
-
 		std::string Blueprint::getName() const
 		{
 			return m_name;
@@ -710,6 +708,5 @@ namespace kg
 		{
 			return m_entitiesById.at( id );
 		}
-
 	}
 }

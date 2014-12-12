@@ -24,15 +24,12 @@ namespace kg
 
 		virtual int getPluginId() const;
 
-
 		std::shared_ptr<Entity>& getCamera( int index );
 
 		/*void setWindowSize( const sf::Vector2i& size );
 		void setWindowTitle( const std::string& title );*/
 
-
 		static const std::string PLUGIN_NAME;
-
 
 		//configuration values:
 		static const std::string ANTIALIASING;//

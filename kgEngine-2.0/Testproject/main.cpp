@@ -63,16 +63,14 @@ protected:
 		returnType( className::* mem_fn_ptr ) (parameterType...) )
 	{
 		std::function<returnType( className*, parameterType... )> f1 = std::mem_fn( mem_fn_ptr );
-		std::function<returnType( parameterType... )> f2 = easy_bind( f1, static_cast<className*>(this) );
+		std::function<returnType( parameterType... )> f2 = easy_bind( f1, static_cast< className* >(this) );
 
 		m_connectToSignal( signal, f2 );
 	};
 };
 
 template<class ... parameterType >
-using Signal = boost::signals2::signal < void( parameterType... ) >;
-
-
+using Signal = boost::signals2::signal < void( parameterType... ) > ;
 
 class Foo
 {

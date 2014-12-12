@@ -11,7 +11,7 @@ namespace kg
 	}
 
 	void Camera::init( Engine& engine, ComponentManager& thisEntity )
-{
+	{
 		r_position = thisEntity.getComponent<Position>().get();
 		r_size = thisEntity.getComponent<Size>().get();
 		r_globalBounds = thisEntity.getComponent<GlobalBounds>().get();
@@ -21,7 +21,7 @@ namespace kg
 	}
 
 	void Camera::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
-{
+	{
 		m_texture.clear( Color::Green );
 		m_texture.setView( m_view );
 
@@ -45,8 +45,6 @@ namespace kg
 				m_texture.draw( *entity->getComponent<Graphics>() );
 
 		m_texture.display();
-
-		engine.renderWindow.draw( *this );
 
 		return;
 	}

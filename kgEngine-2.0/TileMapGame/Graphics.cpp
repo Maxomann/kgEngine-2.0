@@ -35,7 +35,7 @@ namespace kg
 	}
 
 	void Graphics::init( Engine& engine, ComponentManager& thisEntity )
-{
+	{
 		auto position = thisEntity.getComponent<Position>().get();
 		r_size = thisEntity.getComponent<Size>().get();
 		auto rotation = thisEntity.getComponent<Rotation>().get();
@@ -53,7 +53,7 @@ namespace kg
 	}
 
 	void Graphics::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
-{
+	{
 		return;
 	}
 

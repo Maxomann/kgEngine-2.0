@@ -5,7 +5,6 @@ using namespace kg::blueprint;
 
 namespace kg
 {
-
 	DLL_EXPORT bool ConfigFile::loadFromFile( const std::string& path )
 	{
 		m_data.clear();
@@ -19,7 +18,6 @@ namespace kg
 		}
 		else
 		{
-
 			std::string line;
 
 			while( std::getline( file, line ) )
@@ -143,5 +141,4 @@ namespace kg
 
 		return file;
 	}
-
 }

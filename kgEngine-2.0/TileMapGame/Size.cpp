@@ -15,12 +15,12 @@ namespace kg
 	}
 
 	void Size::init( Engine& engine, ComponentManager& thisEntity )
-{
+	{
 		return;
 	}
 
 	void Size::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
-{
+	{
 		return;
 	}
 

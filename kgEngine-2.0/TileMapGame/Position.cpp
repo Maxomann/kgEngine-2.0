@@ -10,12 +10,12 @@ namespace kg
 	}
 
 	void Position::init( Engine& engine, ComponentManager& thisEntity )
-{
+	{
 		return;
 	}
 
 	void Position::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
-{
+	{
 		return;
 	}
 

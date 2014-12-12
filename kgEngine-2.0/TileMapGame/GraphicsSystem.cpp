@@ -4,7 +4,6 @@ using namespace sf;
 
 namespace kg
 {
-
 	void GraphicsSystem::init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile )
 	{
 		m_configFile = configFile;
@@ -37,9 +36,6 @@ namespace kg
 		if( !window_name )
 			window_name = configFile->setData( WINDOW_NAME, WINDOW_NAME_DEFAULT );
 
-
-
-
 		//init window
 		sf::ContextSettings contextSettings;
 		contextSettings.antialiasingLevel = antialiasing.toInt();
@@ -64,7 +60,6 @@ namespace kg
 		}
 		engine.renderWindow.setVerticalSyncEnabled( vsync.toBool() );
 
-
 		//init camera
 		auto camera = Camera::CREATE( engine, world );
 		if( fullscreen.toBool() )
@@ -78,7 +73,6 @@ namespace kg
 			//ignores: render_resx, render_resy
 		}
 		m_cameras.push_back( camera );
-
 	}
 
 	void GraphicsSystem::sfmlEvent( Engine& engine, const sf::Event& sfEvent )
@@ -87,7 +81,9 @@ namespace kg
 	}
 
 	void GraphicsSystem::update( Engine& engine, World& world, const sf::Time& frameTime )
-{
+	{
+		for( const auto& el : m_cameras )
+			engine.renderWindow.draw( *el->getComponent<Camera>() );
 		return;
 	}
 
