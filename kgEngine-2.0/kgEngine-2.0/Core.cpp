@@ -46,8 +46,6 @@ namespace kg
 
 		//draw here
 		m_engine.renderWindow.display();
-
-		m_engine.isPaused = true;
 	}
 
 	void Core::loadPackages()

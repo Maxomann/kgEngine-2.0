@@ -1,11 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "System.h"
-#include "Engine.h"
 #include "ConfigFile.h"
+#include "Engine.h"
 
 namespace kg
 {
+
 	class DLL_EXPORT SystemManager
 	{
 		std::map<size_t, std::shared_ptr<System>> m_systemsByType;

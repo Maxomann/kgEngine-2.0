@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "PluginManager.h"
 #include "Blueprint.h"
-#include "ResourceManagement.h"
+#include "ResourceManager.h"
 
 namespace kg
 {
@@ -11,7 +11,7 @@ namespace kg
 		bool shouldTerminate = false;
 		bool isPaused = false;//if true entities will not get updated
 		sf::RenderWindow renderWindow;
-		ResourceManagement resourceManagement;
+		ResourceManager resourceManager;
 		PluginManager pluginManager;
 		blueprint::BlueprintManager blueprint;
 	};

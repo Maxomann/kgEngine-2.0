@@ -1,0 +1,16 @@
+Globals.save:
+
+SystemId[values]
+SystemId2[values]
+...
+SystemIdN[values]
+
+
+
+
+ChunkXY.save:
+
+BlueprintId;UniqueId;ComponentId[values]ComponentId2[values]...ComponentIdN[values]
+BlueprintId2;UniqueId2;ComponentId[values]ComponentId2[values]...ComponentIdN[values]
+...
+BlueprintIdN;UniqueIdN;ComponentId[values]ComponentId2[values]...ComponentIdN[values]

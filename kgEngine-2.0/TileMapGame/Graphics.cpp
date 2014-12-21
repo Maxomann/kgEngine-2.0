@@ -15,7 +15,7 @@ namespace kg
 		it = blueprintValues.find( BLUEPRINT_TEXTURE_PATH );
 		if( it != blueprintValues.end() )
 			texturePath = it->second.toString();
-		m_resourceManagementReference = engine.resourceManagement.getResource<sf::Texture>( texturePackage, texturePath );
+		m_resourceManagementReference = engine.resourceManager.getResource<sf::Texture>( texturePackage, texturePath );
 		m_sprite.setTexture( *m_resourceManagementReference.get() );
 
 		sf::IntRect textureRect;

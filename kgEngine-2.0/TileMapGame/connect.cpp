@@ -9,6 +9,7 @@
 #include "GameController.h"
 #include "ChunkSystem.h"
 #include "GraphicsSystem.h"
+#include "SaveSystem.h"
 
 using namespace std;
 using namespace kg;

@@ -6,4 +6,6 @@
 #include "id.h"
 #include <_PluginCreator.h>
 
+#include <boost/algorithm/string.hpp>
+
 #endif//STDAFX_H

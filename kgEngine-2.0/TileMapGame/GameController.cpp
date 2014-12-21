@@ -33,14 +33,17 @@ namespace kg
 
 		if( Keyboard::isKeyPressed( Keyboard::Escape ) )
 			engine.shouldTerminate = true;
-		if( Keyboard::isKeyPressed( Keyboard::W ) )
-			camera->getComponent<Position>()->move( sf::Vector2i( 0, -10 ) );
-		if( Keyboard::isKeyPressed( Keyboard::S ) )
-			camera->getComponent<Position>()->move( sf::Vector2i( 0, 10 ) );
-		if( Keyboard::isKeyPressed( Keyboard::A ) )
-			camera->getComponent<Position>()->move( sf::Vector2i( -10, 0 ) );
-		if( Keyboard::isKeyPressed( Keyboard::D ) )
-			camera->getComponent<Position>()->move( sf::Vector2i( 10, 0 ) );
+		if( !engine.isPaused )
+		{
+			if( Keyboard::isKeyPressed( Keyboard::W ) )
+				camera->getComponent<Position>()->move( sf::Vector2i( 0, -10 ) );
+			if( Keyboard::isKeyPressed( Keyboard::S ) )
+				camera->getComponent<Position>()->move( sf::Vector2i( 0, 10 ) );
+			if( Keyboard::isKeyPressed( Keyboard::A ) )
+				camera->getComponent<Position>()->move( sf::Vector2i( -10, 0 ) );
+			if( Keyboard::isKeyPressed( Keyboard::D ) )
+				camera->getComponent<Position>()->move( sf::Vector2i( 10, 0 ) );
+		}
 
 		return;
 	}

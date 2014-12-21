@@ -11,6 +11,7 @@ namespace kg
 			CHUNK_SYSTEM,
 			GAME_CONTROLLER,
 			GRAPHICS_SYSTEM,
+			SAVE_SYSTEM,
 
 			LAST_ELEMENT
 		};
@@ -36,6 +37,7 @@ namespace kg
 			CHUNK_SYSTEM,
 			GAME_CONTROLLER,
 			GRAPHICS_SYSTEM,
+			SAVE_SYSTEM,
 
 			LAST_ELEMENT
 		};

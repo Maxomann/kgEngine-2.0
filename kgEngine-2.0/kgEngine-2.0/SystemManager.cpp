@@ -13,7 +13,7 @@ namespace kg
 	void SystemManager::initSystemsByImportance( Engine& engine, World& world )
 	{
 		for( auto& system : m_systemsByUpdateImportance )
-			system.second->init( engine, world, engine.resourceManagement.getConfigFile<ConfigFile>( system.second->getPluginName() ) );
+			system.second->init( engine, world, engine.resourceManager.getConfigFile<ConfigFile>( system.second->getPluginName() ) );
 	}
 
 	void SystemManager::forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent )
