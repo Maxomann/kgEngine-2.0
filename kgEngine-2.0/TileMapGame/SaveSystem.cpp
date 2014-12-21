@@ -23,7 +23,7 @@ namespace kg
 
 	double SavegameSystem::getUpdateImportance() const
 	{
-		return (int)id::SystemUpdateImportance::SAVE_SYSTEM;
+		return ( int )id::SystemUpdateImportance::SAVE_SYSTEM;
 	}
 
 	const std::string& SavegameSystem::getPluginName() const
@@ -52,27 +52,52 @@ namespace kg
 
 	void SavegameSystem::openSavegame( Engine& engine, World& world, const std::string& savegameName )
 	{
+		m_openSavegameName = savegameName;
 
+		//create savegame folder if it does not exist
+		create_directories( path(SAVEGAME_FOLDER + "/" + savegameName) );
+
+		fstream globalsFile( SAVEGAME_FOLDER + "/" + savegameName + SYSTEM_SAVE_FILENAME + SAVE_FILE_EXTENSION,
+							 ios::in );
+		vector<string> lines;
+		string line;
+		while( getline( globalsFile, line ) )
+			lines.push_back( std::move(line) );
+
+		SystemSaveInformationMap systemSaveInformationMap;
+
+		for( const auto& el : lines )
+		{
+			SystemSaveInformation info( el );
+			systemSaveInformationMap.insert(std::pair<int, SystemSaveInformation>(info.getSystemId(), info));
+		}
+
+		s_onSystemLoad( systemSaveInformationMap );//notify systems
 	}
 
 	const std::string& SavegameSystem::getOpenSavegameName() const
 	{
-		return m_openSavegame;
-	}
-
-	void SavegameSystem::saveEntitiesToFile( const std::string& fileName/*relative to open savegame path*/, const std::vector<std::shared_ptr<Entity>>& entities )
-	{
-
+		return m_openSavegameName;
 	}
 
 	void SavegameSystem::saveSystems()
 	{
+		auto saveInformationVec = s_onSystemSave();
+		fstream globalsFile( SAVEGAME_FOLDER + "/" + m_openSavegameName + SYSTEM_SAVE_FILENAME + SAVE_FILE_EXTENSION,
+							 fstream::out | fstream::trunc );
+		for( const auto& el : saveInformationVec )
+			globalsFile << el.toString()<< endl;
 
+		return;
 	}
 
-	const std::string SavegameSystem::SAVEGAME_FOLDER ="./Saves";
+	const std::string SavegameSystem::SAVE_FILE_EXTENSION = ".save";
 
-	const std::string SavegameSystem::PLUGIN_NAME="SaveSystem";
+	const std::string SavegameSystem::SYSTEM_SAVE_FILENAME = "_global.save";
+
+	const std::string SavegameSystem::SAVEGAME_FOLDER = "./Saves";
+
+	const std::string SavegameSystem::PLUGIN_NAME = "SaveSystem";
 
 	SystemSaveInformation::SystemSaveInformation( const std::string& constructFromString )
 	{
@@ -102,6 +127,8 @@ namespace kg
 
 	void SystemSaveInformation::m_fromString( const std::string& str )
 	{
+		m_information.clear();
+
 		std::string sID;
 		std::string sValues;
 		bool isInValues = false;
@@ -156,15 +183,15 @@ namespace kg
 	}
 
 	EntitySaveInformation::EntitySaveInformation( int blueprintEntityId, long long int uniqueEntityId )
-		:m_blueprintEntityId(blueprintEntityId),
+		:m_blueprintEntityId( blueprintEntityId ),
 		m_uniqueEntityId( uniqueEntityId )
 	{
-		
+
 	}
 
 	int EntitySaveInformation::getActiveComponentId() const
 	{
-		return m_uniqueEntityId;
+		return m_activeComponentId;
 	}
 
 	void EntitySaveInformation::setActiveComponentId( int id )
@@ -195,6 +222,61 @@ namespace kg
 
 	void EntitySaveInformation::m_fromString( const std::string& str )
 	{
+		m_information.clear();
+
+		string sblueprintId;
+		string sUniqueId;
+		map<int, string> sValuesByComponentId;
+		bool first = false;
+		bool second = false;
+
+		std::string rawValueString;
+
+		for( const auto& el : str )
+		{
+			if( first )
+			{
+				if( second )
+				{
+					//second
+					rawValueString.push_back( el );
+				}
+				else
+				{
+					//only first
+					if( el == ';' )
+						second = true;
+					else
+						sUniqueId.push_back( el );
+				}
+			}
+			else
+			{
+				//none
+				if( el == ';' )
+					first = true;
+				else
+					sblueprintId.push_back( el );
+			}
+		}
+
+		vector<string> splitComponents;
+		rawValueString.pop_back();
+		boost::split( splitComponents, rawValueString, boost::is_any_of( "]" ) );
+		for( const auto& el : splitComponents )
+		{
+			vector<string> secondSplit;//0:componentId 1:values
+			boost::split( secondSplit, el, boost::is_any_of( "[" ) );
+
+			if( secondSplit.size() != 2 )
+				throw exception();
+
+			int componentId = atoi( secondSplit.at( 0 ).c_str() );
+			boost::split( m_information[componentId], secondSplit.at( 1 ), boost::is_any_of( ";" ) );
+		}
+
+		m_blueprintEntityId = atoi( sblueprintId.c_str() );
+		m_uniqueEntityId = atoll( sUniqueId.c_str() );
 
 	}
 
@@ -205,7 +287,7 @@ namespace kg
 		retVal += ";";
 		retVal += to_string( m_uniqueEntityId );
 		retVal += ";";
-		for(const auto& el : m_information)
+		for( const auto& el : m_information )
 		{
 			retVal += to_string( el.first );//componentId
 			retVal += "[";

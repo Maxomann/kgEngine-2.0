@@ -9,7 +9,7 @@ namespace kg
 
 		std::vector<std::string> m_information;
 
-		void m_fromString( const std::string& str );//!
+		void m_fromString( const std::string& str );
 
 	public:
 		SystemSaveInformation( const std::string& constructFromString );
@@ -21,12 +21,12 @@ namespace kg
 
 		int getSystemId()const;
 
-		std::string toString()const;//!
+		std::string toString()const;
 
 	};
 	class EntitySaveInformation
 	{
-		using InformationByComponentIdMap = std::map < int, std::vector<std::string> > ;
+		using InformationByComponentIdMap = std::map < int, std::vector<std::string> >;
 
 		int m_blueprintEntityId;
 		long long int m_uniqueEntityId;
@@ -35,7 +35,7 @@ namespace kg
 
 		int m_activeComponentId = -1;
 
-		void m_fromString( const std::string& str );//!
+		void m_fromString( const std::string& str );
 
 	public:
 		EntitySaveInformation( const std::string& constructFromString );
@@ -52,14 +52,17 @@ namespace kg
 		int getBlueprintEntityId()const;
 		long long int getUniqueEntityId()const;
 
-		std::string toString()const;//!
+		std::string toString()const;
 	};
+
+
 
 	class SavegameSystem : public System
 	{
-		std::string m_openSavegame;
+		std::string m_openSavegameName;
 
 	public:
+		using SystemSaveInformationMap = std::map < int, SystemSaveInformation > ;
 
 		virtual void init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile );
 
@@ -75,19 +78,25 @@ namespace kg
 
 
 		std::vector<std::string> getAvailableSavegameNames()const;
+		//loads systems
 		void openSavegame( Engine& engine, World& world, const std::string& savegameName );
 		const std::string& getOpenSavegameName()const;
+		void loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename );//TODO
 
 		void saveEntitiesToFile( const std::string& fileName/*relative to open savegame path*/,
-								 const std::vector<std::shared_ptr<Entity>>& entities );
+								 const std::vector<std::shared_ptr<Entity>>& entities );//TODO
 		//saves every system that is registered in systemManager to globals.save
 		void saveSystems();
 
 
 	signals:
-
+		boost::signals2::signal<SystemSaveInformation(),
+			aggregate_values<std::vector<SystemSaveInformation>>> s_onSystemSave;
+		Signal<const SystemSaveInformationMap&> s_onSystemLoad;
 
 		static const std::string PLUGIN_NAME;
 		static const std::string SAVEGAME_FOLDER;
+		static const std::string SYSTEM_SAVE_FILENAME;
+		static const std::string SAVE_FILE_EXTENSION;
 	};
 }

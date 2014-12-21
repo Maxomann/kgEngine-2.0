@@ -26,7 +26,7 @@ namespace kg
 		m_texture.setView( m_view );
 
 		auto toDraw = world.getEntitiesThatHaveComponent<Graphics>();
-		map<int, std::vector<shared_ptr<Entity>>> sortedByZValue;
+		map<float, std::vector<shared_ptr<Entity>>> sortedByZValue;
 		for( auto& el : toDraw )
 		{
 			auto graphics = el->getComponent<Graphics>();
