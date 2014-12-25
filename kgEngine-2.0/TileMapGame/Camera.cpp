@@ -120,7 +120,7 @@ namespace kg
 		camera->addComponent<Camera>( static_pointer_cast< Component >(make_shared<Camera>()) );
 		camera->addComponent<Rotation>( static_pointer_cast< Component >(make_shared<Rotation>()) );
 		camera->addComponent<GlobalBounds>( static_pointer_cast< Component >(make_shared<GlobalBounds>()) );
-		camera->initComponentsByImportance( engine );
+		camera->initComponentsByImportance( engine );//init
 		camera->getComponent<Position>()->set( sf::Vector2i( 0, 0 ) );
 		camera->getComponent<Size>()->set( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
 		camera->getComponent<Camera>()->setRenderResolution( engine.renderWindow.getSize() );

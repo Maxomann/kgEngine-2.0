@@ -7,6 +7,7 @@ namespace kg
 	struct Engine;
 	class ComponentManager;
 	class World;
+	class EntitySaveInformation;
 	namespace blueprint
 	{
 		class Entity;
@@ -31,5 +32,11 @@ namespace kg
 		virtual double getUpdateImportance()const = 0;
 
 		virtual std::vector<size_t> getRequieredComponents()const = 0;
+
+		virtual void writeSaveInformation( EntitySaveInformation& writeTo )
+		{ };//TEMPORARY
+
+		virtual void loadSaveInformation( const EntitySaveInformation& loadFrom )
+		{ };//TEMPORARY!!!
 	};
 }

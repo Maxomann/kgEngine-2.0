@@ -27,6 +27,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+#include <boost/algorithm/string.hpp>
+
 #ifdef _WIN32
 #include<windows.h>
 #elif

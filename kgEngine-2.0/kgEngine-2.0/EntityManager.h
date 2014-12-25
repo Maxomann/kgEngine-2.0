@@ -48,6 +48,12 @@ namespace kg
 											  const int& entityBlueprintId,
 											  const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues
 											  = blueprint::ComponentValuesByNameByComponentMap() );//componentValuesByNameByComponent
+		//helper function for creating a specific unique id
+		std::shared_ptr<Entity> createEntity( Engine& engine,
+											  const int& entityBlueprintId,
+											  const int& uniqueId,
+											  const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues
+											  = blueprint::ComponentValuesByNameByComponentMap() );//componentValuesByNameByComponent
 
 	signals:
 		Signal<std::shared_ptr<Entity>&> s_entity_added;

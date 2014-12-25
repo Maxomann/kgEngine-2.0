@@ -9,6 +9,28 @@ namespace kg
 	class World;
 	class ConfigFile;
 
+	class DLL_EXPORT SystemSaveInformation
+	{
+		int m_systemId;
+
+		std::vector<std::string> m_information;
+
+		void m_fromString( const std::string& str );
+
+	public:
+		SystemSaveInformation( const std::string& constructFromString );
+		SystemSaveInformation( int systemId );
+
+		const std::vector<std::string> getInformation()const;
+		void setInformation( const std::vector<std::string>& information );
+		bool hasInformation()const;
+
+		int getSystemId()const;
+
+		std::string toString()const;
+
+	};
+
 	class DLL_EXPORT System : public Plugin
 	{
 	public:
@@ -25,5 +47,11 @@ namespace kg
 
 		// the lower the importance, the earlier this component gets updated, initialized, sfmlForwarded
 		virtual double getUpdateImportance()const = 0;
+
+		virtual void writeSaveInformation( SystemSaveInformation& writeTo )
+		{ };//TEMPORARY!!!
+
+		virtual void loadSaveInformation( const SystemSaveInformation& loadFrom )
+		{ };//TEMPORARY!!!
 	};
 }

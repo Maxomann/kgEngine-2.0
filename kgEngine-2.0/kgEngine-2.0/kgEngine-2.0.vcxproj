@@ -89,6 +89,7 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PluginManager.cpp" />
+    <ClCompile Include="System.cpp" />
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>

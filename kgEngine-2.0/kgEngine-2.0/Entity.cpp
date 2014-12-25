@@ -1,7 +1,139 @@
 #include "Entity.h"
+using namespace std;
 
 namespace kg
 {
+	EntitySaveInformation::EntitySaveInformation( const std::string& constructFromString )
+	{
+		m_fromString( constructFromString );
+	}
+
+	EntitySaveInformation::EntitySaveInformation( unsigned int blueprintEntityId, Entity::Id uniqueEntityId )
+		:m_blueprintEntityId( blueprintEntityId ),
+		m_uniqueEntityId( uniqueEntityId )
+	{
+
+	}
+
+	int EntitySaveInformation::getActiveComponentId() const
+	{
+		return m_activeComponentId;
+	}
+
+	void EntitySaveInformation::setActiveComponentId( int id )
+	{
+		m_activeComponentId = id;
+		m_information[id];//to prevent errors in getInformation
+	}
+
+	const std::vector<std::string>& EntitySaveInformation::getInformation() const
+	{
+		return m_information.at( m_activeComponentId );
+	}
+
+	void EntitySaveInformation::addInformation( const std::vector<std::string>& information )
+	{
+		m_information.at( m_activeComponentId ) = information;
+	}
+
+	unsigned int EntitySaveInformation::getBlueprintEntityId() const
+	{
+		return m_blueprintEntityId;
+	}
+
+	Entity::Id EntitySaveInformation::getUniqueEntityId() const
+	{
+		return m_uniqueEntityId;
+	}
+
+	void EntitySaveInformation::m_fromString( const std::string& str )
+	{
+		m_information.clear();
+
+		string sblueprintId;
+		string sUniqueId;
+		map<int, string> sValuesByComponentId;
+		bool first = false;
+		bool second = false;
+
+		std::string rawValueString;
+
+		for( const auto& el : str )
+		{
+			if( first )
+			{
+				if( second )
+				{
+					//second
+					rawValueString.push_back( el );
+				}
+				else
+				{
+					//only first
+					if( el == ';' )
+						second = true;
+					else
+						sUniqueId.push_back( el );
+				}
+			}
+			else
+			{
+				//none
+				if( el == ';' )
+					first = true;
+				else
+					sblueprintId.push_back( el );
+			}
+		}
+
+		vector<string> splitComponents;
+		rawValueString.pop_back();
+		boost::split( splitComponents, rawValueString, boost::is_any_of( "]" ) );
+		for( const auto& el : splitComponents )
+		{
+			vector<string> secondSplit;//0:componentId 1:values
+			boost::split( secondSplit, el, boost::is_any_of( "[" ) );
+
+			if( secondSplit.size() != 2 )
+				throw exception();
+
+			int componentId = atoi( secondSplit.at( 0 ).c_str() );
+			boost::split( m_information[componentId], secondSplit.at( 1 ), boost::is_any_of( ";" ) );
+		}
+
+		stringstream( sblueprintId ) >> m_blueprintEntityId;
+		stringstream( sUniqueId ) >> m_uniqueEntityId;
+
+	}
+
+	std::string EntitySaveInformation::toString() const
+	{
+		std::string retVal;
+		retVal = to_string( m_blueprintEntityId );
+		retVal += ";";
+		retVal += to_string( m_uniqueEntityId );
+		retVal += ";";
+		for( const auto& el : m_information )
+		{
+			if( el.second.size() > 0 )//check if there is information to save
+			{
+				retVal += to_string( el.first );//componentId
+				retVal += "[";
+				for( const auto& val : el.second )
+				{
+					retVal += val;
+					retVal += ";";
+				}
+				retVal.pop_back();
+				retVal += "]";
+			}
+		}
+
+		return retVal;
+	}
+
+
+
 	Entity::Entity( const Id& id )
 		:m_id( id )
 	{ }
@@ -59,4 +191,25 @@ namespace kg
 	{
 		return m_additionalComponentValues;
 	}
+
+	void Entity::writeSaveInformation( EntitySaveInformation& writeTo )
+	{
+		for( const auto& el : getAllComponentsByPluginId() )
+		{
+			auto id = el.first;
+			writeTo.setActiveComponentId( id );
+			el.second->writeSaveInformation( writeTo );
+		}
+	}
+
+	void Entity::loadSaveInformation( EntitySaveInformation& loadFrom )
+	{
+		for( const auto& el : getAllComponentsByPluginId() )
+		{
+			auto id = el.first;
+			loadFrom.setActiveComponentId( id );
+			el.second->loadSaveInformation( loadFrom );
+		}
+	}
+
 }

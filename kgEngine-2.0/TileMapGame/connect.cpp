@@ -18,7 +18,7 @@ extern "C"
 {
 	DLL_EXPORT void kgConnect( PluginManager& pluginManager )
 	{
-		SystemSaveInformation sys( 123 );
+		/*SystemSaveInformation sys( 123 );
 		EntitySaveInformation ent( 100, 43262623 );
 		sys.setInformation( { "eins", "zwei", "drei", "vier" } );
 		ent.setActiveComponentId( 456 );
@@ -35,6 +35,11 @@ extern "C"
 		cout << sys2.toString() << endl;
 		cout << ent2.toString() << endl;
 
+		SavegameSystem save;
+
+		auto vec = save.getAvailableSavegameNames();
+		for( const auto& el : vec )
+		cout << el << endl;*/
 
 		//Components
 		pluginManager.addComponentPlugin(
