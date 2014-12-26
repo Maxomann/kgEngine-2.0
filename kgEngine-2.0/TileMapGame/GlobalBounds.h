@@ -29,10 +29,16 @@ namespace kg
 
 		virtual int getPluginId() const;
 
+		virtual void writeSaveInformation( EntitySaveInformation& writeTo ) override;
+
+		virtual void loadSaveInformation( const EntitySaveInformation& loadFrom ) override;
+
+
+
 		const sf::FloatRect get()const;
 
 	signals:
-		Signal<const sf::FloatRect&> s_changed;
+		//Signal<const sf::FloatRect&> s_changed;
 
 		static const std::string PLUGIN_NAME;
 	};

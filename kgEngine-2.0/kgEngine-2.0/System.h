@@ -48,10 +48,8 @@ namespace kg
 		// the lower the importance, the earlier this component gets updated, initialized, sfmlForwarded
 		virtual double getUpdateImportance()const = 0;
 
-		virtual void writeSaveInformation( SystemSaveInformation& writeTo )
-		{ };//TEMPORARY!!!
+		virtual void writeSaveInformation( SystemSaveInformation& writeTo ) = 0;
 
-		virtual void loadSaveInformation( const SystemSaveInformation& loadFrom )
-		{ };//TEMPORARY!!!
+		virtual void loadSaveInformation( const SystemSaveInformation& loadFrom ) = 0;
 	};
 }

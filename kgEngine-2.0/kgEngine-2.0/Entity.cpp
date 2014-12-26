@@ -134,20 +134,26 @@ namespace kg
 
 
 	Entity::Entity( Engine& engine, const Id& id, const blueprint::Entity& entity )
-		: m_id( id )
+		: m_id( id ),
+		m_blueprintId(entity.getId()),
+		m_isConstructedFromBlueprint(true)
 	{
 		initFromBlueprint( engine, entity );
 	}
 
 	Entity::Entity( Engine& engine, const Id& id, const blueprint::Entity& entity, EntitySaveInformation& loadFrom )
-		: m_id( id )
+		: m_id( id ),
+		m_blueprintId( entity.getId() ),
+		m_isConstructedFromBlueprint( true )
 	{
 		initFromBlueprint( engine, entity );
 		loadSaveInformation( loadFrom );
 	}
 
 	Entity::Entity( const Id& id )
-		:m_id(id)
+		:m_id( id ),
+		m_blueprintId( 0 ),
+		m_isConstructedFromBlueprint( false )
 	{
 
 	}
@@ -221,6 +227,16 @@ namespace kg
 			loadFrom.setActiveComponentId( id );
 			el.second->loadSaveInformation( loadFrom );
 		}
+	}
+
+	bool Entity::isConstructedFromBlueprint() const
+	{
+		return m_isConstructedFromBlueprint;
+	}
+
+	unsigned int Entity::getBlueprintId() const
+	{
+		return m_blueprintId;
 	}
 
 }

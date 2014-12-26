@@ -55,5 +55,20 @@ namespace kg
 		set( get() + offsetInDegree );
 	}
 
+	void Rotation::writeSaveInformation( EntitySaveInformation& writeTo )
+	{
+		writeTo.addInformation( { to_string( m_rotationInDegree ) } );
+		return;
+	}
+
+	void Rotation::loadSaveInformation( const EntitySaveInformation& loadFrom )
+	{
+		auto& info = loadFrom.getInformation();
+		if( info.size() == 1 )
+			m_rotationInDegree = atof( info.at( 0 ).c_str() );
+		else
+			throw exception();
+	}
+
 	const std::string Rotation::PLUGIN_NAME = "Rotation";
 }

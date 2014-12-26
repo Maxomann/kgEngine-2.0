@@ -33,6 +33,10 @@ namespace kg
 
 		virtual int getPluginId() const;
 
+		virtual void writeSaveInformation( EntitySaveInformation& writeTo ) override;
+
+		virtual void loadSaveInformation( const EntitySaveInformation& loadFrom ) override;
+
 		// the size in pixel that this camera will render on the screen
 		// for a window of size 800x600 choose sf::Vector2u(800,600)
 		// if this is the only camera you want to draw to the window.
@@ -61,5 +65,6 @@ namespace kg
 
 		//creates a new camera, adds it to the world and returns a pointer to it
 		static std::shared_ptr<Entity> CREATE( Engine& engine, World& world );
+
 	};
 }

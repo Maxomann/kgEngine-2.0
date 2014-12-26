@@ -7,15 +7,17 @@ namespace kg
 	void GameController::init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile )
 	{
 		r_graphicsSystem = world.getSystem<GraphicsSystem>().get();
+		r_saveSystem = world.getSystem<SavegameSystem>().get();
 
-		m_test = world.addEntity( world.createEntity( engine, 100 ) ).second;
+		r_saveSystem->openSavegame( engine, world, "MyFirstSavegameEver" );
+		r_saveSystem->loadEntitiesFromFile( engine, world, "EntitiesInHere" );
 
-		for( int x = 0; x < 10; ++x )
+		/*for( int x = 0; x < 10; ++x )
 			for( int y = 0; y < 10; ++y )
 			{
-				auto entity = world.addEntity( world.createEntity( engine, 100 ) ).second;
+				auto entity = world.addEntity( world.createNewEntity( engine, 100 ) ).second;
 				entity->getComponent<Position>()->set( sf::Vector2i( x * 64, y * 64 ) );
-			}
+			}*/
 
 		return;
 	}
@@ -44,6 +46,15 @@ namespace kg
 			if( Keyboard::isKeyPressed( Keyboard::D ) )
 				camera->getComponent<Position>()->move( sf::Vector2i( 10, 0 ) );
 		}
+		if( Keyboard::isKeyPressed( Keyboard::F5 ) )
+		{
+			r_saveSystem->saveSystems( world );
+			r_saveSystem->saveEntitiesToFile( "EntitiesInHere", world.getAllEntities() );
+
+
+			r_saveSystem->openSavegame( engine, world, "MyFirstSavegameEver" );
+			r_saveSystem->loadEntitiesFromFile( engine, world, "EntitiesInHere" );
+		}
 
 		return;
 	}
@@ -61,6 +72,16 @@ namespace kg
 	int GameController::getPluginId() const
 	{
 		return ( int )id::SystemPluginId::GAME_CONTROLLER;
+	}
+
+	void GameController::writeSaveInformation( SystemSaveInformation& writeTo )
+	{
+		return;
+	}
+
+	void GameController::loadSaveInformation( const SystemSaveInformation& loadFrom )
+	{
+		return;
 	}
 
 	const std::string GameController::PLUGIN_NAME = "GameControllerSystem";

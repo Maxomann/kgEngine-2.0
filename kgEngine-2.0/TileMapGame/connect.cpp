@@ -18,29 +18,6 @@ extern "C"
 {
 	DLL_EXPORT void kgConnect( PluginManager& pluginManager )
 	{
-		/*SystemSaveInformation sys( 123 );
-		EntitySaveInformation ent( 100, 43262623 );
-		sys.setInformation( { "eins", "zwei", "drei", "vier" } );
-		ent.setActiveComponentId( 456 );
-		ent.addInformation( { "AAA", "BBB", "CCC", "DDD" } );
-		ent.setActiveComponentId( 789 );
-		ent.addInformation( { "XXX", "YYY", "ZZZ", "QQQ" } );
-
-		cout << sys.toString() << endl;
-		cout << ent.toString() << endl;
-
-		SystemSaveInformation sys2( sys.toString() );
-		EntitySaveInformation ent2( ent.toString() );
-
-		cout << sys2.toString() << endl;
-		cout << ent2.toString() << endl;
-
-		SavegameSystem save;
-
-		auto vec = save.getAvailableSavegameNames();
-		for( const auto& el : vec )
-		cout << el << endl;*/
-
 		//Components
 		pluginManager.addComponentPlugin(
 			std::make_shared<PluginFactory<Component, Position>>(
@@ -77,5 +54,9 @@ extern "C"
 			std::make_shared<PluginFactory<System, GraphicsSystem>>(
 			( int )id::SystemPluginId::GRAPHICS_SYSTEM,
 			GraphicsSystem::PLUGIN_NAME ) );
+		pluginManager.addSystemPlugin(
+			std::make_shared<PluginFactory<System, SavegameSystem>>(
+			( int )id::SystemPluginId::SAVE_SYSTEM,
+			SavegameSystem::PLUGIN_NAME ) );
 	}
 }

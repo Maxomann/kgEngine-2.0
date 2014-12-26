@@ -3,14 +3,14 @@
 #include "Camera.h"
 #include "ChunkSystem.h"
 #include "GraphicsSystem.h"
+#include "SaveSystem.h"
 
 namespace kg
 {
 	class GameController : public System
 	{
 		GraphicsSystem* r_graphicsSystem;
-
-		std::shared_ptr<Entity> m_test;
+		SavegameSystem* r_saveSystem;
 
 	public:
 		virtual void init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile );
@@ -24,6 +24,10 @@ namespace kg
 		virtual const std::string& getPluginName() const;
 
 		virtual int getPluginId() const;
+
+		virtual void writeSaveInformation( SystemSaveInformation& writeTo ) override;
+
+		virtual void loadSaveInformation( const SystemSaveInformation& loadFrom ) override;
 
 		static const std::string PLUGIN_NAME;
 	};

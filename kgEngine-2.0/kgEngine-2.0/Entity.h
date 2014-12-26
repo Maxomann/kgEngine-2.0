@@ -17,13 +17,17 @@ namespace kg
 	private:
 
 		const Entity::Id m_id;
+		const unsigned int m_blueprintId;
+		const bool m_isConstructedFromBlueprint;
 
 		void initFromBlueprint( Engine& engine,
 								const blueprint::Entity& entity );//componentValuesByNameByComponent
 		void loadSaveInformation( EntitySaveInformation& loadFrom );
 
 	public:
-		Entity( const Id& id );//Entity has to be initialized manually when this constructor is called
+		// Entity has to be initialized manually when this constructor is called
+		// This Entity will not be saved. (To be saved it need to be constructed from a blueprint)
+		Entity( const Id& id );
 		Entity( Engine& engine,
 				const Id& id,
 				const blueprint::Entity& entity );
@@ -34,6 +38,10 @@ namespace kg
 
 
 		const Id& getId()const;
+		//entities can only be saved if this returns true
+		bool isConstructedFromBlueprint()const;
+		//check isConstructedFromBlueprint() before. if false, this value can be ignored
+		unsigned int getBlueprintId()const;
 
 		void writeSaveInformation( EntitySaveInformation& writeTo );
 	};

@@ -55,6 +55,27 @@ namespace kg
 		return m_size;
 	}
 
+	void Size::writeSaveInformation( EntitySaveInformation& writeTo )
+	{
+		writeTo.addInformation( { to_string( m_size.x ), to_string( m_size.y ) } );
+		return;
+	}
+
+	void Size::loadSaveInformation( const EntitySaveInformation& loadFrom )
+	{
+		auto& info = loadFrom.getInformation();
+		if( info.size() == 2 )
+		{
+			auto size_x = atoi( info.at( 0 ).c_str() );
+			auto size_y = atoi( info.at( 1 ).c_str() );
+			set( sf::Vector2i( size_x, size_y ) );
+		}
+		else
+			throw exception();
+
+		return;
+	}
+
 	const std::string Size::PLUGIN_NAME = "Size";
 
 	const std::string Size::BLUEPRINT_WIDTH = "width";

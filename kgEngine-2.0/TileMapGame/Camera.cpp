@@ -140,5 +140,15 @@ namespace kg
 		return m_texture.getSize();
 	}
 
+	void Camera::writeSaveInformation( EntitySaveInformation& writeTo )
+	{
+		return;
+	}
+
+	void Camera::loadSaveInformation( const EntitySaveInformation& loadFrom )
+	{
+		return;
+	}
+
 	const std::string Camera::PLUGIN_NAME = "Camera";
 }

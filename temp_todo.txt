@@ -2,7 +2,7 @@ XXX System::CreateSaveInformation
 XXX Entity::CreateSaveInformation
 XXX System::LoadFromSaveInfotmation
 XXX Entity::LoadFromSaveInformation
-Save/Load AdditionalComponentValues
-Finish SaveSystem
-integrate Saving to existing Systems/Components (only save values that have been modified at runtime through a method call )
+XXX --- GESTRICHEN --- Save/Load AdditionalComponentValues
+XXX Finish SaveSystem
+XXX integrate Saving to existing Systems/Components
 replace int with Id where possible

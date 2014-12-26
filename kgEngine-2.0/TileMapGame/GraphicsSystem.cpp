@@ -8,13 +8,15 @@ namespace kg
 	{
 		m_configFile = configFile;
 
+		m_connectToSignal( world.getSystem<SavegameSystem>()->s_savegameOpened, &GraphicsSystem::m_onSavegameOpened );
+
 		//get config values
 		auto antialiasing = configFile->getData( ANTIALIASING );
 		auto fullscreen = configFile->getData( FULLSCREEN );
 		auto window_resx = configFile->getData( WINDOW_RESX );
 		auto window_resy = configFile->getData( WINDOW_RESY );
-		auto render_resx = configFile->getData( RENDER_RESX );
-		auto render_resy = configFile->getData( RENDER_RESY );
+		/*auto render_resx = configFile->getData( RENDER_RESX );
+		auto render_resy = configFile->getData( RENDER_RESY );*/
 		auto vsync = configFile->getData( VSYNC );
 		auto window_name = configFile->getData( WINDOW_NAME );
 
@@ -27,10 +29,10 @@ namespace kg
 			window_resx = configFile->setData( WINDOW_RESX, WINDOW_RESX_DEFAULT );
 		if( !window_resy )
 			window_resy = configFile->setData( WINDOW_RESY, WINDOW_RESY_DEFAULT );
-		if( !render_resx )
+		/*if( !render_resx )
 			render_resx = configFile->setData( RENDER_RESX, RENDER_RESX_DEFAULT );
 		if( !render_resy )
-			render_resy = configFile->setData( RENDER_RESY, RENDER_RESY_DEFAULT );
+			render_resy = configFile->setData( RENDER_RESY, RENDER_RESY_DEFAULT );*/
 		if( !vsync )
 			vsync = configFile->setData( VSYNC, VSYNC_DEFAULT );
 		if( !window_name )
@@ -61,8 +63,8 @@ namespace kg
 		engine.renderWindow.setVerticalSyncEnabled( vsync.toBool() );
 
 		//init camera
-		auto camera = Camera::CREATE( engine, world );
-		if( fullscreen.toBool() )
+		//auto camera = Camera::CREATE( engine, world );
+		/*if( fullscreen.toBool() )
 		{
 			//fullscreen
 			camera->getComponent<Camera>()->setRenderResolution( sf::Vector2u( render_resx.toInt(), render_resy.toInt() ) );
@@ -71,8 +73,8 @@ namespace kg
 		{
 			//no fullscreen
 			//ignores: render_resx, render_resy
-		}
-		m_cameras.push_back( camera );
+		}*/
+		m_cameras.push_back( Camera::CREATE( engine, world ) );
 	}
 
 	void GraphicsSystem::sfmlEvent( Engine& engine, const sf::Event& sfEvent )
@@ -105,6 +107,22 @@ namespace kg
 	std::shared_ptr<Entity>& GraphicsSystem::getCamera( int index )
 	{
 		return m_cameras.at( index );
+	}
+
+	void GraphicsSystem::writeSaveInformation( SystemSaveInformation& writeTo )
+	{
+		return;
+	}
+
+	void GraphicsSystem::loadSaveInformation( const SystemSaveInformation& loadFrom )
+	{
+		return;
+	}
+
+	void GraphicsSystem::m_onSavegameOpened( Engine& engine, World& world )
+	{
+		m_cameras.clear();
+		m_cameras.push_back( Camera::CREATE( engine, world ) );
 	}
 
 	const std::string GraphicsSystem::WINDOW_NAME_DEFAULT = "DefaultWindowName";

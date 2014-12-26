@@ -23,6 +23,12 @@ namespace kg
 
 		virtual int getPluginId() const;
 
+		virtual void writeSaveInformation( EntitySaveInformation& writeTo ) override;
+
+		virtual void loadSaveInformation( const EntitySaveInformation& loadFrom ) override;
+
+
+
 		void set( const float rotationInDegree );
 
 		//in degree

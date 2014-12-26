@@ -2,14 +2,17 @@
 #include "stdafx.h"
 #include "id.h"
 #include "Camera.h"
+#include "SaveSystem.h"
 
 namespace kg
 {
-	class GraphicsSystem : public System
+	class GraphicsSystem : public System, public CallbackReciever
 	{
 		std::vector<std::shared_ptr<Entity>> m_cameras;
 
 		std::shared_ptr<ConfigFile> m_configFile;
+
+		void m_onSavegameOpened( Engine& engine, World& world );
 
 	public:
 		virtual void init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile );
@@ -23,6 +26,12 @@ namespace kg
 		virtual const std::string& getPluginName() const;
 
 		virtual int getPluginId() const;
+
+		virtual void writeSaveInformation( SystemSaveInformation& writeTo ) override;
+
+		virtual void loadSaveInformation( const SystemSaveInformation& loadFrom ) override;
+
+
 
 		std::shared_ptr<Entity>& getCamera( int index );
 

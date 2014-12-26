@@ -140,5 +140,15 @@ namespace kg
 		// its a bug -.-
 	}
 
+	void ChunkSystem::writeSaveInformation( SystemSaveInformation& writeTo )
+	{
+		return;
+	}
+
+	void ChunkSystem::loadSaveInformation( const SystemSaveInformation& loadFrom )
+	{
+		return;
+	}
+
 	const std::string ChunkSystem::PLUGIN_NAME = "ChunkSystem";
 }

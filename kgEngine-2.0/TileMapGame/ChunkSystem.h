@@ -33,6 +33,12 @@ namespace kg
 
 		virtual int getPluginId() const;
 
+		virtual void writeSaveInformation( SystemSaveInformation& writeTo ) override;
+
+		virtual void loadSaveInformation( const SystemSaveInformation& loadFrom ) override;
+
+
+
 		static const std::string PLUGIN_NAME;
 
 		// returns a reference to the internal container

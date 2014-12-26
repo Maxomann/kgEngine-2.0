@@ -41,15 +41,23 @@ namespace kg
 			return returnValue;
 		};
 
+		std::vector<std::shared_ptr<Entity>> getAllEntities();
+
 		void updateEntities( Engine& engine, World& world, const sf::Time& frameTime );
 
 		//helper function for creating a new Entity with a unique id
-		std::shared_ptr<Entity> createEntity( Engine& engine,
-											  const int& entityBlueprintId );//componentValuesByNameByComponent
+		std::shared_ptr<Entity> createNewEntity( Engine& engine,
+												 const int& entityBlueprintId );//componentValuesByNameByComponent
 		//helper function for creating a specific unique id
-		std::shared_ptr<Entity> createEntity( Engine& engine,
-											  const int& entityBlueprintId,
-											  const Entity::Id& uniqueId );//componentValuesByNameByComponent
+		std::shared_ptr<Entity> createNewEntity( Engine& engine,
+												 const int& entityBlueprintId,
+												 const Entity::Id& uniqueId );//componentValuesByNameByComponent
+		//helper function for loading an entity from save information
+		std::shared_ptr<Entity> loadEntity( Engine& engine,
+											EntitySaveInformation& saveInformation );
+
+		//removes every entity
+		void clear();
 
 	signals:
 		Signal<std::shared_ptr<Entity>&> s_entity_added;

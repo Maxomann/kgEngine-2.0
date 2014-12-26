@@ -1,5 +1,8 @@
 #include "EntityManager.h"
 
+using namespace std;
+using namespace sf;
+
 namespace kg
 {
 	Entity::Id EntityManager::getUniqueEntityId()
@@ -54,13 +57,13 @@ namespace kg
 			entity.second->updateAllComponentsByImportance( engine, world, frameTime );
 	}
 
-	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine,
+	std::shared_ptr<Entity> EntityManager::createNewEntity( Engine& engine,
 														 const int& entityBlueprintId )
 	{
-		return createEntity( engine, entityBlueprintId, getUniqueEntityId() );
+		return createNewEntity( engine, entityBlueprintId, getUniqueEntityId() );
 	}
 
-	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine,
+	std::shared_ptr<Entity> EntityManager::createNewEntity( Engine& engine,
 														 const int& entityBlueprintId,
 														 const Entity::Id& uniqueId )
 	{
@@ -75,4 +78,28 @@ namespace kg
 	{
 		m_highestUniqueId = id;
 	}
+
+	std::shared_ptr<Entity> EntityManager::loadEntity( Engine& engine, EntitySaveInformation& saveInformation )
+	{
+		auto returnValue = std::make_shared<Entity>( engine,
+													 saveInformation.getUniqueEntityId(),
+													 engine.blueprint.getEntityById( saveInformation.getBlueprintEntityId() ),
+													 saveInformation );
+
+		return returnValue;
+	}
+
+	void EntityManager::clear()
+	{
+		m_entities.clear();
+	}
+
+	std::vector<std::shared_ptr<Entity>> EntityManager::getAllEntities()
+	{
+		vector<shared_ptr<Entity>> retVal;
+		for( auto& el : m_entities )
+			retVal.push_back( el.second );
+		return retVal;
+	}
+
 }

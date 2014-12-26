@@ -21,4 +21,15 @@ namespace kg
 		for( const auto& el : m_systemsByUpdateImportance )
 			el.second->sfmlEvent( engine, sfEvent );
 	}
+
+	std::shared_ptr<System> SystemManager::getSystemById( const Plugin::Id& id )const
+	{
+		return m_systemsByPluginId.at( id );
+	}
+
+	const std::map<Plugin::Id, std::shared_ptr<System>>& SystemManager::getAllSystemsByPluginId() const
+	{
+		return m_systemsByPluginId;
+	}
+
 }
