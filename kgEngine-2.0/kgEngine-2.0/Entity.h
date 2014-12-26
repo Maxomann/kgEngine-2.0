@@ -17,23 +17,28 @@ namespace kg
 	private:
 
 		const Entity::Id m_id;
-		blueprint::ComponentValuesByNameByComponentMap m_additionalComponentValues;
-
-	public:
-		Entity( const Id& id );
 
 		void initFromBlueprint( Engine& engine,
-								const blueprint::Entity& entity,
-								const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues
-								= blueprint::ComponentValuesByNameByComponentMap() );//componentValuesByNameByComponent
+								const blueprint::Entity& entity );//componentValuesByNameByComponent
+		void loadSaveInformation( EntitySaveInformation& loadFrom );
 
-		const blueprint::ComponentValuesByNameByComponentMap& getAdditionalComponentValues()const;
+	public:
+		Entity( const Id& id );//Entity has to be initialized manually when this constructor is called
+		Entity( Engine& engine,
+				const Id& id,
+				const blueprint::Entity& entity );
+		Entity( Engine& engine,
+				const Id& id,
+				const blueprint::Entity& entity,
+				EntitySaveInformation& loadFrom );
+
 
 		const Id& getId()const;
 
 		void writeSaveInformation( EntitySaveInformation& writeTo );
-		void loadSaveInformation( EntitySaveInformation& loadFrom );
 	};
+
+
 
 	class DLL_EXPORT EntitySaveInformation
 	{

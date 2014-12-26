@@ -81,6 +81,4 @@ namespace kg
 		return m_information.size();
 	}
 
-
-
 }

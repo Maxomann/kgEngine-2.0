@@ -133,10 +133,24 @@ namespace kg
 	}
 
 
+	Entity::Entity( Engine& engine, const Id& id, const blueprint::Entity& entity )
+		: m_id( id )
+	{
+		initFromBlueprint( engine, entity );
+	}
+
+	Entity::Entity( Engine& engine, const Id& id, const blueprint::Entity& entity, EntitySaveInformation& loadFrom )
+		: m_id( id )
+	{
+		initFromBlueprint( engine, entity );
+		loadSaveInformation( loadFrom );
+	}
 
 	Entity::Entity( const Id& id )
-		:m_id( id )
-	{ }
+		:m_id(id)
+	{
+
+	}
 
 	const Entity::Id& Entity::getId() const
 	{
@@ -144,10 +158,10 @@ namespace kg
 	}
 
 	void Entity::initFromBlueprint( Engine& engine,
-									const blueprint::Entity& entity,
-									const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues )//componentValuesByNameByComponent
+									const blueprint::Entity& entity )//componentValuesByNameByComponent
 	{
-		m_additionalComponentValues = additionalBlueprintValues;//save additionalComponentValues for later request (ex. saving)
+		//OLD ADDITIONAL BLUEPRINT VALUES CODE
+		//m_additionalComponentValues = additionalBlueprintValues;//save additionalComponentValues for later request (ex. saving)
 
 		auto components = entity.getComponentNames();
 		for( const auto& name : components )
@@ -156,15 +170,17 @@ namespace kg
 			auto component = std::get<2>( createdComponent );
 
 			auto componentValues = entity.getComponentValues( name );
-			//add additional component values to the map
-			auto additionalComponentValuesForComponent = additionalBlueprintValues.find( name );
+			//OLD CODE: add additional component values to the map
+			/*auto additionalComponentValuesForComponent = additionalBlueprintValues.find( name );
 			if( additionalComponentValuesForComponent != additionalBlueprintValues.end() )
 				for( const auto& el : (*additionalComponentValuesForComponent).second )
-					componentValues[el.first] = el.second;//override existing value (if it exists)
+					componentValues[el.first] = el.second;//override existing value (if it exists)*/
 
 			component->preInit( engine, componentValues );
 			addComponent( component, std::get<1>( createdComponent ) );
 		}
+
+
 		// check component requirements of each component
 		// throw exception if not all requirements are met
 		for( const auto& component : getAllComponentsByTypeHash() )
@@ -185,11 +201,6 @@ namespace kg
 		}
 
 		initComponentsByImportance( engine );
-	}
-
-	const blueprint::ComponentValuesByNameByComponentMap& Entity::getAdditionalComponentValues() const
-	{
-		return m_additionalComponentValues;
 	}
 
 	void Entity::writeSaveInformation( EntitySaveInformation& writeTo )

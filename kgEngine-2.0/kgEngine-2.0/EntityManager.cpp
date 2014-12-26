@@ -55,16 +55,18 @@ namespace kg
 	}
 
 	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine,
-														 const int& entityBlueprintId,
-														 const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues )
+														 const int& entityBlueprintId )
 	{
-		return createEntity( engine, entityBlueprintId, getUniqueEntityId(), additionalBlueprintValues );
+		return createEntity( engine, entityBlueprintId, getUniqueEntityId() );
 	}
 
-	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine, const int& entityBlueprintId, const int& uniqueId, const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues /*= blueprint::ComponentValuesByNameByComponentMap() */ )
+	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine,
+														 const int& entityBlueprintId,
+														 const Entity::Id& uniqueId )
 	{
-		auto returnValue = std::make_shared<Entity>( uniqueId );
-		returnValue->initFromBlueprint( engine, engine.blueprint.getEntityById( entityBlueprintId ), additionalBlueprintValues );
+		auto returnValue = std::make_shared<Entity>( engine,
+													 uniqueId,
+													 engine.blueprint.getEntityById( entityBlueprintId ) );
 
 		return returnValue;
 	}
