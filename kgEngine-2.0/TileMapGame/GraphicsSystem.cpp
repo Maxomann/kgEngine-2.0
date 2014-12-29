@@ -82,7 +82,7 @@ namespace kg
 		return;
 	}
 
-	void GraphicsSystem::update( Engine& engine, World& world, const sf::Time& frameTime )
+	void GraphicsSystem::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
 		for( const auto& el : m_cameras )
 			engine.renderWindow.draw( *el->getComponent<Camera>() );
@@ -99,8 +99,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int GraphicsSystem::getPluginId() const
-	{
+	Plugin::Id GraphicsSystem::getPluginId() const
+{
 		return ( int )id::SystemUpdateImportance::GRAPHICS_SYSTEM;
 	}
 

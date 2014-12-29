@@ -2,10 +2,13 @@
 #include "stdafx.h"
 #include "System.h"
 #include "ConfigFile.h"
+#include "ResourceManager.h"
 #include "Engine.h"
 
 namespace kg
 {
+	struct Engine;
+	class SaveManager;
 
 	class DLL_EXPORT SystemManager
 	{
@@ -59,6 +62,6 @@ namespace kg
 		};*/
 
 		void forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent );
-		void updateAllSystemsByImportance( Engine& engine, World& world, const sf::Time& frameTime );
+		void updateAllSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
 	};
 }

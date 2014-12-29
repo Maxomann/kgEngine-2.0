@@ -34,8 +34,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int Rotation::getPluginId() const
-	{
+	Plugin::Id Rotation::getPluginId() const
+{
 		return ( int )id::ComponentPluginId::ROTATION;
 	}
 

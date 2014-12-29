@@ -34,8 +34,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int Position::getPluginId() const
-	{
+	Plugin::Id Position::getPluginId() const
+{
 		return ( int )id::ComponentPluginId::POSITION;
 	}
 

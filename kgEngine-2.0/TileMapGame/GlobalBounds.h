@@ -27,7 +27,7 @@ namespace kg
 
 		virtual const std::string& getPluginName() const;
 
-		virtual int getPluginId() const;
+		virtual Plugin::Id getPluginId()const;
 
 		virtual void writeSaveInformation( EntitySaveInformation& writeTo ) override;
 

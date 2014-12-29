@@ -32,9 +32,5 @@ namespace kg
 		virtual double getUpdateImportance()const = 0;
 
 		virtual std::vector<size_t> getRequieredComponents()const = 0;
-
-		virtual void writeSaveInformation( EntitySaveInformation& writeTo ) = 0;
-
-		virtual void loadSaveInformation( const EntitySaveInformation& loadFrom ) = 0;
 	};
 }

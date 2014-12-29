@@ -11,8 +11,8 @@ namespace kg
 		bool shouldTerminate = false;
 		bool isPaused = false;//if true entities will not get updated
 		sf::RenderWindow renderWindow;
-		ResourceManager resourceManager;
 		PluginManager pluginManager;
 		blueprint::BlueprintManager blueprint;
+		ResourceManager resourceManager;
 	};
 }

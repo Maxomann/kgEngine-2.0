@@ -1,31 +1,19 @@
 #pragma once
 #include "stdafx.h"
+#include "Entity.h"
+#include "Callback.h"
+#include "World.h"
+#include "id_internal.h"
+#include "SaveComponent.h"
 
 namespace kg
 {
-	class SavegameSystem : public System
+	class SaveManager
 	{
 		std::string m_openSavegameName;
 
 	public:
 		using SystemSaveInformationMap = std::map < int, SystemSaveInformation > ;
-
-		virtual void init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile );
-
-		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent );
-
-		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
-
-		virtual double getUpdateImportance() const;
-
-		virtual const std::string& getPluginName() const;
-
-		virtual Plugin::Id getPluginId()const;
-
-		virtual void writeSaveInformation( SystemSaveInformation& writeTo ) override;
-
-		virtual void loadSaveInformation( const SystemSaveInformation& loadFrom ) override;
-
 
 
 		std::vector<std::string> getAvailableSavegameNames()const;
@@ -44,6 +32,8 @@ namespace kg
 
 	signals:
 		Signal<Engine&, World&> s_savegameOpened;
+		std::map<Plugin::Id, boost::signals2::signal < std::vector<std::string>()>> s_writeSaveInformation;//first: systemId, second: signal
+		std::map< Plugin::Id, Signal<const std::vector<std::string>&>> s_loadSaveInformation;//first: systemId, second: signal
 
 		static const std::string PLUGIN_NAME;
 		static const std::string SAVEGAME_FOLDER;

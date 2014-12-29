@@ -72,8 +72,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int Graphics::getPluginId() const
-	{
+	Plugin::Id Graphics::getPluginId() const
+{
 		return ( int )id::ComponentPluginId::GRAPHICS;
 	}
 

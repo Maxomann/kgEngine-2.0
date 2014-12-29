@@ -5,12 +5,6 @@ using namespace sf;
 
 namespace kg
 {
-	Entity::Id EntityManager::getUniqueEntityId()
-	{
-		m_highestUniqueId++;
-		return m_highestUniqueId - 1;
-	}
-
 	std::pair<bool, std::shared_ptr<Entity>> EntityManager::addEntity( std::shared_ptr<Entity>& entity )
 	{
 		auto id = entity->getId();
@@ -55,38 +49,6 @@ namespace kg
 	{
 		for( auto& entity : m_entities )
 			entity.second->updateAllComponentsByImportance( engine, world, frameTime );
-	}
-
-	std::shared_ptr<Entity> EntityManager::createNewEntity( Engine& engine,
-														 const int& entityBlueprintId )
-	{
-		return createNewEntity( engine, entityBlueprintId, getUniqueEntityId() );
-	}
-
-	std::shared_ptr<Entity> EntityManager::createNewEntity( Engine& engine,
-														 const int& entityBlueprintId,
-														 const Entity::Id& uniqueId )
-	{
-		auto returnValue = std::make_shared<Entity>( engine,
-													 uniqueId,
-													 engine.blueprint.getEntityById( entityBlueprintId ) );
-
-		return returnValue;
-	}
-
-	void EntityManager::setLowestUniqueEntityId( const Entity::Id& id )
-	{
-		m_highestUniqueId = id;
-	}
-
-	std::shared_ptr<Entity> EntityManager::loadEntity( Engine& engine, EntitySaveInformation& saveInformation )
-	{
-		auto returnValue = std::make_shared<Entity>( engine,
-													 saveInformation.getUniqueEntityId(),
-													 engine.blueprint.getEntityById( saveInformation.getBlueprintEntityId() ),
-													 saveInformation );
-
-		return returnValue;
 	}
 
 	void EntityManager::clear()

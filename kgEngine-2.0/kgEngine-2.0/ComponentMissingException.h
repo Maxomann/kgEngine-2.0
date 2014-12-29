@@ -5,17 +5,19 @@ namespace kg
 {
 	class DLL_EXPORT ComponentMissingException : public std::exception
 	{
-		std::string m_msg;
+		const std::string m_msg;
 
 	public:
 		ComponentMissingException( const std::string& requieringComponentName,
 								   int requieringComponentId,
 								   const std::string& missingComponentName,
 								   int missingComponentId )
+								   : m_msg(
+								   std::string( "ComponentMissingException\n") +
+								   std::string( "requieringComponentName=" ) + requieringComponentName + std::string( ":" ) + std::to_string( requieringComponentId ) + std::string( "\n") +
+								   std::string( "missingComponentName=" ) + missingComponentName + std::string( ":" ) + std::to_string( missingComponentId ) + std::string( "\n") )
 		{
-			m_msg += "ComponentMissingException\n";
-			m_msg += "requieringComponentName=" + requieringComponentName + ":" + std::to_string( requieringComponentId ) + "\n";
-			m_msg += "missingComponentName=" + missingComponentName + ":" + std::to_string( missingComponentId ) + "\n";
+
 		}
 
 		virtual const char* what()const

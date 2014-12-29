@@ -15,9 +15,6 @@
     <Filter Include="Headerdateien\Engine">
       <UniqueIdentifier>{9ac4b11d-d367-4f22-8427-cffd45b0cceb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headerdateien\FileAccess">
-      <UniqueIdentifier>{a022310f-a164-4d4e-82c8-f746ed2e0af6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headerdateien\Toolset">
       <UniqueIdentifier>{80d96a5c-3d9e-44eb-a705-71f938d6bf7a}</UniqueIdentifier>
     </Filter>
@@ -59,6 +56,15 @@
     <ClCompile Include="System.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="EntityFactory.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveComponent.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -94,17 +100,11 @@
     <ClInclude Include="PluginManager.h">
       <Filter>Headerdateien\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="PluginFactory.h">
-      <Filter>Headerdateien\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="PluginRegistrationException.h">
       <Filter>Headerdateien\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="PluginRequestException.h">
       <Filter>Headerdateien\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Blueprint.h">
-      <Filter>Headerdateien\FileAccess</Filter>
     </ClInclude>
     <ClInclude Include="_PluginCreator.h">
       <Filter>Headerdateien</Filter>
@@ -129,6 +129,24 @@
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
       <Filter>Headerdateien\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PluginFactory.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityFactory.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Blueprint.h">
+      <Filter>Headerdateien\Toolset</Filter>
+    </ClInclude>
+    <ClInclude Include="id_internal.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveComponent.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveManager.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

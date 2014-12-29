@@ -9,6 +9,6 @@ namespace kg
 		typedef int Id;
 
 		virtual const std::string& getPluginName()const = 0;
-		virtual int getPluginId()const = 0;
+		virtual Plugin::Id getPluginId()const = 0;
 	};
 }

@@ -55,8 +55,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int GlobalBounds::getPluginId() const
-	{
+	Plugin::Id GlobalBounds::getPluginId() const
+{
 		return ( int )id::ComponentPluginId::GLOBAL_BOUNDS;
 	}
 

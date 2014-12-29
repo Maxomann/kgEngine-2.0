@@ -1,4 +1,4 @@
-#include "SaveSystem.h"
+#include "SaveManager.h"
 using namespace std;
 using namespace sf;
 using namespace tr2;
@@ -6,37 +6,7 @@ using namespace sys;
 
 namespace kg
 {
-	void SavegameSystem::init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile )
-	{
-		return;
-	}
-
-	void SavegameSystem::sfmlEvent( Engine& engine, const sf::Event& sfEvent )
-	{
-		return;
-	}
-
-	void SavegameSystem::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
-	{
-		return;
-	}
-
-	double SavegameSystem::getUpdateImportance() const
-	{
-		return ( int )id::SystemUpdateImportance::SAVE_SYSTEM;
-	}
-
-	const std::string& SavegameSystem::getPluginName() const
-	{
-		return PLUGIN_NAME;
-	}
-
-	Plugin::Id SavegameSystem::getPluginId() const
-{
-		return ( int )id::SystemPluginId::SAVE_SYSTEM;
-	}
-
-	std::vector<std::string> SavegameSystem::getAvailableSavegameNames() const
+	std::vector<std::string> SaveManager::getAvailableSavegameNames() const
 	{
 		std::vector<std::string> retVal;
 
@@ -50,7 +20,7 @@ namespace kg
 		return retVal;
 	}
 
-	void SavegameSystem::openSavegame( Engine& engine, World& world, const std::string& savegameName )
+	void SaveManager::openSavegame( Engine& engine, World& world, const std::string& savegameName )
 	{
 		world.clear();
 		m_openSavegameName = savegameName;
@@ -81,30 +51,35 @@ namespace kg
 			if( el != "" )
 			{
 				SystemSaveInformation info( el );
-				world.getSystemById( info.getSystemPluginId() )->loadSaveInformation( info );
+				s_loadSaveInformation[info.getSystemPluginId()]( info.getInformation() );
 			}
 		}
+		globalsFile.close();
 
 		s_savegameOpened( engine, world );//inform registered systems (even if no save information has been loaded for them!)
 
-		globalsFile.close();
 		return;
 	}
 
-	const std::string& SavegameSystem::getOpenSavegameName() const
+	const std::string& SaveManager::getOpenSavegameName() const
 	{
 		return m_openSavegameName;
 	}
 
-	void SavegameSystem::saveSystems( World& world )
+	void SaveManager::saveSystems( World& world )
 	{
 		std::vector<SystemSaveInformation> saveInformationVec;
-		for( const auto& el : world.getAllSystemsByPluginId() )
+		for( const auto& el : s_writeSaveInformation )
 		{
 			SystemSaveInformation info( el.first );
-			el.second->writeSaveInformation( info );
-			saveInformationVec.push_back( info );
+			auto optionalVec = el.second();
+			if( optionalVec )
+			{
+				info.setInformation( optionalVec.get() );
+				saveInformationVec.push_back( info );
+			}
 		}
+
 		fstream globalsFile( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + SYSTEM_SAVE_FILENAME + SAVE_FILE_EXTENSION,
 							 fstream::out | fstream::trunc );
 		globalsFile << to_string( world.getUniqueEntityId() ) << endl;//save lowest unique entity id
@@ -119,7 +94,7 @@ namespace kg
 		return;
 	}
 
-	void SavegameSystem::loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename )
+	void SaveManager::loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename )
 	{
 		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION,
 					  fstream::in );
@@ -136,24 +111,26 @@ namespace kg
 
 		for( auto& el : information )
 		{
-			world.addEntity( world.loadEntity( engine, el ) );
+			auto entity = world.createNewEntity( engine, el.getBlueprintEntityId(), el.getUniqueEntityId() );
+			entity->getComponent<Save>()->loadSaveInformation( el );
+			world.addEntity( entity );
 		}
 
 		file.close();
 		return;
 	}
 
-	void SavegameSystem::saveEntitiesToFile( const std::string& filename/*relative to open savegame path*/, const std::vector<std::shared_ptr<Entity>>& entities )
+	void SaveManager::saveEntitiesToFile( const std::string& filename/*relative to open savegame path*/, const std::vector<std::shared_ptr<Entity>>& entities )
 	{
 		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION,
 					  fstream::out | fstream::trunc );
 
 		for( const auto& el : entities )
 		{
-			if( el->isConstructedFromBlueprint() )//can only be saved if this is true
+			auto saveComponent = el->getComponent<Save>();
+			if( saveComponent )//can only be saved if it has a save component
 			{
-				EntitySaveInformation saveInformation( el->getBlueprintId(), el->getId() );
-				el->writeSaveInformation( saveInformation );
+				auto saveInformation = saveComponent->writeSaveInformation();
 				file << saveInformation.toString() << endl;
 			}
 		}
@@ -162,22 +139,16 @@ namespace kg
 		return;
 	}
 
-	void SavegameSystem::writeSaveInformation( SystemSaveInformation& writeTo )
-	{
-		return;
-	}
+	const std::string SaveManager::SAVE_FILE_EXTENSION = ".save";
 
-	void SavegameSystem::loadSaveInformation( const SystemSaveInformation& loadFrom )
-	{
-		return;
-	}
+	const std::string SaveManager::SYSTEM_SAVE_FILENAME = "_global";
 
-	const std::string SavegameSystem::SAVE_FILE_EXTENSION = ".save";
+	const std::string SaveManager::SAVEGAME_FOLDER = "./Saves";
 
-	const std::string SavegameSystem::SYSTEM_SAVE_FILENAME = "_global";
+	const std::string SaveManager::PLUGIN_NAME = "SaveSystem";
 
-	const std::string SavegameSystem::SAVEGAME_FOLDER = "./Saves";
 
-	const std::string SavegameSystem::PLUGIN_NAME = "SaveSystem";
+
+
 
 }

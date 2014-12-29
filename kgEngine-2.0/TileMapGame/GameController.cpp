@@ -29,7 +29,7 @@ namespace kg
 		return;
 	}
 
-	void GameController::update( Engine& engine, World& world, const sf::Time& frameTime )
+	void GameController::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
 		auto camera = r_graphicsSystem->getCamera( 0 );
 
@@ -69,8 +69,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int GameController::getPluginId() const
-	{
+	Plugin::Id GameController::getPluginId() const
+{
 		return ( int )id::SystemPluginId::GAME_CONTROLLER;
 	}
 

@@ -3,6 +3,7 @@
 #include "World.h"
 #include "Engine.h"
 #include "Entity.h"
+#include "SaveManager.h"
 
 namespace kg
 {
@@ -13,6 +14,7 @@ namespace kg
 		typedef void( *CONNECT )(PluginManager&);
 
 		Engine m_engine;
+		SaveManager m_saveManager;
 		World m_world;
 
 		sf::Clock m_frameTimeClock;

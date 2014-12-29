@@ -64,8 +64,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int Camera::getPluginId() const
-	{
+	Plugin::Id Camera::getPluginId() const
+{
 		return ( int )id::ComponentPluginId::CAMERA;
 	}
 

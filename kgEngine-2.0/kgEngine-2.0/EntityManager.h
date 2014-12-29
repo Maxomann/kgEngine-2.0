@@ -2,20 +2,15 @@
 #include "stdafx.h"
 #include "Entity.h"
 #include "Callback.h"
+#include "EntityFactory.h"
 
 namespace kg
 {
-	class DLL_EXPORT EntityManager
+	class DLL_EXPORT EntityManager : public EntityFactory
 	{
 		std::unordered_map<Entity::Id, std::shared_ptr<Entity>> m_entities;
 
-		Entity::Id m_highestUniqueId = 0;
-
 	public:
-		//not unique between servers/clients
-		Entity::Id getUniqueEntityId();
-		void setLowestUniqueEntityId( const Entity::Id& id );
-
 		// overwrites entity if it already exists
 		// first: returns false in that case
 		// second: EntityId of the added Entity
@@ -45,16 +40,6 @@ namespace kg
 
 		void updateEntities( Engine& engine, World& world, const sf::Time& frameTime );
 
-		//helper function for creating a new Entity with a unique id
-		std::shared_ptr<Entity> createNewEntity( Engine& engine,
-												 const int& entityBlueprintId );//componentValuesByNameByComponent
-		//helper function for creating a specific unique id
-		std::shared_ptr<Entity> createNewEntity( Engine& engine,
-												 const int& entityBlueprintId,
-												 const Entity::Id& uniqueId );//componentValuesByNameByComponent
-		//helper function for loading an entity from save information
-		std::shared_ptr<Entity> loadEntity( Engine& engine,
-											EntitySaveInformation& saveInformation );
 
 		//removes every entity
 		void clear();
