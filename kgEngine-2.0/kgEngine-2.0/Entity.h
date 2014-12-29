@@ -26,7 +26,7 @@ namespace kg
 
 	public:
 		// Entity has to be initialized manually when this constructor is called
-		// This Entity will not be saved. (To be saved it need to be constructed from a blueprint)
+		// This Entity will not be saved. (To be saved it needs to be constructed from a blueprint)
 		Entity( const Id& id );
 		Entity( Engine& engine,
 				const Id& id,

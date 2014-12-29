@@ -9,7 +9,7 @@ using namespace placeholders;
 
 int main()
 {
-	
+	cout << std::numeric_limits<long long int>::max() << endl;
 
 	system( "pause" );
 }
