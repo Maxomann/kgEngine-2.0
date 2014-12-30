@@ -8,7 +8,7 @@ namespace kg
 {
 	class DLL_EXPORT EntityManager : public EntityFactory
 	{
-		std::unordered_map<Entity::Id, std::shared_ptr<Entity>> m_entities;
+		std::unordered_map<Entity*, std::shared_ptr<Entity>> m_entities;
 
 	public:
 		// overwrites entity if it already exists
@@ -18,10 +18,10 @@ namespace kg
 
 		// ensures that the entity with id parameter:id does not exist anymore
 		// returns false if entity with id did not exist
-		bool removeEntity( const Entity::Id& id );
+		bool removeEntity( const std::shared_ptr<Entity>& entity );
 
 		// returns nullptr if Entity with id does not exist
-		std::shared_ptr<Entity> getEntity( const Entity::Id& id );
+		std::shared_ptr<Entity> getEntity( const std::shared_ptr<Entity>& entity );
 
 		//returns all entities that have all components, given in the template parameter, registered
 		template<class /*variadic*/ ComponentType>

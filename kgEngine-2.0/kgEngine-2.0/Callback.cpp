@@ -1,4 +1,4 @@
-#ifdef DEBUG KG_OLD_CALLBACK_SYSTEM
+#ifdef KG_OLD_CALLBACK_SYSTEM
 
 #include "Callback.h"
 

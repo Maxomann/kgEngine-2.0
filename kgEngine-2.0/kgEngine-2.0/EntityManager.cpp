@@ -7,7 +7,7 @@ namespace kg
 {
 	std::pair<bool, std::shared_ptr<Entity>> EntityManager::addEntity( std::shared_ptr<Entity>& entity )
 	{
-		auto id = entity->getId();
+		Entity* id = entity.get();
 
 		auto it = m_entities.find( id );
 		auto end = m_entities.end();
@@ -20,8 +20,10 @@ namespace kg
 		return std::pair<bool, std::shared_ptr<Entity>>( it != end, entity );
 	}
 
-	bool EntityManager::removeEntity( const Entity::Id& id )
+	bool EntityManager::removeEntity( const std::shared_ptr<Entity>& entity )
 	{
+		Entity* id = entity.get();
+
 		auto it = m_entities.find( id );
 
 		bool didExist = false;
@@ -36,8 +38,10 @@ namespace kg
 		return didExist;
 	}
 
-	std::shared_ptr<Entity> EntityManager::getEntity( const Entity::Id& id )
+	std::shared_ptr<Entity> EntityManager::getEntity( const std::shared_ptr<Entity>& entity )
 	{
+		auto id = entity.get();
+
 		auto it = m_entities.find( id );
 		if( it == m_entities.end() )
 			return nullptr;

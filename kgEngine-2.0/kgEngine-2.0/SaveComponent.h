@@ -61,7 +61,7 @@ namespace kg
 
 	};
 
-	class DLL_EXPORT Saveable : public Component
+	class DLL_EXPORT Saveable : public Component, public boost::noncopyable
 	{
 		const unsigned int m_blueprintEntityId;
 		const Entity::Id m_uniqueEntityId;
@@ -89,6 +89,8 @@ namespace kg
 
 		EntitySaveInformation writeSaveInformation()const;
 		void loadSaveInformation( EntitySaveInformation& information );
+
+		const Entity::Id& getUniqueId()const;
 
 	signals:
 		std::map < Plugin::Id,//first: componentId, second: signal

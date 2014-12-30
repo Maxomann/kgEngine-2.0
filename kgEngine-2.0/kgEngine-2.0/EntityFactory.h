@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "Entity.h"
 #include "Engine.h"
 #include "SaveComponent.h"
 

@@ -25,7 +25,7 @@ namespace kg
 															const int& entityBlueprintId,
 															const Entity::Id& uniqueId )
 	{
-		auto entity = std::make_shared<Entity>( uniqueId );
+		auto entity = std::make_shared<Entity>();
 
 		auto entityBlueprint = engine.blueprint.getEntityById( entityBlueprintId );
 

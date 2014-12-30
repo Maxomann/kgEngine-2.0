@@ -275,6 +275,11 @@ namespace kg
 
 	}
 
+	const Entity::Id& Saveable::getUniqueId() const
+	{
+		return m_uniqueEntityId;
+	}
+
 	const std::string Saveable::PLUGIN_NAME = "internal_save";
 
 
