@@ -8,7 +8,7 @@
 
 namespace kg
 {
-	class SaveManager
+	class DLL_EXPORT SaveManager
 	{
 		std::string m_openSavegameName;
 
