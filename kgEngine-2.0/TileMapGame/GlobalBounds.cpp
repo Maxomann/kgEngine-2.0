@@ -16,7 +16,7 @@ namespace kg
 		r_rotation = thisEntity.getComponent<Rotation>().get();
 
 		//register callbacks:
-		m_connectToSignal( r_position->s_changed, std::function<void( const sf::Vector2i& )>( [&]( const sf::Vector2i& )
+		/*m_connectToSignal( r_position->s_changed, std::function<void( const sf::Vector2i& )>( [&]( const sf::Vector2i& )
 		{
 			onTransformationChanged();
 		} ) );
@@ -30,7 +30,7 @@ namespace kg
 			{
 				onTransformationChanged();
 			} ) );
-		}
+		}*/
 
 		return;
 	}
@@ -55,8 +55,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int GlobalBounds::getPluginId() const
-	{
+	Plugin::Id GlobalBounds::getPluginId() const
+{
 		return ( int )id::ComponentPluginId::GLOBAL_BOUNDS;
 	}
 
@@ -77,9 +77,19 @@ namespace kg
 		return shape.getGlobalBounds();
 	}
 
-	void GlobalBounds::onTransformationChanged()
+	/*void GlobalBounds::onTransformationChanged()
 	{
-		s_changed( get() );
+		//s_changed( get() );
+	}*/
+
+	void GlobalBounds::writeSaveInformation( EntitySaveInformation& writeTo )
+	{
+		return;
+	}
+
+	void GlobalBounds::loadSaveInformation( const EntitySaveInformation& loadFrom )
+	{
+		return;
 	}
 
 	const std::string GlobalBounds::PLUGIN_NAME = "GlobalBounds";

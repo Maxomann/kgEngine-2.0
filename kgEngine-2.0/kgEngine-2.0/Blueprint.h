@@ -48,8 +48,8 @@ namespace kg
 
 		class DLL_EXPORT Value
 		{
-			/*const*/ std::string m_name = "standart constructor has been called - object not initialized";
-			/*const*/ std::string m_rawValue = "standart constructor has been called - object not initialized";
+			/*const*/ std::string m_name = "standard constructor has been called - object not initialized";
+			/*const*/ std::string m_rawValue = "standard constructor has been called - object not initialized";
 			bool m_isValid = false;
 
 		public:

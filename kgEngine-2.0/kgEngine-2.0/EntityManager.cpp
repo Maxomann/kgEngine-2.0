@@ -1,16 +1,13 @@
 #include "EntityManager.h"
 
+using namespace std;
+using namespace sf;
+
 namespace kg
 {
-	Entity::Id EntityManager::getUniqueEntityId()
-	{
-		m_highestUniqueId++;
-		return m_highestUniqueId - 1;
-	}
-
 	std::pair<bool, std::shared_ptr<Entity>> EntityManager::addEntity( std::shared_ptr<Entity>& entity )
 	{
-		auto id = entity->getId();
+		Entity* id = entity.get();
 
 		auto it = m_entities.find( id );
 		auto end = m_entities.end();
@@ -23,8 +20,10 @@ namespace kg
 		return std::pair<bool, std::shared_ptr<Entity>>( it != end, entity );
 	}
 
-	bool EntityManager::removeEntity( const Entity::Id& id )
+	bool EntityManager::removeEntity( const std::shared_ptr<Entity>& entity )
 	{
+		Entity* id = entity.get();
+
 		auto it = m_entities.find( id );
 
 		bool didExist = false;
@@ -39,8 +38,10 @@ namespace kg
 		return didExist;
 	}
 
-	std::shared_ptr<Entity> EntityManager::getEntity( const Entity::Id& id )
+	std::shared_ptr<Entity> EntityManager::getEntity( const std::shared_ptr<Entity>& entity )
 	{
+		auto id = entity.get();
+
 		auto it = m_entities.find( id );
 		if( it == m_entities.end() )
 			return nullptr;
@@ -54,18 +55,17 @@ namespace kg
 			entity.second->updateAllComponentsByImportance( engine, world, frameTime );
 	}
 
-	std::shared_ptr<Entity> EntityManager::createEntity( Engine& engine,
-														 const int& entityBlueprintId,
-														 const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues )
+	void EntityManager::clear()
 	{
-		auto returnValue = std::make_shared<Entity>( getUniqueEntityId() );
-		returnValue->initFromBlueprint( engine, engine.blueprint.getEntityById( entityBlueprintId ), additionalBlueprintValues );
-
-		return returnValue;
+		m_entities.clear();
 	}
 
-	void EntityManager::setLowestUniqueEntityId( const Entity::Id& id )
+	std::vector<std::shared_ptr<Entity>> EntityManager::getAllEntities()
 	{
-		m_highestUniqueId = id;
+		vector<shared_ptr<Entity>> retVal;
+		for( auto& el : m_entities )
+			retVal.push_back( el.second );
+		return retVal;
 	}
+
 }

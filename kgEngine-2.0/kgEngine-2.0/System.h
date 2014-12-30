@@ -8,6 +8,7 @@ namespace kg
 	class SystemManager;
 	class World;
 	class ConfigFile;
+	class SaveManager;
 
 	class DLL_EXPORT System : public Plugin
 	{
@@ -21,7 +22,7 @@ namespace kg
 
 		// components get updated before systems
 		// frame time is 0 when Engine::isPaused == true
-		virtual void update( Engine& engine, World& world, const sf::Time& frameTime ) = 0;
+		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime ) = 0;
 
 		// the lower the importance, the earlier this component gets updated, initialized, sfmlForwarded
 		virtual double getUpdateImportance()const = 0;

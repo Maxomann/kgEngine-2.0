@@ -7,6 +7,7 @@ namespace kg
 	struct Engine;
 	class ComponentManager;
 	class World;
+	class EntitySaveInformation;
 	namespace blueprint
 	{
 		class Entity;

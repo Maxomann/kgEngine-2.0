@@ -1,0 +1,319 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="kg::ComponentManager" Collapsed="true">
+    <Position X="3.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAgAgAIAIAAEECAAAAAAAAAAAACAAAIAAAAAAAAA=</HashCode>
+      <FileName>ComponentManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::World" Collapsed="true">
+    <Position X="5.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>World.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::Component" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAIAAAAAIAAEIAA=</HashCode>
+      <FileName>Component.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::Core" Collapsed="true">
+    <Position X="16.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAEACAAAAAAAAAAAAAAAAAIAAAAIAAAEBAA=</HashCode>
+      <FileName>Core.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::Entity" Collapsed="true">
+    <Position X="3.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EgAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Entity.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::EntityManager" Collapsed="true">
+    <Position X="5.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEABAAAAAAAAAIAAAQAAAAgAEQAAAAAAEAAAAACAAAA=</HashCode>
+      <FileName>EntityManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::Plugin" Collapsed="true">
+    <Position X="1.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Plugin.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::SystemManager" Collapsed="true">
+    <Position X="8.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAABAAAAABAAABAAIABAAAAIAAEAAKAAA=</HashCode>
+      <FileName>SystemManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::ConfigFile" Collapsed="true">
+    <Position X="14.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEQAAAAAAAAAAAAAIAIBAAgAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>ConfigFile.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::System" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAAIAAAAAIAAEAAA=</HashCode>
+      <FileName>System.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::PluginFactoryInterface&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EgAAAABAAAAAAAAAAAAAAAAAAAAAAAgAAABEIAAAAAA=</HashCode>
+      <FileName>PluginFactory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::PluginFactory&lt;FakeType, RealType&gt;" Collapsed="true">
+    <Position X="0.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAgAAABAAAAAAAA=</HashCode>
+      <FileName>PluginFactory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::EntityFactory" Collapsed="true">
+    <Position X="5.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAQAAAAAA=</HashCode>
+      <FileName>EntityFactory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::ComponentMissingException" Collapsed="true">
+    <Position X="21.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAEAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ComponentMissingException.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::PathNotAvailableException" Collapsed="true">
+    <Position X="16.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAEAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>PathNotAvailableException.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::PluginRegistrationException" Collapsed="true">
+    <Position X="20" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAEAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PluginRegistrationException.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::PluginRequestException" Collapsed="true">
+    <Position X="21.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAEAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>PluginRequestException.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::WrongCallbackSignatureException" Collapsed="true">
+    <Position X="21.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WrongCallbackSignatureException.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::PluginManager" Collapsed="true">
+    <Position X="18.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAACAgAAAAAAAgAABAEAIAAAABYAAAAAAAA=</HashCode>
+      <FileName>PluginManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::Resource" Collapsed="true">
+    <Position X="14.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::ResourceManager" Collapsed="true">
+    <Position X="16.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAgAAAAAAACAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>ResourceManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::CallbackReciever" Collapsed="true">
+    <Position X="18.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Callback.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::CallbackSender" Collapsed="true">
+    <Position X="20" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAACAAAAEACAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Callback.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::Entity" Collapsed="true">
+    <Position X="18.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EkAAAAAAAAAAASAAAAAAAAACAAAAAAQAAgAEAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::Value" Collapsed="true">
+    <Position X="20" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAABAAAAAABACAAEAAAgBAACEAAACAQAAAAkAAAQAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::ParsingError" Collapsed="true">
+    <Position X="14.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACABAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::LinkingError" Collapsed="true">
+    <Position X="21.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAEEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::Command&lt;T&gt;" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::Blueprint" Collapsed="true">
+    <Position X="14.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAACAAAAAAAAACAAAEAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::ComponentDeclaration" Collapsed="true">
+    <Position X="10" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::ValueDeclaration" Collapsed="true">
+    <Position X="12.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::ComponentDefinition" Collapsed="true">
+    <Position X="1" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::InheritanceDeclaration" Collapsed="true">
+    <Position X="3.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::BlueprintDeclaration" Collapsed="true">
+    <Position X="5.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::EntityDeclaration" Collapsed="true">
+    <Position X="7.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::blueprint::BlueprintManager" Collapsed="true">
+    <Position X="16.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAACAAAAAwAAAAAQAAAAIAAAAIEA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::EntitySaveInformation">
+    <Position X="22.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAACAAAAAAAACAAAAAEQBAABAAgAACAQAAABBAAAAAA=</HashCode>
+      <FileName>Save.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="kg::SystemSaveInformation">
+    <Position X="18" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAACAEAAAAABAARABQAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Save.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="kg::Engine" Collapsed="true">
+    <Position X="18.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAIAAAAAAQBAAAAAABAAAAAAAIAA=</HashCode>
+      <FileName>Engine.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="kg::aggregate_values&lt;Container&gt;" Collapsed="true">
+    <Position X="14.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Callback.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="indices&lt;...Is&gt;" Collapsed="true">
+    <Position X="20" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Callback.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="build_indices&lt;N, ...Is&gt;" Collapsed="true">
+    <Position X="16.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Callback.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="placeholder&lt;I&gt;" Collapsed="true">
+    <Position X="14.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Callback.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="std::is_placeholder&lt;::placeholder&lt;I&gt;&gt;" Collapsed="true">
+    <Position X="21.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Callback.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="kg::blueprint::ComponentValuesByNameByComponentMap" Collapsed="true">
+    <Position X="14.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Blueprint.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

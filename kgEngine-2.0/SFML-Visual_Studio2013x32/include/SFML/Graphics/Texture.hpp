@@ -46,7 +46,7 @@ class InputStream;
 ////////////////////////////////////////////////////////////
 class SFML_GRAPHICS_API Texture : GlResource
 {
-public :
+public:
 
     ////////////////////////////////////////////////////////////
     /// \brief Types of texture coordinates that can be used for rendering
@@ -58,7 +58,7 @@ public :
         Pixels      ///< Texture coordinates in range [0 .. size]
     };
 
-public :
+public:
 
     ////////////////////////////////////////////////////////////
     /// \brief Default constructor
@@ -460,12 +460,15 @@ public :
     /// You can expect a value of 512 pixels for low-end graphics
     /// card, and up to 8192 pixels or more for newer hardware.
     ///
+    /// Note: The first call to this function, whether by your
+    /// code or SFML will result in a context switch.
+    ///
     /// \return Maximum size allowed for textures, in pixels
     ///
     ////////////////////////////////////////////////////////////
     static unsigned int getMaximumSize();
 
-private :
+private:
 
     friend class RenderTexture;
     friend class RenderTarget;

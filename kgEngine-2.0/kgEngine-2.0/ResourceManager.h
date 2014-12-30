@@ -10,7 +10,7 @@ namespace kg
 		virtual bool loadFromFile( const std::string& path ) = 0;
 	};
 
-	class DLL_EXPORT ResourceManagement
+	class DLL_EXPORT ResourceManager
 	{
 	private:
 		std::unordered_map< std::string, std::unordered_map<size_t, std::shared_ptr<void>> >m_resources;
@@ -137,4 +137,5 @@ namespace kg
 			return reloadResource<T>( "./Config/" + systemName + ".ini" );
 		}
 	};
+
 }

@@ -34,8 +34,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int Position::getPluginId() const
-	{
+	Plugin::Id Position::getPluginId() const
+{
 		return ( int )id::ComponentPluginId::POSITION;
 	}
 
@@ -53,6 +53,26 @@ namespace kg
 	void Position::move( const sf::Vector2i& offset )
 	{
 		set( m_position + offset );
+	}
+
+	void Position::writeSaveInformation( EntitySaveInformation& writeTo )
+	{
+		writeTo.addInformation( { to_string( m_position.x ), to_string( m_position.y ) } );
+	}
+
+	void Position::loadSaveInformation( const EntitySaveInformation& loadFrom )
+	{
+		auto& info = loadFrom.getInformation();
+		if( info.size() == 2 )
+		{
+			auto pos_x = atoi( info.at( 0 ).c_str() );
+			auto pos_y = atoi( info.at( 1 ).c_str() );
+			set( Vector2i( pos_x, pos_y ) );
+		}
+		else
+			throw exception();
+
+		return;
 	}
 
 	const std::string Position::PLUGIN_NAME = "Position";

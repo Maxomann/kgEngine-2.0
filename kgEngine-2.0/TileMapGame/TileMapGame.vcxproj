@@ -89,6 +89,7 @@
     <ClCompile Include="GlobalBounds.cpp" />
     <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="Rotation.cpp" />
+    <ClCompile Include="SaveSystem.cpp" />
     <ClCompile Include="Size.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="connect.cpp" />
@@ -101,6 +102,7 @@
     <ClInclude Include="GlobalBounds.h" />
     <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="Rotation.h" />
+    <ClInclude Include="SaveSystem.h" />
     <ClInclude Include="Size.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GameController.h" />

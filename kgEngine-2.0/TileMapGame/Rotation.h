@@ -21,7 +21,13 @@ namespace kg
 
 		virtual const std::string& getPluginName() const;
 
-		virtual int getPluginId() const;
+		virtual Plugin::Id getPluginId()const;
+
+		virtual void writeSaveInformation( EntitySaveInformation& writeTo ) override;
+
+		virtual void loadSaveInformation( const EntitySaveInformation& loadFrom ) override;
+
+
 
 		void set( const float rotationInDegree );
 

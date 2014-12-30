@@ -1,0 +1,8 @@
+XXX System::CreateSaveInformation
+XXX Entity::CreateSaveInformation
+XXX System::LoadFromSaveInfotmation
+XXX Entity::LoadFromSaveInformation
+XXX --- GESTRICHEN --- Save/Load AdditionalComponentValues
+XXX Finish SaveSystem
+XXX integrate Saving to existing Systems/Components
+replace int with Id where possible

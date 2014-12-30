@@ -50,7 +50,7 @@ class Texture;
 ////////////////////////////////////////////////////////////
 class SFML_GRAPHICS_API Shader : GlResource, NonCopyable
 {
-public :
+public:
 
     ////////////////////////////////////////////////////////////
     /// \brief Types of shaders
@@ -79,7 +79,7 @@ public :
     ////////////////////////////////////////////////////////////
     static CurrentTextureType CurrentTexture;
 
-public :
+public:
 
     ////////////////////////////////////////////////////////////
     /// \brief Default constructor
@@ -486,12 +486,15 @@ public :
     /// the shader features. If it returns false, then
     /// any attempt to use sf::Shader will fail.
     ///
+    /// Note: The first call to this function, whether by your
+    /// code or SFML will result in a context switch.
+    ///
     /// \return True if shaders are supported, false otherwise
     ///
     ////////////////////////////////////////////////////////////
     static bool isAvailable();
 
-private :
+private:
 
     ////////////////////////////////////////////////////////////
     /// \brief Compile the shader(s) and create the program

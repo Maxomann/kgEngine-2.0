@@ -25,13 +25,19 @@ namespace kg
 
 		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent );
 
-		virtual void update( Engine& engine, World& world, const sf::Time& frameTime );
+		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
 
 		virtual double getUpdateImportance() const;
 
 		virtual const std::string& getPluginName() const;
 
-		virtual int getPluginId() const;
+		virtual Plugin::Id getPluginId()const;
+
+		virtual void writeSaveInformation( SystemSaveInformation& writeTo ) override;
+
+		virtual void loadSaveInformation( const SystemSaveInformation& loadFrom ) override;
+
+
 
 		static const std::string PLUGIN_NAME;
 

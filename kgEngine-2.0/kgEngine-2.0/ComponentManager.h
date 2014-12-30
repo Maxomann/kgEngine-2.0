@@ -24,6 +24,7 @@ namespace kg
 	{
 		std::map<size_t, std::shared_ptr<Component>> m_componentsByType;
 		std::map<double, std::shared_ptr<Component>> m_componentsByUpdateImportance;
+		std::map<Plugin::Id, std::shared_ptr<Component>> m_componentsByPluginId;
 	public:
 		// If this function returns true a system of type T has already been registered.
 		// This function overwrites the old system with the parameter of this function
@@ -37,8 +38,9 @@ namespace kg
 
 			m_componentsByType[realTypeHashCode] = component;
 			m_componentsByUpdateImportance[updateImportance] = component;
+			m_componentsByPluginId[component->getPluginId()] = component;
 
-			//it != m_systemsByType.end(); means that a system has been overwritten
+			//if [it != m_systemsByType.end();] a system has been overwritten
 			return it != m_componentsByType.end();
 		}
 
@@ -81,5 +83,7 @@ namespace kg
 		bool hasComponent( const std::vector<size_t>& componentTypes )const;
 
 		const std::map<size_t, std::shared_ptr<Component>>& getAllComponentsByTypeHash()const;
+
+		const std::map<Plugin::Id, std::shared_ptr<Component>>& getAllComponentsByPluginId()const;
 	};
 }

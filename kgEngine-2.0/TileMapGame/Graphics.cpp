@@ -15,7 +15,7 @@ namespace kg
 		it = blueprintValues.find( BLUEPRINT_TEXTURE_PATH );
 		if( it != blueprintValues.end() )
 			texturePath = it->second.toString();
-		m_resourceManagementReference = engine.resourceManagement.getResource<sf::Texture>( texturePackage, texturePath );
+		m_resourceManagementReference = engine.resourceManager.getResource<sf::Texture>( texturePackage, texturePath );
 		m_sprite.setTexture( *m_resourceManagementReference.get() );
 
 		sf::IntRect textureRect;
@@ -72,8 +72,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int Graphics::getPluginId() const
-	{
+	Plugin::Id Graphics::getPluginId() const
+{
 		return ( int )id::ComponentPluginId::GRAPHICS;
 	}
 
@@ -125,6 +125,16 @@ namespace kg
 	{
 		auto bounds = r_globalBounds->get();
 		return bounds.top + bounds.height;//feet position
+	}
+
+	void Graphics::writeSaveInformation( EntitySaveInformation& writeTo )
+	{
+		return;
+	}
+
+	void Graphics::loadSaveInformation( const EntitySaveInformation& loadFrom )
+	{
+		return;
 	}
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";

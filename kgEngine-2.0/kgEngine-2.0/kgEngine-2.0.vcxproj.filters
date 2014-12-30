@@ -9,18 +9,11 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Ressourcendateien">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Headerdateien\Exceptions">
       <UniqueIdentifier>{dfeb575d-eba1-4e2d-9982-0c6c06d43b54}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headerdateien\Engine">
       <UniqueIdentifier>{9ac4b11d-d367-4f22-8427-cffd45b0cceb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headerdateien\FileAccess">
-      <UniqueIdentifier>{a022310f-a164-4d4e-82c8-f746ed2e0af6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headerdateien\Toolset">
       <UniqueIdentifier>{80d96a5c-3d9e-44eb-a705-71f938d6bf7a}</UniqueIdentifier>
@@ -60,6 +53,18 @@
     <ClCompile Include="ConfigFile.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="System.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityFactory.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveComponent.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -95,20 +100,11 @@
     <ClInclude Include="PluginManager.h">
       <Filter>Headerdateien\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="PluginFactory.h">
-      <Filter>Headerdateien\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="PluginRegistrationException.h">
       <Filter>Headerdateien\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="PluginRequestException.h">
       <Filter>Headerdateien\Exceptions</Filter>
-    </ClInclude>
-    <ClInclude Include="Blueprint.h">
-      <Filter>Headerdateien\FileAccess</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManagement.h">
-      <Filter>Headerdateien\Engine</Filter>
     </ClInclude>
     <ClInclude Include="_PluginCreator.h">
       <Filter>Headerdateien</Filter>
@@ -131,5 +127,29 @@
     <ClInclude Include="ConfigFile.h">
       <Filter>Headerdateien\Toolset</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Headerdateien\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PluginFactory.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityFactory.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Blueprint.h">
+      <Filter>Headerdateien\Toolset</Filter>
+    </ClInclude>
+    <ClInclude Include="id_internal.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveComponent.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

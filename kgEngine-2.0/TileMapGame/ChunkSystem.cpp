@@ -17,7 +17,7 @@ namespace kg
 		return;
 	}
 
-	void ChunkSystem::update( Engine& engine, World& world, const sf::Time& frameTime )
+	void ChunkSystem::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
 		return;
 	}
@@ -32,8 +32,8 @@ namespace kg
 		return PLUGIN_NAME;
 	}
 
-	int ChunkSystem::getPluginId() const
-	{
+	Plugin::Id ChunkSystem::getPluginId() const
+{
 		return ( int )id::SystemPluginId::CHUNK_SYSTEM;
 	}
 
@@ -138,6 +138,16 @@ namespace kg
 		// entity is not in world anymore
 		// or
 		// its a bug -.-
+	}
+
+	void ChunkSystem::writeSaveInformation( SystemSaveInformation& writeTo )
+	{
+		return;
+	}
+
+	void ChunkSystem::loadSaveInformation( const SystemSaveInformation& loadFrom )
+	{
+		return;
 	}
 
 	const std::string ChunkSystem::PLUGIN_NAME = "ChunkSystem";

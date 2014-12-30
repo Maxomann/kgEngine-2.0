@@ -1,15 +1,20 @@
 #pragma once
 #include "stdafx.h"
 #include "System.h"
-#include "Engine.h"
 #include "ConfigFile.h"
+#include "ResourceManager.h"
+#include "Engine.h"
 
 namespace kg
 {
+	struct Engine;
+	class SaveManager;
+
 	class DLL_EXPORT SystemManager
 	{
 		std::map<size_t, std::shared_ptr<System>> m_systemsByType;
 		std::map<double, std::shared_ptr<System>> m_systemsByUpdateImportance;
+		std::map<Plugin::Id, std::shared_ptr<System>> m_systemsByPluginId;
 	public:
 
 		// If this function returns true a system of type T has already been registered.
@@ -22,6 +27,7 @@ namespace kg
 
 			m_systemsByType[realTypeHashCode] = system;
 			m_systemsByUpdateImportance[updateImportance] = system;
+			m_systemsByPluginId[system->getPluginId()] = system;
 
 			//it != m_systemsByType.end(); means that a system has been overwritten
 			return it != m_systemsByType.end();
@@ -46,6 +52,9 @@ namespace kg
 				return static_pointer_cast< T >(it->second);
 		};
 
+		std::shared_ptr<System> getSystemById( const Plugin::Id& id )const;
+		const std::map<Plugin::Id, std::shared_ptr<System>>& getAllSystemsByPluginId()const;
+
 		/*template<class T, class CastTo>
 		std::shared_ptr<CastTo>& getSystemWithCast()
 		{
@@ -53,6 +62,6 @@ namespace kg
 		};*/
 
 		void forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent );
-		void updateAllSystemsByImportance( Engine& engine, World& world, const sf::Time& frameTime );
+		void updateAllSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
 	};
 }

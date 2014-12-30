@@ -48,6 +48,28 @@ namespace kg
 {
 #define signals public
 
+	// COMBINER FOR SIGNALS:
+	// aggregate_values is a combiner which places all the values returned
+	// from slots into a container
+	template<typename Container>
+	struct aggregate_values
+	{
+		typedef Container result_type;
+
+		template<typename InputIterator>
+		Container operator()( InputIterator first, InputIterator last ) const
+		{
+			Container values;
+
+			while( first != last )
+			{
+				values.push_back( *first );
+				++first;
+			}
+			return values;
+		}
+	};
+
 	template< class ... parameterType >
 	using Signal = boost::signals2::signal < void( parameterType... ) > ;
 

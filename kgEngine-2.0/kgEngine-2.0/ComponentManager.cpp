@@ -28,4 +28,10 @@ namespace kg
 	{
 		return m_componentsByType;
 	}
+
+	const std::map<Plugin::Id, std::shared_ptr<Component>>& ComponentManager::getAllComponentsByPluginId() const
+	{
+		return m_componentsByPluginId;
+	}
+
 }

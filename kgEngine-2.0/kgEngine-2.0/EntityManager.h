@@ -2,20 +2,15 @@
 #include "stdafx.h"
 #include "Entity.h"
 #include "Callback.h"
+#include "EntityFactory.h"
 
 namespace kg
 {
-	class DLL_EXPORT EntityManager
+	class DLL_EXPORT EntityManager : public EntityFactory
 	{
-		std::unordered_map<Entity::Id, std::shared_ptr<Entity>> m_entities;
-
-		Entity::Id m_highestUniqueId = 0;
+		std::unordered_map<Entity*, std::shared_ptr<Entity>> m_entities;
 
 	public:
-		//not unique between servers/clients
-		Entity::Id getUniqueEntityId();
-		void setLowestUniqueEntityId( const Entity::Id& id );
-
 		// overwrites entity if it already exists
 		// first: returns false in that case
 		// second: EntityId of the added Entity
@@ -23,10 +18,10 @@ namespace kg
 
 		// ensures that the entity with id parameter:id does not exist anymore
 		// returns false if entity with id did not exist
-		bool removeEntity( const Entity::Id& id );
+		bool removeEntity( const std::shared_ptr<Entity>& entity );
 
 		// returns nullptr if Entity with id does not exist
-		std::shared_ptr<Entity> getEntity( const Entity::Id& id );
+		std::shared_ptr<Entity> getEntity( const std::shared_ptr<Entity>& entity );
 
 		//returns all entities that have all components, given in the template parameter, registered
 		template<class /*variadic*/ ComponentType>
@@ -41,13 +36,13 @@ namespace kg
 			return returnValue;
 		};
 
+		std::vector<std::shared_ptr<Entity>> getAllEntities();
+
 		void updateEntities( Engine& engine, World& world, const sf::Time& frameTime );
 
-		//helper function for creating a new Entity with a unique id
-		std::shared_ptr<Entity> createEntity( Engine& engine,
-											  const int& entityBlueprintId,
-											  const blueprint::ComponentValuesByNameByComponentMap& additionalBlueprintValues
-											  = blueprint::ComponentValuesByNameByComponentMap() );//componentValuesByNameByComponent
+
+		//removes every entity
+		void clear();
 
 	signals:
 		Signal<std::shared_ptr<Entity>&> s_entity_added;
