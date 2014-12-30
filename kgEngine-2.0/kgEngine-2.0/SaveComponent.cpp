@@ -13,7 +13,6 @@ namespace kg
 		:m_blueprintEntityId( blueprintEntityId ),
 		m_uniqueEntityId( uniqueEntityId )
 	{
-
 	}
 
 	int EntitySaveInformation::getActiveComponentId() const
@@ -104,7 +103,6 @@ namespace kg
 
 		stringstream( sblueprintId ) >> m_blueprintEntityId;
 		stringstream( sUniqueId ) >> m_uniqueEntityId;
-
 	}
 
 	std::string EntitySaveInformation::toString() const
@@ -141,7 +139,6 @@ namespace kg
 	SystemSaveInformation::SystemSaveInformation( int systemPluginId )
 		: m_systemPluginId( systemPluginId )
 	{
-
 	}
 
 	const std::vector<std::string> SystemSaveInformation::getInformation() const
@@ -272,7 +269,6 @@ namespace kg
 		:m_blueprintEntityId( blueprintEntityId ),
 		m_uniqueEntityId( uniqueEntityId )
 	{
-
 	}
 
 	const Entity::Id& Saveable::getUniqueId() const
@@ -281,7 +277,4 @@ namespace kg
 	}
 
 	const std::string Saveable::PLUGIN_NAME = "internal_save";
-
-
 }
-

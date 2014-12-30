@@ -137,5 +137,4 @@ namespace kg
 			return reloadResource<T>( "./Config/" + systemName + ".ini" );
 		}
 	};
-
 }

@@ -33,5 +33,4 @@ namespace kg
 	{
 		return m_componentsByPluginId;
 	}
-
 }

@@ -31,5 +31,4 @@ namespace kg
 	{
 		return m_systemsByPluginId;
 	}
-
 }

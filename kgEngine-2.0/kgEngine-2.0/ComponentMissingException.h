@@ -13,11 +13,10 @@ namespace kg
 								   const std::string& missingComponentName,
 								   int missingComponentId )
 								   : m_msg(
-								   std::string( "ComponentMissingException\n") +
-								   std::string( "requieringComponentName=" ) + requieringComponentName + std::string( ":" ) + std::to_string( requieringComponentId ) + std::string( "\n") +
-								   std::string( "missingComponentName=" ) + missingComponentName + std::string( ":" ) + std::to_string( missingComponentId ) + std::string( "\n") )
+								   std::string( "ComponentMissingException\n" ) +
+								   std::string( "requieringComponentName=" ) + requieringComponentName + std::string( ":" ) + std::to_string( requieringComponentId ) + std::string( "\n" ) +
+								   std::string( "missingComponentName=" ) + missingComponentName + std::string( ":" ) + std::to_string( missingComponentId ) + std::string( "\n" ) )
 		{
-
 		}
 
 		virtual const char* what()const

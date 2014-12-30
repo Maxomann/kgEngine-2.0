@@ -37,8 +37,6 @@ namespace kg
 		std::string toString()const;
 	};
 
-
-
 	class DLL_EXPORT SystemSaveInformation
 	{
 		int m_systemPluginId;
@@ -58,7 +56,6 @@ namespace kg
 		int getSystemPluginId()const;
 
 		std::string toString()const;
-
 	};
 
 	class DLL_EXPORT Saveable : public Component, public boost::noncopyable
@@ -68,7 +65,6 @@ namespace kg
 
 	public:
 		Saveable( const unsigned int& blueprintEntityId, const Entity::Id& uniqueEntityId );
-
 
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues ) override;
 
@@ -83,7 +79,6 @@ namespace kg
 		virtual const std::string& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId()const override;
-
 
 		static const std::string PLUGIN_NAME;
 

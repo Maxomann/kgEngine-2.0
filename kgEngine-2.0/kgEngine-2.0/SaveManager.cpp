@@ -44,8 +44,6 @@ namespace kg
 		}
 		world.setLowestUniqueEntityId( lowestUniqueId );
 
-
-
 		for( const auto& el : lines )
 		{
 			if( el != "" )
@@ -146,9 +144,4 @@ namespace kg
 	const std::string SaveManager::SAVEGAME_FOLDER = "./Saves";
 
 	const std::string SaveManager::PLUGIN_NAME = "SaveSystem";
-
-
-
-
-
 }

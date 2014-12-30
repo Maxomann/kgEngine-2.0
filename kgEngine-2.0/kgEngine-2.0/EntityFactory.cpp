@@ -29,7 +29,6 @@ namespace kg
 
 		auto entityBlueprint = engine.blueprint.getEntityById( entityBlueprintId );
 
-
 		//OLD ADDITIONAL BLUEPRINT VALUES CODE
 		//m_additionalComponentValues = additionalBlueprintValues;//save additionalComponentValues for later request (ex. saving)
 		auto components = entityBlueprint.getComponentNames();
@@ -49,7 +48,7 @@ namespace kg
 			entity->addComponent( component, std::get<1>( createdComponent ) );
 		}
 
-		entity->addComponent<Saveable>( std::static_pointer_cast<Component>(std::make_shared<Saveable>( entityBlueprintId, uniqueId )) );
+		entity->addComponent<Saveable>( std::static_pointer_cast< Component >(std::make_shared<Saveable>( entityBlueprintId, uniqueId )) );
 
 		// check component requirements of each component
 		// throw exception if not all requirements are met

@@ -15,7 +15,6 @@ namespace kg
 	public:
 		using SystemSaveInformationMap = std::map < int, SystemSaveInformation > ;
 
-
 		std::vector<std::string> getAvailableSavegameNames()const;
 		//loads systems
 		void openSavegame( Engine& engine, World& world, const std::string& savegameName );

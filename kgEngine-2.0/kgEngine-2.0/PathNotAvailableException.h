@@ -11,7 +11,6 @@ namespace kg
 		PathNotAvailableException( const std::string& path )
 			:m_msg( "Path not found: " + path )
 		{
-
 		}
 
 		virtual const char* what()const

@@ -40,7 +40,6 @@ namespace kg
 
 		void updateEntities( Engine& engine, World& world, const sf::Time& frameTime );
 
-
 		//removes every entity
 		void clear();
 

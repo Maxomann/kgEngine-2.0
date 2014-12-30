@@ -67,5 +67,4 @@ namespace kg
 			retVal.push_back( el.second );
 		return retVal;
 	}
-
 }
