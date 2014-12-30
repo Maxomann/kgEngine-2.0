@@ -61,13 +61,13 @@ namespace kg
 
 	};
 
-	class Save : public Component
+	class DLL_EXPORT Saveable : public Component
 	{
 		const unsigned int m_blueprintEntityId;
 		const Entity::Id m_uniqueEntityId;
 
 	public:
-		Save( const unsigned int& blueprintEntityId, const Entity::Id& uniqueEntityId );
+		Saveable( const unsigned int& blueprintEntityId, const Entity::Id& uniqueEntityId );
 
 
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues ) override;
