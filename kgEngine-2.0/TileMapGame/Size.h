@@ -4,9 +4,12 @@
 
 namespace kg
 {
-	class Size : public Component
+	class Size : public Component, public CallbackReciever
 	{
 		sf::Vector2i m_size;
+
+		void onLoadSaveInformation( const std::vector<std::string>& information );
+		std::vector<std::string> onWriteSaveInformation();
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
@@ -22,10 +25,6 @@ namespace kg
 		virtual const std::string& getPluginName() const;
 
 		virtual Plugin::Id getPluginId()const;
-
-		virtual void writeSaveInformation( EntitySaveInformation& writeTo ) override;
-
-		virtual void loadSaveInformation( const EntitySaveInformation& loadFrom ) override;
 
 
 

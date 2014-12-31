@@ -58,13 +58,13 @@ namespace kg
 		std::string toString()const;
 	};
 
-	class DLL_EXPORT Saveable : public Component, public boost::noncopyable
+	class DLL_EXPORT Save : public Component, public boost::noncopyable
 	{
 		const unsigned int m_blueprintEntityId;
 		const Entity::Id m_uniqueEntityId;
 
 	public:
-		Saveable( const unsigned int& blueprintEntityId, const Entity::Id& uniqueEntityId );
+		Save( const unsigned int& blueprintEntityId, const Entity::Id& uniqueEntityId );
 
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues ) override;
 
@@ -93,4 +93,8 @@ namespace kg
 
 		std::map<Plugin::Id, Signal<const std::vector<std::string>&>> s_loadSaveInformation;//first: componentId, second: signal
 	};
+
+	//void onLoadSaveInformation( const std::vector<std::string>& information )
+	//std::vector<std::string> onWriteSaveInformation( )
+
 }

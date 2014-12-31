@@ -207,42 +207,42 @@ namespace kg
 		return m_information.size() != 0;
 	}
 
-	void Saveable::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
+	void Save::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
 	{
 		return;
 	}
 
-	void Saveable::init( Engine& engine, ComponentManager& thisEntity )
+	void Save::init( Engine& engine, ComponentManager& thisEntity )
 	{
 		return;
 	}
 
-	void Saveable::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
+	void Save::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
 	{
 		return;
 	}
 
-	double Saveable::getUpdateImportance() const
+	double Save::getUpdateImportance() const
 	{
 		return id::SAVE_UPDATE_IMPORTANCE;
 	}
 
-	std::vector<size_t> Saveable::getRequieredComponents() const
+	std::vector<size_t> Save::getRequieredComponents() const
 	{
 		return{ };
 	}
 
-	const std::string& Saveable::getPluginName() const
+	const std::string& Save::getPluginName() const
 	{
 		return PLUGIN_NAME;
 	}
 
-	Plugin::Id Saveable::getPluginId() const
+	Plugin::Id Save::getPluginId() const
 	{
 		return id::SAVE_COMPONENT_ID;
 	}
 
-	kg::EntitySaveInformation Saveable::writeSaveInformation() const
+	kg::EntitySaveInformation Save::writeSaveInformation() const
 	{
 		EntitySaveInformation retVal( m_blueprintEntityId, m_uniqueEntityId );
 		for( const auto& el : s_writeSaveInformation )
@@ -256,7 +256,7 @@ namespace kg
 		return retVal;
 	}
 
-	void Saveable::loadSaveInformation( EntitySaveInformation& information )
+	void Save::loadSaveInformation( EntitySaveInformation& information )
 	{
 		for( auto& el : s_loadSaveInformation )
 		{
@@ -265,16 +265,16 @@ namespace kg
 		}
 	}
 
-	Saveable::Saveable( const unsigned int& blueprintEntityId, const Entity::Id& uniqueEntityId )
+	Save::Save( const unsigned int& blueprintEntityId, const Entity::Id& uniqueEntityId )
 		:m_blueprintEntityId( blueprintEntityId ),
 		m_uniqueEntityId( uniqueEntityId )
 	{
 	}
 
-	const Entity::Id& Saveable::getUniqueId() const
+	const Entity::Id& Save::getUniqueId() const
 	{
 		return m_uniqueEntityId;
 	}
 
-	const std::string Saveable::PLUGIN_NAME = "internal_save";
+	const std::string Save::PLUGIN_NAME = "internal_save";
 }

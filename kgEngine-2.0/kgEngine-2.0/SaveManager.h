@@ -31,8 +31,8 @@ namespace kg
 
 	signals:
 		Signal<Engine&, World&> s_savegameOpened;
-		std::map<Plugin::Id, boost::signals2::signal < std::vector<std::string>()>> s_writeSaveInformation;//first: systemId, second: signal
-		std::map< Plugin::Id, Signal<const std::vector<std::string>&>> s_loadSaveInformation;//first: systemId, second: signal
+		std::map< Plugin::Id, boost::signals2::signal < std::vector<std::string>()> > s_writeSaveInformation;//first: systemId, second: signal
+		std::map< Plugin::Id, Signal<const std::vector<std::string>&> > s_loadSaveInformation;//first: systemId, second: signal
 
 		static const std::string PLUGIN_NAME;
 		static const std::string SAVEGAME_FOLDER;

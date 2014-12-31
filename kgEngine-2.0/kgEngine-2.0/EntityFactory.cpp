@@ -15,13 +15,13 @@ namespace kg
 		m_highestUniqueId = id;
 	}
 
-	std::shared_ptr<Entity> EntityFactory::createNewEntity( Engine& engine,
+	std::shared_ptr<Entity> EntityFactory::createNewSaveableEntity( Engine& engine,
 															const int& entityBlueprintId )
 	{
-		return createNewEntity( engine, entityBlueprintId, getUniqueEntityId() );
+		return createNewSaveableEntity( engine, entityBlueprintId, getUniqueEntityId() );
 	}
 
-	std::shared_ptr<Entity> EntityFactory::createNewEntity( Engine& engine,
+	std::shared_ptr<Entity> EntityFactory::createNewSaveableEntity( Engine& engine,
 															const int& entityBlueprintId,
 															const Entity::Id& uniqueId )
 	{
@@ -48,7 +48,7 @@ namespace kg
 			entity->addComponent( component, std::get<1>( createdComponent ) );
 		}
 
-		entity->addComponent<Saveable>( std::static_pointer_cast< Component >(std::make_shared<Saveable>( entityBlueprintId, uniqueId )) );
+		entity->addComponent<Save>( std::static_pointer_cast< Component >(std::make_shared<Save>( entityBlueprintId, uniqueId )) );
 
 		// check component requirements of each component
 		// throw exception if not all requirements are met

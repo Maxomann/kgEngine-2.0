@@ -40,7 +40,7 @@ namespace kg
 			addSystem( system, typeId );
 		};
 
-		void initSystemsByImportance( Engine& engine, World& world );
+		void initSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager );
 
 		template<class T>
 		std::shared_ptr<T> getSystem()

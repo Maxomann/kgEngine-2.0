@@ -4,11 +4,11 @@ using namespace sf;
 
 namespace kg
 {
-	void GraphicsSystem::init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile )
+	void GraphicsSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
 		m_configFile = configFile;
 
-		m_connectToSignal( world.getSystem<SavegameSystem>()->s_savegameOpened, &GraphicsSystem::m_onSavegameOpened );
+		m_connectToSignal( saveManager.s_savegameOpened, &GraphicsSystem::m_onSavegameOpened );
 
 		//get config values
 		auto antialiasing = configFile->getData( ANTIALIASING );
@@ -74,7 +74,7 @@ namespace kg
 			//no fullscreen
 			//ignores: render_resx, render_resy
 		}*/
-		m_cameras.push_back( Camera::CREATE( engine, world ) );
+		m_cameras.push_back( Camera::EMPLACE_TO_WORLD( engine, world ) );
 	}
 
 	void GraphicsSystem::sfmlEvent( Engine& engine, const sf::Event& sfEvent )
@@ -109,20 +109,10 @@ namespace kg
 		return m_cameras.at( index );
 	}
 
-	void GraphicsSystem::writeSaveInformation( SystemSaveInformation& writeTo )
-	{
-		return;
-	}
-
-	void GraphicsSystem::loadSaveInformation( const SystemSaveInformation& loadFrom )
-	{
-		return;
-	}
-
 	void GraphicsSystem::m_onSavegameOpened( Engine& engine, World& world )
 	{
 		m_cameras.clear();
-		m_cameras.push_back( Camera::CREATE( engine, world ) );
+		m_cameras.push_back( Camera::EMPLACE_TO_WORLD( engine, world ) );
 	}
 
 	const std::string GraphicsSystem::WINDOW_NAME_DEFAULT = "DefaultWindowName";

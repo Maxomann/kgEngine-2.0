@@ -16,6 +16,14 @@ namespace kg
 
 	void Size::init( Engine& engine, ComponentManager& thisEntity )
 	{
+		auto saveComponent = thisEntity.getComponent<Save>();
+		if( saveComponent )
+		{
+			m_connectToSignal( saveComponent->s_loadSaveInformation[( int )id::ComponentPluginId::SIZE],
+							   &Size::onLoadSaveInformation );
+			m_connectToSignal( saveComponent->s_writeSaveInformation[( int )id::ComponentPluginId::SIZE],
+							   &Size::onWriteSaveInformation );
+		}
 		return;
 	}
 
@@ -55,19 +63,17 @@ namespace kg
 		return m_size;
 	}
 
-	void Size::writeSaveInformation( EntitySaveInformation& writeTo )
+	std::vector<std::string> Size::onWriteSaveInformation()
 	{
-		writeTo.addInformation( { to_string( m_size.x ), to_string( m_size.y ) } );
-		return;
+		return { to_string( m_size.x ), to_string( m_size.y ) };
 	}
 
-	void Size::loadSaveInformation( const EntitySaveInformation& loadFrom )
+	void Size::onLoadSaveInformation( const std::vector<std::string>& information )
 	{
-		auto& info = loadFrom.getInformation();
-		if( info.size() == 2 )
+		if( information.size() == 2 )
 		{
-			auto size_x = atoi( info.at( 0 ).c_str() );
-			auto size_y = atoi( info.at( 1 ).c_str() );
+			auto size_x = atoi( information.at( 0 ).c_str() );
+			auto size_y = atoi( information.at( 1 ).c_str() );
 			set( sf::Vector2i( size_x, size_y ) );
 		}
 		else

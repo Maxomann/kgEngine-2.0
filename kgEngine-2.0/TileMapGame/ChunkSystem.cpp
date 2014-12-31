@@ -4,7 +4,7 @@ using namespace sf;
 
 namespace kg
 {
-	void ChunkSystem::init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile )
+	void ChunkSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
 		m_connectToSignal( world.s_entity_added, &ChunkSystem::m_onEntityAddedToWorld );
 		m_connectToSignal( world.s_entity_removed, &ChunkSystem::m_onEntityRemovedFromWorld );
@@ -138,16 +138,6 @@ namespace kg
 		// entity is not in world anymore
 		// or
 		// its a bug -.-
-	}
-
-	void ChunkSystem::writeSaveInformation( SystemSaveInformation& writeTo )
-	{
-		return;
-	}
-
-	void ChunkSystem::loadSaveInformation( const SystemSaveInformation& loadFrom )
-	{
-		return;
 	}
 
 	const std::string ChunkSystem::PLUGIN_NAME = "ChunkSystem";

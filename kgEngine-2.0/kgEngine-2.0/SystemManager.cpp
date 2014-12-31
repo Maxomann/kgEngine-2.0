@@ -10,10 +10,10 @@ namespace kg
 			el.second->update( engine, world, saveManager, frameTime );
 	}
 
-	void SystemManager::initSystemsByImportance( Engine& engine, World& world )
+	void SystemManager::initSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager )
 	{
 		for( auto& system : m_systemsByUpdateImportance )
-			system.second->init( engine, world, engine.resourceManager.getConfigFile<ConfigFile>( system.second->getPluginName() ) );
+			system.second->init( engine, world, saveManager, engine.resourceManager.getConfigFile<ConfigFile>( system.second->getPluginName() ) );
 	}
 
 	void SystemManager::forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent )

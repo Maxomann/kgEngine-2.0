@@ -127,16 +127,6 @@ namespace kg
 		return bounds.top + bounds.height;//feet position
 	}
 
-	void Graphics::writeSaveInformation( EntitySaveInformation& writeTo )
-	{
-		return;
-	}
-
-	void Graphics::loadSaveInformation( const EntitySaveInformation& loadFrom )
-	{
-		return;
-	}
-
 	const std::string Graphics::PLUGIN_NAME = "Graphics";
 
 	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_LEFT = "texrect_left";

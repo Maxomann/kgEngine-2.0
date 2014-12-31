@@ -3,9 +3,13 @@
 
 namespace kg
 {
-	class Position : public Component
+	class Position : public Component, public CallbackReciever
 	{
 		sf::Vector2i m_position;//the CENTER of the Object
+
+		void onLoadSaveInformation( const std::vector<std::string>& information );
+		std::vector<std::string> onWriteSaveInformation();
+		
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
@@ -21,12 +25,6 @@ namespace kg
 		virtual const std::string& getPluginName() const;
 
 		virtual Plugin::Id getPluginId()const;
-
-		virtual void writeSaveInformation( EntitySaveInformation& writeTo ) override;
-
-		virtual void loadSaveInformation( const EntitySaveInformation& loadFrom ) override;
-
-
 
 		void set( const sf::Vector2i& position );
 

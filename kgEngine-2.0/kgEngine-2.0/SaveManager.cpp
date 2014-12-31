@@ -109,8 +109,8 @@ namespace kg
 
 		for( auto& el : information )
 		{
-			auto entity = world.createNewEntity( engine, el.getBlueprintEntityId(), el.getUniqueEntityId() );
-			entity->getComponent<Saveable>()->loadSaveInformation( el );
+			auto entity = world.createNewSaveableEntity( engine, el.getBlueprintEntityId(), el.getUniqueEntityId() );
+			entity->getComponent<Save>()->loadSaveInformation( el );
 			world.addEntity( entity );
 		}
 
@@ -125,7 +125,7 @@ namespace kg
 
 		for( const auto& el : entities )
 		{
-			auto saveComponent = el->getComponent<Saveable>();
+			auto saveComponent = el->getComponent<Save>();
 			if( saveComponent )//can only be saved if it has a save component
 			{
 				auto saveInformation = saveComponent->writeSaveInformation();

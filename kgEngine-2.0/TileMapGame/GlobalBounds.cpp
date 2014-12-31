@@ -82,15 +82,5 @@ namespace kg
 		//s_changed( get() );
 	}*/
 
-	void GlobalBounds::writeSaveInformation( EntitySaveInformation& writeTo )
-	{
-		return;
-	}
-
-	void GlobalBounds::loadSaveInformation( const EntitySaveInformation& loadFrom )
-	{
-		return;
-	}
-
 	const std::string GlobalBounds::PLUGIN_NAME = "GlobalBounds";
 }

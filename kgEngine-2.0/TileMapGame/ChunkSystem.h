@@ -21,7 +21,7 @@ namespace kg
 
 	public:
 
-		virtual void init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile );
+		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );
 
 		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent );
 
@@ -32,10 +32,6 @@ namespace kg
 		virtual const std::string& getPluginName() const;
 
 		virtual Plugin::Id getPluginId()const;
-
-		virtual void writeSaveInformation( SystemSaveInformation& writeTo ) override;
-
-		virtual void loadSaveInformation( const SystemSaveInformation& loadFrom ) override;
 
 
 

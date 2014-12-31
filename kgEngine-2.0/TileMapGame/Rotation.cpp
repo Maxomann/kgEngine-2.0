@@ -11,6 +11,14 @@ namespace kg
 
 	void Rotation::init( Engine& engine, ComponentManager& thisEntity )
 	{
+		auto saveComponent = thisEntity.getComponent<Save>();
+		if( saveComponent )
+		{
+			m_connectToSignal( saveComponent->s_loadSaveInformation[( int )id::ComponentPluginId::ROTATION],
+							   &Rotation::onLoadSaveInformation );
+			m_connectToSignal( saveComponent->s_writeSaveInformation[( int )id::ComponentPluginId::ROTATION],
+							   &Rotation::onWriteSaveInformation );
+		}
 		return;
 	}
 
@@ -55,17 +63,15 @@ namespace kg
 		set( get() + offsetInDegree );
 	}
 
-	void Rotation::writeSaveInformation( EntitySaveInformation& writeTo )
+	std::vector<std::string> Rotation::onWriteSaveInformation()
 	{
-		writeTo.addInformation( { to_string( m_rotationInDegree ) } );
-		return;
+		return { to_string( m_rotationInDegree ) };
 	}
 
-	void Rotation::loadSaveInformation( const EntitySaveInformation& loadFrom )
+	void Rotation::onLoadSaveInformation( const std::vector<std::string>& information )
 	{
-		auto& info = loadFrom.getInformation();
-		if( info.size() == 1 )
-			m_rotationInDegree = atof( info.at( 0 ).c_str() );
+		if( information.size() == 1 )
+			m_rotationInDegree = atof( information.at( 0 ).c_str() );
 		else
 			throw exception();
 	}

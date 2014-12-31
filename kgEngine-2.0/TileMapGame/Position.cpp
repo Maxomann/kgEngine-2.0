@@ -11,6 +11,15 @@ namespace kg
 
 	void Position::init( Engine& engine, ComponentManager& thisEntity )
 	{
+		auto saveComponent = thisEntity.getComponent<Save>();
+		if( saveComponent )
+		{
+			m_connectToSignal( saveComponent->s_loadSaveInformation[( int )id::ComponentPluginId::POSITION],
+							   &Position::onLoadSaveInformation );
+			m_connectToSignal( saveComponent->s_writeSaveInformation[( int )id::ComponentPluginId::POSITION],
+							   &Position::onWriteSaveInformation );
+		}
+
 		return;
 	}
 
@@ -35,7 +44,7 @@ namespace kg
 	}
 
 	Plugin::Id Position::getPluginId() const
-{
+	{
 		return ( int )id::ComponentPluginId::POSITION;
 	}
 
@@ -55,18 +64,17 @@ namespace kg
 		set( m_position + offset );
 	}
 
-	void Position::writeSaveInformation( EntitySaveInformation& writeTo )
+	std::vector<std::string> Position::onWriteSaveInformation()
 	{
-		writeTo.addInformation( { to_string( m_position.x ), to_string( m_position.y ) } );
+		return { to_string( m_position.x ), to_string( m_position.y ) };
 	}
 
-	void Position::loadSaveInformation( const EntitySaveInformation& loadFrom )
+	void Position::onLoadSaveInformation( const std::vector<std::string>& information )
 	{
-		auto& info = loadFrom.getInformation();
-		if( info.size() == 2 )
+		if( information.size() == 2 )
 		{
-			auto pos_x = atoi( info.at( 0 ).c_str() );
-			auto pos_y = atoi( info.at( 1 ).c_str() );
+			auto pos_x = atoi( information.at( 0 ).c_str() );
+			auto pos_y = atoi( information.at( 1 ).c_str() );
 			set( Vector2i( pos_x, pos_y ) );
 		}
 		else

@@ -19,23 +19,19 @@ namespace kg
 		void onSizeChanged( const sf::Vector2i& newSize );
 
 	public:
-		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues );
+		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )override;
 
-		virtual void init( Engine& engine, ComponentManager& thisEntity );
+		virtual void init( Engine& engine, ComponentManager& thisEntity )override;
 
-		virtual void update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime );
+		virtual void update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )override;
 
-		virtual double getUpdateImportance() const;
+		virtual double getUpdateImportance() const override;
 
-		virtual std::vector<size_t> getRequieredComponents() const;
+		virtual std::vector<size_t> getRequieredComponents() const override;
 
-		virtual const std::string& getPluginName() const;
+		virtual const std::string& getPluginName() const override;
 
-		virtual Plugin::Id getPluginId()const;
-
-		virtual void writeSaveInformation( EntitySaveInformation& writeTo ) override;
-
-		virtual void loadSaveInformation( const EntitySaveInformation& loadFrom ) override;
+		virtual Plugin::Id getPluginId()const override;
 
 		// the size in pixel that this camera will render on the screen
 		// for a window of size 800x600 choose sf::Vector2u(800,600)
@@ -64,7 +60,7 @@ namespace kg
 		static const std::string PLUGIN_NAME;
 
 		//creates a new camera, adds it to the world and returns a pointer to it
-		static std::shared_ptr<Entity> CREATE( Engine& engine, World& world );
+		static std::shared_ptr<Entity> EMPLACE_TO_WORLD( Engine& engine, World& world );
 
 	};
 }

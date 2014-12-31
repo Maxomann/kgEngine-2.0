@@ -10,12 +10,12 @@ namespace kg
 	class ConfigFile;
 	class SaveManager;
 
-	class DLL_EXPORT System : public Plugin
+	class DLL_EXPORT System : public Plugin, public sf::NonCopyable
 	{
 	public:
 		// other systems are not guaranteed to be initialized
 		// configFile is only used for values of this system
-		virtual void init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile ) = 0;
+		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile ) = 0;
 
 		// sfml event loop is forwarded before update() is called
 		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent ) = 0;

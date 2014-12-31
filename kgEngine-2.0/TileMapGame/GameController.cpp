@@ -4,18 +4,17 @@ using namespace sf;
 
 namespace kg
 {
-	void GameController::init( Engine& engine, World& world, std::shared_ptr<ConfigFile>& configFile )
+	void GameController::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
 		r_graphicsSystem = world.getSystem<GraphicsSystem>().get();
-		r_saveSystem = world.getSystem<SavegameSystem>().get();
 
-		r_saveSystem->openSavegame( engine, world, "MyFirstSavegameEver" );
-		r_saveSystem->loadEntitiesFromFile( engine, world, "EntitiesInHere" );
+		saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
+		saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
 
 		/*for( int x = 0; x < 10; ++x )
 			for( int y = 0; y < 10; ++y )
 			{
-				auto entity = world.addEntity( world.createNewEntity( engine, 100 ) ).second;
+				auto entity = world.addEntity( world.createNewSaveableEntity( engine, 100 ) ).second;
 				entity->getComponent<Position>()->set( sf::Vector2i( x * 64, y * 64 ) );
 			}*/
 
@@ -48,12 +47,11 @@ namespace kg
 		}
 		if( Keyboard::isKeyPressed( Keyboard::F5 ) )
 		{
-			r_saveSystem->saveSystems( world );
-			r_saveSystem->saveEntitiesToFile( "EntitiesInHere", world.getAllEntities() );
+			saveManager.saveSystems( world );
+			saveManager.saveEntitiesToFile( "EntitiesInHere", world.getAllEntities() );
 
-
-			r_saveSystem->openSavegame( engine, world, "MyFirstSavegameEver" );
-			r_saveSystem->loadEntitiesFromFile( engine, world, "EntitiesInHere" );
+			saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
+			saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
 		}
 
 		return;
@@ -72,16 +70,6 @@ namespace kg
 	Plugin::Id GameController::getPluginId() const
 {
 		return ( int )id::SystemPluginId::GAME_CONTROLLER;
-	}
-
-	void GameController::writeSaveInformation( SystemSaveInformation& writeTo )
-	{
-		return;
-	}
-
-	void GameController::loadSaveInformation( const SystemSaveInformation& loadFrom )
-	{
-		return;
 	}
 
 	const std::string GameController::PLUGIN_NAME = "GameControllerSystem";

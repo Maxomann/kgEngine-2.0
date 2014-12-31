@@ -112,15 +112,9 @@ namespace kg
 		return m_screenOffset;
 	}
 
-	std::shared_ptr<Entity> Camera::CREATE( Engine& engine, World& world )
+	std::shared_ptr<Entity> Camera::EMPLACE_TO_WORLD( Engine& engine, World& world )
 	{
-		auto camera = std::make_shared<Entity>( world.getUniqueEntityId() );
-		camera->addComponent<Position>( static_pointer_cast< Component >(make_shared<Position>()) );
-		camera->addComponent<Size>( static_pointer_cast< Component >(make_shared<Size>()) );
-		camera->addComponent<Camera>( static_pointer_cast< Component >(make_shared<Camera>()) );
-		camera->addComponent<Rotation>( static_pointer_cast< Component >(make_shared<Rotation>()) );
-		camera->addComponent<GlobalBounds>( static_pointer_cast< Component >(make_shared<GlobalBounds>()) );
-		camera->initComponentsByImportance( engine );//init
+		auto camera = world.createNewTemporaryEntity<Position, Size, Camera, Rotation, GlobalBounds>(engine);
 		camera->getComponent<Position>()->set( sf::Vector2i( 0, 0 ) );
 		camera->getComponent<Size>()->set( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
 		camera->getComponent<Camera>()->setRenderResolution( engine.renderWindow.getSize() );
@@ -138,16 +132,6 @@ namespace kg
 	sf::Vector2u Camera::getRenderResolution() const
 	{
 		return m_texture.getSize();
-	}
-
-	void Camera::writeSaveInformation( EntitySaveInformation& writeTo )
-	{
-		return;
-	}
-
-	void Camera::loadSaveInformation( const EntitySaveInformation& loadFrom )
-	{
-		return;
 	}
 
 	const std::string Camera::PLUGIN_NAME = "Camera";

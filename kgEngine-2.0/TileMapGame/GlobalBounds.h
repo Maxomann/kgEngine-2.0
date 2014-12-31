@@ -29,11 +29,6 @@ namespace kg
 
 		virtual Plugin::Id getPluginId()const;
 
-		virtual void writeSaveInformation( EntitySaveInformation& writeTo ) override;
-
-		virtual void loadSaveInformation( const EntitySaveInformation& loadFrom ) override;
-
-
 
 		const sf::FloatRect get()const;
 

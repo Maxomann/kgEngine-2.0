@@ -9,7 +9,6 @@
 #include "GameController.h"
 #include "ChunkSystem.h"
 #include "GraphicsSystem.h"
-#include "SaveSystem.h"
 
 using namespace std;
 using namespace kg;
@@ -54,9 +53,5 @@ extern "C"
 			std::make_shared<PluginFactory<System, GraphicsSystem>>(
 			( int )id::SystemPluginId::GRAPHICS_SYSTEM,
 			GraphicsSystem::PLUGIN_NAME ) );
-		pluginManager.addSystemPlugin(
-			std::make_shared<PluginFactory<System, SavegameSystem>>(
-			( int )id::SystemPluginId::SAVE_SYSTEM,
-			SavegameSystem::PLUGIN_NAME ) );
 	}
 }
