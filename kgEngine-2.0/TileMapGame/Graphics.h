@@ -1,16 +1,12 @@
 #pragma once
 #include "stdafx.h"
-#include "Position.h"
-#include "Size.h"
-#include "Rotation.h"
-#include "GlobalBounds.h"
+#include "Transformation.h"
 
 namespace kg
 {
 	class Graphics : public Component, public CallbackReciever, public sf::Drawable
 	{
-		Size* r_size = nullptr;
-		GlobalBounds* r_globalBounds;
+		Transformation* r_transformation = nullptr;
 
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;
 		sf::Sprite m_sprite;
@@ -19,6 +15,7 @@ namespace kg
 		void onSizeChanged( const sf::Vector2i& newSize );
 		void onRotationChanged( const float& newRotation );
 
+		//only works when position is {0,0} and rotation is 0
 		void centerOrigin();
 		void scaleToObjectSize();
 
@@ -42,7 +39,6 @@ namespace kg
 		void setTextureRect( const sf::IntRect& rect );
 		const sf::IntRect& getTextureRect()const;
 
-		float getZValue()const;
 
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 

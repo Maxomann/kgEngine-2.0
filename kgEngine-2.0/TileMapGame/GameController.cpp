@@ -15,7 +15,7 @@ namespace kg
 			for( int y = 0; y < 10; ++y )
 			{
 				auto entity = world.addEntity( world.createNewSaveableEntity( engine, 100 ) ).second;
-				entity->getComponent<Position>()->set( sf::Vector2i( x * 64, y * 64 ) );
+				entity->getComponent<Transformation>()->setPosition( sf::Vector2i( x * 64, y * 64 ) );
 			}*/
 
 		return;
@@ -37,13 +37,13 @@ namespace kg
 		if( !engine.isPaused )
 		{
 			if( Keyboard::isKeyPressed( Keyboard::W ) )
-				camera->getComponent<Position>()->move( sf::Vector2i( 0, -10 ) );
+				camera->getComponent<Transformation>()->move( sf::Vector2i( 0, -10 ) );
 			if( Keyboard::isKeyPressed( Keyboard::S ) )
-				camera->getComponent<Position>()->move( sf::Vector2i( 0, 10 ) );
+				camera->getComponent<Transformation>()->move( sf::Vector2i( 0, 10 ) );
 			if( Keyboard::isKeyPressed( Keyboard::A ) )
-				camera->getComponent<Position>()->move( sf::Vector2i( -10, 0 ) );
+				camera->getComponent<Transformation>()->move( sf::Vector2i( -10, 0 ) );
 			if( Keyboard::isKeyPressed( Keyboard::D ) )
-				camera->getComponent<Position>()->move( sf::Vector2i( 10, 0 ) );
+				camera->getComponent<Transformation>()->move( sf::Vector2i( 10, 0 ) );
 		}
 		if( Keyboard::isKeyPressed( Keyboard::F5 ) )
 		{

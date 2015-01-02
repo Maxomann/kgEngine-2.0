@@ -6,9 +6,7 @@ namespace kg
 {
 	class Camera : public Component, public sf::Drawable, public CallbackReciever
 	{
-		Position* r_position;
-		Size* r_size;
-		GlobalBounds* r_globalBounds;
+		Transformation* r_transformation;
 
 		sf::View m_view;
 		sf::RenderTexture m_texture;

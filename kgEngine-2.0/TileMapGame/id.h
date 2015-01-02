@@ -1,59 +1,66 @@
 #pragma once
+#include "stdafx.h"
 
 namespace kg
 {
 	namespace id
 	{
-		enum class SystemPluginId : int
+		namespace SystemPluginId
 		{
-			FIRST_ELEMENT,
+			enum
+			{
+				FIRST_ELEMENT,
 
-			CHUNK_SYSTEM,
-			GRAPHICS_SYSTEM,
-			SAVE_SYSTEM,
-			GAME_CONTROLLER,
+				CHUNK_SYSTEM,
+				GRAPHICS_SYSTEM,
+				GAME_CONTROLLER,
 
-			LAST_ELEMENT
-		};
+				LAST_ELEMENT
+			};
+		}
 
-		enum class ComponentPluginId : int
+		namespace ComponentPluginId
 		{
-			FIRST_ELEMENT = ( int )SystemPluginId::LAST_ELEMENT,
+			enum
+			{
+				FIRST_ELEMENT = SystemPluginId::LAST_ELEMENT,
 
-			POSITION,
-			SIZE,
-			ROTATION,
-			GLOBAL_BOUNDS,
-			GRAPHICS,
-			CAMERA,
+				TRANSFORMATION,
+				GLOBAL_BOUNDS,
+				GRAPHICS,
+				CAMERA,
 
-			LAST_ELEMENT
-		};
+				LAST_ELEMENT
+			};
+		}
 
-		enum class SystemUpdateImportance : int
+		namespace SystemUpdateImportance
 		{
-			FIRST_ELEMENT,
+			enum
+			{
+				FIRST_ELEMENT,
 
-			CHUNK_SYSTEM,
-			GRAPHICS_SYSTEM,
-			SAVE_SYSTEM,
-			GAME_CONTROLLER,
+				CHUNK_SYSTEM,
+				GRAPHICS_SYSTEM,
+				GAME_CONTROLLER,
 
-			LAST_ELEMENT
-		};
+				LAST_ELEMENT
+			};
+		}
 
-		enum class ComponentUpdateImportance : int
+		namespace ComponentUpdateImportance
 		{
-			FIRST_ELEMENT,
+			enum
+			{
+				FIRST_ELEMENT,
 
-			POSITION,
-			SIZE,
-			ROTATION,
-			GLOBAL_BOUNDS,
-			GRAPHICS,
-			CAMERA,
+				TRANSFORMATION,
+				GLOBAL_BOUNDS,
+				GRAPHICS,
+				CAMERA,
 
-			LAST_ELEMENT
-		};
+				LAST_ELEMENT
+			};
+		}
 	}
 }

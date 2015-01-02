@@ -1,12 +1,11 @@
 ENTITY MyFirstEntity:100
-	Position
-	Size
 	Graphics
-	GlobalBounds
+	Transformation
 	
-	COMPONENT Size
+	COMPONENT Transformation
 		width:64px
 		height:64px
+		zValue:0
 	END
 	COMPONENT Graphics
 		package:"Testpackage"

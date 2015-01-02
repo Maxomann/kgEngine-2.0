@@ -36,15 +36,11 @@ namespace kg
 
 	void Graphics::init( Engine& engine, ComponentManager& thisEntity )
 	{
-		auto position = thisEntity.getComponent<Position>().get();
-		r_size = thisEntity.getComponent<Size>().get();
-		auto rotation = thisEntity.getComponent<Rotation>().get();
-		r_globalBounds = thisEntity.getComponent<GlobalBounds>().get();
+		r_transformation = thisEntity.getComponent<Transformation>().get();
 
-		m_connectToSignal( position->s_changed, &Graphics::onPositionChanged );
-		m_connectToSignal( r_size->s_changed, &Graphics::onSizeChanged );
-		if( rotation )
-			m_connectToSignal( rotation->s_changed, &Graphics::onRotationChanged );
+		m_connectToSignal( r_transformation->s_positionChanged, &Graphics::onPositionChanged );
+		m_connectToSignal( r_transformation->s_sizeChanged, &Graphics::onSizeChanged );
+		m_connectToSignal( r_transformation->s_rotationChanged, &Graphics::onRotationChanged );
 
 		centerOrigin();
 		scaleToObjectSize();
@@ -59,12 +55,12 @@ namespace kg
 
 	double Graphics::getUpdateImportance() const
 	{
-		return ( double )id::ComponentUpdateImportance::GRAPHICS;
+		return id::ComponentUpdateImportance::GRAPHICS;
 	}
 
 	std::vector<size_t> Graphics::getRequieredComponents() const
 	{
-		return{ typeid(Position).hash_code(), typeid(Size).hash_code(), typeid(GlobalBounds).hash_code() };
+		return{ typeid(Transformation).hash_code() };
 	}
 
 	const std::string& Graphics::getPluginName() const
@@ -74,7 +70,7 @@ namespace kg
 
 	Plugin::Id Graphics::getPluginId() const
 {
-		return ( int )id::ComponentPluginId::GRAPHICS;
+		return id::ComponentPluginId::GRAPHICS;
 	}
 
 	void Graphics::draw( RenderTarget& target, RenderStates states ) const
@@ -107,8 +103,8 @@ namespace kg
 		auto globalBounds = m_sprite.getGlobalBounds();
 
 		m_sprite.scale( sf::Vector2f(
-			r_size->get().x / globalBounds.width,
-			r_size->get().y / globalBounds.height ) );
+			r_transformation->getSize().x / globalBounds.width,
+			r_transformation->getSize().y / globalBounds.height ) );
 	}
 
 	void Graphics::onPositionChanged( const sf::Vector2i& newPosition )
@@ -121,11 +117,6 @@ namespace kg
 		m_sprite.setRotation( newRotation );
 	}
 
-	float Graphics::getZValue() const
-	{
-		auto bounds = r_globalBounds->get();
-		return bounds.top + bounds.height;//feet position
-	}
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";
 

@@ -24,22 +24,10 @@
     <ClCompile Include="connect.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Position.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Size.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Rotation.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="GlobalBounds.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="GameController.cpp">
@@ -51,13 +39,13 @@
     <ClCompile Include="GraphicsSystem.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Transformation.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
       <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Position.h">
-      <Filter>Headerdateien\Components</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Headerdateien</Filter>
@@ -68,15 +56,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Headerdateien\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Size.h">
-      <Filter>Headerdateien\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Rotation.h">
-      <Filter>Headerdateien\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalBounds.h">
-      <Filter>Headerdateien\Components</Filter>
-    </ClInclude>
     <ClInclude Include="GameController.h">
       <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
@@ -85,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="GraphicsSystem.h">
       <Filter>Headerdateien\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Transformation.h">
+      <Filter>Headerdateien\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

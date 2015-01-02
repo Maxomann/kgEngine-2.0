@@ -70,8 +70,9 @@ namespace kg
 		}
 	};
 
+
 	template< class ... parameterType >
-	using Signal = boost::signals2::signal < void( parameterType... ) > ;
+	using Signal = boost::signals2::signal < void( parameterType... ) >;
 
 	class CallbackReciever
 	{

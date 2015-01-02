@@ -24,7 +24,7 @@ namespace kg
 
 	double ChunkSystem::getUpdateImportance() const
 	{
-		return ( double )id::SystemUpdateImportance::CHUNK_SYSTEM;
+		return id::SystemUpdateImportance::CHUNK_SYSTEM;
 	}
 
 	const std::string& ChunkSystem::getPluginName() const
@@ -34,14 +34,14 @@ namespace kg
 
 	Plugin::Id ChunkSystem::getPluginId() const
 {
-		return ( int )id::SystemPluginId::CHUNK_SYSTEM;
+		return id::SystemPluginId::CHUNK_SYSTEM;
 	}
 
 	void ChunkSystem::m_onEntityAddedToWorld( std::shared_ptr<Entity>& entity )
 	{
-		if( entity->hasComponent<Position>() )
+		if( entity->hasComponent<Transformation>() )
 		{
-			m_connectToSignal( entity->getComponent<Position>()->s_changed,
+			m_connectToSignal( entity->getComponent<Transformation>()->s_positionChanged,
 							   std::function<void( const sf::Vector2i& )>(
 							   std::bind( &ChunkSystem::m_onEntityPositionChanged,
 							   this,
@@ -54,7 +54,7 @@ namespace kg
 
 	void ChunkSystem::m_refreshChunkInformation( std::shared_ptr<Entity>& entity )
 	{
-		auto newChunk = calculateChunkForPosition( entity->getComponent<Position>()->get() );
+		auto newChunk = calculateChunkForPosition( entity->getComponent<Transformation>()->getPosition() );
 
 		auto findResult = m_entityData.find( entity );
 		if( findResult != m_entityData.end() )

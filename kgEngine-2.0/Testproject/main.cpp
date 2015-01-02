@@ -7,9 +7,21 @@
 using namespace std;
 using namespace placeholders;
 
+template<class T>
+void foo( const T& el )
+{
+
+}
+
 int main()
 {
-	cout << std::numeric_limits<long long int>::max() << endl;
+	using Type = std::string;
+
+	Type str( "Hello, world!" );
+	
+
+
+
 
 	system( "pause" );
 }

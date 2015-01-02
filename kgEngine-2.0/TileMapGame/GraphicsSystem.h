@@ -7,11 +7,27 @@ namespace kg
 {
 	class GraphicsSystem : public System, public CallbackReciever
 	{
+		struct ConfigValues
+		{
+			blueprint::Value antialiasing;
+			blueprint::Value fullscreen;
+			blueprint::Value window_resx;
+			blueprint::Value window_resy;
+			blueprint::Value render_resx;
+			blueprint::Value render_resy;
+			blueprint::Value vsync;
+			blueprint::Value window_name;
+		}m_configValues;
+
+
 		std::vector<std::shared_ptr<Entity>> m_cameras;
 
 		std::shared_ptr<ConfigFile> m_configFile;
 
 		void m_onSavegameOpened( Engine& engine, World& world );
+
+		void m_initCameras( Engine& engine, World& world );
+		
 
 	public:
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );
