@@ -1,19 +1,56 @@
-ENTITY MyFirstEntity:100
+BLUEPRINT Tile
 	Graphics
 	Transformation
-	
+
 	COMPONENT Transformation
 		width:64px
 		height:64px
 		zValue:0
 	END
+	
 	COMPONENT Graphics
 		package:"Testpackage"
-		path:"testimage.png"
+		path:"tileset.png"
+	END
+	
+END BLUEPRINT
+
+ENTITY TestTile:100
+INHERIT Tile
+	COMPONENT Graphics
 		texrect_top:0px
 		texrect_left:0px
 		texrect_height:16px
 		texrect_width:16px
 	END
+END ENTITY
 
+ENTITY Grass:101
+INHERIT Tile
+	COMPONENT Graphics
+		texrect_top:0px
+		texrect_left:32px
+		texrect_height:16px
+		texrect_width:16px
+	END
+END ENTITY
+
+ENTITY Dirt:102
+INHERIT Tile
+	COMPONENT Graphics
+		texrect_top:0px
+		texrect_left:48px
+		texrect_height:16px
+		texrect_width:16px
+	END
+END ENTITY
+
+ENTITY Sand:103
+INHERIT Tile
+	COMPONENT Graphics
+		texrect_top:0px
+		texrect_left:64px
+		texrect_height:16px
+		texrect_width:16px
+	END
 END ENTITY

@@ -7,11 +7,20 @@
 using namespace std;
 using namespace placeholders;
 
-template<class T>
-void foo( const T& el )
+template<int ID>
+class Foo
 {
+public:
+	int get()const
+	{
+		return ID;
+	}
+};
 
-}
+enum E
+{
+	A=100
+};
 
 int main()
 {
@@ -20,7 +29,8 @@ int main()
 	Type str( "Hello, world!" );
 	
 
-
+	Foo<E::A> f;
+	cout << f.get() << endl;
 
 
 	system( "pause" );

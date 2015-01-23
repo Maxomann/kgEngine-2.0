@@ -11,8 +11,10 @@ namespace kg
 		saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
 		saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
 
-		/*for( int x = 0; x < 10; ++x )
-			for( int y = 0; y < 10; ++y )
+
+		/*int fieldSize = 10;
+		for( int x = 0; x < fieldSize; ++x )
+			for( int y = 0; y < fieldSize; ++y )
 			{
 				auto entity = world.addEntity( world.createNewSaveableEntity( engine, 100 ) ).second;
 				entity->getComponent<Transformation>()->setPosition( sf::Vector2i( x * 64, y * 64 ) );

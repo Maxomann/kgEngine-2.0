@@ -10,7 +10,9 @@ namespace kg
 		sf::Vector2i m_size;
 		int m_zValue = 0;
 
+
 		void onLoadSaveInformation( const std::vector<std::string>& information );
+
 		std::vector<std::string> onWriteSaveInformation();
 
 

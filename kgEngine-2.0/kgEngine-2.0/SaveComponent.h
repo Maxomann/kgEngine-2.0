@@ -96,5 +96,4 @@ namespace kg
 
 	//void onLoadSaveInformation( const std::vector<std::string>& information )
 	//std::vector<std::string> onWriteSaveInformation( )
-
 }
