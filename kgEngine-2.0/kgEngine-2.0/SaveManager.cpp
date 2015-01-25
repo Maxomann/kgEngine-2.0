@@ -92,10 +92,17 @@ namespace kg
 		return;
 	}
 
-	void SaveManager::loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename )
+	bool SaveManager::loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename )
 	{
+		//return false if file does not exist
+		if( !exists( path(string(SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION ))) )
+			return false;
+
 		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION,
 					  fstream::in );
+		if( !file.is_open() )
+			return false;
+		
 
 		vector<string> lines;
 		string line;
@@ -115,7 +122,7 @@ namespace kg
 		}
 
 		file.close();
-		return;
+		return true;
 	}
 
 	void SaveManager::saveEntitiesToFile( const std::string& filename/*relative to open savegame path*/, const std::vector<std::shared_ptr<Entity>>& entities )

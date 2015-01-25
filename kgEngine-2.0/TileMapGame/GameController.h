@@ -10,10 +10,12 @@ namespace kg
 	{
 		GraphicsSystem* r_graphicsSystem;
 
+		void shutDown( Engine& engine, World& world, SaveManager& saveManager );
+
 	public:
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );
 
-		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent );
+		virtual void sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent );
 
 		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
 

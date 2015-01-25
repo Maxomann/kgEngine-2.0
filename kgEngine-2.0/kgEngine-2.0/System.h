@@ -18,7 +18,7 @@ namespace kg
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile ) = 0;
 
 		// sfml event loop is forwarded before update() is called
-		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent ) = 0;
+		virtual void sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent ) = 0;
 
 		// components get updated before systems
 		// frame time is 0 when Engine::isPaused == true

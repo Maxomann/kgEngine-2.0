@@ -37,7 +37,7 @@ namespace kg
 		Event event;
 		while( m_engine.renderWindow.pollEvent( event ) )
 		{
-			m_world.forwardSfmlEventByImportance( m_engine, event );
+			m_world.forwardSfmlEventByImportance( m_engine, m_world, m_saveManager, event );
 		}
 
 		if( !m_engine.isPaused )//if engine is not paused, update entities

@@ -7,6 +7,7 @@ namespace kg
 {
 	class GraphicsSystem : public System, public CallbackReciever
 	{
+		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
 		{
 			blueprint::Value antialiasing;
@@ -22,7 +23,6 @@ namespace kg
 
 		std::vector<std::shared_ptr<Entity>> m_cameras;
 
-		std::shared_ptr<ConfigFile> m_configFile;
 
 		void m_onSavegameOpened( Engine& engine, World& world );
 
@@ -32,7 +32,7 @@ namespace kg
 	public:
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );
 
-		virtual void sfmlEvent( Engine& engine, const sf::Event& sfEvent );
+		virtual void sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent );
 
 		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
 
@@ -45,6 +45,7 @@ namespace kg
 
 
 		std::shared_ptr<Entity>& getCamera( int index );
+		std::vector<std::shared_ptr<Entity>>& getCameras();
 
 		/*void setWindowSize( const sf::Vector2i& size );
 		void setWindowTitle( const std::string& title );*/

@@ -42,6 +42,9 @@
     <ClCompile Include="Transformation.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="ChunkGenerator.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
@@ -67,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="Transformation.h">
       <Filter>Headerdateien\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkGenerator.h">
+      <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -20,12 +20,12 @@ namespace kg
 		void openSavegame( Engine& engine, World& world, const std::string& savegameName );
 		const std::string& getOpenSavegameName()const;
 		//filename without extension!
-		void loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename );//TODO
+		bool loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename );
 
 		// filename without extension!
 		// PREVIOUSLY STORED INFORMATION IN FILE(filename) WILL BE DELETED!
 		void saveEntitiesToFile( const std::string& filename/*relative to open savegame path*/,
-								 const std::vector<std::shared_ptr<Entity>>& entities );//TODO
+								 const std::vector<std::shared_ptr<Entity>>& entities );
 		//saves every system that is registered in systemManager to globals.save
 		void saveSystems( World& world );
 

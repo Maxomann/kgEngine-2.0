@@ -66,13 +66,15 @@ namespace kg
 
 	}
 
-	void GraphicsSystem::sfmlEvent( Engine& engine, const sf::Event& sfEvent )
+	void GraphicsSystem::sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent )
 	{
 		return;
 	}
 
 	void GraphicsSystem::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
+		engine.renderWindow.setTitle( m_configValues.window_name.toString() + to_string( frameTime.asMilliseconds() ) );
+
 		for( const auto& el : m_cameras )
 			engine.renderWindow.draw( *el->getComponent<Camera>() );
 		return;
@@ -121,6 +123,11 @@ namespace kg
 			//ignores: render_resx, render_resy
 		}
 		m_cameras.push_back( Camera::EMPLACE_TO_WORLD( engine, world ) );
+	}
+
+	std::vector<std::shared_ptr<Entity>>& GraphicsSystem::getCameras()
+	{
+		return m_cameras;
 	}
 
 	const std::string GraphicsSystem::WINDOW_NAME_DEFAULT = "DefaultWindowName";

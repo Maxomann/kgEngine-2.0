@@ -61,7 +61,7 @@ namespace kg
 		return std::static_pointer_cast< CastTo >(getSystem<T>());
 		};*/
 
-		void forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent );
+		void forwardSfmlEventByImportance( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent );
 		void updateAllSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
 	};
 }

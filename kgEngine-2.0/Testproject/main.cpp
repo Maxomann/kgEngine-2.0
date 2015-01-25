@@ -19,18 +19,19 @@ public:
 
 enum E
 {
-	A=100
+	A = 100
 };
 
 int main()
 {
-	using Type = std::string;
+	int chunkSize = 10;
 
-	Type str( "Hello, world!" );
-	
-
-	Foo<E::A> f;
-	cout << f.get() << endl;
+	for( int x = 0; x <= chunkSize; ++x )
+		cout << x / chunkSize << ":";
+	cout << endl;
+	for( int x = 0; x >= chunkSize*-1; --x )
+		cout << x / chunkSize << ":";
+	cout << endl;
 
 
 	system( "pause" );

@@ -40,5 +40,9 @@ extern "C"
 			std::make_shared<PluginFactory<System, GraphicsSystem>>(
 			( int )id::SystemPluginId::GRAPHICS_SYSTEM,
 			GraphicsSystem::PLUGIN_NAME ) );
+		pluginManager.addSystemPlugin(
+			std::make_shared<PluginFactory<System, ChunkGenerator>>(
+			( int )id::SystemPluginId::CHUNK_GENERATOR,
+			ChunkGenerator::PLUGIN_NAME ) );
 	}
 }

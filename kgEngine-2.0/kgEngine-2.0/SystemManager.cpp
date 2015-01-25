@@ -16,10 +16,10 @@ namespace kg
 			system.second->init( engine, world, saveManager, engine.resourceManager.getConfigFile<ConfigFile>( system.second->getPluginName() ) );
 	}
 
-	void SystemManager::forwardSfmlEventByImportance( Engine& engine, const sf::Event& sfEvent )
+	void SystemManager::forwardSfmlEventByImportance( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent )
 	{
 		for( const auto& el : m_systemsByUpdateImportance )
-			el.second->sfmlEvent( engine, sfEvent );
+			el.second->sfmlEvent( engine, world, saveManager, sfEvent );
 	}
 
 	std::shared_ptr<System> SystemManager::getSystemById( const Plugin::Id& id )const

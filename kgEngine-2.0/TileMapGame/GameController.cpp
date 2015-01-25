@@ -9,7 +9,7 @@ namespace kg
 		r_graphicsSystem = world.getSystem<GraphicsSystem>().get();
 
 		saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
-		saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
+		//saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
 
 
 		/*int fieldSize = 10;
@@ -23,19 +23,20 @@ namespace kg
 		return;
 	}
 
-	void GameController::sfmlEvent( Engine& engine, const sf::Event& sfEvent )
+	void GameController::sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent )
 	{
 		if( sfEvent.type == Event::Closed )
-			engine.shouldTerminate = true;
+			shutDown( engine, world, saveManager );
 		return;
 	}
 
 	void GameController::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
 		auto camera = r_graphicsSystem->getCamera( 0 );
+		camera->getComponent<Transformation>()->setSize( Vector2i( 1080 * 3, 720 * 3 ) );
 
 		if( Keyboard::isKeyPressed( Keyboard::Escape ) )
-			engine.shouldTerminate = true;
+			shutDown( engine, world, saveManager );
 		if( !engine.isPaused )
 		{
 			if( Keyboard::isKeyPressed( Keyboard::W ) )
@@ -49,11 +50,13 @@ namespace kg
 		}
 		if( Keyboard::isKeyPressed( Keyboard::F5 ) )
 		{
-			saveManager.saveSystems( world );
+			world.getSystem<ChunkSystem>()->saveAllLoadedChunks( engine, world, saveManager );
+
+			/*saveManager.saveSystems( world );
 			saveManager.saveEntitiesToFile( "EntitiesInHere", world.getAllEntities() );
 
-			saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
-			saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
+			saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );//REGISTER CALLBACK IN CHUNK SYSTEM!!! reset loaded chunks
+			saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );*/
 		}
 
 		return;
@@ -72,6 +75,13 @@ namespace kg
 	Plugin::Id GameController::getPluginId() const
 {
 		return ( int )id::SystemPluginId::GAME_CONTROLLER;
+	}
+
+	void GameController::shutDown( Engine& engine, World& world, SaveManager& saveManager )
+	{
+		saveManager.saveSystems( world );
+		world.getSystem<ChunkSystem>()->saveAllLoadedChunks( engine, world, saveManager );
+		engine.shouldTerminate = true;
 	}
 
 	const std::string GameController::PLUGIN_NAME = "GameControllerSystem";
