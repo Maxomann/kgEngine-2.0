@@ -30,7 +30,7 @@ namespace kg
 		void saveSystems( World& world );
 
 	signals:
-		Signal<Engine&, World&> s_savegameOpened;
+		Signal<Engine&> s_savegameOpened;
 		std::map< Plugin::Id, boost::signals2::signal < std::vector<std::string>()> > s_writeSaveInformation;//first: systemId, second: signal
 		std::map< Plugin::Id, Signal<const std::vector<std::string>&> > s_loadSaveInformation;//first: systemId, second: signal
 

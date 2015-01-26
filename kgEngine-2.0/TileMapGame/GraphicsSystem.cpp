@@ -75,6 +75,12 @@ namespace kg
 	{
 		engine.renderWindow.setTitle( m_configValues.window_name.toString() + to_string( frameTime.asMilliseconds() ) );
 
+		if( m_shouldInitCameras )
+		{
+			m_initCameras( engine, world );
+			m_shouldInitCameras = false;
+		}
+
 		for( const auto& el : m_cameras )
 			engine.renderWindow.draw( *el->getComponent<Camera>() );
 		return;
@@ -100,10 +106,10 @@ namespace kg
 		return m_cameras.at( index );
 	}
 
-	void GraphicsSystem::m_onSavegameOpened( Engine& engine, World& world )
+	void GraphicsSystem::m_onSavegameOpened( Engine& engine )
 	{
 		m_cameras.clear();
-		m_initCameras( engine, world );
+		m_shouldInitCameras = true;
 	}
 
 	void GraphicsSystem::m_initCameras( Engine& engine, World& world )

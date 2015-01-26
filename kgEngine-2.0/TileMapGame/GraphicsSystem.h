@@ -23,8 +23,9 @@ namespace kg
 
 		std::vector<std::shared_ptr<Entity>> m_cameras;
 
+		bool m_shouldInitCameras=true;
 
-		void m_onSavegameOpened( Engine& engine, World& world );
+		void m_onSavegameOpened( Engine& engine );
 
 		void m_initCameras( Engine& engine, World& world );
 		

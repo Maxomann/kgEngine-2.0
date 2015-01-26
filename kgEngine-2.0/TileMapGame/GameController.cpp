@@ -33,30 +33,32 @@ namespace kg
 	void GameController::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
 		auto camera = r_graphicsSystem->getCamera( 0 );
-		camera->getComponent<Transformation>()->setSize( Vector2i( 1080 * 3, 720 * 3 ) );
+		//camera->getComponent<Transformation>()->setSize( Vector2i( 1080 * 3, 720 * 3 ) );
+		
+		auto frameTimeInMilliseconds = frameTime.asMilliseconds();
 
 		if( Keyboard::isKeyPressed( Keyboard::Escape ) )
 			shutDown( engine, world, saveManager );
 		if( !engine.isPaused )
 		{
 			if( Keyboard::isKeyPressed( Keyboard::W ) )
-				camera->getComponent<Transformation>()->move( sf::Vector2i( 0, -10 ) );
+				camera->getComponent<Transformation>()->move( sf::Vector2i( 0, -10.0 / 16.0 * frameTimeInMilliseconds ) );
 			if( Keyboard::isKeyPressed( Keyboard::S ) )
-				camera->getComponent<Transformation>()->move( sf::Vector2i( 0, 10 ) );
+				camera->getComponent<Transformation>()->move( sf::Vector2i( 0, 10.0 / 16.0 * frameTimeInMilliseconds ) );
 			if( Keyboard::isKeyPressed( Keyboard::A ) )
-				camera->getComponent<Transformation>()->move( sf::Vector2i( -10, 0 ) );
+				camera->getComponent<Transformation>()->move( sf::Vector2i( -10.0 / 16.0 * frameTimeInMilliseconds, 0 ) );
 			if( Keyboard::isKeyPressed( Keyboard::D ) )
-				camera->getComponent<Transformation>()->move( sf::Vector2i( 10, 0 ) );
+				camera->getComponent<Transformation>()->move( sf::Vector2i( 10.0 / 16.0 * frameTimeInMilliseconds, 0 ) );
 		}
+
 		if( Keyboard::isKeyPressed( Keyboard::F5 ) )
 		{
 			world.getSystem<ChunkSystem>()->saveAllLoadedChunks( engine, world, saveManager );
 
-			/*saveManager.saveSystems( world );
-			saveManager.saveEntitiesToFile( "EntitiesInHere", world.getAllEntities() );
+			saveManager.saveSystems( world );
 
-			saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );//REGISTER CALLBACK IN CHUNK SYSTEM!!! reset loaded chunks
-			saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );*/
+			saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
+			saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
 		}
 
 		return;

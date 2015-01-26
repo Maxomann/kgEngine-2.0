@@ -86,7 +86,7 @@ namespace kg
 				m_entityData.at( entity ) = newChunk;
 
 				//remove from old chunk
-				auto oldChunkData = m_chunkData.at( oldChunk.x ).at( oldChunk.y );
+				auto& oldChunkData = m_chunkData.at( oldChunk.x ).at( oldChunk.y );
 				oldChunkData.erase( std::find( oldChunkData.begin(), oldChunkData.end(), entity ) );
 
 				//add to new chunk
@@ -208,7 +208,7 @@ namespace kg
 
 	void ChunkSystem::saveChunkToFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
 	{
-		auto temp = getEntitiesInChunk( chunkPosition );//TODO: Camera gets deleted
+		//auto temp = getEntitiesInChunk( chunkPosition );//TODO: Camera gets deleted
 		saveManager.saveEntitiesToFile( getChunkSavename( chunkPosition ), getEntitiesInChunk( chunkPosition ) );
 	}
 
@@ -262,10 +262,11 @@ namespace kg
 	{
 		for( const auto& x : m_loadedChunks )
 			for( const auto& y : x.second )
-				saveChunkToFile( engine, world, saveManager, Vector2i( x.first, y.first ) );
+				if(y.second)
+					saveChunkToFile( engine, world, saveManager, Vector2i( x.first, y.first ) );
 	}
 
-	void ChunkSystem::m_onSavegameOpened( Engine& engine, World& world )
+	void ChunkSystem::m_onSavegameOpened( Engine& engine )
 	{
 		m_chunkData.clear();
 		m_entityData.clear();
