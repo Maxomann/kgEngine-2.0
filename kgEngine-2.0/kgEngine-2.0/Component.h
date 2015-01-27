@@ -17,6 +17,9 @@ namespace kg
 	class DLL_EXPORT Component : public Plugin, public sf::NonCopyable
 	{
 	public:
+		virtual ~Component()
+		{ };
+
 		// get values from blueprint Entity
 		// will NOT BE CALLED, if this entity is temporary
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues ) = 0;

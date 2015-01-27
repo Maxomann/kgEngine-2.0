@@ -19,32 +19,104 @@ namespace kg
 	class Component;
 	class System;
 
+	/// Manager for plugins.
+	///
+	/// @author	Kay
+	/// @date	26.01.2015
+
 	class DLL_EXPORT PluginManager
 	{
-		std::map<int, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorys;
-		std::map<int, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorys;
+		/// The component plugin factorys sorted by ID.
+		std::map<int, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysById;
+		/// The system plugin factorys sorted by ID.
+		std::map<int, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysById;
 
+		/// The component plugin factorys sorted by name.
 		std::map<std::string, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysByName;
+		/// The system plugin factorys sorted by name.
 		std::map<std::string, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysByName;
 
 	public:
+
+		/// Adds a component plugin.
+		///
+		/// @author	Kay
+		/// @date	26.01.2015
+		///
+		/// @param	componentPluginFactory	The component plugin factory.
+
 		void addComponentPlugin( const std::shared_ptr<PluginFactoryInterface<Component>>& componentPluginFactory );
+
+		/// Adds a system plugin.
+		///
+		/// @author	Kay
+		/// @date	26.01.2015
+		///
+		/// @param	systemPluginFactory	The system plugin factory.
+
 		void addSystemPlugin( const std::shared_ptr<PluginFactoryInterface<System>>& systemPluginFactory );
 
-		//systemId; realTypeHashCode; System;
+		/// Creates component plugin.
+		///
+		/// @author	Kay
+		/// @date	26.01.2015
+		///
+		/// @param	pluginId	Identifier for the plugin.
+		///
+		/// @return	The new component plugin. <componentId; realTypeHashCode; Component;>
+
 		std::tuple<int, size_t, std::shared_ptr<Component>> createComponentPlugin( const int& pluginId );
-		//systemId; realTypeHashCode; System;
+
+		/// Creates system plugin.
+		///
+		/// @author	Kay
+		/// @date	26.01.2015
+		///
+		/// @param	pluginId	Identifier for the plugin.
+		///
+		/// @return	The new system plugin. <systemId; realTypeHashCode; System;>
+
 		std::tuple<int, size_t, std::shared_ptr<System>> createSystemPlugin( const int& pluginId );
 
-		//systemId; realTypeHashCode; System;
+		/// Creates component plugin.
+		///
+		/// @author	Kay
+		/// @date	26.01.2015
+		///
+		/// @param	pluginName	Name of the plugin.
+		///
+		/// @return	The new component plugin. <componentId; realTypeHashCode; Component;>
+
 		std::tuple<int, size_t, std::shared_ptr<Component>> createComponentPlugin( const std::string& pluginName );
-		//systemId; realTypeHashCode; System;
+
+		/// Creates system plugin.
+		///
+		/// @author	Kay
+		/// @date	26.01.2015
+		///
+		/// @param	pluginName	Name of the plugin.
+		///
+		/// @return	The new system plugin. <systemId; realTypeHashCode; System;>
+
 		std::tuple<int, size_t, std::shared_ptr<System>> createSystemPlugin( const std::string& pluginName );
 
-		//systemId; realTypeHashCode; System;
+		/// Creates every system available.
+		///
+		/// @author	Kay
+		/// @date	26.01.2015
+		///
+		/// @return	The new every system available. tuple:<systemId; realTypeHashCode; System;>
+
 		std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> createEverySystemAvailable()const;
 
-		//first:pluginId second:pluginName
+		///
+		/// @author	Kay
+		/// @date	26.01.2015
+		///
+		/// @param	hashCode	The hash code.
+		///
+		/// @return	The plugin information by real type hash code. <first:pluginId second:pluginName>
+
 		const std::pair<int, std::string> getPluginInformationByRealTypeHashCode( size_t hashCode )const;
 	};
 }

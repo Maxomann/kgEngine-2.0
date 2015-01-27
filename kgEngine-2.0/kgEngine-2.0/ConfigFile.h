@@ -5,14 +5,6 @@
 
 namespace kg
 {
-	DLL_EXPORT std::string aLoadFileToString( const std::string& path );
-
-	//don't forget to DELETE char*
-	DLL_EXPORT char* aLoadFileToCharPointer( const std::string& path );
-
-	//File will be deleted before writing
-	DLL_EXPORT void aSaveStringToFile( const std::string& path, const std::string& data );
-
 	class ConfigFile
 	{
 		std::map<std::string, std::string> m_data;

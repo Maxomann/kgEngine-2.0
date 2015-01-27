@@ -62,8 +62,6 @@ namespace kg
 		}
 		engine.renderWindow.setVerticalSyncEnabled( m_configValues.vsync.toBool() );
 
-		m_initCameras( engine, world );
-
 	}
 
 	void GraphicsSystem::sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent )
@@ -128,7 +126,7 @@ namespace kg
 			//no fullscreen
 			//ignores: render_resx, render_resy
 		}
-		m_cameras.push_back( Camera::EMPLACE_TO_WORLD( engine, world ) );
+		m_cameras.push_back( camera );
 	}
 
 	std::vector<std::shared_ptr<Entity>>& GraphicsSystem::getCameras()

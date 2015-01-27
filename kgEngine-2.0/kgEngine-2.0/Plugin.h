@@ -6,6 +6,9 @@ namespace kg
 	class DLL_EXPORT Plugin
 	{
 	public:
+		virtual ~Plugin()
+		{ };
+
 		typedef int Id;
 
 		virtual const std::string& getPluginName()const = 0;

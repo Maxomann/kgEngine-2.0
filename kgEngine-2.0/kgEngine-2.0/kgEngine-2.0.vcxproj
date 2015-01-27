@@ -90,6 +90,7 @@
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PluginManager.cpp" />
+    <ClCompile Include="RandomNumberGenerator.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="SaveComponent.cpp" />
     <ClCompile Include="System.cpp" />
@@ -115,6 +116,7 @@
     <ClInclude Include="PluginManager.h" />
     <ClInclude Include="PluginRegistrationException.h" />
     <ClInclude Include="PluginRequestException.h" />
+    <ClInclude Include="RandomNumberGenerator.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SaveManager.h" />
     <ClInclude Include="SaveComponent.h" />

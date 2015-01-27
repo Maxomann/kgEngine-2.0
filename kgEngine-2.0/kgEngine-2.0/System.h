@@ -13,6 +13,9 @@ namespace kg
 	class DLL_EXPORT System : public Plugin, public sf::NonCopyable
 	{
 	public:
+		virtual ~System()
+		{ };
+
 		// other systems are not guaranteed to be initialized
 		// configFile is only used for values of this system
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile ) = 0;

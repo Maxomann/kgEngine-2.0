@@ -100,45 +100,4 @@ namespace kg
 		if( m_path != "ConfigFile -1" )
 			saveToFile();
 	}
-
-	DLL_EXPORT std::string aLoadFileToString( const std::string& path )
-	{
-		std::string returnValue;
-
-		std::ifstream file;
-		file.open( path );
-		if( !file.is_open() )
-			throw PathNotAvailableException( path );
-
-		std::string line;
-
-		while( std::getline( file, line ) )
-			returnValue += line;
-
-		file.close();
-
-		return returnValue;
-	}
-
-	DLL_EXPORT void aSaveStringToFile( const std::string& path, const std::string& data )
-	{
-		std::ofstream file;
-		file.open( path, std::ios::trunc );
-		if( !file.is_open() )
-			throw PathNotAvailableException( path );
-
-		file << data;
-		file.close();
-		return;
-	}
-
-	DLL_EXPORT char* aLoadFileToCharPointer( const std::string& path )
-	{
-		auto str = aLoadFileToString( path );
-
-		char* file = new char[str.length() + 1];
-		strcpy( file, str.c_str() );
-
-		return file;
-	}
 }

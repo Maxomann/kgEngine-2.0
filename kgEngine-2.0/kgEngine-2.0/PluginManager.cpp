@@ -6,10 +6,10 @@ namespace kg
 	{
 		int id = componentPluginFactory->getId();
 
-		if( m_componentPluginFactorys.find( id ) != m_componentPluginFactorys.end() )
+		if( m_componentPluginFactorysById.find( id ) != m_componentPluginFactorysById.end() )
 			throw PluginRegistrationException( id );
 
-		m_componentPluginFactorys[id] = componentPluginFactory;
+		m_componentPluginFactorysById[id] = componentPluginFactory;
 		m_componentPluginFactorysByName[componentPluginFactory->getName()] = componentPluginFactory;
 	}
 
@@ -17,10 +17,10 @@ namespace kg
 	{
 		int id = systemPluginFactory->getId();
 
-		if( m_systemPluginFactorys.find( id ) != m_systemPluginFactorys.end() )
+		if( m_systemPluginFactorysById.find( id ) != m_systemPluginFactorysById.end() )
 			throw PluginRegistrationException( id );
 
-		m_systemPluginFactorys[id] = systemPluginFactory;
+		m_systemPluginFactorysById[id] = systemPluginFactory;
 		m_systemPluginFactorysByName[systemPluginFactory->getName()] = systemPluginFactory;
 	}
 
@@ -28,7 +28,7 @@ namespace kg
 	{
 		std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> returnValue;
 
-		for( const auto& el : m_systemPluginFactorys )
+		for( const auto& el : m_systemPluginFactorysById )
 		{
 			std::tuple<int, size_t, std::shared_ptr<System>> tempRetVal;
 
@@ -44,7 +44,7 @@ namespace kg
 
 	const std::pair<int, std::string> PluginManager::getPluginInformationByRealTypeHashCode( size_t hashCode )const
 	{
-		for( const auto& el : m_componentPluginFactorys )
+		for( const auto& el : m_componentPluginFactorysById )
 			if( el.second->getRealTypeHashCode() == hashCode )
 				return std::pair<int, std::string>( el.second->getId(), el.second->getName() );
 		return std::pair<int, std::string>( -1, "getPluginInformationByRealTypeHashCode::NOT_FOUND. HashCode: " + std::to_string( hashCode ) );
@@ -54,7 +54,7 @@ namespace kg
 	{
 		try
 		{
-			auto& componentPluginFactory = m_componentPluginFactorys.at( pluginId );
+			auto& componentPluginFactory = m_componentPluginFactorysById.at( pluginId );
 
 			return std::make_tuple( componentPluginFactory->getId(), componentPluginFactory->getRealTypeHashCode(), componentPluginFactory->create() );
 		}
@@ -84,7 +84,7 @@ namespace kg
 	{
 		try
 		{
-			auto& systemPluginFactory = m_systemPluginFactorys.at( pluginId );
+			auto& systemPluginFactory = m_systemPluginFactorysById.at( pluginId );
 
 			return std::make_tuple( systemPluginFactory->getId(), systemPluginFactory->getRealTypeHashCode(), systemPluginFactory->create() );
 		}

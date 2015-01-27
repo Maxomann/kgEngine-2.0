@@ -19,6 +19,7 @@
 #include <cstdint>
 #include <list>
 #include <forward_list>
+#include <random>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

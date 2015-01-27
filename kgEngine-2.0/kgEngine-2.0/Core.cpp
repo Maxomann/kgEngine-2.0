@@ -72,9 +72,12 @@ namespace kg
 		{
 #ifdef _WIN32
 			HMODULE dllHandle = LoadLibrary( std::string( el ).c_str() );
-			CONNECT connectFunction = ( CONNECT )GetProcAddress( dllHandle, "kgConnect" );
-			if( connectFunction )
-				connectFunction( m_engine.pluginManager );
+			if( dllHandle )
+			{
+				CONNECT connectFunction = ( CONNECT )GetProcAddress( dllHandle, "kgConnect" );
+				if( connectFunction )
+					connectFunction( m_engine.pluginManager );
+			}
 #endif // _WIN32
 		}
 	}

@@ -65,14 +65,14 @@
     <ClInclude Include="ChunkSystem.h">
       <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsSystem.h">
-      <Filter>Headerdateien\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="Transformation.h">
       <Filter>Headerdateien\Components</Filter>
     </ClInclude>
     <ClInclude Include="ChunkGenerator.h">
       <Filter>Headerdateien\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsSystem.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ namespace kg
 		for( int x = 0; x < 10; ++x )
 			for( int y = 0; y < 10; ++y )
 			{
-				auto tile = world.createNewSaveableEntity( engine, 101 );//grass
+				auto tile = world.createNewSaveableEntity( engine, engine.randomNumberGenerator.getRandomInt(101,103) );//grass
 				auto transform = tile->getComponent<Transformation>();
 
 				int chunkPositionInPixelX = chunkPositionInChunks.x*CHUNK_SIZE;

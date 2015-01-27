@@ -61,11 +61,11 @@ namespace kg
 		if( entity->hasComponent<Transformation>() )
 		{
 			m_connectToSignal( entity->getComponent<Transformation>()->s_positionChanged,
-							   std::function<void( const sf::Vector2i& )>(
-							   std::bind( &ChunkSystem::m_onEntityPositionChanged,
+							   function<void( const Vector2i& )>(
+							   bind( &ChunkSystem::m_onEntityPositionChanged,
 							   this,
-							   entity,
-							   std::placeholders::_1 ) ) );
+							   weak_ptr<Entity>(entity),
+							   placeholders::_1 ) ) );
 
 			m_refreshChunkInformation( entity );
 		}
@@ -102,9 +102,11 @@ namespace kg
 		}
 	}
 
-	void ChunkSystem::m_onEntityPositionChanged( std::shared_ptr<Entity>& entity, const sf::Vector2i& newPosition )
+	void ChunkSystem::m_onEntityPositionChanged( weak_ptr<Entity>& entity, const sf::Vector2i& newPosition )
 	{
-		m_refreshChunkInformation( entity );
+		auto sharedEntity = entity.lock();
+		if(sharedEntity)
+			m_refreshChunkInformation( sharedEntity );
 	}
 
 	void ChunkSystem::m_onEntityRemovedFromWorld( std::shared_ptr<Entity>& entity )
