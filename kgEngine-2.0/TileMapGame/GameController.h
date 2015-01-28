@@ -10,6 +10,7 @@ namespace kg
 	{
 		GraphicsSystem* r_graphicsSystem;
 
+		void saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager );
 		void shutDown( Engine& engine, World& world, SaveManager& saveManager );
 
 	public:

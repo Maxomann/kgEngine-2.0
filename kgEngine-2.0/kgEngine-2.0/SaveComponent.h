@@ -3,6 +3,7 @@
 #include "id_internal.h"
 #include "Entity.h"
 #include "Callback.h"
+#include "Blueprint.h"
 
 namespace kg
 {
@@ -60,11 +61,13 @@ namespace kg
 
 	class DLL_EXPORT Save : public Component, public boost::noncopyable
 	{
-		const unsigned int m_blueprintEntityId;
+		const blueprint::Entity& m_blueprint;
+
+		const blueprint::Id m_blueprintEntityId;
 		const Entity::Id m_uniqueEntityId;
 
 	public:
-		Save( const unsigned int& blueprintEntityId, const Entity::Id& uniqueEntityId );
+		Save( const blueprint::Id& blueprintEntityId, const blueprint::Entity& blueprint, const Entity::Id& uniqueEntityId );
 
 		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues ) override;
 
@@ -86,6 +89,9 @@ namespace kg
 		void loadSaveInformation( EntitySaveInformation& information );
 
 		const Entity::Id& getUniqueId()const;
+		const blueprint::Id& getBlueprintId()const;
+		
+		const blueprint::Entity& getBlueprint()const;
 
 	signals:
 		std::map < Plugin::Id,//first: componentId, second: signal

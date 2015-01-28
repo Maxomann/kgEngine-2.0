@@ -265,15 +265,26 @@ namespace kg
 		}
 	}
 
-	Save::Save( const unsigned int& blueprintEntityId, const Entity::Id& uniqueEntityId )
+	Save::Save( const blueprint::Id& blueprintEntityId, const blueprint::Entity& blueprint, const Entity::Id& uniqueEntityId )
 		:m_blueprintEntityId( blueprintEntityId ),
-		m_uniqueEntityId( uniqueEntityId )
+		m_uniqueEntityId( uniqueEntityId ),
+		m_blueprint( blueprint )
 	{
 	}
 
 	const Entity::Id& Save::getUniqueId() const
 	{
 		return m_uniqueEntityId;
+	}
+
+	const blueprint::Id& Save::getBlueprintId() const
+	{
+		return m_blueprintEntityId;
+	}
+
+	const blueprint::Entity& Save::getBlueprint() const
+	{
+		return m_blueprint;
 	}
 
 	const std::string Save::PLUGIN_NAME = "internal_save";

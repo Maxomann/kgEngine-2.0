@@ -53,12 +53,9 @@ namespace kg
 
 		if( Keyboard::isKeyPressed( Keyboard::F5 ) )
 		{
-			world.getSystem<ChunkSystem>()->saveAllLoadedChunks( engine, world, saveManager );
-
-			saveManager.saveSystems( world );
+			saveOpenSavegame( engine, world, saveManager );
 
 			saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
-			saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
 		}
 
 		return;
@@ -81,9 +78,14 @@ namespace kg
 
 	void GameController::shutDown( Engine& engine, World& world, SaveManager& saveManager )
 	{
-		saveManager.saveSystems( world );
-		world.getSystem<ChunkSystem>()->saveAllLoadedChunks( engine, world, saveManager );
+		saveOpenSavegame( engine, world, saveManager );
 		engine.shouldTerminate = true;
+	}
+
+	void GameController::saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager )
+	{
+		world.getSystem<ChunkSystem>()->saveAllLoadedChunks( engine, world, saveManager );
+		saveManager.saveSystems( world );
 	}
 
 	const std::string GameController::PLUGIN_NAME = "GameControllerSystem";

@@ -8,6 +8,9 @@ namespace kg
 		class Value;
 		typedef std::map<std::string, std::map<std::string, Value>> ComponentValuesByNameByComponentMap;
 
+		typedef unsigned int Id;
+		typedef unsigned int Line;
+
 		const std::string file_extension = ".blueprint";
 
 		bool isLineEmpty( const std::string& line );
@@ -20,7 +23,7 @@ namespace kg
 			const std::string m_msg;
 
 		public:
-			ParsingError( unsigned int line );
+			ParsingError( Line line );
 
 			const char* what()const override;
 		};
@@ -38,11 +41,11 @@ namespace kg
 		class Command
 		{
 		public:
-			//first:nextLine second:Object
-			virtual std::pair<unsigned int, T> execute( unsigned int firstLine,
+			//first:nextLine to parse second:Object
+			virtual std::pair<Line, T> execute( Line firstLine,
 														const std::vector<std::string>& lines ) = 0;
 
-			virtual bool canExecuteOn( unsigned int line,
+			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines ) = 0;
 		};
 
@@ -97,14 +100,14 @@ namespace kg
 
 		class DLL_EXPORT Entity
 		{
-			unsigned int m_id;
+			Id m_id;
 			std::string m_name;
 			std::vector<std::string> m_inheritsFrom;//in ascending override importance
 			std::vector<Blueprint*> m_inheritedBlueprints;//in ascending override importance
 			ComponentValuesByNameByComponentMap m_componentValues;//componentValuesByNameByComponent
 		public:
 			Entity();
-			Entity( const unsigned int& id,
+			Entity( const Id& id,
 					std::string& name,
 					std::vector<std::string>& inheritsFrom,
 					ComponentValuesByNameByComponentMap& componentValuesByNameByComponent );
@@ -116,9 +119,11 @@ namespace kg
 
 			void connectToBlueprints( std::map<std::string, Blueprint>& blueprintsByName );
 
-			const unsigned int getId()const;
+			const Id getId()const;
 
 			std::string getName()const;
+
+			const std::vector<Blueprint*>& getInheritedBlueprints()const;
 		};
 
 		///////////////////////////////////////////////////////////////////////////
@@ -127,69 +132,69 @@ namespace kg
 		class ComponentDeclaration : public Command < std::string >
 		{
 		public:
-			virtual std::pair<unsigned int, std::string> execute( unsigned int firstLine,
+			virtual std::pair<Line, std::string> execute( Line firstLine,
 																  const std::vector<std::string>& lines );
 
 			//can execute on any line that is not empty and does only contain alphanumeric characters
-			virtual bool canExecuteOn( unsigned int line,
+			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines );
 		};
 
 		class ValueDeclaration : public Command < Value >
 		{
 		public:
-			virtual std::pair<unsigned int, Value> execute( unsigned int firstLine,
+			virtual std::pair<Line, Value> execute( Line firstLine,
 															const std::vector<std::string>& lines );
 
 			//can execute on any line that is not empty and does contain at least one double point
-			virtual bool canExecuteOn( unsigned int line,
+			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines );
 		};
 
 		class ComponentDefinition : public Command < std::pair<std::string, std::vector<Value> > >
 		{
 		public:
-			virtual std::pair<unsigned int, std::pair<std::string, std::vector<Value> >> execute( unsigned int firstLine,
+			virtual std::pair<Line, std::pair<std::string, std::vector<Value> >> execute( Line firstLine,
 																								  const std::vector<std::string>& lines );
 
-			virtual bool canExecuteOn( unsigned int line,
+			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines );
 		};
 
 		class InheritanceDeclaration : public Command < std::string >
 		{
 		public:
-			virtual std::pair<unsigned int, std::string> execute( unsigned int firstLine,
+			virtual std::pair<Line, std::string> execute( Line firstLine,
 																  const std::vector<std::string>& lines );
 
-			virtual bool canExecuteOn( unsigned int line,
+			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines );
 		};
 
 		class BlueprintDeclaration :public Command < Blueprint >
 		{
 		public:
-			virtual std::pair<unsigned int, Blueprint> execute( unsigned int firstLine,
+			virtual std::pair<Line, Blueprint> execute( Line firstLine,
 																const std::vector<std::string>& lines );
 
-			virtual bool canExecuteOn( unsigned int line,
+			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines );
 		};
 
 		class EntityDeclaration :public Command < Entity >
 		{
 		public:
-			virtual std::pair<unsigned int, Entity> execute( unsigned int firstLine,
+			virtual std::pair<Line, Entity> execute( Line firstLine,
 															 const std::vector<std::string>& lines );
 
-			virtual bool canExecuteOn( unsigned int line,
+			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines );
 		};
 
 		class BlueprintManager
 		{
 			std::map<std::string, Blueprint> m_blueprintsByName;
-			std::map<unsigned int, Entity> m_entitiesById;
+			std::map<Id, Entity> m_entitiesById;
 
 		public:
 			// parse a file
@@ -204,8 +209,11 @@ namespace kg
 			// can throw linking error
 			void link();
 
+			//all references from getBlueprintsByName, getEntitiesById, getBlueprintByName, getEntityById get invalidated
+			//void reparse()
+
 			DLL_EXPORT const std::map<std::string, Blueprint>& getBlueprintsByName()const;
-			DLL_EXPORT const std::map<unsigned int, Entity>& getEntitiesById()const;
+			DLL_EXPORT const std::map<Id, Entity>& getEntitiesById()const;
 
 			DLL_EXPORT const Blueprint& getBlueprintByName( const std::string& name )const;
 			DLL_EXPORT const Entity& getEntityById( const int id )const;

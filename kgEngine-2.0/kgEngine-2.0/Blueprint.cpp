@@ -22,7 +22,7 @@ namespace kg
 			return a.find( b ) != std::string::npos;
 		}
 
-		ParsingError::ParsingError( unsigned int line )
+		ParsingError::ParsingError( Line line )
 			:m_msg( "parsing error on line:" + std::to_string( line ) )
 		{ }
 
@@ -190,7 +190,7 @@ namespace kg
 			return m_name;
 		}
 
-		const unsigned int Entity::getId() const
+		const Id Entity::getId() const
 		{
 			return m_id;
 		}
@@ -231,7 +231,7 @@ namespace kg
 			return std::pair<bool, Value>( false, Value() );
 		}
 
-		Entity::Entity( const unsigned int& id, std::string& name, std::vector<std::string>& inheritsFrom, ComponentValuesByNameByComponentMap& componentValuesByNameByComponent ) :m_id( id ),
+		Entity::Entity( const Id& id, std::string& name, std::vector<std::string>& inheritsFrom, ComponentValuesByNameByComponentMap& componentValuesByNameByComponent ) :m_id( id ),
 			m_name( name ),
 			m_inheritsFrom( inheritsFrom ),
 			m_componentValues( componentValuesByNameByComponent )
@@ -240,7 +240,7 @@ namespace kg
 		Entity::Entity()
 		{ }
 
-		bool ComponentDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
+		bool ComponentDeclaration::canExecuteOn( Line line, const std::vector<std::string>& lines )
 		{
 			if( isLineEmpty( lines.at( line ) ) )
 				return false;
@@ -250,16 +250,16 @@ namespace kg
 			return true;
 		}
 
-		std::pair<unsigned int, std::string> ComponentDeclaration::execute( unsigned int firstLine, const std::vector<std::string>& lines )
+		std::pair<Line, std::string> ComponentDeclaration::execute( Line firstLine, const std::vector<std::string>& lines )
 		{
-			auto retVal = std::make_pair<unsigned int, std::string>( firstLine + 1, std::string() );
+			auto retVal = std::make_pair<Line, std::string>( firstLine + 1, std::string() );
 			for( const auto& ch : lines.at( firstLine ) )
 				if( !std::isspace( ch ) )
 					retVal.second.push_back( ch );
 			return retVal;
 		}
 
-		bool ValueDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
+		bool ValueDeclaration::canExecuteOn( Line line, const std::vector<std::string>& lines )
 		{
 			if( isLineEmpty( lines.at( line ) ) )
 				return false;
@@ -271,7 +271,7 @@ namespace kg
 			return hasDoublePoint;
 		}
 
-		std::pair<unsigned int, Value> ValueDeclaration::execute( unsigned int firstLine, const std::vector<std::string>& lines )
+		std::pair<Line, Value> ValueDeclaration::execute( Line firstLine, const std::vector<std::string>& lines )
 		{
 			std::string name;
 			std::string value;
@@ -292,10 +292,10 @@ namespace kg
 				}
 			}
 
-			return std::make_pair<unsigned int, Value>( firstLine + 1, Value( name, value ) );
+			return std::make_pair<Line, Value>( firstLine + 1, Value( name, value ) );
 		}
 
-		bool ComponentDefinition::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
+		bool ComponentDefinition::canExecuteOn( Line line, const std::vector<std::string>& lines )
 		{
 			auto& lineValue = lines.at( line );
 			if( isLineEmpty( lineValue ) )
@@ -308,9 +308,9 @@ namespace kg
 			return true;
 		}
 
-		std::pair<unsigned int, std::pair<std::string, std::vector<Value> >> ComponentDefinition::execute( unsigned int firstLine, const std::vector<std::string>& lines )
+		std::pair<Line, std::pair<std::string, std::vector<Value> >> ComponentDefinition::execute( Line firstLine, const std::vector<std::string>& lines )
 		{
-			unsigned int line = firstLine;
+			Line line = firstLine;
 			auto lineVal = lines.at( line );
 
 			std::string componentName;
@@ -361,13 +361,13 @@ namespace kg
 			}
 			line++;
 
-			return std::pair<unsigned int, std::pair<std::string, std::vector<Value>>>(
+			return std::pair<Line, std::pair<std::string, std::vector<Value>>>(
 				line,
 				std::pair<std::string, std::vector<Value>>( componentName, componentValues )
 				);
 		}
 
-		bool InheritanceDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
+		bool InheritanceDeclaration::canExecuteOn( Line line, const std::vector<std::string>& lines )
 		{
 			if( isLineEmpty( lines.at( line ) ) )
 				return false;
@@ -375,7 +375,7 @@ namespace kg
 				return contains( lines.at( line ), "INHERIT" );
 		}
 
-		std::pair<unsigned int, std::string> InheritanceDeclaration::execute( unsigned int firstLine, const std::vector<std::string>& lines )
+		std::pair<Line, std::string> InheritanceDeclaration::execute( Line firstLine, const std::vector<std::string>& lines )
 		{
 			auto& lineVal = lines.at( firstLine );
 
@@ -402,10 +402,10 @@ namespace kg
 				}
 			}
 
-			return std::pair<unsigned int, std::string>( firstLine + 1, entityName );
+			return std::pair<Line, std::string>( firstLine + 1, entityName );
 		}
 
-		bool BlueprintDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
+		bool BlueprintDeclaration::canExecuteOn( Line line, const std::vector<std::string>& lines )
 		{
 			if( isLineEmpty( lines.at( line ) ) )
 				return false;
@@ -413,9 +413,9 @@ namespace kg
 				return contains( lines.at( line ), "BLUEPRINT" );
 		}
 
-		std::pair<unsigned int, Blueprint> BlueprintDeclaration::execute( unsigned int firstLine, const std::vector<std::string>& lines )
+		std::pair<Line, Blueprint> BlueprintDeclaration::execute( Line firstLine, const std::vector<std::string>& lines )
 		{
-			unsigned int line = firstLine;
+			Line line = firstLine;
 			auto lineVal = lines.at( line );
 
 			std::string blueprintName;
@@ -483,7 +483,7 @@ namespace kg
 				}
 			}
 
-			return std::pair<unsigned int, Blueprint>( line + 1,
+			return std::pair<Line, Blueprint>( line + 1,
 													   Blueprint(
 													   blueprintName,
 													   componentValues
@@ -491,14 +491,14 @@ namespace kg
 													   );
 		}
 
-		bool EntityDeclaration::canExecuteOn( unsigned int line, const std::vector<std::string>& lines )
+		bool EntityDeclaration::canExecuteOn( Line line, const std::vector<std::string>& lines )
 		{
 			return contains( lines.at( line ), "ENTITY" );
 		}
 
-		std::pair<unsigned int, Entity> EntityDeclaration::execute( unsigned int firstLine, const std::vector<std::string>& lines )
+		std::pair<Line, Entity> EntityDeclaration::execute( Line firstLine, const std::vector<std::string>& lines )
 		{
-			unsigned int line = firstLine;
+			Line line = firstLine;
 			auto lineVal = lines.at( line );
 
 			std::string entityName;
@@ -586,7 +586,7 @@ namespace kg
 				}
 			}
 
-			return std::pair<unsigned int, Entity>( line + 1,
+			return std::pair<Line, Entity>( line + 1,
 													Entity( atoi( entityId.c_str() ),
 													entityName,
 													inheritsFrom,
@@ -594,7 +594,7 @@ namespace kg
 													) );
 		}
 
-		const std::map<unsigned int, Entity>& BlueprintManager::getEntitiesById() const
+		const std::map<Id, Entity>& BlueprintManager::getEntitiesById() const
 		{
 			return m_entitiesById;
 		}
@@ -612,7 +612,7 @@ namespace kg
 
 		void BlueprintManager::parse( const std::vector<std::string>&lines )
 		{
-			unsigned int line = 0;
+			Line line = 0;
 
 			while( line < lines.size() )
 			{
@@ -679,6 +679,11 @@ namespace kg
 			}
 
 			return returnValue;
+		}
+
+		const std::vector<Blueprint*>& Entity::getInheritedBlueprints() const
+		{
+			return m_inheritedBlueprints;
 		}
 
 		const std::map<std::string, Value> Blueprint::getComponentValues( const std::string& componentName ) const
