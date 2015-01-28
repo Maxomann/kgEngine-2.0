@@ -22,8 +22,6 @@ namespace kg
 
 		void generateChunk( Engine& engine, World& world, const sf::Vector2i chunkPositionInChunks );
 
-		static const int CHUNK_SIZE = 640;//not changeable through config file
-
 		static const std::string PLUGIN_NAME;
 	};
 }

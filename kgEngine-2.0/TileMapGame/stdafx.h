@@ -6,4 +6,7 @@
 #include "id.h"
 #include <_PluginCreator.h>
 
+#include "constants.h"
+#include "id.h"
+
 #endif//STDAFX_H

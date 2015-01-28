@@ -56,6 +56,7 @@ namespace kg
 
 		//zValue
 		int getZValue()const;
+		void setZValue( int zValue );
 
 
 		//GlobalBounds

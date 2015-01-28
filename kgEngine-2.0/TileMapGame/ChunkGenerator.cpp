@@ -13,8 +13,8 @@ namespace kg
 				auto tile = world.createNewSaveableEntity( engine, engine.randomNumberGenerator.getRandomInt(101,103) );//grass
 				auto transform = tile->getComponent<Transformation>();
 
-				int chunkPositionInPixelX = chunkPositionInChunks.x*CHUNK_SIZE;
-				int chunkPositionInPixelY = chunkPositionInChunks.y*CHUNK_SIZE;
+				int chunkPositionInPixelX = chunkPositionInChunks.x*Constants::CHUNK_SIZE;
+				int chunkPositionInPixelY = chunkPositionInChunks.y*Constants::CHUNK_SIZE;
 				int tilePositionRelativeToChunkInPixelX = transform->getSize().x*x;
 				int tilePositionRelativeToChunkInPixelY = transform->getSize().y*y;
 				tilePositionRelativeToChunkInPixelX += transform->getSize().x / 2;
@@ -24,6 +24,7 @@ namespace kg
 									   chunkPositionInPixelY + tilePositionRelativeToChunkInPixelY );
 
 				transform->setPosition( tilePosition );
+				transform->setZValue( Constants::STANDART_TILE_ZVALUE );
 
 				world.addEntity( tile );
 			}

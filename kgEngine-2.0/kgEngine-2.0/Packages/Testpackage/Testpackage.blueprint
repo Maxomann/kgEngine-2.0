@@ -5,6 +5,7 @@ BLUEPRINT Tile
 	COMPONENT Transformation
 		width:64px
 		height:64px
+		#will get overriden anyways
 		zValue:0
 	END
 	

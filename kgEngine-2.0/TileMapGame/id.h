@@ -1,5 +1,4 @@
 #pragma once
-#include "stdafx.h"
 
 namespace kg
 {
@@ -18,7 +17,7 @@ namespace kg
 
 				LAST_ELEMENT
 			};
-		}
+		};
 
 		namespace ComponentPluginId
 		{
@@ -33,7 +32,7 @@ namespace kg
 
 				LAST_ELEMENT
 			};
-		}
+		};
 
 		namespace SystemUpdateImportance
 		{
@@ -48,7 +47,7 @@ namespace kg
 
 				LAST_ELEMENT
 			};
-		}
+		};
 
 		namespace ComponentUpdateImportance
 		{
@@ -63,6 +62,6 @@ namespace kg
 
 				LAST_ELEMENT
 			};
-		}
-	}
+		};
+	};
 }

@@ -74,5 +74,8 @@
     <ClInclude Include="GraphicsSystem.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

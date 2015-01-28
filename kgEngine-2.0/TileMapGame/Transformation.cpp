@@ -122,7 +122,7 @@ namespace kg
 
 	void Transformation::onLoadSaveInformation( const std::vector<std::string>& information )
 	{
-		if( information.size() != 5 )
+		if( information.size() != 6 )
 			throw exception();
 		else
 		{
@@ -133,6 +133,7 @@ namespace kg
 			setSize( Vector2i(
 				atoi( information.at( 3 ).c_str() ),
 				atoi( information.at( 4 ).c_str() ) ) );
+			setZValue( atoi( information.at( 5 ).c_str() ) );
 		}
 	}
 
@@ -143,12 +144,18 @@ namespace kg
 			to_string( m_position.y ),
 			to_string( m_rotation ),
 			to_string( m_size.x ),
-			to_string( m_size.y ) };
+			to_string( m_size.y ),
+			to_string( m_zValue ) };
 	}
 
 	int Transformation::getZValue() const
 	{
 		return m_zValue;
+	}
+
+	void Transformation::setZValue( int zValue )
+	{
+		m_zValue = zValue;
 	}
 
 	const std::string Transformation::BLUEPRINT_ZVALUE = "zValue";

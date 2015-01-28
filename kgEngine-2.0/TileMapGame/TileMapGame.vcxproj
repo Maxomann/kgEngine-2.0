@@ -97,6 +97,7 @@
   <ItemGroup>
     <ClInclude Include="ChunkGenerator.h" />
     <ClInclude Include="ChunkSystem.h" />
+    <ClInclude Include="constants.h" />
     <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Camera.h" />

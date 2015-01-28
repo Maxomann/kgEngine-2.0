@@ -134,7 +134,7 @@ namespace kg
 
 	sf::Vector2i ChunkSystem::calculateChunkForPosition( const sf::Vector2i& position )
 	{
-		auto chunk = position / ChunkGenerator::CHUNK_SIZE;
+		auto chunk = position / Constants::CHUNK_SIZE;
 		if( position.x < 0 )
 			chunk.x -= 1;
 
