@@ -9,10 +9,10 @@ namespace kg
 		string texturePackage;
 		string texturePath;
 
-		auto it = blueprintValues.find( BLUEPRINT_PACKAGE_NAME );
+		auto it = blueprintValues.find( Constants::BLUEPRINT_PACKAGE_NAME );
 		if( it != blueprintValues.end() )
 			texturePackage = it->second.toString();
-		it = blueprintValues.find( BLUEPRINT_TEXTURE_PATH );
+		it = blueprintValues.find( Constants::BLUEPRINT_FILE_PATH );
 		if( it != blueprintValues.end() )
 			texturePath = it->second.toString();
 		m_resourceManagementReference = engine.resourceManager.getResource<sf::Texture>( texturePackage, texturePath );
@@ -73,10 +73,10 @@ namespace kg
 		return id::ComponentPluginId::GRAPHICS;
 	}
 
-	void Graphics::draw( RenderTarget& target, RenderStates states ) const
+	/*void Graphics::draw( RenderTarget& target, RenderStates states ) const
 	{
 		target.draw( m_sprite, states );
-	}
+	}*/
 
 	void Graphics::setTextureRect( const sf::IntRect& rect )
 	{
@@ -117,6 +117,11 @@ namespace kg
 		m_sprite.setRotation( newRotation );
 	}
 
+	void Graphics::drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const
+	{
+		spriteBatch.draw( m_sprite );
+	}
+
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";
 
@@ -127,8 +132,4 @@ namespace kg
 	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_HEIGHT = "texrect_height";
 
 	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_WIDTH = "texrect_width";
-
-	const std::string Graphics::BLUEPRINT_TEXTURE_PATH = "path";
-
-	const std::string Graphics::BLUEPRINT_PACKAGE_NAME = "package";
 }

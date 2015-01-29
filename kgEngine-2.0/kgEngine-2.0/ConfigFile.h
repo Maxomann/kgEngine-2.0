@@ -2,10 +2,11 @@
 #include "stdafx.h"
 #include "PathNotAvailableException.h"
 #include "Blueprint.h"
+#include "ResourceManager.h"
 
 namespace kg
 {
-	class ConfigFile
+	class ConfigFile : public Resource
 	{
 		std::map<std::string, std::string> m_data;
 		std::string m_path = "ConfigFile -1";

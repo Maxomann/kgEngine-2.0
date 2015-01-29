@@ -79,12 +79,14 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>../SFML-Visual_Studio2013x32/lib;../Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>kgEngine-2.0.lib;sfml-main.lib;sfml-window.lib;sfml-system.lib;sfml-network.lib;sfml-graphics.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Profile>true</Profile>
     </Link>
     <PostBuildEvent>
       <Command>copy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)\$(SolutionName)\$(TargetName).dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="ChunkGenerator.cpp" />
     <ClCompile Include="ChunkSystem.cpp" />
     <ClCompile Include="GraphicsSystem.cpp" />
@@ -92,13 +94,16 @@
     <ClCompile Include="connect.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="SpriteBatch.cpp" />
     <ClCompile Include="Transformation.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="ChunkGenerator.h" />
     <ClInclude Include="ChunkSystem.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="GraphicsSystem.h" />
+    <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GameController.h" />

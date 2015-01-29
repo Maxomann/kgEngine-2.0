@@ -686,6 +686,14 @@ namespace kg
 			return m_inheritedBlueprints;
 		}
 
+		bool Entity::inheritsFrom( const std::string& blueprintName )
+		{
+			for( const auto& el : m_inheritsFrom )
+				if( el == blueprintName )
+					return true;
+			return false;
+		}
+
 		const std::map<std::string, Value> Blueprint::getComponentValues( const std::string& componentName ) const
 		{
 			if( m_componentValues.find( componentName ) != m_componentValues.end() )

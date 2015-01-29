@@ -6,4 +6,14 @@
 #include "Callback.h"
 #include "ConfigFile.h"
 
+
+//exceptions:
+#include "BlueprintValueReadErrorException.h"
+#include "ComponentMissingException.h"
+#include "PathNotAvailableException.h"
+#include "PathNotAvailableException.h"
+#include "PluginRegistrationException.h"
+#include "PluginRequestException.h"
+#include "WrongCallbackSignatureException.h"
+
 #endif

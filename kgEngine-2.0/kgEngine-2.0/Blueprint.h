@@ -43,7 +43,7 @@ namespace kg
 		public:
 			//first:nextLine to parse second:Object
 			virtual std::pair<Line, T> execute( Line firstLine,
-														const std::vector<std::string>& lines ) = 0;
+												const std::vector<std::string>& lines ) = 0;
 
 			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines ) = 0;
@@ -124,6 +124,8 @@ namespace kg
 			std::string getName()const;
 
 			const std::vector<Blueprint*>& getInheritedBlueprints()const;
+
+			bool inheritsFrom( const std::string& blueprintName );
 		};
 
 		///////////////////////////////////////////////////////////////////////////
@@ -133,7 +135,7 @@ namespace kg
 		{
 		public:
 			virtual std::pair<Line, std::string> execute( Line firstLine,
-																  const std::vector<std::string>& lines );
+														  const std::vector<std::string>& lines );
 
 			//can execute on any line that is not empty and does only contain alphanumeric characters
 			virtual bool canExecuteOn( Line line,
@@ -144,7 +146,7 @@ namespace kg
 		{
 		public:
 			virtual std::pair<Line, Value> execute( Line firstLine,
-															const std::vector<std::string>& lines );
+													const std::vector<std::string>& lines );
 
 			//can execute on any line that is not empty and does contain at least one double point
 			virtual bool canExecuteOn( Line line,
@@ -155,7 +157,7 @@ namespace kg
 		{
 		public:
 			virtual std::pair<Line, std::pair<std::string, std::vector<Value> >> execute( Line firstLine,
-																								  const std::vector<std::string>& lines );
+																						  const std::vector<std::string>& lines );
 
 			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines );
@@ -165,7 +167,7 @@ namespace kg
 		{
 		public:
 			virtual std::pair<Line, std::string> execute( Line firstLine,
-																  const std::vector<std::string>& lines );
+														  const std::vector<std::string>& lines );
 
 			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines );
@@ -175,7 +177,7 @@ namespace kg
 		{
 		public:
 			virtual std::pair<Line, Blueprint> execute( Line firstLine,
-																const std::vector<std::string>& lines );
+														const std::vector<std::string>& lines );
 
 			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines );
@@ -185,7 +187,7 @@ namespace kg
 		{
 		public:
 			virtual std::pair<Line, Entity> execute( Line firstLine,
-															 const std::vector<std::string>& lines );
+													 const std::vector<std::string>& lines );
 
 			virtual bool canExecuteOn( Line line,
 									   const std::vector<std::string>& lines );

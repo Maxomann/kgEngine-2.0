@@ -40,11 +40,17 @@ namespace kg
 			}
 		}
 
+		batch::SpriteBatch spriteBatch;
+		spriteBatch.begin();
+
 		for( const auto& Z : toDrawSorted )
 			for( const auto& Y : Z.second )
 				for( const auto& X : Y.second )
 					for( const auto& entity : X.second )
-						m_texture.draw( *entity->getComponent<Graphics>() );
+						entity->getComponent<Graphics>()->drawToSpriteBatch(spriteBatch);
+
+		spriteBatch.end();
+		m_texture.draw( spriteBatch );
 
 		m_texture.display();
 

@@ -9,4 +9,6 @@
 #include "constants.h"
 #include "id.h"
 
+#include "SpriteBatch.h"
+
 #endif//STDAFX_H

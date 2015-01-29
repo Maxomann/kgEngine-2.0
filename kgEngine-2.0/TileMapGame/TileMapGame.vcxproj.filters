@@ -19,6 +19,9 @@
     <Filter Include="Headerdateien\Components">
       <UniqueIdentifier>{3f03bd40-14e7-4f6a-be7c-57dd84acbe94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\Other">
+      <UniqueIdentifier>{7e7edd7b-5036-41fa-b73e-4272ad3170f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="connect.cpp">
@@ -43,6 +46,12 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="ChunkGenerator.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteBatch.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,11 +80,17 @@
     <ClInclude Include="ChunkGenerator.h">
       <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsSystem.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="constants.h">
       <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Headerdateien\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsSystem.h">
+      <Filter>Headerdateien\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteBatch.h">
+      <Filter>Headerdateien\Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

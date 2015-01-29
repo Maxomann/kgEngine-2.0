@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Graphics.h"
+#include "SpriteBatch.h"
 
 namespace kg
 {

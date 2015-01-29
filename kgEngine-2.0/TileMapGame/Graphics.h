@@ -4,7 +4,7 @@
 
 namespace kg
 {
-	class Graphics : public Component, public CallbackReciever, public sf::Drawable
+	class Graphics : public Component, public CallbackReciever//, public sf::Drawable
 	{
 		Transformation* r_transformation = nullptr;
 
@@ -40,10 +40,9 @@ namespace kg
 		const sf::IntRect& getTextureRect()const;
 
 
-		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
+		void drawToSpriteBatch(batch::SpriteBatch& spriteBatch)const;
+		//virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
-		static const std::string BLUEPRINT_PACKAGE_NAME;
-		static const std::string BLUEPRINT_TEXTURE_PATH;
 		static const std::string BLUEPRINT_TEXTURE_RECT_WIDTH;
 		static const std::string BLUEPRINT_TEXTURE_RECT_HEIGHT;
 		static const std::string BLUEPRINT_TEXTURE_RECT_TOP;

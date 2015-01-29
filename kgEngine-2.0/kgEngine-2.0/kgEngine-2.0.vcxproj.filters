@@ -154,6 +154,9 @@
     <ClInclude Include="RandomNumberGenerator.h">
       <Filter>Headerdateien\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="BlueprintValueReadErrorException.h">
+      <Filter>Headerdateien\Exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
