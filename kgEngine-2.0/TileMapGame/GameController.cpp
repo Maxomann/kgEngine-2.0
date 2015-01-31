@@ -33,7 +33,7 @@ namespace kg
 	void GameController::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
 		auto camera = r_graphicsSystem->getCamera( 0 );
-		//camera->getComponent<Transformation>()->setSize( Vector2i( 1080 * 3, 720 * 3 ) );
+		//camera->getComponent<Transformation>()->setSize( Vector2i( 1080 * 10, 720 * 10 ) );
 		
 		auto frameTimeInMilliseconds = frameTime.asMilliseconds();
 

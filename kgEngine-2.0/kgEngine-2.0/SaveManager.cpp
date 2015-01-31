@@ -23,6 +23,8 @@ namespace kg
 	void SaveManager::openSavegame( Engine& engine, World& world, const std::string& savegameName )
 	{
 		world.clear();
+		s_savegameClosed();
+
 		m_openSavegameName = savegameName;
 
 		//create savegame folder if it does not exist

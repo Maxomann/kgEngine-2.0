@@ -9,7 +9,7 @@ namespace kg
 		m_connectToSignal( world.s_entity_added, &ChunkSystem::m_onEntityAddedToWorld );
 		m_connectToSignal( world.s_entity_removed, &ChunkSystem::m_onEntityRemovedFromWorld );
 
-		m_connectToSignal( saveManager.s_savegameOpened, &ChunkSystem::m_onSavegameOpened );
+		m_connectToSignal( saveManager.s_savegameClosed, &ChunkSystem::m_onSavegameClosed );
 
 		m_configFile = configFile;
 
@@ -268,8 +268,8 @@ namespace kg
 					saveChunkToFile( engine, world, saveManager, Vector2i( x.first, y.first ) );
 	}
 
-	void ChunkSystem::m_onSavegameOpened( Engine& engine )
-	{
+	void ChunkSystem::m_onSavegameClosed()
+{
 		m_chunkData.clear();
 		m_entityData.clear();
 		m_loadedChunks.clear();

@@ -9,6 +9,7 @@ namespace kg
 		m_configFile = configFile;
 
 		m_connectToSignal( saveManager.s_savegameOpened, &GraphicsSystem::m_onSavegameOpened );
+		m_connectToSignal( saveManager.s_savegameClosed, &GraphicsSystem::m_onSavegameClosed );
 
 		//get config values
 		m_configValues.antialiasing = configFile->getData( ANTIALIASING );
@@ -106,8 +107,12 @@ namespace kg
 
 	void GraphicsSystem::m_onSavegameOpened( Engine& engine )
 	{
-		m_cameras.clear();
 		m_shouldInitCameras = true;
+	}
+
+	void GraphicsSystem::m_onSavegameClosed()
+	{
+		m_cameras.clear();
 	}
 
 	void GraphicsSystem::m_initCameras( Engine& engine, World& world )

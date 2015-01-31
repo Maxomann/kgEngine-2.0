@@ -38,7 +38,7 @@ namespace kg
 		void m_onEntityRemovedFromWorld( std::shared_ptr<Entity>& entity );
 		void m_onEntityPositionChanged( std::weak_ptr<Entity>& entity, const sf::Vector2i& newPosition );
 
-		void m_onSavegameOpened( Engine& engine );
+		void m_onSavegameClosed( );
 
 	public:
 

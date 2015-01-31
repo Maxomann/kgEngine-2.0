@@ -28,12 +28,10 @@ namespace kg
 								 const std::vector<std::shared_ptr<Entity>>& entities );
 		//saves every system that is registered in systemManager to globals.save
 		void saveSystems( World& world );
-		void saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager )
-		{
-			throw std::logic_error( "The method or operation is not implemented." );
-		}
+
 	signals:
 		Signal<Engine&> s_savegameOpened;
+		Signal<> s_savegameClosed;
 		std::map< Plugin::Id, boost::signals2::signal < std::vector<std::string>()> > s_writeSaveInformation;//first: systemId, second: signal
 		std::map< Plugin::Id, Signal<const std::vector<std::string>&> > s_loadSaveInformation;//first: systemId, second: signal
 

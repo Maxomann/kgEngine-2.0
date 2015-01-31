@@ -26,6 +26,7 @@ namespace kg
 		bool m_shouldInitCameras=true;
 
 		void m_onSavegameOpened( Engine& engine );
+		void m_onSavegameClosed();
 
 		void m_initCameras( Engine& engine, World& world );
 		
