@@ -26,7 +26,7 @@ namespace kg
 
 		// it is guaranteed that all components of the entity are loaded at this point
 		// their init function is not guaranteed to have been called
-		virtual void init( Engine& engine, ComponentManager& thisEntity ) = 0;
+		virtual void init( Engine& engine, World& world, ComponentManager& thisEntity ) = 0;
 
 		// components get updated before systems
 		// frame time is 0 when isPaused = true

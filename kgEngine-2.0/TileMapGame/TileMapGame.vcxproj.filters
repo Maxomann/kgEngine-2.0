@@ -54,6 +54,9 @@
     <ClCompile Include="SpriteBatch.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationSystem.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="SpriteBatch.h">
       <Filter>Headerdateien\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationSystem.h">
+      <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

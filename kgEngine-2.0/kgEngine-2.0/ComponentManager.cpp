@@ -10,10 +10,10 @@ namespace kg
 			el.second->update( engine, world, *this, frameTime );
 	}
 
-	void ComponentManager::initComponentsByImportance( Engine& engine )
+	void ComponentManager::initComponentsByImportance( Engine& engine, World& world )
 	{
 		for( auto& component : m_componentsByUpdateImportance )
-			component.second->init( engine, *this );
+			component.second->init( engine, world, *this );
 	}
 
 	bool ComponentManager::hasComponent( const std::vector<size_t>& componentTypes )const

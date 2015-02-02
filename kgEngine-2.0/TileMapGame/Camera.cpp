@@ -10,7 +10,7 @@ namespace kg
 		throw new bad_function_call();
 	}
 
-	void Camera::init( Engine& engine, ComponentManager& thisEntity )
+	void Camera::init( Engine& engine, World& world, ComponentManager& thisEntity )
 	{
 		r_transformation = thisEntity.getComponent<Transformation>().get();
 
@@ -122,7 +122,7 @@ namespace kg
 
 	std::shared_ptr<Entity> Camera::EMPLACE_TO_WORLD( Engine& engine, World& world )
 	{
-		auto camera = world.createNewTemporaryEntity<Transformation, Camera>( engine );
+		auto camera = world.createNewTemporaryEntity<Transformation, Camera>( engine,world );
 		camera->getComponent<Transformation>()->setPosition( sf::Vector2i( 0, 0 ) );
 		camera->getComponent<Transformation>()->setSize( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
 		camera->getComponent<Camera>()->setRenderResolution( engine.renderWindow.getSize() );

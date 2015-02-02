@@ -29,58 +29,48 @@ namespace kg
 			e;
 			throw BlueprintValueReadErrorException( PLUGIN_NAME, Constants::BLUEPRINT_FILE_PATH );
 		}
-		try
-		{
-			if( blueprintValues.at( BLUEPRINT_SYNC ).toBool() )
-				m_unsyncedClock = sf::Clock();
-		}
-		catch( std::exception& e )
-		{
-			e;
-			throw BlueprintValueReadErrorException( PLUGIN_NAME, BLUEPRINT_SYNC );
-		}
 
-		m_animationData = engine.resourceManager.getResource<AnimationData>( package, filename );
+		m_animationImplementation.swap( engine.resourceManager.getResource<AnimationFile>( package, filename )->get() );
 	}
 
-	void Animation::init( Engine& engine, ComponentManager& thisEntity )
+	void Animation::init( Engine& engine, World& world, ComponentManager& thisEntity )
 	{
-		throw std::logic_error( "The method or operation is not implemented." );
+		//validate pointers
+		r_animationSystem = world.getSystem<AnimationSystem>().get();
+		r_graphicsComponent = thisEntity.getComponent<Graphics>().get();
+
+		//check pointers
+		if( !r_animationSystem )
+			throw exception();
+		if( !r_graphicsComponent )
+			throw exception();
 	}
 
 	void Animation::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
 	{
-		throw std::logic_error( "The method or operation is not implemented." );
+		m_animationImplementation->update( r_animationSystem, r_graphicsComponent, frameTime.asMilliseconds() );
 	}
 
 	double Animation::getUpdateImportance() const
 	{
-		throw std::logic_error( "The method or operation is not implemented." );
+		return id::ComponentUpdateImportance::ANIMATION;
 	}
 
 	std::vector<size_t> Animation::getRequieredComponents() const
 	{
-		throw std::logic_error( "The method or operation is not implemented." );
+		return{ typeid(Graphics).hash_code() };
 	}
 
 	const std::string& Animation::getPluginName() const
 	{
-		throw std::logic_error( "The method or operation is not implemented." );
+		return PLUGIN_NAME;
 	}
 
 	Plugin::Id Animation::getPluginId() const
 	{
-		throw std::logic_error( "The method or operation is not implemented." );
+		return id::ComponentPluginId::ANIMATION;
 	}
 
 	const std::string Animation::PLUGIN_NAME = "AnimationComponent";
-
-	const std::string Animation::BLUEPRINT_SYNC = "sync";
-
-
-	bool AnimationData::loadFromFile( const std::string& path )
-	{
-		throw std::logic_error( "The method or operation is not implemented." );
-	}
 
 }

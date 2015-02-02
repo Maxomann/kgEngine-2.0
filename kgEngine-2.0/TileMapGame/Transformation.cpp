@@ -17,7 +17,7 @@ namespace kg
 			m_zValue = it->second.toInt();
 	}
 
-	void Transformation::init( Engine& engine, ComponentManager& thisEntity )
+	void Transformation::init( Engine& engine, World& world, ComponentManager& thisEntity )
 	{
 		auto saveComponent = thisEntity.getComponent<Save>();
 		if( saveComponent )

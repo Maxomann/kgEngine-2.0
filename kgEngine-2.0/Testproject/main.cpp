@@ -4,34 +4,63 @@
 
 #include <boost/signals2.hpp>
 
+#include <SFML/Main.hpp>
+#include <SFML/Graphics.hpp>
+
 using namespace std;
+using namespace sf;
 using namespace placeholders;
 
-template<int ID>
-class Foo
-{
-public:
-	int get()const
-	{
-		return ID;
-	}
-};
-
-enum E
-{
-	A = 100
-};
 
 int main()
 {
-	int chunkSize = 10;
+	RenderWindow window( VideoMode( 600, 600 ), "" );
 
-	for( int x = 0; x <= chunkSize; ++x )
-		cout << x / chunkSize << ":";
-	cout << endl;
-	for( int x = 0; x >= chunkSize*-1; --x )
-		cout << x / chunkSize << ":";
-	cout << endl;
+	vector<RectangleShape> shapes;
+	for( int i = 0; i < 5000; ++i )
+	{
+		RectangleShape shape( Vector2f( 600, 600 ) );
+		shape.setFillColor( Color::Red );
+
+		shapes.push_back( shape );
+	}
+
+	sf::Clock clock;
+
+	sf::RenderTexture tex;
+	tex.create( 600, 600 );
+
+	Sprite texSprite;
+
+	while( window.isOpen() )
+	{
+		window.setTitle(to_string(clock.restart().asMilliseconds()));
+
+		Event sfEvent;
+		while( window.pollEvent( sfEvent ) )
+		{
+			if( sfEvent.type == Event::Closed )
+				window.close();
+		}
+
+
+
+		window.clear( Color::Green );
+
+		tex.clear( Color::Blue );
+
+		//draw
+		for( const auto& el : shapes )
+			tex.draw( el );
+
+		tex.display();
+		texSprite.setTexture( tex.getTexture() );
+
+
+		window.draw( texSprite );
+
+		window.display();
+	}
 
 
 	system( "pause" );

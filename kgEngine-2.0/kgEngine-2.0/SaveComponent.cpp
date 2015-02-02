@@ -212,7 +212,7 @@ namespace kg
 		return;
 	}
 
-	void Save::init( Engine& engine, ComponentManager& thisEntity )
+	void Save::init( Engine& engine, World& world, ComponentManager& thisEntity )
 	{
 		return;
 	}

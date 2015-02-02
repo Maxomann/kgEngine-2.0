@@ -34,7 +34,7 @@ namespace kg
 		m_sprite.setTextureRect( textureRect );
 	}
 
-	void Graphics::init( Engine& engine, ComponentManager& thisEntity )
+	void Graphics::init( Engine& engine, World& world, ComponentManager& thisEntity )
 	{
 		r_transformation = thisEntity.getComponent<Transformation>().get();
 

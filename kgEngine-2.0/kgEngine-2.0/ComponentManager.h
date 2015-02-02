@@ -4,6 +4,8 @@
 
 namespace kg
 {
+	class World;
+
 	namespace workaround
 	{
 		template<typename T>
@@ -51,7 +53,7 @@ namespace kg
 			return addComponent( component, typeId );
 		};
 
-		void initComponentsByImportance( Engine& engine );
+		void initComponentsByImportance( Engine& engine, World& world );
 
 		template<class T>
 		std::shared_ptr<T> getComponent()

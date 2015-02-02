@@ -118,7 +118,7 @@ namespace kg
 
 		for( auto& el : information )
 		{
-			auto entity = world.createNewSaveableEntity( engine, el.getBlueprintEntityId(), el.getUniqueEntityId() );
+			auto entity = world.createNewSaveableEntity( engine,world, el.getBlueprintEntityId(), el.getUniqueEntityId() );
 			entity->getComponent<Save>()->loadSaveInformation( el );
 			world.addEntity( entity );
 		}

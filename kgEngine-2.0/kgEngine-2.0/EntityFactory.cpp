@@ -16,14 +16,16 @@ namespace kg
 	}
 
 	std::shared_ptr<Entity> EntityFactory::createNewSaveableEntity( Engine& engine,
-															const int& entityBlueprintId )
+																	World& world,
+																	const int& entityBlueprintId )
 	{
-		return createNewSaveableEntity( engine, entityBlueprintId, getUniqueEntityId() );
+		return createNewSaveableEntity( engine, world, entityBlueprintId, getUniqueEntityId() );
 	}
 
 	std::shared_ptr<Entity> EntityFactory::createNewSaveableEntity( Engine& engine,
-															const int& entityBlueprintId,
-															const Entity::Id& uniqueId )
+																	World& world,
+																	const int& entityBlueprintId,
+																	const Entity::Id& uniqueId )
 	{
 		auto entity = std::make_shared<Entity>();
 
@@ -48,7 +50,7 @@ namespace kg
 			entity->addComponent( component, std::get<1>( createdComponent ) );
 		}
 
-		entity->addComponent<Save>( 
+		entity->addComponent<Save>(
 			std::static_pointer_cast< Component >(
 			std::make_shared<Save>( entityBlueprintId, entityBlueprint, uniqueId )
 			) );
@@ -72,7 +74,7 @@ namespace kg
 			}
 		}
 
-		entity->initComponentsByImportance( engine );
+		entity->initComponentsByImportance( engine, world );
 
 		return entity;
 	}

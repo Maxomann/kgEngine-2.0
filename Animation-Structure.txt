@@ -1,18 +1,18 @@
-MULTIPLY (texture rect has the same size(defined in graphics component). its position equals its the standart offset(defined in graphics component) + texture rect size*the coordinate given in this file {x,y,timeInMillisecons} )
+MULTIPLY (texture rect has the same size(defined in graphics component). its position equals its the standart offset(defined in graphics component) + texture rect size*the coordinate given in this file {x,y,timeInMilliseconds} )
 "stand"{0,0,0}{0,0,0}{0,0,0}{0,0,0}
-"walk_right"{0,0,0}{0,0,0}{0,0,0}{0,0,0}{0,0,0}
+"walk_right"{0,0,0}{0,0,0}{0,0,0}{0,0,0}{0,0,0}sync
 "walk_left"{0,0,0}{0,0,0}{0,0,0}{0,0,0}
 "walk_up"{0,0,0}{0,0,0}{0,0,0}{0,0,0}{0,0,0}{0,0,0}
 "walk_down"{0,0,0}{0,0,0}{0,0,0}{0,0,0}{0,0,0}
 
-ADD (texture rect has the same size(defined in graphics component). its position equals its the standart offset(defined in graphics component) + the offset defined in this file {x,y,timeInMillisecons})
+ADD (texture rect has the same size(defined in graphics component). its position equals its the standart offset(defined in graphics component) + the offset defined in this file {x,y,timeInMilliseconds})
 "stand"{0,0,0}{0,0,0}{0,0,0}{0,0,0}
 "walk_right"{0,0,0}{0,0,0}{0,0,0}{0,0,0}{0,0,0}
 "walk_left"{0,0,0}{0,0,0}{0,0,0}{0,0,0}
 "walk_up"{0,0,0}{0,0,0}{0,0,0}{0,0,0}{0,0,0}{0,0,0}
 "walk_down"{0,0,0}{0,0,0}{0,0,0}
 
-FREE (texture rect has size and position defined in this file {x,y,width,height,timeInMillisecons} ))
+FREE (texture rect has size and position defined in this file {x,y,width,height,timeInMilliseconds} ))
 "stand"{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}
 "walk_right"{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}
 "walk_left"{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}

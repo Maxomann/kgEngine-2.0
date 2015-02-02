@@ -10,6 +10,7 @@ namespace kg
 			{
 				FIRST_ELEMENT,
 
+				ANIMATION_SYSTEM,
 				CHUNK_SYSTEM,
 				CHUNK_GENERATOR,
 				GRAPHICS_SYSTEM,
@@ -28,6 +29,7 @@ namespace kg
 				TRANSFORMATION,
 				GLOBAL_BOUNDS,
 				GRAPHICS,
+				ANIMATION,
 				CAMERA,
 
 				LAST_ELEMENT
@@ -40,6 +42,7 @@ namespace kg
 			{
 				FIRST_ELEMENT,
 
+				ANIMATION_SYSTEM,
 				CHUNK_SYSTEM,
 				CHUNK_GENERATOR,
 				GRAPHICS_SYSTEM,
@@ -58,6 +61,7 @@ namespace kg
 				TRANSFORMATION,
 				GLOBAL_BOUNDS,
 				GRAPHICS,
+				ANIMATION,
 				CAMERA,
 
 				LAST_ELEMENT

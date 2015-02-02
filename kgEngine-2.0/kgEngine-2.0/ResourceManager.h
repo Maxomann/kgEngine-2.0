@@ -189,7 +189,7 @@ namespace kg
 		template< class T >
 		std::shared_ptr<T> getConfigFile( const std::string& systemName )
 		{
-			return reloadResource<T>( "./Config/" + systemName + ".ini" );
+			return getResource<T>( "./Config/" + systemName + ".ini" );
 		}
 	};
 }
