@@ -7,54 +7,45 @@ namespace kg
 {
 
 	typedef std::map<std::string, std::pair<std::vector<std::vector<int>>, bool>> AnimationFileData;
-	typedef std::map<std::string, std::vector<int>> FrameDurationByState;
+	typedef std::map<std::string, std::vector<std::pair<sf::IntRect, int>>> FrameDurationAndTexrectByState;
 
-	class AnimationImplementation
+	class AnimationInterpreter
 	{
-		boost::optional<int> m_unsyncedTimePassed;
-
-		AnimationFileData& m_animationData;
-
-	protected:
-		virtual FrameDurationByState& getFrameDurationByState() = 0;
-		virtual void setAnimationOnGraphics( Graphics* graphicsComponent ) = 0;
-
-		AnimationFileData& getAnimationData();
-
 	public:
-		void update( AnimationSystem* animationSystem, Graphics* graphicsComponent, int frameTimeInMilliseconds );
-
-		std::string getState()const;
-		int getFrame()const;
-
-		void setState( const std::string& state );
-		void setFrame( const int frame );
-
-		bool getCurrentStateSyncronized();
+		virtual FrameDurationAndTexrectByState& interpretAnimationFileData( const AnimationFileData& animationFileData )const=0;
+		FrameDurationAndTexrectByState& operator()( const AnimationFileData& animationFileData )const;
 	};
+
+	class FreeAnimation : public AnimationInterpreter
+	{
+	public:/*!!!!!!!!!!!!!!!!*/
+		virtual FrameDurationAndTexrectByState& interpretAnimationFileData( const AnimationFileData& animationFileData ) const override;
+	};
+
+	class EasyAnimation : public AnimationInterpreter
+	{
+	public:
+		virtual FrameDurationAndTexrectByState& interpretAnimationFileData( const AnimationFileData& animationFileData ) const override;
+	};
+
+
 
 	class AnimationFile : public Resource
 	{
-		AnimationFileData m_animationData;
+		std::string m_interpreterType = "-1";
+		AnimationFileData m_animationFileData;
+		FrameDurationAndTexrectByState m_interpretedData;
 
 	public:
 		virtual bool loadFromFile( const std::string& path ) override;
 
-		std::unique_ptr<AnimationImplementation> get()const;
-		std::unique_ptr<AnimationImplementation> operator()();//equals get()
+		FrameDurationAndTexrectByState& get()const;
+		FrameDurationAndTexrectByState& operator()()const;//equals get()
+
+		static const std::string FREE_ANIMATION;//type of interpreter
+		static const std::string EASY_ANIMATION;//type of interpreter
 	};
 
-	class FreeAnimation : public AnimationImplementation
-	{
-	public:
-		
-	};
-
-	class EasyAnimation : public AnimationImplementation
-	{
-	public:
-
-	};
 
 
 	class Animation : public Component
@@ -62,7 +53,14 @@ namespace kg
 		AnimationSystem* r_animationSystem=nullptr;
 		Graphics* r_graphicsComponent = nullptr;
 
-		std::unique_ptr<AnimationImplementation> m_animationImplementation;
+
+		FrameDurationAndTexrectByState& m_animationData;
+
+		std::string m_state;
+		int m_frame;
+		boost::optional<int> m_unsyncedTimePassed;
+
+		void setAnimationOnGraphics();
 
 
 	public:
@@ -79,6 +77,15 @@ namespace kg
 		virtual const std::string& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId() const override;
+
+
+		std::string getState()const;
+		int getFrame()const;
+
+		void setState( const std::string& state );
+		void setFrame( const int frame );
+
+		bool getCurrentStateSyncronized();
 
 
 		static const std::string PLUGIN_NAME;

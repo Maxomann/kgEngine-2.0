@@ -5,6 +5,8 @@
 
 namespace kg
 {
+	typedef std::pair<sf::FloatRect, std::vector<std::tuple<sf::Sprite, std::shared_ptr<sf::Texture>, int>>> DrawingInformation;
+
 	class Camera : public Component, public sf::Drawable, public CallbackReciever
 	{
 		Transformation* r_transformation;

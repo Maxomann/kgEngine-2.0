@@ -25,12 +25,12 @@ namespace kg
 
 		auto toDraw = world.getEntitiesThatHaveComponent<Graphics>();
 		map<int, map<int, map<int, std::vector<shared_ptr<Entity>>>>> toDrawSorted;//by Z value by Y value by X value;
+		auto cameraRect = r_transformation->getGlobalBounds();
 		for( auto& el : toDraw )
 		{
 			auto graphics = el->getComponent<Graphics>();
 			auto toDrawTransformationComponent = el->getComponent<Transformation>();
 			auto toDrawGlobalBounds = toDrawTransformationComponent->getGlobalBounds();
-			auto cameraRect = r_transformation->getGlobalBounds();
 
 			if( toDrawGlobalBounds.intersects( cameraRect ) )//only add if visible on this camera
 			{
@@ -47,7 +47,7 @@ namespace kg
 			for( const auto& Y : Z.second )
 				for( const auto& X : Y.second )
 					for( const auto& entity : X.second )
-						entity->getComponent<Graphics>()->drawToSpriteBatch(spriteBatch);
+						entity->getComponent<Graphics>()->drawToSpriteBatch( spriteBatch );
 
 		spriteBatch.end();
 		m_texture.draw( spriteBatch );
@@ -122,7 +122,7 @@ namespace kg
 
 	std::shared_ptr<Entity> Camera::EMPLACE_TO_WORLD( Engine& engine, World& world )
 	{
-		auto camera = world.createNewTemporaryEntity<Transformation, Camera>( engine,world );
+		auto camera = world.createNewTemporaryEntity<Transformation, Camera>( engine, world );
 		camera->getComponent<Transformation>()->setPosition( sf::Vector2i( 0, 0 ) );
 		camera->getComponent<Transformation>()->setSize( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
 		camera->getComponent<Camera>()->setRenderResolution( engine.renderWindow.getSize() );

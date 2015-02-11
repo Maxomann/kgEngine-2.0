@@ -92,6 +92,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PluginManager.cpp" />
     <ClCompile Include="RandomNumberGenerator.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="SaveComponent.cpp" />
     <ClCompile Include="System.cpp" />
