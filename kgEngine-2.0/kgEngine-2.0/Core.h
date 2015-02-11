@@ -25,5 +25,7 @@ namespace kg
 
 		void update();
 		bool shouldTerminate()const;
+
+		static const int MIN_FRAME_TIME_IN_MILLISECONDS = 6;
 	};
 }

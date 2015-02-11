@@ -100,17 +100,17 @@ namespace kg
 
 	bool AnimationFile::loadFromFile( const std::string& path )
 	{
-
+		return true;
 	}
 
 	FrameDurationAndTexrectByState& AnimationFile::get() const
 	{
-
+		return FrameDurationAndTexrectByState();
 	}
 
 	FrameDurationAndTexrectByState& AnimationFile::operator()() const
 	{
-
+		return FrameDurationAndTexrectByState();
 	}
 
 }

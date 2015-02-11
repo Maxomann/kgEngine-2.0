@@ -62,7 +62,9 @@ namespace kg
 				contextSettings );
 		}
 		engine.renderWindow.setVerticalSyncEnabled( m_configValues.vsync.toBool() );
+		engine.renderWindow.setActive( false );
 
+		m_launchDrawingThread( engine.renderWindow );
 	}
 
 	void GraphicsSystem::sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent )
@@ -72,7 +74,6 @@ namespace kg
 
 	void GraphicsSystem::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
-		engine.renderWindow.setTitle( m_configValues.window_name.toString() + to_string( frameTime.asMilliseconds() ) );
 
 		if( m_shouldInitCameras )
 		{
@@ -80,8 +81,24 @@ namespace kg
 			m_shouldInitCameras = false;
 		}
 
+		sf::Clock c;
+
+		//collect DrawingStateInformation
+		DrawingStateInformation dsi;
 		for( const auto& el : m_cameras )
-			engine.renderWindow.draw( *el->getComponent<Camera>() );
+			dsi.first.push_back( el->getComponent<Camera>()->getStateInformation() );
+		for( const auto& el : world.getEntitiesThatHaveComponent<Graphics>() )
+			dsi.second.push_back( el->getComponent<Graphics>()->getStateInformation() );
+		m_drawingInformationContainer.push( dsi );
+
+		engine.renderWindow.setTitle( m_configValues.window_name.toString() +
+									  " " +
+									  to_string( frameTime.asMilliseconds() ) +
+									  " :: " +
+									  to_string( m_drawingThreadFrameTime ) +
+									  " ++ " +
+									  to_string(c.restart().asMilliseconds()));
+
 		return;
 	}
 
@@ -96,7 +113,7 @@ namespace kg
 	}
 
 	Plugin::Id GraphicsSystem::getPluginId() const
-{
+	{
 		return ( int )id::SystemUpdateImportance::GRAPHICS_SYSTEM;
 	}
 
@@ -137,6 +154,164 @@ namespace kg
 	std::vector<std::shared_ptr<Entity>>& GraphicsSystem::getCameras()
 	{
 		return m_cameras;
+	}
+
+	GraphicsSystem::~GraphicsSystem()
+	{
+		m_terminateDrawingThread();
+	}
+
+	void GraphicsSystem::m_terminateDrawingThread()
+	{
+		//safely terminate drawing thread
+		m_drawingShouldTerminate = true;
+		while( !m_drawingHasTerminated )
+			sleep( sf::milliseconds( 1 ) );
+		sleep( sf::milliseconds( 1 ) );
+	}
+
+	void GraphicsSystem::m_launchDrawingThread( RenderWindow& renderWindow )
+	{
+		m_drawingShouldTerminate = false;
+		m_drawingHasTerminated = false;
+
+		//launch drawing thread
+		thread drawingThread(
+			drawingThreadFunction,
+			ref( renderWindow ),
+			ref( m_drawingInformationContainer ),
+			ref( m_drawingThreadFrameTime ),
+			ref( m_drawingShouldTerminate ),
+			ref( m_drawingHasTerminated )
+			);
+		drawingThread.detach();
+	}
+
+	void drawingThreadFunction( sf::RenderWindow& renderWindow,
+								SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>>& drawingInformationContainer,
+								int& drawingThreadFrameTime,
+								bool& shouldTerminate,
+								bool& hasTerminated )
+	{
+		renderWindow.setActive( true );
+		map<int, map<int, RenderTexture>> renderTexturesBySize;
+		sf::Clock thisFrameTime;
+
+		while( !shouldTerminate )
+		{
+			drawingThreadFrameTime = thisFrameTime.restart().asMilliseconds();
+
+			auto container = drawingInformationContainer.getContent();
+			if( container->size() > 0 )
+			{
+				renderWindow.clear( Color::Red );
+				auto relevantInformation = container->top();
+
+				//draw here
+				/*OLD CODE FROM CAMERA
+				m_texture.clear( Color::Green );
+				m_texture.setView( m_view );
+
+				auto toDraw = world.getEntitiesThatHaveComponent<Graphics>();
+				map<int, map<int, map<int, std::vector<shared_ptr<Entity>>>>> toDrawSorted;//by Z value by Y value by X value;
+				auto cameraRect = r_transformation->getGlobalBounds();
+				for( auto& el : toDraw )
+				{
+				auto graphics = el->getComponent<Graphics>();
+				auto toDrawTransformationComponent = el->getComponent<Transformation>();
+				auto toDrawGlobalBounds = toDrawTransformationComponent->getGlobalBounds();
+
+				if( toDrawGlobalBounds.intersects( cameraRect ) )//only add if visible on this camera
+				{
+				auto toDrawPosition = toDrawTransformationComponent->getPosition();
+				auto zValue = toDrawTransformationComponent->getZValue();
+				toDrawSorted[zValue][toDrawPosition.y][toDrawPosition.x].push_back( el );
+				}
+				}
+
+				batch::SpriteBatch spriteBatch;
+				spriteBatch.begin();
+
+				for( const auto& Z : toDrawSorted )
+				for( const auto& Y : Z.second )
+				for( const auto& X : Y.second )
+				for( const auto& entity : X.second )
+				entity->getComponent<Graphics>()->drawToSpriteBatch( spriteBatch );
+
+				spriteBatch.end();
+				m_texture.draw( spriteBatch );
+
+				m_texture.display();
+				m_texture.setView( m_texture.getDefaultView() );
+				*/
+
+
+				//for every camera state information
+				for( const auto& camera : relevantInformation.first )
+				{
+					//create render texture if needed (they will not be destroyed until funtion terminates)
+					auto it = renderTexturesBySize.find( camera.renderResolution.x );
+					if( it == end( renderTexturesBySize ) )
+					{
+						renderTexturesBySize[camera.renderResolution.x][camera.renderResolution.y].create( camera.renderResolution.x, camera.renderResolution.y );
+					}
+					else
+					{
+						auto it2 = it->second.find( camera.renderResolution.y );
+						if( it2 == end( it->second ) )
+						{
+							renderTexturesBySize[camera.renderResolution.x][camera.renderResolution.y].create( camera.renderResolution.x, camera.renderResolution.y );
+						}
+					}
+
+
+					auto& renderTexture = renderTexturesBySize[camera.renderResolution.x][camera.renderResolution.y];
+					Sprite renderTextureSprite;
+					map<int, map<int, map<int, std::vector<shared_ptr<Drawable>>>>> toDrawSorted;//Z Y X
+
+
+					//sort toDraws
+					for( const auto& toDraw : relevantInformation.second )
+					{
+						//if toDraw is seen on camera
+						if( camera.globalBounds.intersects( toDraw.globalBounds ) )
+						{
+							//sort
+							toDrawSorted
+								[toDraw.zValue]//Z
+							[toDraw.globalBounds.top + toDraw.globalBounds.height]//Y
+							[toDraw.globalBounds.left]//X
+							.push_back( toDraw.drawable );
+						}
+					}
+
+
+					//draw drawables
+					renderTexture.clear( Color::Green );
+					renderTexture.setView( camera.view );
+					for( const auto& Z : toDrawSorted )
+						for( const auto& Y : Z.second )
+							for( const auto& X : Y.second )
+								for( const auto& toDraw : X.second )
+									renderTexture.draw( *toDraw );
+					renderTexture.display();
+					renderTexture.setView( renderTexture.getDefaultView() );
+
+					renderTextureSprite.setTexture( renderTexture.getTexture() );
+					auto renderTextureSpriteBounds = renderTextureSprite.getGlobalBounds();
+					renderTextureSprite.scale( camera.finalSize.x / renderTextureSpriteBounds.width,
+											   camera.finalSize.y / renderTextureSpriteBounds.height );
+					renderTextureSprite.setPosition( sf::Vector2f( camera.screenOffset ) );
+
+					renderWindow.draw( renderTextureSprite );
+				}
+
+				renderWindow.display();
+			}
+			drawingInformationContainer.swap();
+		}
+		hasTerminated = true;
+		return;
 	}
 
 	const std::string GraphicsSystem::WINDOW_NAME_DEFAULT = "DefaultWindowName";

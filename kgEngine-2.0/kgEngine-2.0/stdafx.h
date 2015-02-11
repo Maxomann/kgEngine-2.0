@@ -20,6 +20,10 @@
 #include <list>
 #include <forward_list>
 #include <random>
+#include <queue>
+#include <thread>
+#include <mutex>
+#include <stack>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

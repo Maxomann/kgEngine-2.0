@@ -5,6 +5,16 @@
 
 namespace kg
 {
+	//cameraStates, graphicsInformations
+	typedef std::pair<std::vector<CameraStateInformation>, std::vector<GraphicsStateInformation>> DrawingStateInformation;
+
+	void drawingThreadFunction( sf::RenderWindow& renderWindow,
+								SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>>& drawingInformationContainer,
+								int& drawingThreadFrameTime,
+								bool& shouldTerminate,
+								bool& hasTerminated );
+
+
 	class GraphicsSystem : public System, public CallbackReciever
 	{
 		std::shared_ptr<ConfigFile> m_configFile;
@@ -23,15 +33,24 @@ namespace kg
 
 		std::vector<std::shared_ptr<Entity>> m_cameras;
 
-		bool m_shouldInitCameras=true;
+		bool m_shouldInitCameras = true;
 
 		void m_onSavegameOpened( Engine& engine );
 		void m_onSavegameClosed();
 
 		void m_initCameras( Engine& engine, World& world );
-		
+
+
+		void m_launchDrawingThread( sf::RenderWindow& renderWindow );
+		void m_terminateDrawingThread();
+		SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>> m_drawingInformationContainer;
+		bool m_drawingShouldTerminate = false;
+		bool m_drawingHasTerminated = false;
+		int m_drawingThreadFrameTime = -1;
 
 	public:
+		~GraphicsSystem();
+
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );
 
 		virtual void sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent );

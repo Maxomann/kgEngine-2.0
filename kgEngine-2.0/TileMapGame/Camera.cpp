@@ -6,7 +6,7 @@ namespace kg
 {
 	void Camera::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
 	{
-		//Should never be called since camera is created in GraphicsSystem
+		//Should never be called since camera creates itself
 		throw new bad_function_call();
 	}
 
@@ -20,40 +20,6 @@ namespace kg
 
 	void Camera::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
 	{
-		m_texture.clear( Color::Green );
-		m_texture.setView( m_view );
-
-		auto toDraw = world.getEntitiesThatHaveComponent<Graphics>();
-		map<int, map<int, map<int, std::vector<shared_ptr<Entity>>>>> toDrawSorted;//by Z value by Y value by X value;
-		auto cameraRect = r_transformation->getGlobalBounds();
-		for( auto& el : toDraw )
-		{
-			auto graphics = el->getComponent<Graphics>();
-			auto toDrawTransformationComponent = el->getComponent<Transformation>();
-			auto toDrawGlobalBounds = toDrawTransformationComponent->getGlobalBounds();
-
-			if( toDrawGlobalBounds.intersects( cameraRect ) )//only add if visible on this camera
-			{
-				auto toDrawPosition = toDrawTransformationComponent->getPosition();
-				auto zValue = toDrawTransformationComponent->getZValue();
-				toDrawSorted[zValue][toDrawPosition.y][toDrawPosition.x].push_back( el );
-			}
-		}
-
-		batch::SpriteBatch spriteBatch;
-		spriteBatch.begin();
-
-		for( const auto& Z : toDrawSorted )
-			for( const auto& Y : Z.second )
-				for( const auto& X : Y.second )
-					for( const auto& entity : X.second )
-						entity->getComponent<Graphics>()->drawToSpriteBatch( spriteBatch );
-
-		spriteBatch.end();
-		m_texture.draw( spriteBatch );
-
-		m_texture.display();
-
 		return;
 	}
 
@@ -75,19 +41,6 @@ namespace kg
 	Plugin::Id Camera::getPluginId() const
 	{
 		return ( int )id::ComponentPluginId::CAMERA;
-	}
-
-	void Camera::draw( RenderTarget& target, RenderStates states ) const
-	{
-		Sprite sprite;
-		sprite.setTexture( m_texture.getTexture() );
-		sprite.setPosition( sf::Vector2f( m_screenOffset ) );
-		sprite.scale( sf::Vector2f(
-			m_finalSize.x / sprite.getGlobalBounds().width,
-			m_finalSize.y / sprite.getGlobalBounds().height
-			) );
-
-		target.draw( sprite );
 	}
 
 	void Camera::onPositionChanged( const sf::Vector2i& newPosition )
@@ -134,12 +87,24 @@ namespace kg
 
 	void Camera::setRenderResolution( const sf::Vector2u& resolution )
 	{
-		m_texture.create( resolution.x, resolution.y );
+		m_renderResolution = resolution;
 	}
 
 	sf::Vector2u Camera::getRenderResolution() const
 	{
-		return m_texture.getSize();
+		return m_renderResolution;
+	}
+
+	kg::CameraStateInformation Camera::getStateInformation() const
+	{
+		CameraStateInformation info;
+		info.view = m_view;
+		info.finalSize = m_finalSize;
+		info.renderResolution = m_renderResolution;
+		info.screenOffset = m_screenOffset;
+		info.globalBounds = r_transformation->getGlobalBounds();
+
+		return info;
 	}
 
 	const std::string Camera::PLUGIN_NAME = "Camera";

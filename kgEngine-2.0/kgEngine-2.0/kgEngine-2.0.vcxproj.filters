@@ -160,6 +160,9 @@
     <ClInclude Include="BlueprintValueReadErrorException.h">
       <Filter>Headerdateien\Exceptions</Filter>
     </ClInclude>
+    <ClInclude Include="SwapContainer.h">
+      <Filter>Headerdateien\Toolset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

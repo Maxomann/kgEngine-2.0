@@ -5,6 +5,7 @@
 #include "core.h"
 #include "Callback.h"
 #include "ConfigFile.h"
+#include "SwapContainer.h"
 
 
 //exceptions:

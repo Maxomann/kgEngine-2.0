@@ -4,12 +4,20 @@
 
 namespace kg
 {
+	struct GraphicsStateInformation
+	{
+		sf::FloatRect globalBounds;
+		std::shared_ptr<sf::Drawable> drawable;
+		int zValue;
+	};
+
+
 	class Graphics : public Component, public CallbackReciever//, public sf::Drawable
 	{
 		Transformation* r_transformation = nullptr;
 
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;
-		sf::Sprite m_sprite;
+		std::shared_ptr<sf::Sprite> m_sprite = std::make_shared<sf::Sprite>();
 
 		void onPositionChanged( const sf::Vector2i& newPosition );
 		void onSizeChanged( const sf::Vector2i& newSize );
@@ -35,12 +43,13 @@ namespace kg
 		virtual Plugin::Id getPluginId()const override;
 
 
+		GraphicsStateInformation getStateInformation()const;
 
 		void setTextureRect( const sf::IntRect& rect );
 		const sf::IntRect& getTextureRect()const;
 
 
-		void drawToSpriteBatch(batch::SpriteBatch& spriteBatch)const;
+		/*void drawToSpriteBatch(batch::SpriteBatch& spriteBatch)const;*/
 		//virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
 		static const std::string BLUEPRINT_TEXTURE_RECT_WIDTH;

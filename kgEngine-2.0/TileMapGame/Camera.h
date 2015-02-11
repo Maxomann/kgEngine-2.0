@@ -5,15 +5,23 @@
 
 namespace kg
 {
-	typedef std::pair<sf::FloatRect, std::vector<std::tuple<sf::Sprite, std::shared_ptr<sf::Texture>, int>>> DrawingInformation;
+	struct CameraStateInformation
+	{ 
+		sf::FloatRect globalBounds;
+		sf::Vector2u renderResolution;
+		sf::Vector2u finalSize;
+		sf::Vector2i screenOffset;
+		sf::View view;
+	};
 
-	class Camera : public Component, public sf::Drawable, public CallbackReciever
+
+	class Camera : public Component, public CallbackReciever
 	{
 		Transformation* r_transformation;
 
 		sf::View m_view;
-		sf::RenderTexture m_texture;
 		sf::Vector2u m_finalSize;
+		sf::Vector2u m_renderResolution;
 		sf::Vector2i m_screenOffset;
 
 		void onPositionChanged( const sf::Vector2i& newPosition );
@@ -33,6 +41,9 @@ namespace kg
 		virtual const std::string& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId()const override;
+
+
+		CameraStateInformation getStateInformation()const;
 
 		// the size in pixel that this camera will render on the screen
 		// for a window of size 800x600 choose sf::Vector2u(800,600)
@@ -55,8 +66,6 @@ namespace kg
 		// Use it for speedup on weak systems
 		void setRenderResolution( const sf::Vector2u& resolution );
 		sf::Vector2u getRenderResolution()const;
-
-		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
 		static const std::string PLUGIN_NAME;
 

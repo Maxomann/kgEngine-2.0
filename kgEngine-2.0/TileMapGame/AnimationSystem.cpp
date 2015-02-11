@@ -53,4 +53,3 @@ namespace kg
 	const std::string AnimationSystem::PLUGIN_NAME="AnimationSystem";
 
 }
-
