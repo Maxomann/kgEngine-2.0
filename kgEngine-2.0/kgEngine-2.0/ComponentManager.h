@@ -76,7 +76,8 @@ namespace kg
 
 			//WORKAROUND
 			std::vector<size_t> componentTypes;// { typeid(ComponentType).hash_code() };
-			workaround::fill<ComponentType>( componentTypes );
+			/*workaround::fill<ComponentType>( componentTypes );*/
+			componentTypes.push_back( typeid(ComponentType).hash_code() );
 
 			return hasComponent( componentTypes );
 		};

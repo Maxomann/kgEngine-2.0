@@ -82,14 +82,13 @@ namespace kg
 		}
 
 		sf::Clock c;
+		c.restart();
 
 		//collect DrawingStateInformation
 		DrawingStateInformation dsi;
-		for( const auto& el : m_cameras )
-			dsi.first.push_back( el->getComponent<Camera>()->getStateInformation() );
-		for( const auto& el : world.getEntitiesThatHaveComponent<Graphics>() )
-			dsi.second.push_back( el->getComponent<Graphics>()->getStateInformation() );
-		m_drawingInformationContainer.push( dsi );
+		dsi.first = m_cameras;
+		dsi.second = world.getEntitiesThatHaveComponent<Graphics>();
+		m_drawingInformationContainer.push( move(dsi) );
 
 		engine.renderWindow.setTitle( m_configValues.window_name.toString() +
 									  " " +
@@ -201,7 +200,7 @@ namespace kg
 		{
 			drawingThreadFrameTime = thisFrameTime.restart().asMilliseconds();
 
-			auto container = drawingInformationContainer.getContent();
+			auto& container = drawingInformationContainer.swap();
 			if( container->size() > 0 )
 			{
 				renderWindow.clear( Color::Red );
@@ -249,23 +248,25 @@ namespace kg
 				//for every camera state information
 				for( const auto& camera : relevantInformation.first )
 				{
+					auto cameraState = camera->getComponent<Camera>()->getStateInformation();
+
 					//create render texture if needed (they will not be destroyed until funtion terminates)
-					auto it = renderTexturesBySize.find( camera.renderResolution.x );
+					auto it = renderTexturesBySize.find( cameraState.renderResolution.x );
 					if( it == end( renderTexturesBySize ) )
 					{
-						renderTexturesBySize[camera.renderResolution.x][camera.renderResolution.y].create( camera.renderResolution.x, camera.renderResolution.y );
+						renderTexturesBySize[cameraState.renderResolution.x][cameraState.renderResolution.y].create( cameraState.renderResolution.x, cameraState.renderResolution.y );
 					}
 					else
 					{
-						auto it2 = it->second.find( camera.renderResolution.y );
+						auto it2 = it->second.find( cameraState.renderResolution.y );
 						if( it2 == end( it->second ) )
 						{
-							renderTexturesBySize[camera.renderResolution.x][camera.renderResolution.y].create( camera.renderResolution.x, camera.renderResolution.y );
+							renderTexturesBySize[cameraState.renderResolution.x][cameraState.renderResolution.y].create( cameraState.renderResolution.x, cameraState.renderResolution.y );
 						}
 					}
 
 
-					auto& renderTexture = renderTexturesBySize[camera.renderResolution.x][camera.renderResolution.y];
+					auto& renderTexture = renderTexturesBySize[cameraState.renderResolution.x][cameraState.renderResolution.y];
 					Sprite renderTextureSprite;
 					map<int, map<int, map<int, std::vector<shared_ptr<Drawable>>>>> toDrawSorted;//Z Y X
 
@@ -273,22 +274,24 @@ namespace kg
 					//sort toDraws
 					for( const auto& toDraw : relevantInformation.second )
 					{
+						auto toDrawState = toDraw->getComponent<Graphics>()->getStateInformation();
+
 						//if toDraw is seen on camera
-						if( camera.globalBounds.intersects( toDraw.globalBounds ) )
+						if( cameraState.globalBounds.intersects( toDrawState.globalBounds ) )
 						{
 							//sort
 							toDrawSorted
-								[toDraw.zValue]//Z
-							[toDraw.globalBounds.top + toDraw.globalBounds.height]//Y
-							[toDraw.globalBounds.left]//X
-							.push_back( toDraw.drawable );
+								[toDrawState.zValue]//Z
+							[toDrawState.globalBounds.top + toDrawState.globalBounds.height]//Y
+							[toDrawState.globalBounds.left]//X
+							.push_back( toDrawState.drawable );
 						}
 					}
 
 
 					//draw drawables
 					renderTexture.clear( Color::Green );
-					renderTexture.setView( camera.view );
+					renderTexture.setView( cameraState.view );
 					for( const auto& Z : toDrawSorted )
 						for( const auto& Y : Z.second )
 							for( const auto& X : Y.second )
@@ -299,16 +302,15 @@ namespace kg
 
 					renderTextureSprite.setTexture( renderTexture.getTexture() );
 					auto renderTextureSpriteBounds = renderTextureSprite.getGlobalBounds();
-					renderTextureSprite.scale( camera.finalSize.x / renderTextureSpriteBounds.width,
-											   camera.finalSize.y / renderTextureSpriteBounds.height );
-					renderTextureSprite.setPosition( sf::Vector2f( camera.screenOffset ) );
+					renderTextureSprite.scale( cameraState.finalSize.x / renderTextureSpriteBounds.width,
+											   cameraState.finalSize.y / renderTextureSpriteBounds.height );
+					renderTextureSprite.setPosition( sf::Vector2f( cameraState.screenOffset ) );
 
 					renderWindow.draw( renderTextureSprite );
 				}
 
 				renderWindow.display();
 			}
-			drawingInformationContainer.swap();
 		}
 		hasTerminated = true;
 		return;

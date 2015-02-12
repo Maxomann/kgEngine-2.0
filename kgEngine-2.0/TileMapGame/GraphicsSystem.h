@@ -6,7 +6,7 @@
 namespace kg
 {
 	//cameraStates, graphicsInformations
-	typedef std::pair<std::vector<CameraStateInformation>, std::vector<GraphicsStateInformation>> DrawingStateInformation;
+	typedef std::pair<std::vector<std::shared_ptr<Entity>>, std::vector<std::shared_ptr<Entity>>> DrawingStateInformation;
 
 	void drawingThreadFunction( sf::RenderWindow& renderWindow,
 								SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>>& drawingInformationContainer,
