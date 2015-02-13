@@ -24,6 +24,7 @@
 #include <thread>
 #include <mutex>
 #include <stack>
+#include <algorithm>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

@@ -12,7 +12,7 @@ namespace kg
 								SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>>& drawingInformationContainer,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
-								bool& hasTerminated );
+								bool& drawingIsActive );
 
 
 	class GraphicsSystem : public System, public CallbackReciever
@@ -45,7 +45,7 @@ namespace kg
 		void m_terminateDrawingThread();
 		SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>> m_drawingInformationContainer;
 		bool m_drawingShouldTerminate = false;
-		bool m_drawingHasTerminated = false;
+		bool m_drawingIsActive = false;
 		int m_drawingThreadFrameTime = -1;
 
 	public:

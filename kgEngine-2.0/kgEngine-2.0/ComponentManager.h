@@ -24,6 +24,7 @@ namespace kg
 
 	class DLL_EXPORT ComponentManager
 	{
+	private:
 		std::map<size_t, std::shared_ptr<Component>> m_componentsByType;
 		std::map<double, std::shared_ptr<Component>> m_componentsByUpdateImportance;
 		std::map<Plugin::Id, std::shared_ptr<Component>> m_componentsByPluginId;
@@ -75,11 +76,11 @@ namespace kg
 			// 			std::vector<size_t> componentTypes { (typeid(ComponentType).hash_code())... };
 
 			//WORKAROUND
-			std::vector<size_t> componentTypes;// { typeid(ComponentType).hash_code() };
-			/*workaround::fill<ComponentType>( componentTypes );*/
-			componentTypes.push_back( typeid(ComponentType).hash_code() );
+			/*std::vector<size_t> componentTypes;// { typeid(ComponentType).hash_code() };
+			workaround::fill<ComponentType>( componentTypes );
+			//componentTypes.push_back( typeid(ComponentType).hash_code() );*/
 
-			return hasComponent( componentTypes );
+			return hasComponent( {typeid(ComponentType).hash_code()} );
 		};
 
 		//returns true if all components of type ComponentType are registered

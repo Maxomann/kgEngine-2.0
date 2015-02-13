@@ -1,5 +1,7 @@
 #include "ComponentManager.h"
 
+using namespace std;
+
 namespace kg
 {
 	void ComponentManager::updateAllComponentsByImportance( Engine& engine, World& world, const sf::Time& frameTime )
@@ -18,8 +20,10 @@ namespace kg
 
 	bool ComponentManager::hasComponent( const std::vector<size_t>& componentTypes )const
 	{
+		auto entIt = end( m_componentsByType );
+
 		for( const auto& type : componentTypes )
-			if( m_componentsByType.find( type ) == m_componentsByType.end() )
+			if( m_componentsByType.find( type ) == entIt )
 				return false;
 		return true;
 	}

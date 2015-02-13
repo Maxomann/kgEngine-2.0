@@ -88,7 +88,10 @@ namespace kg
 		DrawingStateInformation dsi;
 		dsi.first = m_cameras;
 		dsi.second = world.getEntitiesThatHaveComponent<Graphics>();
-		m_drawingInformationContainer.push( move(dsi) );
+		m_drawingInformationContainer.push( move( dsi ) );
+
+		/*for( int i = 0; i < 20; ++i )
+			volatile auto vec( world.getEntitiesThatHaveComponent<Camera>() );*/
 
 		engine.renderWindow.setTitle( m_configValues.window_name.toString() +
 									  " " +
@@ -96,7 +99,9 @@ namespace kg
 									  " :: " +
 									  to_string( m_drawingThreadFrameTime ) +
 									  " ++ " +
-									  to_string(c.restart().asMilliseconds()));
+									  to_string( c.restart().asMilliseconds() ) +
+									  " EntityCount: " +
+									  to_string( world.getEntityCount() ) );
 
 		return;
 	}
@@ -164,7 +169,7 @@ namespace kg
 	{
 		//safely terminate drawing thread
 		m_drawingShouldTerminate = true;
-		while( !m_drawingHasTerminated )
+		while( m_drawingIsActive )
 			sleep( sf::milliseconds( 1 ) );
 		sleep( sf::milliseconds( 1 ) );
 	}
@@ -172,7 +177,7 @@ namespace kg
 	void GraphicsSystem::m_launchDrawingThread( RenderWindow& renderWindow )
 	{
 		m_drawingShouldTerminate = false;
-		m_drawingHasTerminated = false;
+		m_drawingIsActive = true;
 
 		//launch drawing thread
 		thread drawingThread(
@@ -181,7 +186,7 @@ namespace kg
 			ref( m_drawingInformationContainer ),
 			ref( m_drawingThreadFrameTime ),
 			ref( m_drawingShouldTerminate ),
-			ref( m_drawingHasTerminated )
+			ref( m_drawingIsActive )
 			);
 		drawingThread.detach();
 	}
@@ -190,7 +195,7 @@ namespace kg
 								SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>>& drawingInformationContainer,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
-								bool& hasTerminated )
+								bool& drawingIsActive )
 	{
 		renderWindow.setActive( true );
 		map<int, map<int, RenderTexture>> renderTexturesBySize;
@@ -312,7 +317,7 @@ namespace kg
 				renderWindow.display();
 			}
 		}
-		hasTerminated = true;
+		drawingIsActive = false;
 		return;
 	}
 

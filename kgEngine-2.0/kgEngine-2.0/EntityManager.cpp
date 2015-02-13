@@ -5,66 +5,83 @@ using namespace sf;
 
 namespace kg
 {
-	std::pair<bool, std::shared_ptr<Entity>> EntityManager::addEntity( std::shared_ptr<Entity>& entity )
+	bool EntityManager::addEntity( std::shared_ptr<Entity>& entity )
 	{
-		Entity* id = entity.get();
+		bool didExist = doesEntityExist( entity );
 
-		auto it = m_entities.find( id );
-		auto end = m_entities.end();
+		m_entities.push_back( entity );
 
-		m_entities[id] = entity;
-
+		addEntityReferencesByComponentType( entity );
 		s_entity_added( entity );
 
 		//return false if Entity already existed
-		return std::pair<bool, std::shared_ptr<Entity>>( it != end, entity );
+		return !didExist;
 	}
 
 	bool EntityManager::removeEntity( const std::shared_ptr<Entity>& entity )
 	{
-		Entity* id = entity.get();
-
-		auto it = m_entities.find( id );
+		auto it = m_findEntity( entity );
 
 		bool didExist = false;
 
 		if( it != m_entities.end() )
 		{
-			s_entity_removed( it->second );
+			s_entity_removed( *it );
 			didExist = true;
-			m_entities.erase( id );
+			removeEntityReferencesByComponentType( entity );
+			m_entities.erase( m_findEntity( entity ) );
 		}
 
 		return didExist;
 	}
 
-	std::shared_ptr<Entity> EntityManager::getEntity( const std::shared_ptr<Entity>& entity )
+	bool EntityManager::doesEntityExist( const std::shared_ptr<Entity>& entity )
 	{
-		auto id = entity.get();
-
-		auto it = m_entities.find( id );
-		if( it == m_entities.end() )
-			return nullptr;
-		else
-			return it->second;
+		return m_findEntity( entity ) != m_entities.end();
 	}
 
 	void EntityManager::updateEntities( Engine& engine, World& world, const sf::Time& frameTime )
 	{
 		for( auto& entity : m_entities )
-			entity.second->updateAllComponentsByImportance( engine, world, frameTime );
+			entity->updateAllComponentsByImportance( engine, world, frameTime );
 	}
 
 	void EntityManager::clear()
 	{
 		m_entities.clear();
+		m_entitiesByComponentsTheyHave.clear();
 	}
 
-	std::vector<std::shared_ptr<Entity>> EntityManager::getAllEntities()
+	const std::vector<std::shared_ptr<Entity>>& EntityManager::getAllEntities()const
 	{
-		vector<shared_ptr<Entity>> retVal;
-		for( auto& el : m_entities )
-			retVal.push_back( el.second );
-		return retVal;
+		return m_entities;
 	}
+
+	unsigned int EntityManager::getEntityCount() const
+	{
+		return m_entities.size();
+	}
+
+	void EntityManager::addEntityReferencesByComponentType( const std::shared_ptr<Entity>& entity )
+	{
+		for( const auto& comp : entity->getAllComponentsByTypeHash() )
+			m_entitiesByComponentsTheyHave[comp.first].push_back( entity );
+	}
+
+	void EntityManager::removeEntityReferencesByComponentType( const std::shared_ptr<Entity>& entity )
+	{
+		for( const auto& comp : entity->getAllComponentsByTypeHash() )
+		{
+			auto& vec = m_entitiesByComponentsTheyHave[comp.first];
+			auto it = find( begin( vec ), end( vec ), entity );
+			if( it != vec.end() )
+				vec.erase( it );
+		}
+	}
+
+	std::vector<std::shared_ptr<Entity>>::iterator EntityManager::m_findEntity( const std::shared_ptr<Entity>& entity )
+	{
+		return find( begin( m_entities ), end( m_entities ), entity );
+	}
+
 }
