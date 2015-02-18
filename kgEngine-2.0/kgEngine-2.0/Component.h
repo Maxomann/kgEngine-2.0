@@ -22,7 +22,7 @@ namespace kg
 
 		// get values from blueprint Entity
 		// will NOT BE CALLED, if this entity is temporary
-		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues ) = 0;
+		virtual void preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues ) = 0;
 
 		// it is guaranteed that all components of the entity are loaded at this point
 		// their init function is not guaranteed to have been called

@@ -33,7 +33,6 @@ namespace kg
 	void GameController::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
 		auto camera = r_graphicsSystem->getCamera( 0 );
-		camera->getComponent<Transformation>()->setSize( Vector2i( 1080 * 10, 720 * 10 ) );
 		
 		auto frameTimeInMilliseconds = frameTime.asMilliseconds();
 
@@ -49,7 +48,15 @@ namespace kg
 				camera->getComponent<Transformation>()->move( sf::Vector2i( -10.0 / 16.0 * frameTimeInMilliseconds, 0 ) );
 			if( Keyboard::isKeyPressed( Keyboard::D ) )
 				camera->getComponent<Transformation>()->move( sf::Vector2i( 10.0 / 16.0 * frameTimeInMilliseconds, 0 ) );
+			if( Keyboard::isKeyPressed( Keyboard::Add ) )
+				m_cameraZoomFactor -= 0.01*frameTimeInMilliseconds;
+			if( Keyboard::isKeyPressed( Keyboard::Subtract ) )
+				m_cameraZoomFactor += 0.01*frameTimeInMilliseconds;
 		}
+		if( m_cameraZoomFactor < 0 )
+			m_cameraZoomFactor = 0;
+		camera->getComponent<Transformation>()->setSize( Vector2i( 1080.0 * m_cameraZoomFactor, 720.0 * m_cameraZoomFactor ) );
+
 
 		if( Keyboard::isKeyPressed( Keyboard::F5 ) )
 		{

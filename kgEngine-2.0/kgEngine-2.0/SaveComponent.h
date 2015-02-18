@@ -69,7 +69,7 @@ namespace kg
 	public:
 		Save( const blueprint::Id& blueprintEntityId, const blueprint::Entity& blueprint, const Entity::Id& uniqueEntityId );
 
-		virtual void preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues ) override;
+		virtual void preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues ) override;
 
 		virtual void init( Engine& engine, World& world, ComponentManager& thisEntity ) override;
 
@@ -95,7 +95,7 @@ namespace kg
 
 	signals:
 		std::map < Plugin::Id,//first: componentId, second: signal
-			boost::signals2::signal< std::vector<std::string>()> > s_writeSaveInformation;//first:id second: saveInformation
+			ReturningSignal< std::vector<std::string> > > s_writeSaveInformation;//first:id second: saveInformation
 
 		std::map<Plugin::Id, Signal<const std::vector<std::string>&>> s_loadSaveInformation;//first: componentId, second: signal
 	};

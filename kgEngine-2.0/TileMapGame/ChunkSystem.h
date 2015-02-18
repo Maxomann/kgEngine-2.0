@@ -4,6 +4,12 @@
 #include "ChunkGenerator.h"
 #include "GraphicsSystem.h"
 
+#define GENERATE_CHUNK_INSTEAD_OF_LOADING_FROM_FILE 1
+#define LOAD_CHUNKS_ONLY_ONCE 0
+#define CONSOLE_COMPARE_LOAD_UNLOAD_TIME 0
+#define DONT_UNLOAD_CHUNKS 0
+#define UNLOAD_ALL_CHUNKS 0
+
 namespace kg
 {
 	class ChunkSystem : public System, public CallbackReciever

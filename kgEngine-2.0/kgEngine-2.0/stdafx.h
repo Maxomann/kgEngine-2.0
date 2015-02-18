@@ -34,6 +34,7 @@
 #include <SFML/Audio.hpp>
 
 #include <boost/algorithm/string.hpp>
+#include <boost/optional.hpp>
 
 
 #ifdef _WIN32

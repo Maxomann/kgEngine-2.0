@@ -32,7 +32,7 @@ namespace kg
 	signals:
 		Signal<Engine&> s_savegameOpened;
 		Signal<> s_savegameClosed;
-		std::map< Plugin::Id, boost::signals2::signal < std::vector<std::string>()> > s_writeSaveInformation;//first: systemId, second: signal
+		std::map< Plugin::Id, ReturningSignal< std::vector<std::string> > > s_writeSaveInformation;//first: systemId, second: signal
 		std::map< Plugin::Id, Signal<const std::vector<std::string>&> > s_loadSaveInformation;//first: systemId, second: signal
 
 		static const std::string PLUGIN_NAME;

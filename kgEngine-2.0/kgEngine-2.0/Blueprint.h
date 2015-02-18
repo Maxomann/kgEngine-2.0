@@ -55,6 +55,13 @@ namespace kg
 			/*const*/ std::string m_rawValue = "standard constructor has been called - object not initialized";
 			bool m_isValid = false;
 
+			boost::optional<bool> m_asBool;
+			boost::optional<int> m_asInt;
+			boost::optional<std::pair<int, std::string>> m_asIntWithUnit;
+			boost::optional<double> m_asDouble;
+			boost::optional<std::pair<double, std::string>> m_asDoubleWithUnit;
+			boost::optional<std::string> m_asString;
+
 		public:
 			Value();
 			Value( const std::string& name,
@@ -62,15 +69,15 @@ namespace kg
 
 			const std::string& getName()const;
 
-			bool toBool()const;
+			bool toBool();
 
-			int toInt()const;
-			std::pair<int, std::string> toIntWithUnit()const;
+			int toInt();
+			std::pair<int, std::string> toIntWithUnit();
 
-			double toDouble()const;
-			std::pair<double, std::string> toDoubleWithUnit()const;
+			double toDouble();
+			std::pair<double, std::string> toDoubleWithUnit();
 
-			std::string toString()const;
+			std::string toString();
 
 			std::string getRawValue()const;
 

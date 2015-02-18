@@ -316,6 +316,8 @@ namespace kg
 
 				renderWindow.display();
 			}
+			else
+				sleep( milliseconds( 1 ) );
 		}
 		drawingIsActive = false;
 		return;

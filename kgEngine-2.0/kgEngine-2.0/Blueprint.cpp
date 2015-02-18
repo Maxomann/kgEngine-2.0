@@ -62,65 +62,81 @@ namespace kg
 			return m_rawValue;
 		}
 
-		std::string Value::toString() const
+		std::string Value::toString()
 		{
-			if( m_rawValue.at( 0 ) == '"' && *m_rawValue.rbegin() == '"' )
+			if(!m_asString)
 			{
-				std::string retVal = m_rawValue;
-				retVal.erase( 0, 1 );
-				retVal.pop_back();
-				return retVal;
+				if( m_rawValue.at( 0 ) == '"' && *m_rawValue.rbegin() == '"' )
+				{
+					std::string retVal = m_rawValue;
+					retVal.erase( 0, 1 );
+					retVal.pop_back();
+					m_asString= retVal;
+				}
+				else
+					m_asString= m_rawValue;
 			}
-			else
-				return m_rawValue;
+			return *m_asString;
 		}
 
-		std::pair<double, std::string> Value::toDoubleWithUnit() const
+		std::pair<double, std::string> Value::toDoubleWithUnit()
 		{
-			std::string number;
-			std::string unit;
-
-			bool afterNumber = false;
-			for( const auto& ch : m_rawValue )
+			if( !m_asDoubleWithUnit )
 			{
-				if( !afterNumber )
+				std::string number;
+				std::string unit;
+
+				bool afterNumber = false;
+				for( const auto& ch : m_rawValue )
 				{
-					if( std::isdigit( ch ) || ch == '.' )
-						number.push_back( ch );
+					if( !afterNumber )
+					{
+						if( std::isdigit( ch ) || ch == '.' )
+							number.push_back( ch );
+						else
+						{
+							afterNumber = true;
+							unit.push_back( ch );
+						}
+					}
 					else
 					{
-						afterNumber = true;
 						unit.push_back( ch );
 					}
 				}
-				else
-				{
-					unit.push_back( ch );
-				}
+
+				std::istringstream i( number );
+				double d = 0;
+				if( !(i >> d) )
+					d = 0;
+
+				m_asDoubleWithUnit = std::pair<double, std::string>( d, unit );
 			}
-
-			std::istringstream i( number );
-			double d = 0;
-			if( !(i >> d) )
-				d = 0;
-
-			return std::pair<double, std::string>( d, unit );
+			return *m_asDoubleWithUnit;
 		}
 
-		double Value::toDouble() const
+		double Value::toDouble()
 		{
-			return toDoubleWithUnit().first;
+			if(!m_asDouble)
+				m_asDouble= toDoubleWithUnit().first;
+			return *m_asDouble;
 		}
 
-		std::pair<int, std::string> Value::toIntWithUnit() const
+		std::pair<int, std::string> Value::toIntWithUnit()
 		{
-			auto retVal = toDoubleWithUnit();
-			return std::pair<int, std::string>( ( int )retVal.first, retVal.second );
+			if(!m_asIntWithUnit )
+			{
+				auto retVal = toDoubleWithUnit();
+				m_asIntWithUnit= std::pair<int, std::string>( ( int )retVal.first, retVal.second );
+			}
+			return *m_asIntWithUnit;
 		}
 
-		int Value::toInt() const
+		int Value::toInt()
 		{
-			return ( int )toDouble();
+			if(!m_asInt )
+				m_asInt=( int )toDouble();
+			return *m_asInt;
 		}
 
 		const std::string& Value::getName() const
@@ -138,20 +154,24 @@ namespace kg
 			return isValid();
 		}
 
-		bool Value::toBool() const
+		bool Value::toBool()
 		{
-			if( atoi( m_rawValue.c_str() ) != 0 )
+			if(!m_asBool )
 			{
-				return true;
+				if( atoi( m_rawValue.c_str() ) != 0 )
+				{
+					m_asBool = true;
+				}
+				else
+				{
+					auto rawValueCopy = m_rawValue;
+					std::transform( rawValueCopy.begin(), rawValueCopy.end(), rawValueCopy.begin(), ::tolower );
+					if( rawValueCopy == "true" )
+						m_asBool= true;
+				}
+				m_asBool=false;
 			}
-			else
-			{
-				auto rawValueCopy = m_rawValue;
-				std::transform( rawValueCopy.begin(), rawValueCopy.end(), rawValueCopy.begin(), ::tolower );
-				if( rawValueCopy == "true" )
-					return true;
-			}
-			return false;
+			return *m_asBool;
 		}
 
 		Value& Value::operator=(const std::string& rhs)

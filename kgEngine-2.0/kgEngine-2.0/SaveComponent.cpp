@@ -207,7 +207,7 @@ namespace kg
 		return m_information.size() != 0;
 	}
 
-	void Save::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
+	void Save::preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues )
 	{
 		return;
 	}

@@ -4,7 +4,7 @@ using namespace sf;
 
 namespace kg
 {
-	void Graphics::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
+	void Graphics::preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues )
 	{
 		string texturePackage;
 		string texturePath;

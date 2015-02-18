@@ -4,7 +4,7 @@ using namespace sf;
 
 namespace kg
 {
-	void Camera::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
+	void Camera::preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues )
 	{
 		//Should never be called since camera creates itself
 		throw new bad_function_call();

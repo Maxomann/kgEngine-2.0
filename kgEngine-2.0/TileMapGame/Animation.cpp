@@ -5,7 +5,7 @@ using namespace sf;
 namespace kg
 {
 
-	void Animation::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
+	void Animation::preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues )
 	{
 		//load blueprint configuration
 		string package;

@@ -29,7 +29,7 @@ namespace kg
 			s_entity_removed( *it );
 			didExist = true;
 			removeEntityReferencesByComponentType( entity );
-			m_entities.erase( m_findEntity( entity ) );
+			m_entities.erase( it );
 		}
 
 		return didExist;
@@ -72,10 +72,10 @@ namespace kg
 	{
 		for( const auto& comp : entity->getAllComponentsByTypeHash() )
 		{
-			auto& vec = m_entitiesByComponentsTheyHave[comp.first];
-			auto it = find( begin( vec ), end( vec ), entity );
-			if( it != vec.end() )
-				vec.erase( it );
+			auto& container = m_entitiesByComponentsTheyHave[comp.first];
+			auto it = find( begin( container ), end( container ), entity );
+			if( it != container.end() )
+				container.erase( it );
 		}
 	}
 

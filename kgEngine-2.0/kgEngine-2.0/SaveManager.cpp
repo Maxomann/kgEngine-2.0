@@ -97,14 +97,14 @@ namespace kg
 	bool SaveManager::loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename )
 	{
 		//return false if file does not exist
-		if( !exists( path(string(SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION ))) )
+		if( !exists( path( string( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION ) ) ) )
 			return false;
 
 		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION,
 					  fstream::in );
 		if( !file.is_open() )
 			return false;
-		
+
 
 		vector<string> lines;
 		string line;
@@ -118,7 +118,7 @@ namespace kg
 
 		for( auto& el : information )
 		{
-			auto entity = world.createNewSaveableEntity( engine,world, el.getBlueprintEntityId(), el.getUniqueEntityId() );
+			auto entity = world.createNewSaveableEntity( engine, world, el.getBlueprintEntityId(), el.getUniqueEntityId() );
 			entity->getComponent<Save>()->loadSaveInformation( el );
 			world.addEntity( entity );
 		}

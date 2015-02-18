@@ -4,7 +4,7 @@ using namespace sf;
 
 namespace kg
 {
-	void Transformation::preInit( Engine& engine, const std::map<std::string, blueprint::Value>& blueprintValues )
+	void Transformation::preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues )
 	{
 		auto it = blueprintValues.find( BLUEPRINT_HEIGHT );
 		if( it != blueprintValues.end() )

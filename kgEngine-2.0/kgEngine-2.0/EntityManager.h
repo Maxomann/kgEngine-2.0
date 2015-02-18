@@ -10,7 +10,7 @@ namespace kg
 	{
 		std::vector<std::shared_ptr<Entity>> m_entities;
 
-		std::map<size_t, std::vector<std::shared_ptr<Entity>>> m_entitiesByComponentsTheyHave;
+		std::map<size_t, std::list<std::shared_ptr<Entity>>> m_entitiesByComponentsTheyHave;
 
 		void addEntityReferencesByComponentType( const std::shared_ptr<Entity>& entity );
 		void removeEntityReferencesByComponentType( const std::shared_ptr<Entity>& entity );
@@ -32,7 +32,7 @@ namespace kg
 
 		//returns all entities that have all components, given in the template parameter, registered
 		template<class /*variadic*/ ComponentType>
-		const std::vector<std::shared_ptr<Entity>>& getEntitiesThatHaveComponent()
+		const std::list<std::shared_ptr<Entity>>& getEntitiesThatHaveComponent()
 		{
 			return m_entitiesByComponentsTheyHave[typeid(ComponentType).hash_code()];
 		};
