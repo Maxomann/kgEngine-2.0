@@ -20,11 +20,11 @@ namespace kg
 		// overwrites entity if it already exists
 		// first: returns false in that case
 		// second: EntityId of the added Entity
-		bool addEntity( std::shared_ptr<Entity>& entity );
+		void addEntity( std::shared_ptr<Entity>& entity );
 
 		// ensures that the entity with id parameter:id does not exist anymore
 		// returns false if entity with id did not exist
-		bool removeEntity( const std::shared_ptr<Entity>& entity );
+		void removeEntity( const std::shared_ptr<Entity>& entity );
 
 
 		// returns nullptr if Entity with id does not exist

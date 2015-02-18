@@ -20,7 +20,7 @@ namespace kg
 			return m_pluginId;
 		}
 
-		std::string getName()const
+		const std::string& getName()const
 		{
 			return m_name;
 		}

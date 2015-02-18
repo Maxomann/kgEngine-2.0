@@ -5,34 +5,24 @@ using namespace sf;
 
 namespace kg
 {
-	bool EntityManager::addEntity( std::shared_ptr<Entity>& entity )
+	void EntityManager::addEntity( std::shared_ptr<Entity>& entity )
 	{
-		bool didExist = doesEntityExist( entity );
-
 		m_entities.push_back( entity );
 
 		addEntityReferencesByComponentType( entity );
 		s_entity_added( entity );
-
-		//return false if Entity already existed
-		return !didExist;
 	}
 
-	bool EntityManager::removeEntity( const std::shared_ptr<Entity>& entity )
+	void EntityManager::removeEntity( const std::shared_ptr<Entity>& entity )
 	{
 		auto it = m_findEntity( entity );
-
-		bool didExist = false;
 
 		if( it != m_entities.end() )
 		{
 			s_entity_removed( *it );
-			didExist = true;
 			removeEntityReferencesByComponentType( entity );
 			m_entities.erase( it );
 		}
-
-		return didExist;
 	}
 
 	bool EntityManager::doesEntityExist( const std::shared_ptr<Entity>& entity )

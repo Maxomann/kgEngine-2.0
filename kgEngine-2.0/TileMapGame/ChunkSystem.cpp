@@ -206,7 +206,9 @@ namespace kg
 		if( m_loadedChunks[chunkPosition.x][chunkPosition.y] )
 		{
 			//chunk loaded
+#if DONT_SAVE_CHUNKS_ON_UNLOAD != 1
 			saveChunkToFile( engine, world, saveManager, chunkPosition );
+#endif
 			//remove entities in that chunk from world
 			auto temp = getEntitiesInChunk( chunkPosition );
 			for( const auto& entity : temp )
@@ -287,7 +289,7 @@ namespace kg
 				if( y.second == true )//if chunk is loaded atm
 				{
 					sf::Vector2i chunkPosition( x.first, y.first );
-#if UNLOAD_ALL_CHUNKS == 1
+#if UNLOAD_ALL_CHUNKS_EVERY_FRAME == 1
 						//chunk is not on ensure loaded list
 						ensureChunkUnloaded( engine, world, saveManager, chunkPosition );
 #else

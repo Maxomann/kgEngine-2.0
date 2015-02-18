@@ -5,23 +5,31 @@ namespace kg
 	void PluginManager::addComponentPlugin( const std::shared_ptr<PluginFactoryInterface<Component>>& componentPluginFactory )
 	{
 		int id = componentPluginFactory->getId();
+		auto& name = componentPluginFactory->getName();
 
 		if( m_componentPluginFactorysById.find( id ) != m_componentPluginFactorysById.end() )
 			throw PluginRegistrationException( id );
 
 		m_componentPluginFactorysById[id] = componentPluginFactory;
-		m_componentPluginFactorysByName[componentPluginFactory->getName()] = componentPluginFactory;
+		m_componentPluginFactorysByName[name] = componentPluginFactory;
+
+		m_componentPluginNamesByIds[id] = name;
+		m_componentPluginIdsByNames[name] = id;
 	}
 
 	void PluginManager::addSystemPlugin( const std::shared_ptr<PluginFactoryInterface<System>>& systemPluginFactory )
 	{
 		int id = systemPluginFactory->getId();
+		auto& name = systemPluginFactory->getName();
 
 		if( m_systemPluginFactorysById.find( id ) != m_systemPluginFactorysById.end() )
 			throw PluginRegistrationException( id );
 
 		m_systemPluginFactorysById[id] = systemPluginFactory;
-		m_systemPluginFactorysByName[systemPluginFactory->getName()] = systemPluginFactory;
+		m_systemPluginFactorysByName[name] = systemPluginFactory;
+
+		m_systemPluginNamesByIds[id] = name;
+		m_systemPluginIdsByNames[name] = id;
 	}
 
 	std::vector<std::tuple<int, size_t, std::shared_ptr<System>>> PluginManager::createEverySystemAvailable()const
@@ -109,4 +117,57 @@ namespace kg
 			throw PluginRequestException( pluginName );
 		}
 	}
+
+	const std::string& PluginManager::getComponentPluginNameForId( const int& id ) const
+	{
+		try
+		{
+			return m_componentPluginNamesByIds.at( id );
+		}
+		catch( std::out_of_range& e )
+		{
+			e;//to get rid of annoying warning C4101
+			throw PluginRequestException( id );
+		}
+	}
+
+	const int& PluginManager::getComponentPluginIdForName( const std::string& name ) const
+	{
+		try
+		{
+			return m_componentPluginIdsByNames.at( name );
+		}
+		catch( std::out_of_range& e )
+		{
+			e;//to get rid of annoying warning C4101
+			throw PluginRequestException( name );
+		}
+	}
+
+	const std::string& PluginManager::getSystemPluginNameForId( const int& id ) const
+	{
+		try
+		{
+			return m_systemPluginNamesByIds.at( id );
+		}
+		catch( std::out_of_range& e )
+		{
+			e;//to get rid of annoying warning C4101
+			throw PluginRequestException( id );
+		}
+	}
+
+	const int& PluginManager::getSystemPluginIdForName( const std::string& name ) const
+	{
+		try
+		{
+			return m_systemPluginIdsByNames.at( name );
+		}
+		catch( std::out_of_range& e )
+		{
+			e;//to get rid of annoying warning C4101
+			throw PluginRequestException( name );
+		}
+	}
+
 }
