@@ -97,7 +97,7 @@ namespace kg
 									   const std::vector<std::string>& lines ) = 0;
 		};
 
-		class DLL_EXPORT ComponentValue
+		class ComponentValue
 		{
 		public:
 			typedef std::string Name;
@@ -154,7 +154,6 @@ namespace kg
 			void overrideLocalComponentValueReferences();
 
 			const std::map<ComponentValue::Name, const ComponentValue*>& getComponentValueReferencesByName()const;
-			/*VALUES WITHOUT LINKING!!!*/
 			const std::map<ComponentValue::Name, ComponentValue>& getComponentValuesByName()const;
 
 			const std::string& getName()const;
@@ -337,25 +336,25 @@ namespace kg
 		public:
 			// parse a file
 			// can throw parsing error
-			DLL_EXPORT void parse( const std::string& path );
+			void parse( const std::string& path );
 
 			// can throw parsing error
-			DLL_EXPORT void parse( const std::string& file, const std::vector<std::string>&lines );
+			void parse( const std::string& file, const std::vector<std::string>&lines );
 
 			// should be called after all files have been parsed
 			// links entities to blueprints
 			// can throw linking error
-			DLL_EXPORT void link();
+			void link();
 
 			//all references from getBlueprintsByName, getEntitiesById, getBlueprintByName, getEntityById get invalidated
-			DLL_EXPORT void clear();
+			void clear();
 
-			DLL_EXPORT const std::map<ComponentContainer::Name, Blueprint>& getBlueprintsByName()const;
-			DLL_EXPORT const std::map<Entity::Id, Entity>& getEntitiesById()const;
-			DLL_EXPORT const std::map<ComponentContainer::Name, ComponentContainerExtension>& getComponentContainerExtensionsByName()const;
+			const std::map<ComponentContainer::Name, Blueprint>& getBlueprintsByName()const;
+			const std::map<Entity::Id, Entity>& getEntitiesById()const;
+			const std::map<ComponentContainer::Name, ComponentContainerExtension>& getComponentContainerExtensionsByName()const;
 
-			DLL_EXPORT const Blueprint& getBlueprintByName( const ComponentContainer::Name name )const;
-			DLL_EXPORT const Entity& getEntityById( const Entity::Id& id )const;
+			const Blueprint& getBlueprintByName( const ComponentContainer::Name name )const;
+			const Entity& getEntityById( const Entity::Id& id )const;
 		};
 	}
 }

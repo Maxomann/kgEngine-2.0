@@ -5,7 +5,7 @@ using namespace sf;
 namespace kg
 {
 
-	void Animation::preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues )
+	void Animation::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
 	{
 		//load blueprint configuration
 		string package;
@@ -13,7 +13,7 @@ namespace kg
 
 		try
 		{
-			package = blueprintValues.at( Constants::BLUEPRINT_PACKAGE_NAME ).toString();
+			package = blueprintValues.at( Constants::BLUEPRINT_PACKAGE_NAME )->asString();
 		}
 		catch( std::exception& e )
 		{
@@ -22,7 +22,7 @@ namespace kg
 		}
 		try
 		{
-			filename = blueprintValues.at( Constants::BLUEPRINT_FILE_PATH ).toString();
+			filename = blueprintValues.at( Constants::BLUEPRINT_FILE_PATH )->asString();
 		}
 		catch( std::exception& e )
 		{

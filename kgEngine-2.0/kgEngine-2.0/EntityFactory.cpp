@@ -32,21 +32,19 @@ namespace kg
 		auto& entityBlueprint = engine.blueprint.getEntityById( entityBlueprintId );
 
 		//OLD ADDITIONAL BLUEPRINT VALUES CODE
-		//m_additionalComponentValues = additionalBlueprintValues;//save additionalComponentValues for later request (ex. saving)
-		auto components = entityBlueprint.getComponentNames();
-		for( const auto& name : components )
+		auto& components = entityBlueprint.getComponentsByName();
+		for( const auto& comp : components )
 		{
-			auto createdComponent = engine.pluginManager.createComponentPlugin( name );
+			auto createdComponent = engine.pluginManager.createComponentPlugin( comp.first );
 			auto component = std::get<2>( createdComponent );
 
-			auto componentValues = entityBlueprint.getComponentValues( name );
 			//OLD CODE: add additional component values to the map
 			/*auto additionalComponentValuesForComponent = additionalBlueprintValues.find( name );
 			if( additionalComponentValuesForComponent != additionalBlueprintValues.end() )
 			for( const auto& el : (*additionalComponentValuesForComponent).second )
 			componentValues[el.first] = el.second;//override existing value (if it exists)*/
 
-			component->preInit( engine, componentValues );
+			component->preInit( engine, comp.second.getComponentValueReferencesByName() );
 			entity->addComponent( component, std::get<1>( createdComponent ) );
 		}
 

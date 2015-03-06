@@ -4,33 +4,33 @@ using namespace sf;
 
 namespace kg
 {
-	void Graphics::preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues )
+	void Graphics::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
 	{
 		string texturePackage;
 		string texturePath;
 
 		auto it = blueprintValues.find( Constants::BLUEPRINT_PACKAGE_NAME );
 		if( it != blueprintValues.end() )
-			texturePackage = it->second.toString();
+			texturePackage = it->second->asString();
 		it = blueprintValues.find( Constants::BLUEPRINT_FILE_PATH );
 		if( it != blueprintValues.end() )
-			texturePath = it->second.toString();
+			texturePath = it->second->asString();
 		m_resourceManagementReference = engine.resourceManager.getResource<sf::Texture>( texturePackage, texturePath );
 		m_sprite->setTexture( *m_resourceManagementReference.get() );
 
 		sf::IntRect textureRect;
 		it = blueprintValues.find( BLUEPRINT_TEXTURE_RECT_WIDTH );
 		if( it != blueprintValues.end() )
-			textureRect.width = it->second.toInt();
+			textureRect.width = it->second->asInt();
 		it = blueprintValues.find( BLUEPRINT_TEXTURE_RECT_HEIGHT );
 		if( it != blueprintValues.end() )
-			textureRect.height = it->second.toInt();
+			textureRect.height = it->second->asInt();
 		it = blueprintValues.find( BLUEPRINT_TEXTURE_RECT_TOP );
 		if( it != blueprintValues.end() )
-			textureRect.top = it->second.toInt();
+			textureRect.top = it->second->asInt();
 		it = blueprintValues.find( BLUEPRINT_TEXTURE_RECT_LEFT );
 		if( it != blueprintValues.end() )
-			textureRect.left = it->second.toInt();
+			textureRect.left = it->second->asInt();
 		m_sprite->setTextureRect( textureRect );
 	}
 

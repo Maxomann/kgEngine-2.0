@@ -4,17 +4,17 @@ using namespace sf;
 
 namespace kg
 {
-	void Transformation::preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues )
+	void Transformation::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
 	{
 		auto it = blueprintValues.find( BLUEPRINT_HEIGHT );
 		if( it != blueprintValues.end() )
-			m_size.x = it->second.toInt();
+			m_size.x = it->second->asInt();
 		it = blueprintValues.find( BLUEPRINT_WIDTH );
 		if( it != blueprintValues.end() )
-			m_size.y = it->second.toInt();
+			m_size.y = it->second->asInt();
 		it = blueprintValues.find( BLUEPRINT_ZVALUE );
 		if( it != blueprintValues.end() )
-			m_zValue = it->second.toInt();
+			m_zValue = it->second->asInt();
 	}
 
 	void Transformation::init( Engine& engine, World& world, ComponentManager& thisEntity )

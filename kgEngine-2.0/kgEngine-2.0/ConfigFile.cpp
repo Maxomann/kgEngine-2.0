@@ -47,9 +47,9 @@ namespace kg
 		return true;
 	}
 
-	DLL_EXPORT blueprint::Value ConfigFile::getData( const std::string& identifier )
+	DLL_EXPORT std::string& ConfigFile::getData( const std::string& identifier )
 	{
-		return Value( identifier, m_data[identifier] );
+		return m_data[identifier];
 	}
 
 	DLL_EXPORT void ConfigFile::saveToFile()

@@ -100,6 +100,7 @@
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Blueprint.h" />
     <ClInclude Include="BlueprintValueReadErrorException.h" />
     <ClInclude Include="Callback.h" />
     <ClInclude Include="Component.h" />
@@ -111,7 +112,6 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="EntityManager.h" />
-    <ClInclude Include="Blueprint.h" />
     <ClInclude Include="id_internal.h" />
     <ClInclude Include="PathNotAvailableException.h" />
     <ClInclude Include="Plugin.h" />

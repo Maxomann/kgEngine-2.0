@@ -63,13 +63,14 @@ namespace kg
 	{
 		const blueprint::Entity& m_blueprint;
 
-		const blueprint::Id m_blueprintEntityId;
+		const blueprint::Entity::Id m_blueprintEntityId;
 		const Entity::Id m_uniqueEntityId;
 
 	public:
-		Save( const blueprint::Id& blueprintEntityId, const blueprint::Entity& blueprint, const Entity::Id& uniqueEntityId );
+		Save( const blueprint::Entity::Id& blueprintEntityId, const blueprint::Entity& blueprint, const Entity::Id& uniqueEntityId );
 
-		virtual void preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues ) override;
+		virtual void preInit( Engine& engine,
+							  const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues ) override;
 
 		virtual void init( Engine& engine, World& world, ComponentManager& thisEntity ) override;
 
@@ -89,7 +90,7 @@ namespace kg
 		void loadSaveInformation( EntitySaveInformation& information );
 
 		const Entity::Id& getUniqueId()const;
-		const blueprint::Id& getBlueprintId()const;
+		const blueprint::Entity::Id& getBlueprintId()const;
 		
 		const blueprint::Entity& getBlueprint()const;
 

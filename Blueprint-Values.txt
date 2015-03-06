@@ -1,0 +1,26 @@
+single value:
+string					:"This is a string!"
+bool					:true|false|0|1
+int						:100
+intWithUnit				:50px
+double					:33.3
+doubleWithUnit			:66.6px
+
+list of any single value:
+vector<string>			:["Hello","How are you?","fine"]
+vector<bool>				:[true, false,   0, 1]
+vector<int>				:[100,200,400,800]
+vector<intWithUnit>		:[50px,100px,200px]
+vector<double>			:[33.3,66.6,100.5]
+vector<doubleWithUnit>	:[352.3px,52.14px,66m]
+
+map of any single value:
+map<string>				:["Hello, ","world";"How ","are you?"]
+map<bool>				:
+map<int>				:
+map<intWithUnit>		:
+map<double>				:
+map<doubleWithUnit>		:
+
+
+["Hello", 314.1, 400, 30px]

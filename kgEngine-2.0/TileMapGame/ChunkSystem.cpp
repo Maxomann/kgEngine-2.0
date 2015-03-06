@@ -14,13 +14,13 @@ namespace kg
 		m_configFile = configFile;
 
 		//get config values
-		m_configValues.chunkLoadRadiusAroundCamera = configFile->getData( CHUNK_LOAD_RADIUS_AROUND_CAMERA );
+		m_configValues.chunkLoadRadiusAroundCamera = &configFile->getData( CHUNK_LOAD_RADIUS_AROUND_CAMERA );
 
 		//set them if invalid ( and retrieve them a second time )
-		if( !m_configValues.chunkLoadRadiusAroundCamera )
-			m_configValues.chunkLoadRadiusAroundCamera = configFile->setData( CHUNK_LOAD_RADIUS_AROUND_CAMERA, CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT );
+		if( !m_configValues.chunkLoadRadiusAroundCamera->size() )
+			*m_configValues.chunkLoadRadiusAroundCamera = CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT;
 
-		chunkLoadRadiusAroundCamera = m_configValues.chunkLoadRadiusAroundCamera.toInt();
+		m_chunkLoadRadiusAroundCamera = boost::lexical_cast< int >(*m_configValues.chunkLoadRadiusAroundCamera);
 
 		return;
 	}
@@ -250,18 +250,18 @@ namespace kg
 		//add chunks that should be ensured to be loaded
 		for( const auto& position : chunkPositions )
 		{
-			for( int x = (-1 * chunkLoadRadiusAroundCamera); x <= chunkLoadRadiusAroundCamera; ++x )
+			for( int x = (-1 * m_chunkLoadRadiusAroundCamera); x <= m_chunkLoadRadiusAroundCamera; ++x )
 			{
-				for( int y = (-1 * chunkLoadRadiusAroundCamera); y <= chunkLoadRadiusAroundCamera; ++y )
+				for( int y = (-1 * m_chunkLoadRadiusAroundCamera); y <= m_chunkLoadRadiusAroundCamera; ++y )
 				{
 					chunksToEnsureLoaded.push_back( Vector2i( position.x + x, position.y + y ) );
 				}
 			}
 		}
 #else
-		for( int x = (-1 * chunkLoadRadiusAroundCamera); x <= chunkLoadRadiusAroundCamera; ++x )
+		for( int x = (-1 * m_chunkLoadRadiusAroundCamera); x <= m_chunkLoadRadiusAroundCamera; ++x )
 		{
-			for( int y = (-1 * chunkLoadRadiusAroundCamera); y <= chunkLoadRadiusAroundCamera; ++y )
+			for( int y = (-1 * m_chunkLoadRadiusAroundCamera); y <= m_chunkLoadRadiusAroundCamera; ++y )
 			{
 				chunksToEnsureLoaded.push_back( Vector2i( x, y ) );
 			}
@@ -290,8 +290,8 @@ namespace kg
 				{
 					sf::Vector2i chunkPosition( x.first, y.first );
 #if UNLOAD_ALL_CHUNKS_EVERY_FRAME == 1
-						//chunk is not on ensure loaded list
-						ensureChunkUnloaded( engine, world, saveManager, chunkPosition );
+					//chunk is not on ensure loaded list
+					ensureChunkUnloaded( engine, world, saveManager, chunkPosition );
 #else
 					if( find( begin( chunksToEnsureLoaded ), end( chunksToEnsureLoaded ), chunkPosition )
 						==
@@ -305,7 +305,7 @@ namespace kg
 			}
 		}
 #endif
-		
+
 
 #if CONSOLE_COMPARE_LOAD_UNLOAD_TIME==1
 		int b_val = b.getElapsedTime().asMilliseconds();

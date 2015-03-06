@@ -9,7 +9,7 @@
 #define CONSOLE_COMPARE_LOAD_UNLOAD_TIME 0
 #define DONT_UNLOAD_CHUNKS 0
 #define DONT_SAVE_CHUNKS_ON_UNLOAD 1
-#define UNLOAD_ALL_CHUNKS_EVERY_FRAME 0
+#define UNLOAD_ALL_CHUNKS_EVERY_FRAME 1
 
 namespace kg
 {
@@ -20,11 +20,11 @@ namespace kg
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
 		{
-			blueprint::Value chunkLoadRadiusAroundCamera;
+			std::string* chunkLoadRadiusAroundCamera;
 		}m_configValues;
 
 		// CHUNK LOAD STATE DATA:
-		int chunkLoadRadiusAroundCamera;
+		int m_chunkLoadRadiusAroundCamera;
 		std::map<int, std::map<int, bool>> m_loadedChunks;
 		std::string getChunkSavename( const sf::Vector2i chunkPosition )const;
 		bool loadChunkFromFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );//returns false if file did not exist

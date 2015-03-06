@@ -44,9 +44,6 @@
     <ClCompile Include="PluginManager.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Blueprint.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Callback.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -69,6 +66,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Blueprint.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -142,9 +142,6 @@
     <ClInclude Include="EntityFactory.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="Blueprint.h">
-      <Filter>Headerdateien\Toolset</Filter>
-    </ClInclude>
     <ClInclude Include="id_internal.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -161,6 +158,9 @@
       <Filter>Headerdateien\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="SwapContainer.h">
+      <Filter>Headerdateien\Toolset</Filter>
+    </ClInclude>
+    <ClInclude Include="Blueprint.h">
       <Filter>Headerdateien\Toolset</Filter>
     </ClInclude>
   </ItemGroup>

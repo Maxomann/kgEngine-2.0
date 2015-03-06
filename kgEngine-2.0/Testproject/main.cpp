@@ -1,67 +1,84 @@
-#include <iostream>
-#include <functional>
-#include <sstream>
-
-#include <boost/signals2.hpp>
-
-#include <SFML/Main.hpp>
-#include <SFML/Graphics.hpp>
+#include "Blueprint.h"
 
 using namespace std;
 using namespace sf;
 using namespace placeholders;
-
+using namespace kg::blueprint;
 
 int main()
 {
-	RenderWindow window( VideoMode( 600, 600 ), "" );
+	BlueprintManager blue;
 
-	vector<RectangleShape> shapes;
-	for( int i = 0; i < 5000; ++i )
+	blue.parse( "./test2.blueprint" );
+	blue.link();
+
+	auto& bps = blue.getBlueprintsByName();
+	auto& ents = blue.getEntitiesById();
+	auto& exts = blue.getComponentContainerExtensionsByName();
+
+	for( const auto& el : bps )
 	{
-		RectangleShape shape( Vector2f( 600, 600 ) );
-		shape.setFillColor( Color::Red );
+		cout << "BLUEPRINT " << el.second.getName() << endl;
 
-		shapes.push_back( shape );
-	}
+		auto& comps = el.second.getComponentsByName();
 
-	sf::Clock clock;
-
-	sf::RenderTexture tex;
-	tex.create( 600, 600 );
-
-	Sprite texSprite;
-
-	while( window.isOpen() )
-	{
-		window.setTitle(to_string(clock.restart().asMilliseconds()));
-
-		Event sfEvent;
-		while( window.pollEvent( sfEvent ) )
+		for( const auto& comp : comps )
 		{
-			if( sfEvent.type == Event::Closed )
-				window.close();
+			cout << "COMPONENT " << comp.second.getName() << endl;
+			auto& vals = comp.second.getComponentValueReferencesByName();
+
+			for( const auto& val : vals )
+				cout << "VALUE " << val.first << "::" << val.second->getName() << " = " << val.second->getRawValue() << endl;
+
+			cout << "END COMPONENT" << endl;
 		}
 
-
-
-		window.clear( Color::Green );
-
-		tex.clear( Color::Blue );
-
-		//draw
-		for( const auto& el : shapes )
-			tex.draw( el );
-
-		tex.display();
-		texSprite.setTexture( tex.getTexture() );
-
-
-		window.draw( texSprite );
-
-		window.display();
+		cout << "END BLUEPRINT" << endl << endl;
 	}
 
+
+	for( const auto& el : ents )
+	{
+		cout << "ENTITY " << el.second.getName() << ":" << el.second.getId() << endl;
+
+		auto& comps = el.second.getComponentsByName();
+
+		for( const auto& comp : comps )
+		{
+			cout << "COMPONENT " << comp.second.getName() << endl;
+			auto& vals = comp.second.getComponentValueReferencesByName();
+
+			for( const auto& val : vals )
+				cout << "VALUE " << val.first << "::" << val.second->getName() << " = " << val.second->getRawValue() << endl;
+
+			cout << "END COMPONENT" << endl;
+		}
+
+		cout << "END ENTITY" << endl << endl;
+	}
+
+	for( const auto& el : exts )
+	{
+		cout << "EXTENSION " << el.second.getName() << endl;
+
+		auto& comps = el.second.getComponentsByName();
+
+		for( const auto& comp : comps )
+		{
+			cout << "COMPONENT " << comp.second.getName() << endl;
+			auto& vals = comp.second.getComponentValueReferencesByName();
+
+			for( const auto& val : vals )
+				cout << "VALUE " << val.first << "::" << val.second->getName() << " = " << val.second->getRawValue() << endl;
+
+			cout << "END COMPONENT" << endl;
+		}
+
+		cout << "END EXTENSION" << endl << endl;
+	}
+
+
+	cout << "finished" << endl;
 
 	system( "pause" );
 }

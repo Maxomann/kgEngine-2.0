@@ -28,7 +28,7 @@ namespace kg
 		void scaleToObjectSize();
 
 	public:
-		virtual void preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues )override;
+		virtual void preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )override;
 
 		virtual void init( Engine& engine, World& world, ComponentManager& thisEntity )override;
 

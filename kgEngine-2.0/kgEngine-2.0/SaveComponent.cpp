@@ -207,7 +207,7 @@ namespace kg
 		return m_information.size() != 0;
 	}
 
-	void Save::preInit( Engine& engine, std::map<std::string, blueprint::Value>& blueprintValues )
+	void Save::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
 	{
 		return;
 	}
@@ -265,7 +265,7 @@ namespace kg
 		}
 	}
 
-	Save::Save( const blueprint::Id& blueprintEntityId, const blueprint::Entity& blueprint, const Entity::Id& uniqueEntityId )
+	Save::Save( const blueprint::Entity::Id& blueprintEntityId, const blueprint::Entity& blueprint, const Entity::Id& uniqueEntityId )
 		:m_blueprintEntityId( blueprintEntityId ),
 		m_uniqueEntityId( uniqueEntityId ),
 		m_blueprint( blueprint )
@@ -277,7 +277,7 @@ namespace kg
 		return m_uniqueEntityId;
 	}
 
-	const blueprint::Id& Save::getBlueprintId() const
+	const blueprint::Entity::Id& Save::getBlueprintId() const
 	{
 		return m_blueprintEntityId;
 	}

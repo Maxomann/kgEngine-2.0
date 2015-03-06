@@ -20,14 +20,14 @@ namespace kg
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
 		{
-			blueprint::Value antialiasing;
-			blueprint::Value fullscreen;
-			blueprint::Value window_resx;
-			blueprint::Value window_resy;
-			blueprint::Value render_resx;
-			blueprint::Value render_resy;
-			blueprint::Value vsync;
-			blueprint::Value window_name;
+			std::string* antialiasing;
+			std::string* fullscreen;
+			std::string* window_resx;
+			std::string* window_resy;
+			std::string* render_resx;
+			std::string* render_resy;
+			std::string* vsync;
+			std::string* window_name;
 		}m_configValues;
 
 

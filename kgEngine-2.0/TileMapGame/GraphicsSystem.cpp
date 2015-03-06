@@ -12,43 +12,43 @@ namespace kg
 		m_connectToSignal( saveManager.s_savegameClosed, &GraphicsSystem::m_onSavegameClosed );
 
 		//get config values
-		m_configValues.antialiasing = configFile->getData( ANTIALIASING );
-		m_configValues.fullscreen = configFile->getData( FULLSCREEN );
-		m_configValues.window_resx = configFile->getData( WINDOW_RESX );
-		m_configValues.window_resy = configFile->getData( WINDOW_RESY );
-		m_configValues.render_resx = configFile->getData( RENDER_RESX );
-		m_configValues.render_resy = configFile->getData( RENDER_RESY );
-		m_configValues.vsync = configFile->getData( VSYNC );
-		m_configValues.window_name = configFile->getData( WINDOW_NAME );
+		m_configValues.antialiasing = &configFile->getData( ANTIALIASING );
+		m_configValues.fullscreen = &configFile->getData( FULLSCREEN );
+		m_configValues.window_resx = &configFile->getData( WINDOW_RESX );
+		m_configValues.window_resy = &configFile->getData( WINDOW_RESY );
+		m_configValues.render_resx = &configFile->getData( RENDER_RESX );
+		m_configValues.render_resy = &configFile->getData( RENDER_RESY );
+		m_configValues.vsync = &configFile->getData( VSYNC );
+		m_configValues.window_name = &configFile->getData( WINDOW_NAME );
 
 		//set them if invalid ( and retrieve them a second time )
-		if( !m_configValues.antialiasing )
-			m_configValues.antialiasing = configFile->setData( ANTIALIASING, ANTIALIASING_DEFAULT );
-		if( !m_configValues.fullscreen )
-			m_configValues.fullscreen = configFile->setData( FULLSCREEN, FULLSCREEN_DEFAULT );
-		if( !m_configValues.window_resx )
-			m_configValues.window_resx = configFile->setData( WINDOW_RESX, WINDOW_RESX_DEFAULT );
-		if( !m_configValues.window_resy )
-			m_configValues.window_resy = configFile->setData( WINDOW_RESY, WINDOW_RESY_DEFAULT );
-		if( !m_configValues.render_resx )
-			m_configValues.render_resx = configFile->setData( RENDER_RESX, RENDER_RESX_DEFAULT );
-		if( !m_configValues.render_resy )
-			m_configValues.render_resy = configFile->setData( RENDER_RESY, RENDER_RESY_DEFAULT );
-		if( !m_configValues.vsync )
-			m_configValues.vsync = configFile->setData( VSYNC, VSYNC_DEFAULT );
-		if( !m_configValues.window_name )
-			m_configValues.window_name = configFile->setData( WINDOW_NAME, WINDOW_NAME_DEFAULT );
+		if( !m_configValues.antialiasing->size() )
+			*m_configValues.antialiasing = ANTIALIASING_DEFAULT;
+		if( !m_configValues.fullscreen->size() )
+			*m_configValues.fullscreen = FULLSCREEN_DEFAULT;
+		if( !m_configValues.window_resx->size() )
+			*m_configValues.window_resx = WINDOW_RESX_DEFAULT;
+		if( !m_configValues.window_resy->size() )
+			*m_configValues.window_resy = WINDOW_RESY_DEFAULT;
+		if( !m_configValues.render_resx->size() )
+			*m_configValues.render_resx = RENDER_RESX_DEFAULT;
+		if( !m_configValues.render_resy->size() )
+			*m_configValues.render_resy = RENDER_RESY_DEFAULT;
+		if( !m_configValues.vsync->size() )
+			*m_configValues.vsync = VSYNC_DEFAULT;
+		if( !m_configValues.window_name->size() )
+			*m_configValues.window_name = WINDOW_NAME_DEFAULT;
 
 		//init window
 		sf::ContextSettings contextSettings;
-		contextSettings.antialiasingLevel = m_configValues.antialiasing.toInt();
+		contextSettings.antialiasingLevel = boost::lexical_cast< int >(*m_configValues.antialiasing);
 
-		if( m_configValues.fullscreen.toBool() )
+		if( boost::lexical_cast< bool >(*m_configValues.fullscreen) )
 		{
 			//fullscreen
 			engine.renderWindow.create(
 				sf::VideoMode::getDesktopMode(),//ignores: window_resx, window_resy
-				m_configValues.window_name.toString(),
+				*m_configValues.window_name,
 				sf::Style::Fullscreen,
 				contextSettings );
 		}
@@ -56,12 +56,14 @@ namespace kg
 		{
 			//no fullscreen
 			engine.renderWindow.create(
-				sf::VideoMode( m_configValues.window_resx.toInt(), m_configValues.window_resy.toInt(), 32 ),
-				m_configValues.window_name.toString(),
+				sf::VideoMode(
+				boost::lexical_cast< int >(*m_configValues.window_resx),
+				boost::lexical_cast< int >(*m_configValues.window_resy), 32 ),
+				*m_configValues.window_name,
 				sf::Style::Close,
 				contextSettings );
 		}
-		engine.renderWindow.setVerticalSyncEnabled( m_configValues.vsync.toBool() );
+		engine.renderWindow.setVerticalSyncEnabled( boost::lexical_cast< bool >(*m_configValues.vsync) );
 		engine.renderWindow.setActive( false );
 
 		m_launchDrawingThread( engine.renderWindow );
@@ -93,7 +95,7 @@ namespace kg
 		/*for( int i = 0; i < 20; ++i )
 			volatile auto vec( world.getEntitiesThatHaveComponent<Camera>() );*/
 
-		engine.renderWindow.setTitle( m_configValues.window_name.toString() +
+		engine.renderWindow.setTitle( *m_configValues.window_name +
 									  " " +
 									  to_string( frameTime.asMilliseconds() ) +
 									  " :: " +
@@ -140,12 +142,13 @@ namespace kg
 	{
 		//init camera
 		auto camera = Camera::EMPLACE_TO_WORLD( engine, world );
-		if( m_configValues.fullscreen.toBool() )
+		if( boost::lexical_cast< bool >(*m_configValues.fullscreen) )
 		{
 			//fullscreen
 			camera->getComponent<Camera>()->setRenderResolution(
-				sf::Vector2u( m_configValues.render_resx.toInt(),
-				m_configValues.render_resy.toInt() ) );
+				sf::Vector2u(
+				boost::lexical_cast< int >(*m_configValues.render_resx),
+				boost::lexical_cast< int >(*m_configValues.render_resy) ) );
 		}
 		else
 		{
@@ -255,7 +258,7 @@ namespace kg
 				{
 					auto cameraState = camera->getComponent<Camera>()->getStateInformation();
 
-					//create render texture if needed (they will not be destroyed until funtion terminates)
+					//create render texture if needed (they will not be destroyed until function terminates)
 					auto it = renderTexturesBySize.find( cameraState.renderResolution.x );
 					if( it == end( renderTexturesBySize ) )
 					{

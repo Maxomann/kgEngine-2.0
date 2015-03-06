@@ -8,6 +8,7 @@ BLUEPRINT Tile
 		finalSizeY:64px
 		textureRectX:64px
 		textureRextY:64px
+		
 		texturePath:"-1"
 	END COMPONENT
 	COMPONENT BoundingBox
@@ -26,6 +27,10 @@ INHERIT Tile
 		textureRectY:64px
 		frameTime:0.1s
 	END COMPONENT
+	
+	COMPONENT Graphics
+	finalSizeX:999111px;
+	END
 	
 END BLUEPRINT
 

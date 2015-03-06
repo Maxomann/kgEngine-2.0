@@ -37,7 +37,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/range/algorithm/remove_if.hpp>
 #include <boost/optional.hpp>
-#include <boost/lexical_cast.hpp>
 
 
 #ifdef _WIN32
