@@ -12,8 +12,7 @@ namespace kg
 	EntitySaveInformation::EntitySaveInformation( unsigned int blueprintEntityId, Entity::Id uniqueEntityId )
 		:m_blueprintEntityId( blueprintEntityId ),
 		m_uniqueEntityId( uniqueEntityId )
-	{
-	}
+	{ }
 
 	int EntitySaveInformation::getActiveComponentId() const
 	{
@@ -138,8 +137,7 @@ namespace kg
 
 	SystemSaveInformation::SystemSaveInformation( int systemPluginId )
 		: m_systemPluginId( systemPluginId )
-	{
-	}
+	{ }
 
 	const std::vector<std::string> SystemSaveInformation::getInformation() const
 	{
@@ -269,8 +267,7 @@ namespace kg
 		:m_blueprintEntityId( blueprintEntityId ),
 		m_uniqueEntityId( uniqueEntityId ),
 		m_blueprint( blueprint )
-	{
-	}
+	{ }
 
 	const Entity::Id& Save::getUniqueId() const
 	{

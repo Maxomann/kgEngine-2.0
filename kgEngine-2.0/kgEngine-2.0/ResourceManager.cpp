@@ -4,8 +4,6 @@ using namespace sf;
 
 namespace kg
 {
-
-
 	std::vector<std::string> readFileToVector( const std::string& path )
 	{
 		std::vector<std::string> returnValue;
@@ -22,6 +20,4 @@ namespace kg
 
 		return returnValue;
 	}
-
 }
-

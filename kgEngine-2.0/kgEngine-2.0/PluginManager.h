@@ -36,8 +36,6 @@ namespace kg
 		/// The system plugin factorys sorted by name.
 		std::map<std::string, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysByName;
 
-
-
 		std::map<int, std::string> m_componentPluginNamesByIds;
 		std::map<std::string, int> m_componentPluginIdsByNames;
 
@@ -127,13 +125,10 @@ namespace kg
 
 		const std::pair<int, std::string> getPluginInformationByRealTypeHashCode( size_t hashCode )const;
 
-
 		const std::string& getComponentPluginNameForId( const int& id )const;
 		const int& getComponentPluginIdForName( const std::string& name )const;
 
-
 		const std::string& getSystemPluginNameForId( const int& id )const;
 		const int& getSystemPluginIdForName( const std::string& name )const;
-
 	};
 }

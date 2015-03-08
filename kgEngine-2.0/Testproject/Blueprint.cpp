@@ -24,7 +24,6 @@ namespace kg
 			return a.find( b ) != std::string::npos;
 		}
 
-
 		vector<string> split( const std::string& str, const std::string& splitAt )
 		{
 			vector<string> strs;
@@ -72,7 +71,6 @@ namespace kg
 			return m_msg.c_str();
 		}
 
-
 		bool EndOfBlockDeclaration::canExecuteOn( const std::string& file, Line firstLine, const std::vector<std::string>& lines )
 		{
 			const auto& line = lines.at( firstLine );
@@ -94,11 +92,9 @@ namespace kg
 			return false;
 		}
 
-
 		EmptyLineNotRecognisedError::EmptyLineNotRecognisedError( const std::string& file, Line line )
 			: ParsingError( file, line, "EmptyLineNotRecognised" )
 		{ }
-
 
 		std::pair<Line, Component> ComponentDeclaration::execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines )
 		{
@@ -120,7 +116,6 @@ namespace kg
 
 			return false;
 		}
-
 
 		std::pair<Line, ComponentValue> ComponentValueDeclaration::execute( const std::string& file,
 																			Line firstLine,
@@ -144,7 +139,6 @@ namespace kg
 				return find( line.begin(), line.end(), ':' ) != line.end();
 			return false;
 		}
-
 
 		std::pair<Line, Component> ComponentDefinition::execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines )
 		{
@@ -198,13 +192,11 @@ namespace kg
 			return false;
 		}
 
-
 		std::pair<Line, ComponentContainer::Name> InheritanceDeclaration::execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines )
 		{
 			auto strs = split( lines.at( firstLine ), boostEmptyCharFilter );
 			return make_pair( firstLine + 1, strs.at( 1 ) );
 		}
-
 
 		bool InheritanceDeclaration::canExecuteOn( const std::string& file, Line firstLine, const std::vector<std::string>& lines )
 		{
@@ -223,7 +215,6 @@ namespace kg
 			}
 			return false;
 		}
-
 
 		std::pair<Line, Blueprint> BlueprintDeclaration::execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines )
 		{
@@ -628,7 +619,6 @@ namespace kg
 			m_hasCollectedInheritReferences( move( container.m_hasCollectedInheritReferences ) )
 
 		{
-
 		}
 
 		void ComponentContainer::addComponentInformation( const Component& component )
@@ -734,7 +724,6 @@ namespace kg
 			m_componentValuesByName( move( component.m_componentValuesByName ) ),
 			m_componentValueReferencesByName( move( component.m_componentValueReferencesByName ) )
 		{
-
 		}
 
 		const std::string& Component::getName() const
@@ -883,11 +872,11 @@ namespace kg
 				m_asDoubleWithUnit = std::pair<double, std::string>( d, unit );
 
 			/*double*/
-			if(m_asDoubleWithUnit)
+			if( m_asDoubleWithUnit )
 				m_asDouble = m_asDoubleWithUnit->first;
 
 			/*intWithUnit*/
-			if(m_asDoubleWithUnit )
+			if( m_asDoubleWithUnit )
 				m_asIntWithUnit = std::pair<int, std::string>(
 				( int )m_asDoubleWithUnit->first,
 				m_asDoubleWithUnit->second );
@@ -916,27 +905,23 @@ namespace kg
 		Blueprint::Blueprint( const ComponentContainer::Name& name )
 			:ComponentContainer( name )
 		{
-
 		}
 
 		Blueprint::Blueprint( Blueprint&& blueprint )
 			: ComponentContainer( move( blueprint ) )
 		{
-
 		}
 
 		Entity::Entity( const ComponentContainer::Name& name, const Id& id )
 			: ComponentContainer( name ),
 			m_id( id )
 		{
-
 		}
 
 		Entity::Entity( Entity&& entity )
 			: ComponentContainer( move( entity ) ),
 			m_id( move( entity.m_id ) )
 		{
-
 		}
 
 		const Entity::Id& Entity::getId() const
@@ -947,14 +932,12 @@ namespace kg
 		ComponentContainerExtension::ComponentContainerExtension( const ComponentContainer::Name& name )
 			:ComponentContainer( name )
 		{
-
 		}
 
 		ComponentContainerExtension::ComponentContainerExtension( ComponentContainerExtension&& componentContainerExtension )
 			: ComponentContainer( move( componentContainerExtension ) ),
 			m_destinations( move( componentContainerExtension.m_destinations ) )
 		{
-
 		}
 
 		void ComponentContainerExtension::addDestination( const ComponentContainer::Name& destination )
@@ -971,13 +954,11 @@ namespace kg
 
 		ComponentValueConversionNotAvailable::ComponentValueConversionNotAvailable()
 		{
-
 		}
 
 		const char* ComponentValueConversionNotAvailable::what() const
 		{
 			return "ComponentValueConversionNotAvailable";
 		}
-
 	}
 }

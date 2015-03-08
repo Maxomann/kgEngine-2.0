@@ -4,13 +4,14 @@ using namespace sf;
 
 namespace kg
 {
-
 	void ChunkGenerator::generateChunk( Engine& engine, World& world, const sf::Vector2i chunkPositionInChunks )
 	{
-		for( int x = 0; x < 10; ++x )
-			for( int y = 0; y < 10; ++y )
+		const auto count = Constants::CHUNK_SIZE / Constants::TILE_SIZE;
+
+		for( int x = 0; x < count; ++x )
+			for( int y = 0; y < count; ++y )
 			{
-				auto tile = world.createNewSaveableEntity( engine,world, engine.randomNumberGenerator.getRandomInt(101,103) );//grass
+				auto tile = world.createNewSaveableEntity( engine, world, engine.randomNumberGenerator.getRandomInt( 101, 103 ) );//grass
 				auto transform = tile->getComponent<Transformation>();
 
 				int chunkPositionInPixelX = chunkPositionInChunks.x*Constants::CHUNK_SIZE;
@@ -61,5 +62,4 @@ namespace kg
 	}
 
 	const std::string ChunkGenerator::PLUGIN_NAME = "ChunkGenerator";
-
 }

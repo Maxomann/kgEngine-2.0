@@ -8,14 +8,16 @@ namespace kg
 {
 	class DLL_EXPORT EntityManager : public EntityFactory
 	{
-		std::vector<std::shared_ptr<Entity>> m_entities;
+	public:
+		typedef std::unordered_set<std::shared_ptr<Entity>> EntityContainer;
 
-		std::map<size_t, std::list<std::shared_ptr<Entity>>> m_entitiesByComponentsTheyHave;
+	private:
+		EntityContainer m_entities;
 
 		void addEntityReferencesByComponentType( const std::shared_ptr<Entity>& entity );
 		void removeEntityReferencesByComponentType( const std::shared_ptr<Entity>& entity );
 
-		std::vector<std::shared_ptr<Entity>>::iterator m_findEntity( const std::shared_ptr<Entity>& entity );
+		EntityContainer::iterator m_findEntity( const std::shared_ptr<Entity>& entity );
 	public:
 		// overwrites entity if it already exists
 		// first: returns false in that case
@@ -26,18 +28,10 @@ namespace kg
 		// returns false if entity with id did not exist
 		void removeEntity( const std::shared_ptr<Entity>& entity );
 
-
 		// returns nullptr if Entity with id does not exist
 		bool doesEntityExist( const std::shared_ptr<Entity>& entity );
 
-		//returns all entities that have all components, given in the template parameter, registered
-		template<class /*variadic*/ ComponentType>
-		const std::list<std::shared_ptr<Entity>>& getEntitiesThatHaveComponent()
-		{
-			return m_entitiesByComponentsTheyHave[typeid(ComponentType).hash_code()];
-		};
-
-		const std::vector<std::shared_ptr<Entity>>& getAllEntities()const;
+		const EntityContainer& getAllEntities()const;
 
 		void updateEntities( Engine& engine, World& world, const sf::Time& frameTime );
 
@@ -47,7 +41,7 @@ namespace kg
 		unsigned int getEntityCount()const;
 
 	signals:
-		Signal<std::shared_ptr<Entity>&> s_entity_added;
-		Signal<std::shared_ptr<Entity>&> s_entity_removed;
+		Signal<const std::shared_ptr<Entity>&> s_entity_added;
+		Signal<const std::shared_ptr<Entity>&> s_entity_removed;
 	};
 }

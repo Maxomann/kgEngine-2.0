@@ -57,7 +57,7 @@ namespace kg
 		return id::SystemPluginId::CHUNK_SYSTEM;
 	}
 
-	void ChunkSystem::m_onEntityAddedToWorld( std::shared_ptr<Entity>& entity )
+	void ChunkSystem::m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity )
 	{
 		if( entity->hasComponent<Transformation>() )
 		{
@@ -72,7 +72,7 @@ namespace kg
 		}
 	}
 
-	void ChunkSystem::m_refreshChunkInformation( std::shared_ptr<Entity>& entity )
+	void ChunkSystem::m_refreshChunkInformation( const std::shared_ptr<Entity>& entity )
 	{
 		auto newChunk = calculateChunkForPosition( entity->getComponent<Transformation>()->getPosition() );
 
@@ -88,10 +88,10 @@ namespace kg
 
 				//remove from old chunk
 				auto& oldChunkData = m_chunkData.at( oldChunk.x ).at( oldChunk.y );
-				oldChunkData.erase( std::find( oldChunkData.begin(), oldChunkData.end(), entity ) );
+				oldChunkData.erase( oldChunkData.find( entity ) );
 
 				//add to new chunk
-				m_chunkData[newChunk.x][newChunk.y].push_back( entity );
+				m_chunkData[newChunk.x][newChunk.y].insert( entity );
 			}
 		}
 		else
@@ -99,7 +99,7 @@ namespace kg
 			//entity is going to be registered
 			m_entityData[entity] = newChunk;
 			//add to new chunk
-			m_chunkData[newChunk.x][newChunk.y].push_back( entity );
+			m_chunkData[newChunk.x][newChunk.y].insert( entity );
 		}
 	}
 
@@ -110,7 +110,7 @@ namespace kg
 			m_refreshChunkInformation( sharedEntity );
 	}
 
-	void ChunkSystem::m_onEntityRemovedFromWorld( std::shared_ptr<Entity>& entity )
+	void ChunkSystem::m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
 	{
 		auto currentChunk = getChunkOfEntity( entity );
 		auto& chunkData = m_chunkData.at( currentChunk.x ).at( currentChunk.y );
@@ -210,17 +210,17 @@ namespace kg
 			saveChunkToFile( engine, world, saveManager, chunkPosition );
 #endif
 			//remove entities in that chunk from world
-			auto temp = getEntitiesInChunk( chunkPosition );
+			const auto temp = getEntitiesInChunk( chunkPosition );
 			for( const auto& entity : temp )
 				world.removeEntity( entity );
+
 			//chunk unloaded
+			m_loadedChunks[chunkPosition.x][chunkPosition.y] = false;
 		}
 		else
 		{
 			//chunk unloaded
 		}
-
-		m_loadedChunks[chunkPosition.x][chunkPosition.y] = false;
 	}
 
 	bool ChunkSystem::loadChunkFromFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
@@ -267,20 +267,9 @@ namespace kg
 			}
 		}
 #endif
-#if CONSOLE_COMPARE_LOAD_UNLOAD_TIME==1
-		Clock a;
-#endif
-
-		for( const auto& el : chunksToEnsureLoaded )
-			ensureChunkLoaded( engine, world, saveManager, el );
-
-#if CONSOLE_COMPARE_LOAD_UNLOAD_TIME==1
-		int a_val = a.getElapsedTime().asMilliseconds();
-
-		Clock b;
-#endif
 
 #if DONT_UNLOAD_CHUNKS != 1
+		/*unload chunks*/
 		//for every chunks that is loaded atm and is not in chunksToEnsureLoaded: unload
 		for( const auto& x : m_loadedChunks )
 		{
@@ -306,12 +295,9 @@ namespace kg
 		}
 #endif
 
-
-#if CONSOLE_COMPARE_LOAD_UNLOAD_TIME==1
-		int b_val = b.getElapsedTime().asMilliseconds();
-		if( b_val > a_val)
-			cout << "b_val is bigger" << endl;
-#endif
+		/*load chunks*/
+		for( const auto& el : chunksToEnsureLoaded )
+			ensureChunkLoaded( engine, world, saveManager, el );
 	}
 
 	void ChunkSystem::saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager )

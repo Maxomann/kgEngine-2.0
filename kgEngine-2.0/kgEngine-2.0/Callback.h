@@ -72,7 +72,6 @@ namespace kg
 		}
 	};
 
-
 	template< class ... parameterType >
 	using SafeSignal = boost::signals2::signal < void( parameterType... ) > ;
 
@@ -102,9 +101,6 @@ namespace kg
 		};
 	};
 
-
-
-
 	template<class T> class MySignal
 	{ };
 
@@ -130,7 +126,7 @@ namespace kg
 		{
 			if( m_registeredCallbacks.size() == 1 )
 			{
-				return m_registeredCallbacks.at(0)( Args... );
+				return m_registeredCallbacks.at( 0 )(Args...);
 			}
 			else if( m_registeredCallbacks.size() > 1 )
 			{
@@ -191,7 +187,7 @@ namespace kg
 			returnType( className::* mem_fn_ptr ) (parameterType...) )
 		{
 			std::function<returnType( className*, parameterType... )> f1 = std::mem_fn( mem_fn_ptr );
-			signal.addCallback( std::move(easy_bind( f1, static_cast< className* >(this) )) );
+			signal.addCallback( std::move( easy_bind( f1, static_cast< className* >(this) ) ) );
 		};
 	};
 }

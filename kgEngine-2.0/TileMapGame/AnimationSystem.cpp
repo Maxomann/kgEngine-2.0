@@ -4,8 +4,6 @@ using namespace sf;
 
 namespace kg
 {
-
-
 	void AnimationSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
 		return;
@@ -50,6 +48,5 @@ namespace kg
 		return m_syncedTimeByStateDuration[stateDurationInMilliseconds];
 	}
 
-	const std::string AnimationSystem::PLUGIN_NAME="AnimationSystem";
-
+	const std::string AnimationSystem::PLUGIN_NAME = "AnimationSystem";
 }

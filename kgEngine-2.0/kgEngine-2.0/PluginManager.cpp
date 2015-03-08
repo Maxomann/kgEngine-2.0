@@ -169,5 +169,4 @@ namespace kg
 			throw PluginRequestException( name );
 		}
 	}
-
 }

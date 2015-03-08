@@ -27,7 +27,6 @@ namespace kg
 
 			virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
 
-
 		private:
 			std::vector<QueueItem> textures;
 			std::vector<sf::Vertex> vertices;

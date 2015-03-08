@@ -25,8 +25,6 @@ extern "C"
 			Graphics::PLUGIN_NAME ) );
 		//Camera not registered as a plugin. A camera entity is created in the GraphicsSystem
 
-
-
 		//Systems
 		pluginManager.addSystemPlugin(
 			std::make_shared<PluginFactory<System, GameController>>(

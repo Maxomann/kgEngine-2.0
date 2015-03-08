@@ -2,6 +2,7 @@ BLUEPRINT MyBlueprint
 	FirstComponent
 	SecondComponent
 	
+	#Dies ist ein Kommentar
 	COMPONENT FirstComponent
 		ffv:10px
 		fsv:20px
@@ -13,6 +14,7 @@ BLUEPRINT MyBlueprint
 
 END BLUEPRINT
 
+
 BLUEPRINT MySecondBlueprint
 INHERIT MyBlueprint
 	ThirdComponent
@@ -23,15 +25,17 @@ INHERIT MyBlueprint
 		stv:777px
 	END
 	COMPONENT ThirdComponent
-		tfv:50px
+		tfv:"Hallo"
 	END
 
 END BLUEPRINT
+
 
 BLUEPRINT MyThirdBlueprint
 INHERIT MySecondBlueprint
 
 END BLUEPRINT
+
 
 ENTITY MyEntity : 100
 INHERIT MySecondBlueprint

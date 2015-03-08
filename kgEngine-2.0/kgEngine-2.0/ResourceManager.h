@@ -47,7 +47,7 @@ namespace kg
 		 * Template argument is the type, NOT A POINTER TO IT!!!
 		 * getResource<sf::Texture>;  == OK
 		 * getResource<sf::Texture*>; == NOT WORKING
-		 * 
+		 *
 		 * class T must have a function like this: void bool T::loadFromFile(const std::string&amp; path)
 		 * YOU CAN INHERIT Resource FOR THAT.
 		 *
@@ -160,10 +160,10 @@ namespace kg
 		 * Template argument is the type, NOT A POINTER TO IT!!!
 		 * getResource<sf::Texture>;  == OK
 		 * getResource<sf::Texture*>; == NOT WORKING
-		 * 
+		 *
 		 * class T must have a function like this: void bool T::loadFromFile(const std::string&amp; path)
 		 * YOU CAN INHERIT Resource FOR THAT
-		 * 
+		 *
 		 * resourcePath is relative to the packages 'Resource' folder.
 		 *
 		 * @author	Kay
@@ -184,7 +184,7 @@ namespace kg
 
 		/**********************************************************************************************//**
 		 * same as getResource but loadFromFile will be called in every case
-		 * 
+		 *
 		 * resourcePath is relative to the packages 'Resource' folder.
 		 *
 		 * @author	Kay
@@ -234,5 +234,4 @@ namespace kg
 	 **************************************************************************************************/
 
 	std::vector<std::string> readFileToVector( const std::string& path );
-
 }

@@ -6,14 +6,13 @@
 namespace kg
 {
 	struct CameraStateInformation
-	{ 
+	{
 		sf::FloatRect globalBounds;
 		sf::Vector2u renderResolution;
 		sf::Vector2u finalSize;
 		sf::Vector2i screenOffset;
 		sf::View view;
 	};
-
 
 	class Camera : public Component, public CallbackReciever
 	{
@@ -41,7 +40,6 @@ namespace kg
 		virtual const std::string& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId()const override;
-
 
 		CameraStateInformation getStateInformation()const;
 
@@ -71,6 +69,5 @@ namespace kg
 
 		//creates a new camera, adds it to the world and returns a pointer to it
 		static std::shared_ptr<Entity> EMPLACE_TO_WORLD( Engine& engine, World& world );
-
 	};
 }

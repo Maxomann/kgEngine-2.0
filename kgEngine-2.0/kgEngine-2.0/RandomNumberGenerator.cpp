@@ -3,8 +3,6 @@ using namespace std;
 
 namespace kg
 {
-
-
 	RandomNumberGenerator::RandomNumberGenerator()
 	{
 		m_reSeed();
@@ -14,6 +12,4 @@ namespace kg
 	{
 		m_rng.seed( m_rdv() );
 	}
-
 }
-

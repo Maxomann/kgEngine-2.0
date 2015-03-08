@@ -11,7 +11,6 @@ namespace kg
 		int zValue;
 	};
 
-
 	class Graphics : public Component, public CallbackReciever//, public sf::Drawable
 	{
 		Transformation* r_transformation = nullptr;
@@ -42,12 +41,10 @@ namespace kg
 
 		virtual Plugin::Id getPluginId()const override;
 
-
 		GraphicsStateInformation getStateInformation()const;
 
 		void setTextureRect( const sf::IntRect& rect );
 		const sf::IntRect& getTextureRect()const;
-
 
 		/*void drawToSpriteBatch(batch::SpriteBatch& spriteBatch)const;*/
 		//virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;

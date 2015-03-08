@@ -25,6 +25,8 @@
 #include <mutex>
 #include <stack>
 #include <algorithm>
+#include <set>
+#include <unordered_set>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
@@ -38,7 +40,6 @@
 #include <boost/range/algorithm/remove_if.hpp>
 #include <boost/optional.hpp>
 #include <boost/lexical_cast.hpp>
-
 
 #ifdef _WIN32
 #include<windows.h>

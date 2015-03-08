@@ -6,7 +6,7 @@
 namespace kg
 {
 	//cameraStates, graphicsInformations
-	typedef std::pair<std::vector<std::shared_ptr<Entity>>, std::list<std::shared_ptr<Entity>>> DrawingStateInformation;
+	typedef std::pair<std::vector<std::shared_ptr<Entity>>, EntityManager::EntityContainer> DrawingStateInformation;
 
 	void drawingThreadFunction( sf::RenderWindow& renderWindow,
 								SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>>& drawingInformationContainer,
@@ -14,8 +14,7 @@ namespace kg
 								bool& shouldTerminate,
 								bool& drawingIsActive );
 
-
-	class GraphicsSystem : public System, public CallbackReciever
+	class GraphicsSystem : public System, public EntityThatHasComponentContainer < Graphics >
 	{
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
@@ -30,7 +29,6 @@ namespace kg
 			std::string* window_name;
 		}m_configValues;
 
-
 		std::vector<std::shared_ptr<Entity>> m_cameras;
 
 		bool m_shouldInitCameras = true;
@@ -39,7 +37,6 @@ namespace kg
 		void m_onSavegameClosed();
 
 		void m_initCameras( Engine& engine, World& world );
-
 
 		void m_launchDrawingThread( sf::RenderWindow& renderWindow );
 		void m_terminateDrawingThread();
@@ -62,8 +59,6 @@ namespace kg
 		virtual const std::string& getPluginName() const;
 
 		virtual Plugin::Id getPluginId()const;
-
-
 
 		std::shared_ptr<Entity>& getCamera( int index );
 		std::vector<std::shared_ptr<Entity>>& getCameras();

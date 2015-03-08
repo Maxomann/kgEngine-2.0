@@ -4,18 +4,17 @@
 #include "ChunkGenerator.h"
 #include "GraphicsSystem.h"
 
-#define GENERATE_CHUNK_INSTEAD_OF_LOADING_FROM_FILE 1
+#define GENERATE_CHUNK_INSTEAD_OF_LOADING_FROM_FILE 0
 #define LOAD_CHUNKS_ONLY_ONCE 0
-#define CONSOLE_COMPARE_LOAD_UNLOAD_TIME 0
 #define DONT_UNLOAD_CHUNKS 0
-#define DONT_SAVE_CHUNKS_ON_UNLOAD 1
-#define UNLOAD_ALL_CHUNKS_EVERY_FRAME 1
+#define DONT_SAVE_CHUNKS_ON_UNLOAD 0
+#define UNLOAD_ALL_CHUNKS_EVERY_FRAME 0
 
 namespace kg
 {
 	class ChunkSystem : public System, public CallbackReciever
 	{
-		typedef std::vector<std::shared_ptr<Entity>> EntityContainer;
+		typedef EntityManager::EntityContainer EntityContainer;
 
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
@@ -33,19 +32,17 @@ namespace kg
 		void ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
 		void ensureChunksLoadedAroundCameraPositionsUnloadOther( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector2i>& cameraPositions );
 
-
 		// ENTITY POSITION DATA:
 		std::map< int, std::map<int, EntityContainer >> m_chunkData;//int x, int y
 		std::map< std::shared_ptr<Entity>, sf::Vector2i > m_entityData;
 		const EntityContainer m_emptyList = EntityContainer();//only for returnValue in getEntitiesInChunk()
-		void m_refreshChunkInformation( std::shared_ptr<Entity>& entity );
+		void m_refreshChunkInformation( const std::shared_ptr<Entity>& entity );
 
-
-		void m_onEntityAddedToWorld( std::shared_ptr<Entity>& entity );
-		void m_onEntityRemovedFromWorld( std::shared_ptr<Entity>& entity );
+		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity );
+		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity );
 		void m_onEntityPositionChanged( std::weak_ptr<Entity>& entity, const sf::Vector2i& newPosition );
 
-		void m_onSavegameClosed( );
+		void m_onSavegameClosed();
 
 	public:
 
@@ -60,8 +57,6 @@ namespace kg
 		virtual const std::string& getPluginName() const;
 
 		virtual Plugin::Id getPluginId()const;
-
-
 
 		static const std::string PLUGIN_NAME;
 
@@ -81,10 +76,8 @@ namespace kg
 		// returns the position in chunks for the position of an entity
 		static sf::Vector2i calculateChunkForPosition( const sf::Vector2i& position );
 
-
 		//configuration default values:
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA;
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT;
-
 	};
 }

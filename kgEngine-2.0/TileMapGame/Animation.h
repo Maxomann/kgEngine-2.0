@@ -5,14 +5,13 @@
 
 namespace kg
 {
-
 	typedef std::map<std::string, std::pair<std::vector<std::vector<int>>, bool>> AnimationFileData;
 	typedef std::map<std::string, std::vector<std::pair<sf::IntRect, int>>> FrameDurationAndTexrectByState;
 
 	class AnimationInterpreter
 	{
 	public:
-		virtual FrameDurationAndTexrectByState& interpretAnimationFileData( const AnimationFileData& animationFileData )const=0;
+		virtual FrameDurationAndTexrectByState& interpretAnimationFileData( const AnimationFileData& animationFileData )const = 0;
 		FrameDurationAndTexrectByState& operator()( const AnimationFileData& animationFileData )const;
 	};
 
@@ -27,8 +26,6 @@ namespace kg
 	public:
 		virtual FrameDurationAndTexrectByState& interpretAnimationFileData( const AnimationFileData& animationFileData ) const override;
 	};
-
-
 
 	class AnimationFile : public Resource
 	{
@@ -46,13 +43,10 @@ namespace kg
 		static const std::string EASY_ANIMATION;//type of interpreter
 	};
 
-
-
 	class Animation : public Component
 	{
-		AnimationSystem* r_animationSystem=nullptr;
+		AnimationSystem* r_animationSystem = nullptr;
 		Graphics* r_graphicsComponent = nullptr;
-
 
 		FrameDurationAndTexrectByState& m_animationData;
 
@@ -61,7 +55,6 @@ namespace kg
 		boost::optional<int> m_unsyncedTimePassed;
 
 		void setAnimationOnGraphics();
-
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues ) override;
@@ -78,7 +71,6 @@ namespace kg
 
 		virtual Plugin::Id getPluginId() const override;
 
-
 		std::string getState()const;
 		int getFrame()const;
 
@@ -87,9 +79,8 @@ namespace kg
 
 		bool getCurrentStateSyncronized();
 
-
 		static const std::string PLUGIN_NAME;
-		
+
 		static const std::string BLUEPRINT_SYNC;
 	};
 }

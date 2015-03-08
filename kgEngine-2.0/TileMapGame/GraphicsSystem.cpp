@@ -6,6 +6,8 @@ namespace kg
 {
 	void GraphicsSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
+		EntityThatHasComponentContainer<Graphics>::init( world );
+
 		m_configFile = configFile;
 
 		m_connectToSignal( saveManager.s_savegameOpened, &GraphicsSystem::m_onSavegameOpened );
@@ -76,7 +78,6 @@ namespace kg
 
 	void GraphicsSystem::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
-
 		if( m_shouldInitCameras )
 		{
 			m_initCameras( engine, world );
@@ -89,7 +90,7 @@ namespace kg
 		//collect DrawingStateInformation
 		DrawingStateInformation dsi;
 		dsi.first = m_cameras;
-		dsi.second = world.getEntitiesThatHaveComponent<Graphics>();
+		dsi.second = getEntitiesThatHaveComponent();
 		m_drawingInformationContainer.push( move( dsi ) );
 
 		/*for( int i = 0; i < 20; ++i )
@@ -252,7 +253,6 @@ namespace kg
 				m_texture.setView( m_texture.getDefaultView() );
 				*/
 
-
 				//for every camera state information
 				for( const auto& camera : relevantInformation.first )
 				{
@@ -273,11 +273,9 @@ namespace kg
 						}
 					}
 
-
 					auto& renderTexture = renderTexturesBySize[cameraState.renderResolution.x][cameraState.renderResolution.y];
 					Sprite renderTextureSprite;
 					map<int, map<int, map<int, std::vector<shared_ptr<Drawable>>>>> toDrawSorted;//Z Y X
-
 
 					//sort toDraws
 					for( const auto& toDraw : relevantInformation.second )
@@ -295,7 +293,6 @@ namespace kg
 							.push_back( toDrawState.drawable );
 						}
 					}
-
 
 					//draw drawables
 					renderTexture.clear( Color::Green );

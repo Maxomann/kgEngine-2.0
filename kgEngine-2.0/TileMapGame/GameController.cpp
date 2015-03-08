@@ -11,14 +11,13 @@ namespace kg
 		saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
 		//saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
 
-
 		/*int fieldSize = 10;
 		for( int x = 0; x < fieldSize; ++x )
-			for( int y = 0; y < fieldSize; ++y )
-			{
-				auto entity = world.addEntity( world.createNewSaveableEntity( engine, 100 ) ).second;
-				entity->getComponent<Transformation>()->setPosition( sf::Vector2i( x * 64, y * 64 ) );
-			}*/
+		for( int y = 0; y < fieldSize; ++y )
+		{
+		auto entity = world.addEntity( world.createNewSaveableEntity( engine, 100 ) ).second;
+		entity->getComponent<Transformation>()->setPosition( sf::Vector2i( x * 64, y * 64 ) );
+		}*/
 
 		return;
 	}
@@ -33,7 +32,7 @@ namespace kg
 	void GameController::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
 		auto camera = r_graphicsSystem->getCamera( 0 );
-		
+
 		auto frameTimeInMilliseconds = frameTime.asMilliseconds();
 
 		if( Keyboard::isKeyPressed( Keyboard::Escape ) )
@@ -57,7 +56,6 @@ namespace kg
 			m_cameraZoomFactor = 0;
 		camera->getComponent<Transformation>()->setSize( Vector2i( 1080.0 * m_cameraZoomFactor, 720.0 * m_cameraZoomFactor ) );
 
-
 		if( Keyboard::isKeyPressed( Keyboard::F5 ) )
 		{
 			saveOpenSavegame( engine, world, saveManager );
@@ -79,7 +77,7 @@ namespace kg
 	}
 
 	Plugin::Id GameController::getPluginId() const
-{
+	{
 		return ( int )id::SystemPluginId::GAME_CONTROLLER;
 	}
 

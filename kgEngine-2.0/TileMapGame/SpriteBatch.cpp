@@ -159,8 +159,6 @@ namespace kg
 				textures.push_back( qi );
 				queueCount = 0;
 			}
-
 		}
-
 	}
 }

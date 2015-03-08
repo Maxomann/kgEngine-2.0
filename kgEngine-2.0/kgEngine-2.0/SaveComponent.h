@@ -91,7 +91,7 @@ namespace kg
 
 		const Entity::Id& getUniqueId()const;
 		const blueprint::Entity::Id& getBlueprintId()const;
-		
+
 		const blueprint::Entity& getBlueprint()const;
 
 	signals:

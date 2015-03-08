@@ -17,7 +17,6 @@ namespace kg
 		const std::string END = "END";
 		const std::string INHERIT = "INHERIT";
 
-
 		bool isLineEmptyOrComment( const std::string& line );
 
 		bool contains( const std::string&a, const std::string b );
@@ -25,7 +24,6 @@ namespace kg
 		std::vector<std::string> split( const std::string& str, const std::string& splitAt );
 
 		std::vector<std::string> splitAtFirstOccurence( const std::string str, const char splitAt );
-
 
 		class ParsingError : public std::exception
 		{
@@ -204,7 +202,6 @@ namespace kg
 
 		class Blueprint : public ComponentContainer
 		{
-
 		public:
 			Blueprint( Blueprint&& blueprint );
 			Blueprint( const ComponentContainer::Name& name );
@@ -236,7 +233,6 @@ namespace kg
 			void writeInheritanceInfoToDestinations( std::map<ComponentContainer::Name, ComponentContainer*>& componentContainersByName )const;
 		};
 
-
 		///////////////////////////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////
 
@@ -248,7 +244,6 @@ namespace kg
 									   const std::vector<std::string>& lines ) override;
 		};
 
-
 		class ComponentDeclaration : public Command < Component >
 		{
 		public:
@@ -259,7 +254,6 @@ namespace kg
 			virtual bool canExecuteOn( const std::string& file,
 									   Line firstLine,
 									   const std::vector<std::string>& lines ) override;
-
 		};
 
 		class ComponentValueDeclaration : public Command < ComponentValue >
@@ -268,7 +262,6 @@ namespace kg
 			virtual std::pair<Line, ComponentValue> execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
 
 			virtual bool canExecuteOn( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
-
 		};
 
 		class ComponentDefinition : public Command < Component >
@@ -277,9 +270,7 @@ namespace kg
 			virtual std::pair<Line, Component> execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
 
 			virtual bool canExecuteOn( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
-
 		};
-
 
 		class InheritanceDeclaration : public Command < ComponentContainer::Name >
 		{
@@ -287,7 +278,6 @@ namespace kg
 			virtual std::pair<Line, ComponentContainer::Name> execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
 
 			virtual bool canExecuteOn( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
-
 		};
 
 		class BlueprintDeclaration : public Command < Blueprint >
@@ -296,7 +286,6 @@ namespace kg
 			virtual std::pair<Line, Blueprint> execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
 
 			virtual bool canExecuteOn( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
-
 		};
 
 		class EntityDeclaration : public Command < Entity >
@@ -305,7 +294,6 @@ namespace kg
 			virtual std::pair<Line, Entity> execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
 
 			virtual bool canExecuteOn( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
-
 		};
 
 		class ComponentContainerExtensionDestinationDeclaration : public Command < ComponentContainer::Name >
@@ -314,7 +302,6 @@ namespace kg
 			virtual std::pair<Line, ComponentContainer::Name> execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
 
 			virtual bool canExecuteOn( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
-
 		};
 
 		class ComponentContainerExtensionDeclaration : public Command < ComponentContainerExtension >
@@ -323,9 +310,7 @@ namespace kg
 			virtual std::pair<Line, ComponentContainerExtension> execute( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
 
 			virtual bool canExecuteOn( const std::string& file, Line firstLine, const std::vector<std::string>& lines ) override;
-
 		};
-
 
 		class BlueprintManager : public boost::noncopyable
 		{

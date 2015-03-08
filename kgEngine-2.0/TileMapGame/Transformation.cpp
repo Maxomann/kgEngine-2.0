@@ -129,7 +129,7 @@ namespace kg
 			setPosition(
 				Vector2i( atoi( information.at( 0 ).c_str() ),
 				atoi( information.at( 1 ).c_str() ) ) );
-			setRotation( static_cast<float>(atof( information.at( 2 ).c_str() )) );
+			setRotation( static_cast< float >(atof( information.at( 2 ).c_str() )) );
 			setSize( Vector2i(
 				atoi( information.at( 3 ).c_str() ),
 				atoi( information.at( 4 ).c_str() ) ) );
@@ -159,7 +159,6 @@ namespace kg
 	}
 
 	const std::string Transformation::BLUEPRINT_ZVALUE = "zValue";
-
 
 	const std::string Transformation::PLUGIN_NAME = "Transformation";
 

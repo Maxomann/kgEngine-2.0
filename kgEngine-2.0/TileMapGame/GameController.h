@@ -28,7 +28,6 @@ namespace kg
 
 		virtual Plugin::Id getPluginId()const;
 
-
 		static const std::string PLUGIN_NAME;
 	};
 }

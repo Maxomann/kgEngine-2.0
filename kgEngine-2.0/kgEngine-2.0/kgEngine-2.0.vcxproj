@@ -112,6 +112,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="EntityThatHasComponentContainer.h" />
     <ClInclude Include="id_internal.h" />
     <ClInclude Include="PathNotAvailableException.h" />
     <ClInclude Include="Plugin.h" />
@@ -130,9 +131,6 @@
     <ClInclude Include="World.h" />
     <ClInclude Include="WrongCallbackSignatureException.h" />
     <ClInclude Include="_PluginCreator.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

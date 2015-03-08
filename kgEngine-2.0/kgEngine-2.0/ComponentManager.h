@@ -80,7 +80,7 @@ namespace kg
 			workaround::fill<ComponentType>( componentTypes );
 			//componentTypes.push_back( typeid(ComponentType).hash_code() );*/
 
-			return hasComponent( {typeid(ComponentType).hash_code()} );
+			return hasComponent( { typeid(ComponentType).hash_code() } );
 		};
 
 		//returns true if all components of type ComponentType are registered

@@ -163,8 +163,8 @@
     <ClInclude Include="Blueprint.h">
       <Filter>Headerdateien\Toolset</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="EntityThatHasComponentContainer.h">
+      <Filter>Headerdateien\Toolset</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

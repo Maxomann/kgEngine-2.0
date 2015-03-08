@@ -105,7 +105,6 @@ namespace kg
 		if( !file.is_open() )
 			return false;
 
-
 		vector<string> lines;
 		string line;
 		while( getline( file, line ) )
@@ -127,7 +126,8 @@ namespace kg
 		return true;
 	}
 
-	void SaveManager::saveEntitiesToFile( const std::string& filename/*relative to open savegame path*/, const std::vector<std::shared_ptr<Entity>>& entities )
+	void SaveManager::saveEntitiesToFile( const std::string& filename/*relative to open savegame path*/,
+										  const EntityManager::EntityContainer& entities )
 	{
 		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION,
 					  fstream::out | fstream::trunc );

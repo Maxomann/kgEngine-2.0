@@ -69,13 +69,13 @@ namespace kg
 	}
 
 	Plugin::Id Graphics::getPluginId() const
-{
+	{
 		return id::ComponentPluginId::GRAPHICS;
 	}
 
 	/*void Graphics::draw( RenderTarget& target, RenderStates states ) const
 	{
-		target.draw( m_sprite, states );
+	target.draw( m_sprite, states );
 	}*/
 
 	void Graphics::setTextureRect( const sf::IntRect& rect )
@@ -119,7 +119,7 @@ namespace kg
 
 	/*void Graphics::drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const
 	{
-		spriteBatch.draw( *m_sprite );
+	spriteBatch.draw( *m_sprite );
 	}*/
 
 	kg::GraphicsStateInformation Graphics::getStateInformation() const
@@ -131,7 +131,6 @@ namespace kg
 
 		return info;
 	}
-
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";
 

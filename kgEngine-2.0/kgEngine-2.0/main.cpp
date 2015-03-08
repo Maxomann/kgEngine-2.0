@@ -20,7 +20,7 @@ int main()
 	}
 	catch( std::exception& e )
 	{
-		cout << "exception: "<< e.what() << endl;
+		cout << "exception: " << e.what() << endl;
 		system( "pause" );
 	}
 #endif

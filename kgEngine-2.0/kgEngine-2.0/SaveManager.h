@@ -15,6 +15,11 @@ namespace kg
 	public:
 		using SystemSaveInformationMap = std::map < int, SystemSaveInformation > ;
 
+		static const std::string PLUGIN_NAME;
+		static const std::string SAVEGAME_FOLDER;
+		static const std::string SYSTEM_SAVE_FILENAME;
+		static const std::string SAVE_FILE_EXTENSION;
+
 		std::vector<std::string> getAvailableSavegameNames()const;
 		//loads systems
 		void openSavegame( Engine& engine, World& world, const std::string& savegameName );
@@ -25,7 +30,7 @@ namespace kg
 		// filename without extension!
 		// PREVIOUSLY STORED INFORMATION IN FILE(filename) WILL BE DELETED!
 		void saveEntitiesToFile( const std::string& filename/*relative to open savegame path*/,
-								 const std::vector<std::shared_ptr<Entity>>& entities );
+								 const EntityManager::EntityContainer& entities );
 		//saves every system that is registered in systemManager to globals.save
 		void saveSystems( World& world );
 
@@ -34,10 +39,5 @@ namespace kg
 		Signal<> s_savegameClosed;
 		std::map< Plugin::Id, ReturningSignal< std::vector<std::string> > > s_writeSaveInformation;//first: systemId, second: signal
 		std::map< Plugin::Id, Signal<const std::vector<std::string>&> > s_loadSaveInformation;//first: systemId, second: signal
-
-		static const std::string PLUGIN_NAME;
-		static const std::string SAVEGAME_FOLDER;
-		static const std::string SYSTEM_SAVE_FILENAME;
-		static const std::string SAVE_FILE_EXTENSION;
 	};
 }

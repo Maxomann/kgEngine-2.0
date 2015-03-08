@@ -19,7 +19,6 @@ namespace kg
 
 		virtual Plugin::Id getPluginId() const override;
 
-
 		void generateChunk( Engine& engine, World& world, const sf::Vector2i chunkPositionInChunks );
 
 		static const std::string PLUGIN_NAME;
