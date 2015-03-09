@@ -5,38 +5,34 @@ namespace kg
 {
 	namespace batch
 	{
-		struct QueueItem
-		{
-			unsigned int count;
-			const sf::Texture* texture;
-		};
-
-		class SpriteBatch : public sf::Drawable
+		class SpriteBatch
 		{
 		public:
 			SpriteBatch( void );
 			~SpriteBatch( void );
 
-			void begin();
-			void end();
 
-			void draw( const sf::Sprite& sprite );
-			void draw( const sf::Texture* texture, sf::Vector2f position, sf::IntRect rec, sf::Color color, sf::Vector2f scale,
-					   sf::Vector2f origin, float rotation = 0 );
-			void draw( const sf::Texture* texture, sf::FloatRect rec, sf::IntRect src, sf::Color color );
+			void display( bool reset = true, bool flush = true );
+			void draw( const sf::Sprite &sprite );
+			void draw( const sf::Texture *texture, const sf::Vector2f &position,
+					   const sf::IntRect &rec, const sf::Color &color, const sf::Vector2f &scale,
+					   const sf::Vector2f &origin, float rotation = 0 );
 
-			virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const;
+			void draw( const sf::Texture *texture, const sf::FloatRect &dest, const sf::IntRect &rec, const sf::Color &color );
+
+			void flush();
+			void setRenderStates( const sf::RenderStates &states );
+			void setRenderTarget( sf::RenderTarget &rt );
 
 		private:
-			std::vector<QueueItem> textures;
+			sf::RenderTarget *rt;
+			sf::RenderStates state;
 			std::vector<sf::Vertex> vertices;
 			int count;
-			bool active;
-			unsigned int queueCount;
-			const sf::Texture* activeTexture;
+			int capacity;
 
-			int create( const sf::Texture* texture );
-			void enqueue();
+			int create( const sf::Texture *texture );
+
 		};
 	}
 }

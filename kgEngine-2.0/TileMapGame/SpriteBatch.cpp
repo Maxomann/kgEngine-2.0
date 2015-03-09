@@ -6,159 +6,141 @@ namespace kg
 {
 	namespace batch
 	{
-		static const double M_PI = 3.14159265358979323846;
+		const float Pi = 3.14159265;
+		const int MaxCapacity = 400000;
+		const int LookupSize = 512;
 
-		SpriteBatch::SpriteBatch( void ) : count( 0 ), active( false ), queueCount( 0 ), activeTexture( 0 )
-		{ }
+		float getSin[LookupSize];
+		float getCos[LookupSize];
+		bool initialized = false;
+
+		void create_lookup()
+		{
+			for( int i = 0; i < LookupSize; i++ )
+			{
+				getSin[i] = sin( i * Pi / LookupSize * 2 );
+				getCos[i] = cos( i * Pi / LookupSize * 2 );
+			}
+			initialized = true;
+		}
+
+		SpriteBatch::SpriteBatch( void ) : count( 0 ), capacity( 40 )
+		{
+			vertices.resize( capacity );
+
+			if( !initialized )
+				create_lookup();
+		}
 
 		SpriteBatch::~SpriteBatch( void )
 		{ }
 
-		void SpriteBatch::begin()
+		void SpriteBatch::draw( const Sprite &sprite )
 		{
-			if( active ) throw std::exception( "SpriteBatch is already active." );
-			vertices.clear();
+			draw( sprite.getTexture(), sprite.getPosition(), sprite.getTextureRect(), sprite.getColor(), sprite.getScale(), sprite.getOrigin(), sprite.getRotation() );
+		}
+
+		void SpriteBatch::flush()
+		{
 			count = 0;
-			textures.clear();
-			active = true;
 		}
 
-		void SpriteBatch::end()
+		void SpriteBatch::setRenderStates( const sf::RenderStates &states )
 		{
-			if( !active ) throw std::exception( "SpriteBatch is not active." );
-			enqueue();
-			active = false;
+			display( false );
+			this->state = states;
 		}
 
-		void SpriteBatch::draw( sf::RenderTarget& target, sf::RenderStates states ) const
+		void SpriteBatch::setRenderTarget( sf::RenderTarget &rt )
 		{
-			int index = 0;
-			for( auto item : textures )
+			this->rt = &rt;
+		}
+
+		void SpriteBatch::display( bool reset, bool flush )
+		{
+			rt->draw( &vertices[0], count * 4, PrimitiveType::Quads, state );
+			if( flush ) count = 0;
+			if( reset ) state = RenderStates();
+		}
+
+		int SpriteBatch::create( const Texture *texture )
+		{
+			if( texture != state.texture )
 			{
-				states.texture = item.texture;
-				target.draw( &vertices[index], item.count, sf::PrimitiveType::Quads, states );
-				index += item.count;
-			}
-		}
-
-		void SpriteBatch::draw( const sf::Sprite& sprite )
-		{
-			draw(
-				sprite.getTexture(), sprite.getPosition(), sprite.getTextureRect(),
-				sprite.getColor(), sprite.getScale(), sprite.getOrigin(), sprite.getRotation() );
-		}
-
-		void SpriteBatch::draw( const sf::Texture* texture, sf::Vector2f position, sf::IntRect rec,
-								sf::Color color, sf::Vector2f scale, sf::Vector2f origin, float rotation /*= 0*/ )
-		{
-			int index = create( texture );
-			float _sin = 0, _cos = 1;
-
-			if( rotation != 0 )
-			{
-				rotation = rotation / 180 * ( float )M_PI;
-				_sin = sin( rotation );
-				_cos = cos( rotation );
+				display( false );
+				state.texture = texture;
 			}
 
-			float pX = -origin.x * scale.x;
-			float pY = -origin.y * scale.y;
-
-			scale.x *= rec.width;
-			scale.y *= rec.height;
-
-			sf::Vertex* ptr = &vertices[index];
-
-			ptr->position.x = pX * _cos - pY * _sin + position.x;
-			ptr->position.y = pX * _sin + pY * _cos + position.y;
-			ptr->texCoords.x = ( float )rec.left;
-			ptr->texCoords.y = ( float )rec.top;
-			ptr->color = color;
-			ptr++;
-
-			pX += scale.x;
-			ptr->position.x = pX * _cos - pY * _sin + position.x;
-			ptr->position.y = pX * _sin + pY * _cos + position.y;
-			ptr->texCoords.x = ( float )(rec.left + rec.width);
-			ptr->texCoords.y = ( float )rec.top;
-			ptr->color = color;
-			ptr++;
-
-			pY += scale.y;
-			ptr->position.x = pX * _cos - pY * _sin + position.x;
-			ptr->position.y = pX * _sin + pY * _cos + position.y;
-			ptr->texCoords.x = ( float )(rec.left + rec.width);
-			ptr->texCoords.y = ( float )(rec.top + rec.height);
-			ptr->color = color;
-			ptr++;
-
-			pX -= scale.x;
-			ptr->position.x = pX * _cos - pY * _sin + position.x;
-			ptr->position.y = pX * _sin + pY * _cos + position.y;
-			ptr->texCoords.x = ( float )rec.left;
-			ptr->texCoords.y = ( float )(rec.top + rec.height);
-			ptr->color = color;
-		}
-
-		void SpriteBatch::draw( const sf::Texture* texture, sf::FloatRect rec, sf::IntRect src, sf::Color color )
-		{
-			int index = create( texture );
-			sf::Vertex* ptr = &vertices[index];
-
-			ptr->position.x = rec.left;
-			ptr->position.y = rec.top;
-			ptr->texCoords.x = ( float )src.left;
-			ptr->texCoords.y = ( float )src.top;
-			ptr->color = color;
-			ptr++;
-
-			ptr->position.x = rec.left + rec.width;
-			ptr->position.y = rec.top;
-			ptr->texCoords.x = ( float )(src.left + src.width);
-			ptr->texCoords.y = ( float )(src.top);
-			ptr->color = color;
-			ptr++;
-
-			ptr->position.x = rec.left + rec.width;
-			ptr->position.y = rec.top + rec.height;
-			ptr->texCoords.x = ( float )(src.left + src.width);
-			ptr->texCoords.y = ( float )(src.top + src.height);
-			ptr->color = color;
-			ptr++;
-
-			ptr->position.x = rec.left;
-			ptr->position.y = rec.top + rec.height;
-			ptr->texCoords.x = ( float )src.left;
-			ptr->texCoords.y = ( float )(src.top + src.height);
-			ptr->color = color;
-		}
-
-		int SpriteBatch::create( const sf::Texture* texture )
-		{
-			if( !active ) throw std::exception( "SpriteBatch is not active." );
-			if( texture != activeTexture )
+			if( count * 4 >= capacity )
 			{
-				enqueue();
-				activeTexture = texture;
+				//display(false);
+				if( capacity < MaxCapacity )
+				{
+					capacity *= 2;
+					if( capacity > MaxCapacity ) capacity = MaxCapacity;
+					vertices.resize( capacity );
+				}
 			}
-
-			vertices.resize( vertices.size() + 4 );
-			queueCount += 4;
-
 			return 4 * count++;
 		}
 
-		void SpriteBatch::enqueue()
+		void SpriteBatch::draw(
+			const Texture *texture, const Vector2f &position,
+			const IntRect &rec, const Color &color, const Vector2f &scale,
+			const Vector2f &origin, float rotation )
 		{
-			if( queueCount > 0 )
-			{
-				QueueItem qi;
-				qi.texture = activeTexture;
-				activeTexture = NULL;
-				qi.count = queueCount;
-				textures.push_back( qi );
-				queueCount = 0;
-			}
+			auto index = create( texture );
+
+			int rot = static_cast< int >(rotation / 360 * LookupSize + 0.5) & (LookupSize - 1);
+			float _sin = getSin[rot];
+			float _cos = getCos[rot];
+
+			//float _sin = sinf(rotation);
+			//float _cos = cosf(rotation);
+
+			auto scalex = rec.width * scale.x;
+			auto scaley = rec.height * scale.y;
+
+			Vertex *ptr = &vertices[index];
+
+			auto pX = -origin.x * scale.x;
+			auto pY = -origin.y * scale.y;
+
+			ptr->position.x = pX * _cos - pY * _sin + position.x;
+			ptr->position.y = pX * _sin + pY * _cos + position.y;
+			ptr->texCoords.x = rec.left;
+			ptr->texCoords.y = rec.top;
+			ptr->color = color;
+			ptr++;
+
+			pX += scalex;
+			ptr->position.x = pX * _cos - pY * _sin + position.x;
+			ptr->position.y = pX * _sin + pY * _cos + position.y;
+			ptr->texCoords.x = rec.left + rec.width;
+			ptr->texCoords.y = rec.top;
+			ptr->color = color;
+			ptr++;
+
+			pY += scaley;
+			ptr->position.x = pX * _cos - pY * _sin + position.x;
+			ptr->position.y = pX * _sin + pY * _cos + position.y;
+			ptr->texCoords.x = rec.left + rec.width;
+			ptr->texCoords.y = rec.top + rec.height;
+			ptr->color = color;
+			ptr++;
+
+			pX -= scalex;
+			ptr->position.x = pX * _cos - pY * _sin + position.x;
+			ptr->position.y = pX * _sin + pY * _cos + position.y;
+			ptr->texCoords.x = rec.left;
+			ptr->texCoords.y = rec.top + rec.height;
+			ptr->color = color;
 		}
+
+		void SpriteBatch::draw( const Texture *texture, const FloatRect &dest, const IntRect &rec, const Color &color )
+		{
+			draw( texture, Vector2f( dest.left, dest.top ), rec, color, Vector2f( 1, 1 ), Vector2f( 0, 0 ), 0 );
+		}
+
 	}
 }

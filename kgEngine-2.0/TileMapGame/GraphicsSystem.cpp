@@ -88,9 +88,7 @@ namespace kg
 		c.restart();
 
 		//collect DrawingStateInformation
-		DrawingStateInformation dsi;
-		dsi.first = m_cameras;
-		dsi.second = getEntitiesThatHaveComponent();
+		DrawingStateInformation dsi = make_pair( m_cameras, getEntitiesThatHaveComponent() );
 		m_drawingInformationContainer.push( move( dsi ) );
 
 		/*for( int i = 0; i < 20; ++i )
@@ -196,13 +194,12 @@ namespace kg
 	}
 
 	void drawingThreadFunction( sf::RenderWindow& renderWindow,
-								SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>>& drawingInformationContainer,
+								DrawingInformationSwapContainer& drawingInformationContainer,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
 								bool& drawingIsActive )
 	{
 		renderWindow.setActive( true );
-		map<int, map<int, RenderTexture>> renderTexturesBySize;
 		sf::Clock thisFrameTime;
 
 		while( !shouldTerminate )
@@ -213,106 +210,11 @@ namespace kg
 			if( container->size() > 0 )
 			{
 				renderWindow.clear( Color::Red );
-				auto relevantInformation = container->top();
-
-				//draw here
-				/*OLD CODE FROM CAMERA
-				m_texture.clear( Color::Green );
-				m_texture.setView( m_view );
-
-				auto toDraw = world.getEntitiesThatHaveComponent<Graphics>();
-				map<int, map<int, map<int, std::vector<shared_ptr<Entity>>>>> toDrawSorted;//by Z value by Y value by X value;
-				auto cameraRect = r_transformation->getGlobalBounds();
-				for( auto& el : toDraw )
-				{
-				auto graphics = el->getComponent<Graphics>();
-				auto toDrawTransformationComponent = el->getComponent<Transformation>();
-				auto toDrawGlobalBounds = toDrawTransformationComponent->getGlobalBounds();
-
-				if( toDrawGlobalBounds.intersects( cameraRect ) )//only add if visible on this camera
-				{
-				auto toDrawPosition = toDrawTransformationComponent->getPosition();
-				auto zValue = toDrawTransformationComponent->getZValue();
-				toDrawSorted[zValue][toDrawPosition.y][toDrawPosition.x].push_back( el );
-				}
-				}
-
-				batch::SpriteBatch spriteBatch;
-				spriteBatch.begin();
-
-				for( const auto& Z : toDrawSorted )
-				for( const auto& Y : Z.second )
-				for( const auto& X : Y.second )
-				for( const auto& entity : X.second )
-				entity->getComponent<Graphics>()->drawToSpriteBatch( spriteBatch );
-
-				spriteBatch.end();
-				m_texture.draw( spriteBatch );
-
-				m_texture.display();
-				m_texture.setView( m_texture.getDefaultView() );
-				*/
+				auto& relevantInformation = container->top();
 
 				//for every camera state information
 				for( const auto& camera : relevantInformation.first )
-				{
-					auto cameraState = camera->getComponent<Camera>()->getStateInformation();
-
-					//create render texture if needed (they will not be destroyed until function terminates)
-					auto it = renderTexturesBySize.find( cameraState.renderResolution.x );
-					if( it == end( renderTexturesBySize ) )
-					{
-						renderTexturesBySize[cameraState.renderResolution.x][cameraState.renderResolution.y].create( cameraState.renderResolution.x, cameraState.renderResolution.y );
-					}
-					else
-					{
-						auto it2 = it->second.find( cameraState.renderResolution.y );
-						if( it2 == end( it->second ) )
-						{
-							renderTexturesBySize[cameraState.renderResolution.x][cameraState.renderResolution.y].create( cameraState.renderResolution.x, cameraState.renderResolution.y );
-						}
-					}
-
-					auto& renderTexture = renderTexturesBySize[cameraState.renderResolution.x][cameraState.renderResolution.y];
-					Sprite renderTextureSprite;
-					map<int, map<int, map<int, std::vector<shared_ptr<Drawable>>>>> toDrawSorted;//Z Y X
-
-					//sort toDraws
-					for( const auto& toDraw : relevantInformation.second )
-					{
-						auto toDrawState = toDraw->getComponent<Graphics>()->getStateInformation();
-
-						//if toDraw is seen on camera
-						if( cameraState.globalBounds.intersects( toDrawState.globalBounds ) )
-						{
-							//sort
-							toDrawSorted
-								[toDrawState.zValue]//Z
-							[toDrawState.globalBounds.top + toDrawState.globalBounds.height]//Y
-							[toDrawState.globalBounds.left]//X
-							.push_back( toDrawState.drawable );
-						}
-					}
-
-					//draw drawables
-					renderTexture.clear( Color::Green );
-					renderTexture.setView( cameraState.view );
-					for( const auto& Z : toDrawSorted )
-						for( const auto& Y : Z.second )
-							for( const auto& X : Y.second )
-								for( const auto& toDraw : X.second )
-									renderTexture.draw( *toDraw );
-					renderTexture.display();
-					renderTexture.setView( renderTexture.getDefaultView() );
-
-					renderTextureSprite.setTexture( renderTexture.getTexture() );
-					auto renderTextureSpriteBounds = renderTextureSprite.getGlobalBounds();
-					renderTextureSprite.scale( cameraState.finalSize.x / renderTextureSpriteBounds.width,
-											   cameraState.finalSize.y / renderTextureSpriteBounds.height );
-					renderTextureSprite.setPosition( sf::Vector2f( cameraState.screenOffset ) );
-
-					renderWindow.draw( renderTextureSprite );
-				}
+					camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, relevantInformation.second );
 
 				renderWindow.display();
 			}

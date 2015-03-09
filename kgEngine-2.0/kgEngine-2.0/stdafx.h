@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <set>
 #include <unordered_set>
+#include <atomic>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
@@ -49,5 +50,14 @@
 
 #define variadic ...
 #define DLL_EXPORT __declspec(dllexport)
+
+
+
+template< class T >
+std::size_t getRuntimeTypeIdentifier()
+{
+	return typeid(T).hash_code();
+}
+
 
 #endif//STDAFX_H

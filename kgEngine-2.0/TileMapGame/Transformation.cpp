@@ -15,13 +15,15 @@ namespace kg
 		it = blueprintValues.find( BLUEPRINT_ZVALUE );
 		if( it != blueprintValues.end() )
 			m_zValue = it->second->asInt();
+
+		recalculateGlobalBounds();
 	}
 
 	void Transformation::init( Engine& engine, World& world, ComponentManager& thisEntity )
 	{
-		auto saveComponent = thisEntity.getComponent<Save>();
-		if( saveComponent )
+		if( thisEntity.hasComponent<Save>() )
 		{
+			auto saveComponent = thisEntity.getComponent<Save>();
 			m_connectToSignal( saveComponent->s_loadSaveInformation[( int )id::ComponentPluginId::TRANSFORMATION],
 							   &Transformation::onLoadSaveInformation );
 			m_connectToSignal( saveComponent->s_writeSaveInformation[( int )id::ComponentPluginId::TRANSFORMATION],
@@ -54,20 +56,16 @@ namespace kg
 		return id::ComponentPluginId::TRANSFORMATION;
 	}
 
-	const sf::FloatRect Transformation::getGlobalBounds() const
-	{
-		RectangleShape shape;
-		shape.setSize( sf::Vector2f( m_size ) );
-		shape.setOrigin( sf::Vector2f( static_cast< float >(m_size.x) / 2, static_cast< float >(m_size.y) / 2 ) );
-		shape.setPosition( sf::Vector2f( m_position ) );
-		shape.setRotation( m_rotation );
-
-		return shape.getGlobalBounds();
+	const sf::FloatRect& Transformation::getGlobalBounds() const
+{
+		return m_globalBounds;
 	}
 
 	void Transformation::setPosition( const sf::Vector2i& position )
 	{
 		m_position = position;
+
+		recalculateGlobalBounds();
 
 		s_transformationChanged();
 		s_positionChanged( m_position );
@@ -82,6 +80,8 @@ namespace kg
 	{
 		m_position += offset;
 
+		recalculateGlobalBounds();
+
 		s_transformationChanged();
 		s_positionChanged( m_position );
 	}
@@ -89,6 +89,8 @@ namespace kg
 	void Transformation::setRotation( const float rotationInDegree )
 	{
 		m_rotation = rotationInDegree;
+
+		recalculateGlobalBounds();
 
 		s_transformationChanged();
 		s_rotationChanged( m_rotation );
@@ -103,6 +105,8 @@ namespace kg
 	{
 		m_rotation += offsetInDegree;
 
+		recalculateGlobalBounds();
+
 		s_transformationChanged();
 		s_rotationChanged( m_rotation );
 	}
@@ -110,6 +114,8 @@ namespace kg
 	void Transformation::setSize( const sf::Vector2i& size )
 	{
 		m_size = size;
+
+		recalculateGlobalBounds();
 
 		s_transformationChanged();
 		s_sizeChanged( m_size );
@@ -146,6 +152,18 @@ namespace kg
 			to_string( m_size.x ),
 			to_string( m_size.y ),
 			to_string( m_zValue ) };
+	}
+
+	void Transformation::recalculateGlobalBounds()
+	{
+		RectangleShape shape;
+
+		shape.setSize( sf::Vector2f( m_size ) );
+		shape.setOrigin( sf::Vector2f( static_cast< float >(m_size.x) / 2, static_cast< float >(m_size.y) / 2 ) );
+		shape.setPosition( sf::Vector2f( m_position ) );
+		shape.setRotation( m_rotation );
+
+		m_globalBounds = shape.getGlobalBounds();
 	}
 
 	int Transformation::getZValue() const

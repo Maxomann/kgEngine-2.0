@@ -87,24 +87,67 @@ namespace kg
 
 	void Camera::setRenderResolution( const sf::Vector2u& resolution )
 	{
-		m_renderResolution = resolution;
+		m_renderTextureSize = resolution;
 	}
 
 	sf::Vector2u Camera::getRenderResolution() const
 	{
-		return m_renderResolution;
+		return m_renderTexture.getSize();
 	}
 
-	kg::CameraStateInformation Camera::getStateInformation() const
+	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow, const EntityManager::EntityContainer& toDraw )
 	{
-		CameraStateInformation info;
-		info.view = m_view;
-		info.finalSize = m_finalSize;
-		info.renderResolution = m_renderResolution;
-		info.screenOffset = m_screenOffset;
-		info.globalBounds = r_transformation->getGlobalBounds();
+		if( getRenderResolution() != m_renderTextureSize )
+			m_renderTexture.create( m_renderTextureSize.x, m_renderTextureSize.y );
 
-		return info;
+		map<int, map<int, map<int, std::vector<Graphics*>>>> toDrawSorted;//Z Y X
+		auto& thisGlobalBounds = r_transformation->getGlobalBounds();
+
+		//sort toDraws
+		for( const auto& obj : toDraw )
+		{
+			auto transformationComponent = obj->getComponent<Transformation>();
+			auto graphicsComponent = obj->getComponent<Graphics>();
+			auto& globalBounds = transformationComponent->getGlobalBounds();
+
+			//if toDraw is seen on camera
+			if( thisGlobalBounds.intersects( globalBounds ) )
+			{
+				//sort
+				toDrawSorted
+					[transformationComponent->getZValue()]//Z
+				[globalBounds.top + globalBounds.height]//Y
+				[globalBounds.left]//X
+				.emplace_back( graphicsComponent.get() );
+			}
+		}
+
+		Sprite renderTextureSprite;
+		m_renderTexture.clear( Color::Green );
+
+		batch::SpriteBatch spriteBatch;
+		/*RenderStates states( m_view.getTransform() );
+		spriteBatch.setRenderStates( states );*/
+		spriteBatch.setRenderTarget( m_renderTexture );
+
+		m_renderTexture.setView( m_view );
+		for( const auto& Z : toDrawSorted )
+			for( const auto& Y : Z.second )
+				for( const auto& X : Y.second )
+					for( const auto& toDraw : X.second )
+						toDraw->drawToSpriteBatch( spriteBatch );
+
+		spriteBatch.display();
+		m_renderTexture.display();
+
+
+		renderTextureSprite.setTexture( m_renderTexture.getTexture() );
+		auto renderTextureSpriteBounds = renderTextureSprite.getGlobalBounds();
+		renderTextureSprite.scale( m_finalSize.x / renderTextureSpriteBounds.width,
+								   m_finalSize.y / renderTextureSpriteBounds.height );
+		renderTextureSprite.setPosition( sf::Vector2f( m_screenOffset ) );
+
+		renderWindow.draw( renderTextureSprite );
 	}
 
 	const std::string Camera::PLUGIN_NAME = "Camera";

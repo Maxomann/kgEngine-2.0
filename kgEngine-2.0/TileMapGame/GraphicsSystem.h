@@ -5,11 +5,13 @@
 
 namespace kg
 {
+
 	//cameraStates, graphicsInformations
 	typedef std::pair<std::vector<std::shared_ptr<Entity>>, EntityManager::EntityContainer> DrawingStateInformation;
+	typedef SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation, std::vector<DrawingStateInformation>>> DrawingInformationSwapContainer;
 
 	void drawingThreadFunction( sf::RenderWindow& renderWindow,
-								SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>>& drawingInformationContainer,
+								DrawingInformationSwapContainer& drawingInformationContainer,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
 								bool& drawingIsActive );
@@ -40,7 +42,7 @@ namespace kg
 
 		void m_launchDrawingThread( sf::RenderWindow& renderWindow );
 		void m_terminateDrawingThread();
-		SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation>> m_drawingInformationContainer;
+		DrawingInformationSwapContainer m_drawingInformationContainer;
 		bool m_drawingShouldTerminate = false;
 		bool m_drawingIsActive = false;
 		int m_drawingThreadFrameTime = -1;

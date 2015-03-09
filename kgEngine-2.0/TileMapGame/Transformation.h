@@ -5,6 +5,8 @@ namespace kg
 {
 	class Transformation : public Component, public CallbackReciever
 	{
+		sf::FloatRect m_globalBounds;
+
 		sf::Vector2i m_position;
 		float m_rotation = 0;//in degree
 		sf::Vector2i m_size;
@@ -13,6 +15,8 @@ namespace kg
 		void onLoadSaveInformation( const std::vector<std::string>& information );
 
 		std::vector<std::string> onWriteSaveInformation();
+
+		void recalculateGlobalBounds();
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues ) override;
@@ -53,7 +57,7 @@ namespace kg
 		void setZValue( int zValue );
 
 		//GlobalBounds
-		const sf::FloatRect getGlobalBounds()const;
+		const sf::FloatRect& getGlobalBounds()const;
 
 		static const std::string PLUGIN_NAME;
 

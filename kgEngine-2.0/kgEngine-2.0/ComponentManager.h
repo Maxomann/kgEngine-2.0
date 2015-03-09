@@ -25,9 +25,9 @@ namespace kg
 	class DLL_EXPORT ComponentManager
 	{
 	private:
-		std::map<size_t, std::shared_ptr<Component>> m_componentsByType;
-		std::map<double, std::shared_ptr<Component>> m_componentsByUpdateImportance;
-		std::map<Plugin::Id, std::shared_ptr<Component>> m_componentsByPluginId;
+		std::unordered_map<size_t, std::shared_ptr<Component>> m_componentsByType;
+		std::map<double, std::shared_ptr<Component>> m_componentsByUpdateImportance;/*not unordered*/
+		std::unordered_map<Plugin::Id, std::shared_ptr<Component>> m_componentsByPluginId;
 	public:
 		// If this function returns true a system of type T has already been registered.
 		// This function overwrites the old system with the parameter of this function
@@ -57,13 +57,14 @@ namespace kg
 		void initComponentsByImportance( Engine& engine, World& world );
 
 		template<class T>
-		std::shared_ptr<T> getComponent()
+		std::shared_ptr<T> getComponent()const
 		{
 			auto it = m_componentsByType.find( typeid(T).hash_code() );
 			if( it == m_componentsByType.end() )
-				return std::static_pointer_cast< T >(std::shared_ptr<void>());
+			return std::static_pointer_cast< T >(std::shared_ptr<void>());
 			else
-				return std::static_pointer_cast< T >(it->second);
+			return std::static_pointer_cast< T >(it->second);
+			//return std::static_pointer_cast< T >(m_componentsByType.at( typeid(T).hash_code() ) );
 		};
 
 		void updateAllComponentsByImportance( Engine& engine, World& world, const sf::Time& frameTime );
@@ -86,8 +87,8 @@ namespace kg
 		//returns true if all components of type ComponentType are registered
 		bool hasComponent( const std::vector<size_t>& componentTypes )const;
 
-		const std::map<size_t, std::shared_ptr<Component>>& getAllComponentsByTypeHash()const;
+		const std::unordered_map<size_t, std::shared_ptr<Component>>& getAllComponentsByTypeHash()const;
 
-		const std::map<Plugin::Id, std::shared_ptr<Component>>& getAllComponentsByPluginId()const;
+		const std::unordered_map<Plugin::Id, std::shared_ptr<Component>>& getAllComponentsByPluginId()const;
 	};
 }

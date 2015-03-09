@@ -28,12 +28,12 @@ namespace kg
 		return true;
 	}
 
-	const std::map<size_t, std::shared_ptr<Component>>& ComponentManager::getAllComponentsByTypeHash() const
+	const std::unordered_map<size_t, std::shared_ptr<Component>>& ComponentManager::getAllComponentsByTypeHash() const
 	{
 		return m_componentsByType;
 	}
 
-	const std::map<Plugin::Id, std::shared_ptr<Component>>& ComponentManager::getAllComponentsByPluginId() const
+	const std::unordered_map<Plugin::Id, std::shared_ptr<Component>>& ComponentManager::getAllComponentsByPluginId() const
 	{
 		return m_componentsByPluginId;
 	}

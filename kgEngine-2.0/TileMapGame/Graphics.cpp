@@ -16,7 +16,7 @@ namespace kg
 		if( it != blueprintValues.end() )
 			texturePath = it->second->asString();
 		m_resourceManagementReference = engine.resourceManager.getResource<sf::Texture>( texturePackage, texturePath );
-		m_sprite->setTexture( *m_resourceManagementReference.get() );
+		m_sprite.setTexture( *m_resourceManagementReference.get() );
 
 		sf::IntRect textureRect;
 		it = blueprintValues.find( BLUEPRINT_TEXTURE_RECT_WIDTH );
@@ -31,7 +31,7 @@ namespace kg
 		it = blueprintValues.find( BLUEPRINT_TEXTURE_RECT_LEFT );
 		if( it != blueprintValues.end() )
 			textureRect.left = it->second->asInt();
-		m_sprite->setTextureRect( textureRect );
+		m_sprite.setTextureRect( textureRect );
 	}
 
 	void Graphics::init( Engine& engine, World& world, ComponentManager& thisEntity )
@@ -80,12 +80,12 @@ namespace kg
 
 	void Graphics::setTextureRect( const sf::IntRect& rect )
 	{
-		m_sprite->setTextureRect( rect );
+		m_sprite.setTextureRect( rect );
 	}
 
 	const sf::IntRect& Graphics::getTextureRect() const
 	{
-		return m_sprite->getTextureRect();
+		return m_sprite.getTextureRect();
 	}
 
 	void Graphics::onSizeChanged( const sf::Vector2i& newSize )
@@ -95,41 +95,36 @@ namespace kg
 
 	void Graphics::centerOrigin()
 	{
-		m_sprite->setOrigin( sf::Vector2f( m_sprite->getGlobalBounds().width / 2, m_sprite->getGlobalBounds().height / 2 ) );
+		m_sprite.setOrigin( sf::Vector2f( m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2 ) );
 	}
 
 	void Graphics::scaleToObjectSize()
 	{
-		auto globalBounds = m_sprite->getGlobalBounds();
+		auto globalBounds = m_sprite.getGlobalBounds();
 
-		m_sprite->scale( sf::Vector2f(
+		m_sprite.scale( sf::Vector2f(
 			r_transformation->getSize().x / globalBounds.width,
 			r_transformation->getSize().y / globalBounds.height ) );
 	}
 
 	void Graphics::onPositionChanged( const sf::Vector2i& newPosition )
 	{
-		m_sprite->setPosition( sf::Vector2f( newPosition ) );
+		m_sprite.setPosition( sf::Vector2f( newPosition ) );
 	}
 
 	void Graphics::onRotationChanged( const float& newRotation )
 	{
-		m_sprite->setRotation( newRotation );
+		m_sprite.setRotation( newRotation );
 	}
 
-	/*void Graphics::drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const
+	void Graphics::drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const
 	{
-	spriteBatch.draw( *m_sprite );
-	}*/
+		spriteBatch.draw( m_sprite );
+	}
 
-	kg::GraphicsStateInformation Graphics::getStateInformation() const
+	void Graphics::draw( RenderTarget& target, RenderStates states ) const
 	{
-		GraphicsStateInformation info;
-		info.globalBounds = m_sprite->getGlobalBounds();
-		info.drawable = static_pointer_cast< Drawable >(m_sprite);
-		r_transformation->getZValue();
-
-		return info;
+		target.draw( m_sprite, states );
 	}
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";

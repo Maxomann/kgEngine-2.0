@@ -37,7 +37,7 @@ namespace kg
 		DLL_EXPORT void push( T&& element )
 		{
 			m_rwMutex.lock();
-			(*m_inActiveContainer)->push( element );
+			(*m_inActiveContainer)->push( std::move(element) );
 			m_rwMutex.unlock();
 		};
 
