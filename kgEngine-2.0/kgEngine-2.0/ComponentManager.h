@@ -28,8 +28,9 @@ namespace kg
 		typedef std::map<size_t, Component*> ComponentsByTypeContainer;
 
 	private:
+		std::vector<std::shared_ptr<Component>> m_components;
 		ComponentsByTypeContainer m_componentsByType;
-		std::map<double, std::shared_ptr<Component>> m_componentsByUpdateImportance;/*not unordered*/
+		std::map<double, std::vector<Component*>> m_componentsByUpdateImportance;/*not unordered*/
 		/*std::unordered_map<Plugin::Id, std::shared_ptr<Component>> m_componentsByPluginId;*/
 	public:
 		// If this function returns true a system of type T has already been registered.
@@ -42,8 +43,9 @@ namespace kg
 
 			auto it = m_componentsByType.find( realTypeHashCode );
 
+			m_components.emplace_back( component );
 			m_componentsByType[realTypeHashCode] = component.get();
-			m_componentsByUpdateImportance[updateImportance] = component;
+			m_componentsByUpdateImportance[updateImportance].emplace_back(component.get());
 			/*m_componentsByPluginId[component->getPluginId()] = component;*/
 
 			//if [it != m_systemsByType.end();] a system has been overwritten

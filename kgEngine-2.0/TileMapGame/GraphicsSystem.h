@@ -10,17 +10,22 @@ namespace kg
 	//std::vector<std::shared_ptr<Entity>>
 	typedef std::vector<std::shared_ptr<Entity>> CameraContainer;
 
+	typedef std::vector<std::shared_ptr<Entity>>EntityTempContainer;
+
 	void drawingThreadFunction( sf::RenderWindow& renderWindow,
-								std::mutex& drawableEntitiesMutex,
-								EntityManager::EntityContainer& drawableEntities,
+								std::mutex& m_drawableEntityMutex,
 								std::mutex& cameraContainerMutex,
 								CameraContainer& cameraContainer,
+								EntityTempContainer& addedEntities,
+								EntityTempContainer& removedEntities,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
 								bool& drawingIsActive );
 
 	class GraphicsSystem : public System, public CallbackReciever
 	{
+	private:
+
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
 		{
@@ -34,13 +39,15 @@ namespace kg
 			std::string* window_name;
 		}m_configValues;
 
-		mutable std::mutex m_cameraContainerMutex;
+		mutable std::mutex m_cameraContainerMutexA;
+		mutable std::mutex m_cameraContainerMutexB;
 		CameraContainer m_cameras;
 		bool m_shouldInitCameras = true;
 		void m_initCameras( Engine& engine, World& world );
 
 		mutable std::mutex m_drawableEntityMutex;
-		EntityManager::EntityContainer m_drawableEntities;
+		EntityTempContainer m_addedEntities;
+		EntityTempContainer m_removedEntities;
 		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity );
 		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity );
 
@@ -70,7 +77,7 @@ namespace kg
 		virtual Plugin::Id getPluginId()const;
 
 		std::shared_ptr<Entity> getCamera( int index );
-		std::vector<std::shared_ptr<Entity>> getCameras()const;
+		CameraContainer getCameras()const;
 
 		/*void setWindowSize( const sf::Vector2i& size );
 		void setWindowTitle( const std::string& title );*/

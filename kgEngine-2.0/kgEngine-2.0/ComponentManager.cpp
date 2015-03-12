@@ -7,15 +7,17 @@ namespace kg
 	void ComponentManager::updateAllComponentsByImportance( Engine& engine, World& world, const sf::Time& frameTime )
 	{
 		// the lower the importance, the earlier the component gets updated
-		// this is due to sorting from low to high key values in std::Map
-		for( auto& el : m_componentsByUpdateImportance )
-			el.second->update( engine, world, *this, frameTime );
+		// this is due to sorting from low to high key values in std::map
+		for( auto& vec : m_componentsByUpdateImportance )
+			for( auto& el : vec.second )
+				el->update( engine, world, *this, frameTime );
 	}
 
 	void ComponentManager::initComponentsByImportance( Engine& engine, World& world )
 	{
-		for( auto& component : m_componentsByUpdateImportance )
-			component.second->init( engine, world, *this );
+		for( auto& vec : m_componentsByUpdateImportance )
+			for( auto& el : vec.second )
+				el->init( engine, world, *this );
 	}
 
 	bool ComponentManager::hasComponent( const std::vector<size_t>& componentTypes )const

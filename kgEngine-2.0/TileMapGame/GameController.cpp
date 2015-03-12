@@ -31,7 +31,9 @@ namespace kg
 
 	void GameController::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
-		auto camera = r_graphicsSystem->getCamera( 0 );
+		if( m_camera.expired() )
+			m_camera = r_graphicsSystem->getCamera( 0 );
+		auto camera = m_camera.lock();
 
 		auto frameTimeInMilliseconds = frameTime.asMilliseconds();
 
@@ -39,18 +41,22 @@ namespace kg
 			shutDown( engine, world, saveManager );
 		if( !engine.isPaused )
 		{
+			Vector2i cameraMovement;
+
 			if( Keyboard::isKeyPressed( Keyboard::W ) )
-				camera->getComponent<Transformation>()->move( sf::Vector2i( 0, -10.0 / 16.0 * frameTimeInMilliseconds ) );
+				cameraMovement += sf::Vector2i( 0, -10.0 / 16.0 * frameTimeInMilliseconds );
 			if( Keyboard::isKeyPressed( Keyboard::S ) )
-				camera->getComponent<Transformation>()->move( sf::Vector2i( 0, 10.0 / 16.0 * frameTimeInMilliseconds ) );
+				cameraMovement += sf::Vector2i( 0, 10.0 / 16.0 * frameTimeInMilliseconds );
 			if( Keyboard::isKeyPressed( Keyboard::A ) )
-				camera->getComponent<Transformation>()->move( sf::Vector2i( -10.0 / 16.0 * frameTimeInMilliseconds, 0 ) );
+				cameraMovement += sf::Vector2i( -10.0 / 16.0 * frameTimeInMilliseconds, 0 );
 			if( Keyboard::isKeyPressed( Keyboard::D ) )
-				camera->getComponent<Transformation>()->move( sf::Vector2i( 10.0 / 16.0 * frameTimeInMilliseconds, 0 ) );
+				cameraMovement += sf::Vector2i( 10.0 / 16.0 * frameTimeInMilliseconds, 0 );
 			if( Keyboard::isKeyPressed( Keyboard::Add ) )
 				m_cameraZoomFactor -= 0.01*frameTimeInMilliseconds;
 			if( Keyboard::isKeyPressed( Keyboard::Subtract ) )
 				m_cameraZoomFactor += 0.01*frameTimeInMilliseconds;
+
+			camera->getComponent<Transformation>()->move( cameraMovement );
 		}
 		if( m_cameraZoomFactor < 0 )
 			m_cameraZoomFactor = 0;

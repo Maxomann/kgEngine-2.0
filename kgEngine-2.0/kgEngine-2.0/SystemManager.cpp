@@ -6,20 +6,23 @@ namespace kg
 	{
 		// the lower the importance, the earlier the system gets updated
 		// this is due to sorting from low to high key values in std::Map
-		for( auto& el : m_systemsByUpdateImportance )
-			el.second->update( engine, world, saveManager, frameTime );
+		for( auto& vec : m_systemsByUpdateImportance )
+			for( auto& el : vec.second )
+			el->update( engine, world, saveManager, frameTime );
 	}
 
 	void SystemManager::initSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager )
 	{
-		for( auto& system : m_systemsByUpdateImportance )
-			system.second->init( engine, world, saveManager, engine.resourceManager.getConfigFile<ConfigFile>( system.second->getPluginName() ) );
+		for( auto& vec : m_systemsByUpdateImportance )
+			for( auto& el : vec.second )
+				el->init( engine, world, saveManager, engine.resourceManager.getConfigFile<ConfigFile>( el->getPluginName() ) );
 	}
 
 	void SystemManager::forwardSfmlEventByImportance( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent )
 	{
-		for( const auto& el : m_systemsByUpdateImportance )
-			el.second->sfmlEvent( engine, world, saveManager, sfEvent );
+		for( auto& vec : m_systemsByUpdateImportance )
+			for( auto& el : vec.second )
+			el->sfmlEvent( engine, world, saveManager, sfEvent );
 	}
 
 	/*std::shared_ptr<System> SystemManager::getSystemById( const Plugin::Id& id )const

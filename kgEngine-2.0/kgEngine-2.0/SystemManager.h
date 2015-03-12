@@ -13,7 +13,7 @@ namespace kg
 	class DLL_EXPORT SystemManager
 	{
 		std::map<size_t, System*> m_systemsByType;
-		std::map<double, std::shared_ptr<System>> m_systemsByUpdateImportance;
+		std::map<double, std::vector<std::shared_ptr<System>>> m_systemsByUpdateImportance;
 		/*std::map<Plugin::Id, std::shared_ptr<System>> m_systemsByPluginId;*/
 	public:
 
@@ -26,7 +26,7 @@ namespace kg
 			auto it = m_systemsByType.find( realTypeHashCode );
 
 			m_systemsByType[realTypeHashCode] = system.get();
-			m_systemsByUpdateImportance[updateImportance] = system;
+			m_systemsByUpdateImportance[updateImportance].emplace_back( system );
 			/*m_systemsByPluginId[system->getPluginId()] = system;*/
 
 			//it != m_systemsByType.end(); means that a system has been overwritten

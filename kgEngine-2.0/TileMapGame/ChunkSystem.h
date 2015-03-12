@@ -14,7 +14,7 @@ namespace kg
 {
 	class ChunkSystem : public System, public CallbackReciever
 	{
-		typedef EntityManager::EntityContainer EntityContainer;
+		typedef std::unordered_set<std::shared_ptr<Entity>> EntityContainer;
 
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues

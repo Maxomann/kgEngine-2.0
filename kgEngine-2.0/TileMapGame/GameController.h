@@ -11,6 +11,7 @@ namespace kg
 		GraphicsSystem* r_graphicsSystem;
 
 		float m_cameraZoomFactor = 1;
+		std::weak_ptr<Entity> m_camera;
 
 		void saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager );
 		void shutDown( Engine& engine, World& world, SaveManager& saveManager );

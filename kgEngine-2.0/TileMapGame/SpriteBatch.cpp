@@ -7,7 +7,7 @@ namespace kg
 	namespace batch
 	{
 		const float Pi = 3.14159265;
-		const int MaxCapacity = 400000;
+		const unsigned int MaxCapacity = std::numeric_limits<unsigned int>::max();
 		const int LookupSize = 512;
 
 		float getSin[LookupSize];

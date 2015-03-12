@@ -41,6 +41,7 @@
 #include <boost/range/algorithm/remove_if.hpp>
 #include <boost/optional.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/container/flat_set.hpp>
 
 #ifdef _WIN32
 #include<windows.h>
