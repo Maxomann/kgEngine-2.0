@@ -45,8 +45,7 @@ namespace kg
 
 		virtual size_t getRealTypeHashCode() const
 		{
-			auto retVal = typeid(RealType).hash_code();
-			return retVal;
+			return RealType::type_hash;
 		}
 	};
 }

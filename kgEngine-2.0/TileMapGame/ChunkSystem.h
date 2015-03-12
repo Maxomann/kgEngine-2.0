@@ -60,6 +60,8 @@ namespace kg
 
 		static const std::string PLUGIN_NAME;
 
+		static const size_t type_hash;
+
 		// returns a reference to the internal container
 		const EntityContainer& getEntitiesInChunk( const sf::Vector2i& chunk )const;
 

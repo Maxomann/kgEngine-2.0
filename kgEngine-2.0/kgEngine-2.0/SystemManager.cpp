@@ -22,13 +22,13 @@ namespace kg
 			el.second->sfmlEvent( engine, world, saveManager, sfEvent );
 	}
 
-	std::shared_ptr<System> SystemManager::getSystemById( const Plugin::Id& id )const
+	/*std::shared_ptr<System> SystemManager::getSystemById( const Plugin::Id& id )const
 	{
-		return m_systemsByPluginId.at( id );
-	}
+	return m_systemsByPluginId.at( id );
+	}*/
 
-	const std::map<Plugin::Id, std::shared_ptr<System>>& SystemManager::getAllSystemsByPluginId() const
+	/*const std::map<Plugin::Id, std::shared_ptr<System>>& SystemManager::getAllSystemsByPluginId() const
 	{
-		return m_systemsByPluginId;
-	}
+	return m_systemsByPluginId;
+	}*/
 }

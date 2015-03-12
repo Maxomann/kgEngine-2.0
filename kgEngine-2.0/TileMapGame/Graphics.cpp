@@ -6,6 +6,7 @@ namespace kg
 {
 	void Graphics::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
 	{
+
 		string texturePackage;
 		string texturePath;
 
@@ -32,11 +33,12 @@ namespace kg
 		if( it != blueprintValues.end() )
 			textureRect.left = it->second->asInt();
 		m_sprite.setTextureRect( textureRect );
+
 	}
 
 	void Graphics::init( Engine& engine, World& world, ComponentManager& thisEntity )
 	{
-		r_transformation = thisEntity.getComponent<Transformation>().get();
+		r_transformation = thisEntity.getComponent<Transformation>();
 
 		m_connectToSignal( r_transformation->s_positionChanged, &Graphics::onPositionChanged );
 		m_connectToSignal( r_transformation->s_sizeChanged, &Graphics::onSizeChanged );
@@ -60,7 +62,7 @@ namespace kg
 
 	std::vector<size_t> Graphics::getRequieredComponents() const
 	{
-		return{ typeid(Transformation).hash_code() };
+		return{ Transformation::type_hash };
 	}
 
 	const std::string& Graphics::getPluginName() const
@@ -80,12 +82,17 @@ namespace kg
 
 	void Graphics::setTextureRect( const sf::IntRect& rect )
 	{
+		m_mutex.lock();
 		m_sprite.setTextureRect( rect );
+		m_mutex.unlock();
 	}
 
-	const sf::IntRect& Graphics::getTextureRect() const
-	{
-		return m_sprite.getTextureRect();
+	const sf::IntRect Graphics::getTextureRect() const
+{
+		m_mutex.lock();
+		auto retVal = m_sprite.getTextureRect();
+		m_mutex.unlock();
+		return retVal;
 	}
 
 	void Graphics::onSizeChanged( const sf::Vector2i& newSize )
@@ -95,37 +102,55 @@ namespace kg
 
 	void Graphics::centerOrigin()
 	{
+		m_mutex.lock();
+
 		m_sprite.setOrigin( sf::Vector2f( m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2 ) );
+
+		m_mutex.unlock();
 	}
 
 	void Graphics::scaleToObjectSize()
 	{
+		m_mutex.lock();
+
 		auto globalBounds = m_sprite.getGlobalBounds();
 
 		m_sprite.scale( sf::Vector2f(
 			r_transformation->getSize().x / globalBounds.width,
 			r_transformation->getSize().y / globalBounds.height ) );
+
+		m_mutex.unlock();
 	}
 
 	void Graphics::onPositionChanged( const sf::Vector2i& newPosition )
 	{
+		m_mutex.lock();
 		m_sprite.setPosition( sf::Vector2f( newPosition ) );
+		m_mutex.unlock();
 	}
 
 	void Graphics::onRotationChanged( const float& newRotation )
 	{
+		m_mutex.lock();
 		m_sprite.setRotation( newRotation );
+		m_mutex.unlock();
 	}
 
 	void Graphics::drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const
 	{
+		m_mutex.lock();
 		spriteBatch.draw( m_sprite );
+		m_mutex.unlock();
 	}
 
 	void Graphics::draw( RenderTarget& target, RenderStates states ) const
 	{
+		m_mutex.lock();
 		target.draw( m_sprite, states );
+		m_mutex.unlock();
 	}
+
+	const size_t Graphics::type_hash = getRuntimeTypeInfo<Graphics>();
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";
 

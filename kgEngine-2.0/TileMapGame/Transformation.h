@@ -5,6 +5,9 @@ namespace kg
 {
 	class Transformation : public Component, public CallbackReciever
 	{
+		mutable std::mutex m_globalBoundsMutex;
+		mutable std::mutex m_zValueMutex;
+
 		sf::FloatRect m_globalBounds;
 
 		sf::Vector2i m_position;
@@ -53,13 +56,15 @@ namespace kg
 		sf::Vector2i getSize()const;
 
 		//zValue
-		int getZValue()const;
+		int getZValue()const;/*thread safe*/
 		void setZValue( int zValue );
 
 		//GlobalBounds
-		const sf::FloatRect& getGlobalBounds()const;
+		sf::FloatRect getGlobalBounds()const;/*thread safe*/
 
 		static const std::string PLUGIN_NAME;
+
+		static const size_t type_hash;
 
 	signals:
 		Signal<> s_transformationChanged;//any of: Position, Rotation, Size

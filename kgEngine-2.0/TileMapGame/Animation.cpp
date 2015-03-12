@@ -35,8 +35,8 @@ namespace kg
 	void Animation::init( Engine& engine, World& world, ComponentManager& thisEntity )
 	{
 		//validate pointers
-		r_animationSystem = world.getSystem<AnimationSystem>().get();
-		r_graphicsComponent = thisEntity.getComponent<Graphics>().get();
+		r_animationSystem = world.getSystem<AnimationSystem>();
+		r_graphicsComponent = thisEntity.getComponent<Graphics>();
 
 		//check pointers
 		if( !r_animationSystem )
@@ -56,7 +56,7 @@ namespace kg
 
 	std::vector<size_t> Animation::getRequieredComponents() const
 	{
-		return{ typeid(Graphics).hash_code() };
+		return{ Graphics::type_hash };
 	}
 
 	const std::string& Animation::getPluginName() const
@@ -70,6 +70,8 @@ namespace kg
 	}
 
 	const std::string Animation::PLUGIN_NAME = "AnimationComponent";
+
+	const size_t Animation::type_hash = getRuntimeTypeInfo<Animation>();
 
 	const std::string AnimationFile::FREE_ANIMATION = "FREE";
 

@@ -12,9 +12,9 @@ namespace kg
 
 	class DLL_EXPORT SystemManager
 	{
-		std::map<size_t, std::shared_ptr<System>> m_systemsByType;
+		std::map<size_t, System*> m_systemsByType;
 		std::map<double, std::shared_ptr<System>> m_systemsByUpdateImportance;
-		std::map<Plugin::Id, std::shared_ptr<System>> m_systemsByPluginId;
+		/*std::map<Plugin::Id, std::shared_ptr<System>> m_systemsByPluginId;*/
 	public:
 
 		// If this function returns true a system of type T has already been registered.
@@ -25,9 +25,9 @@ namespace kg
 
 			auto it = m_systemsByType.find( realTypeHashCode );
 
-			m_systemsByType[realTypeHashCode] = system;
+			m_systemsByType[realTypeHashCode] = system.get();
 			m_systemsByUpdateImportance[updateImportance] = system;
-			m_systemsByPluginId[system->getPluginId()] = system;
+			/*m_systemsByPluginId[system->getPluginId()] = system;*/
 
 			//it != m_systemsByType.end(); means that a system has been overwritten
 			return it != m_systemsByType.end();
@@ -36,24 +36,19 @@ namespace kg
 		template<class T>
 		bool addSystem( std::shared_ptr<System>& system )
 		{
-			size_t typeId = typeid(T).hash_code();
-			addSystem( system, typeId );
+			addSystem( system, T::type_hash );
 		};
 
 		void initSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager );
 
 		template<class T>
-		std::shared_ptr<T> getSystem()
+		T* getSystem()
 		{
-			auto it = m_systemsByType.find( typeid(T).hash_code() );
-			if( it == m_systemsByType.end() )
-				return std::static_pointer_cast< T >(std::shared_ptr<void>());
-			else
-				return std::static_pointer_cast< T >(it->second);
+			return static_cast< T* >(m_systemsByType.at( T::type_hash ));
 		};
 
-		std::shared_ptr<System> getSystemById( const Plugin::Id& id )const;
-		const std::map<Plugin::Id, std::shared_ptr<System>>& getAllSystemsByPluginId()const;
+		/*std::shared_ptr<System> getSystemById( const Plugin::Id& id )const;*/
+		/*const std::map<Plugin::Id, std::shared_ptr<System>>& getAllSystemsByPluginId()const;*/
 
 		/*template<class T, class CastTo>
 		std::shared_ptr<CastTo>& getSystemWithCast()

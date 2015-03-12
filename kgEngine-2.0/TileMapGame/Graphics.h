@@ -7,6 +7,8 @@ namespace kg
 
 	class Graphics : public Component, public CallbackReciever, public sf::Drawable
 	{
+		mutable std::mutex m_mutex;
+
 		Transformation* r_transformation = nullptr;
 
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;
@@ -36,7 +38,7 @@ namespace kg
 		virtual Plugin::Id getPluginId()const override;
 
 		void setTextureRect( const sf::IntRect& rect );
-		const sf::IntRect& getTextureRect()const;
+		const sf::IntRect getTextureRect()const;
 
 
 		void drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const;
@@ -49,5 +51,7 @@ namespace kg
 		static const std::string BLUEPRINT_TEXTURE_RECT_LEFT;
 
 		static const std::string PLUGIN_NAME;
+
+		static const size_t type_hash;
 	};
 }

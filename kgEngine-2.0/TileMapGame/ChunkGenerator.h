@@ -22,5 +22,7 @@ namespace kg
 		void generateChunk( Engine& engine, World& world, const sf::Vector2i chunkPositionInChunks );
 
 		static const std::string PLUGIN_NAME;
+
+		static const size_t type_hash;
 	};
 }

@@ -32,7 +32,7 @@ namespace kg
 		std::shared_ptr<Entity> createNewTemporaryEntity( Engine& engine, World& world )
 		{
 			auto entity = std::make_shared<Entity>();
-			std::vector<std::pair<size_t, std::shared_ptr<Component>>> vec{ std::make_pair( typeid(ComponentsType).hash_code(), std::static_pointer_cast< Component >(std::make_shared<ComponentsType>()) )... };
+			std::vector<std::pair<size_t, std::shared_ptr<Component>>> vec{ std::make_pair( ComponentsType::type_hash, std::static_pointer_cast< Component >(std::make_shared<ComponentsType>()) )... };
 			for( auto& el : vec )
 				entity->addComponent( el.second, el.first );
 			entity->initComponentsByImportance( engine, world );

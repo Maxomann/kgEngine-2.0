@@ -49,4 +49,7 @@ namespace kg
 	}
 
 	const std::string AnimationSystem::PLUGIN_NAME = "AnimationSystem";
+
+	const size_t AnimationSystem::type_hash = getRuntimeTypeInfo<AnimationSystem>();
+
 }

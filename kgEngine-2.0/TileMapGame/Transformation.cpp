@@ -21,9 +21,9 @@ namespace kg
 
 	void Transformation::init( Engine& engine, World& world, ComponentManager& thisEntity )
 	{
-		if( thisEntity.hasComponent<Save>() )
+		auto saveComponent = thisEntity.getComponentTry<Save>();
+		if( saveComponent )
 		{
-			auto saveComponent = thisEntity.getComponent<Save>();
 			m_connectToSignal( saveComponent->s_loadSaveInformation[( int )id::ComponentPluginId::TRANSFORMATION],
 							   &Transformation::onLoadSaveInformation );
 			m_connectToSignal( saveComponent->s_writeSaveInformation[( int )id::ComponentPluginId::TRANSFORMATION],
@@ -56,9 +56,15 @@ namespace kg
 		return id::ComponentPluginId::TRANSFORMATION;
 	}
 
-	const sf::FloatRect& Transformation::getGlobalBounds() const
+	sf::FloatRect Transformation::getGlobalBounds() const
 {
-		return m_globalBounds;
+		m_globalBoundsMutex.lock();
+
+		auto retVal = m_globalBounds;
+
+		m_globalBoundsMutex.unlock();
+
+		return retVal;
 	}
 
 	void Transformation::setPosition( const sf::Vector2i& position )
@@ -156,6 +162,8 @@ namespace kg
 
 	void Transformation::recalculateGlobalBounds()
 	{
+		m_globalBoundsMutex.lock();
+
 		RectangleShape shape;
 
 		shape.setSize( sf::Vector2f( m_size ) );
@@ -164,21 +172,35 @@ namespace kg
 		shape.setRotation( m_rotation );
 
 		m_globalBounds = shape.getGlobalBounds();
+
+		m_globalBoundsMutex.unlock();
 	}
 
 	int Transformation::getZValue() const
 	{
-		return m_zValue;
+		m_zValueMutex.lock();
+
+		auto retVal = m_zValue;
+
+		m_zValueMutex.unlock();
+
+		return retVal;
 	}
 
 	void Transformation::setZValue( int zValue )
 	{
+		m_zValueMutex.lock();
+
 		m_zValue = zValue;
+
+		m_zValueMutex.unlock();
 	}
 
 	const std::string Transformation::BLUEPRINT_ZVALUE = "zValue";
 
 	const std::string Transformation::PLUGIN_NAME = "Transformation";
+
+	const size_t Transformation::type_hash = getRuntimeTypeInfo<Transformation>();
 
 	const std::string Transformation::BLUEPRINT_WIDTH = "width";
 	const std::string Transformation::BLUEPRINT_HEIGHT = "height";

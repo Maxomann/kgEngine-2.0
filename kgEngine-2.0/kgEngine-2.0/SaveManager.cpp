@@ -134,7 +134,7 @@ namespace kg
 
 		for( const auto& el : entities )
 		{
-			auto saveComponent = el->getComponent<Save>();
+			auto saveComponent = el->getComponentTry<Save>();
 			if( saveComponent )//can only be saved if it has a save component
 			{
 				auto saveInformation = saveComponent->writeSaveInformation();

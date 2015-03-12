@@ -320,4 +320,7 @@ namespace kg
 	const std::string ChunkSystem::CHUNK_LOAD_RADIUS_AROUND_CAMERA = "iChunkLoadRadiusAroundCamera";
 
 	const std::string ChunkSystem::PLUGIN_NAME = "ChunkSystem";
+
+	const size_t ChunkSystem::type_hash = getRuntimeTypeInfo<ChunkSystem>();
+
 }

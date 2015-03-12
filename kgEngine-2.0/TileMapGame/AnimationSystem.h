@@ -23,5 +23,7 @@ namespace kg
 		int getSyncedTimeForAnimationDuration( const int stateDurationInMilliseconds );
 
 		static const std::string PLUGIN_NAME;
+
+		static const size_t type_hash;
 	};
 }

@@ -12,7 +12,7 @@ namespace kg
 
 	void Camera::init( Engine& engine, World& world, ComponentManager& thisEntity )
 	{
-		r_transformation = thisEntity.getComponent<Transformation>().get();
+		r_transformation = thisEntity.getComponent<Transformation>();
 
 		m_connectToSignal( r_transformation->s_positionChanged, &Camera::onPositionChanged );
 		m_connectToSignal( r_transformation->s_sizeChanged, &Camera::onSizeChanged );
@@ -30,7 +30,7 @@ namespace kg
 
 	std::vector<size_t> Camera::getRequieredComponents() const
 	{
-		return{ typeid(Transformation).hash_code() };
+		return{ Transformation::type_hash };
 	}
 
 	const std::string& Camera::getPluginName() const
@@ -45,32 +45,46 @@ namespace kg
 
 	void Camera::onPositionChanged( const sf::Vector2i& newPosition )
 	{
+		m_viewMutex.lock();
 		m_view.setCenter( sf::Vector2f( newPosition ) );
+		m_viewMutex.unlock();
 	}
 
 	void Camera::onSizeChanged( const sf::Vector2i& newSize )
 	{
+		m_viewMutex.lock();
 		m_view.setSize( sf::Vector2f( newSize ) );
+		m_viewMutex.unlock();
 	}
 
 	void Camera::setFinalSize( const sf::Vector2u& size )
 	{
+		m_finalSizeAndScreenOffsetMutex.lock();
 		m_finalSize = size;
+		m_finalSizeAndScreenOffsetMutex.unlock();
 	}
 
-	const sf::Vector2u& Camera::getFinalSize() const
+	sf::Vector2u Camera::getFinalSize() const
 	{
-		return m_finalSize;
+		m_finalSizeAndScreenOffsetMutex.lock();
+		auto retVal = m_finalSize;
+		m_finalSizeAndScreenOffsetMutex.unlock();
+		return retVal;
 	}
 
 	void Camera::setScreenOffset( const sf::Vector2i& offset )
 	{
+		m_finalSizeAndScreenOffsetMutex.lock();
 		m_screenOffset = offset;
+		m_finalSizeAndScreenOffsetMutex.unlock();
 	}
 
-	const sf::Vector2i& Camera::getScreenOffset() const
+	sf::Vector2i Camera::getScreenOffset() const
 	{
-		return m_screenOffset;
+		m_finalSizeAndScreenOffsetMutex.lock();
+		auto retVal = m_screenOffset;
+		m_finalSizeAndScreenOffsetMutex.unlock();
+		return retVal;
 	}
 
 	std::shared_ptr<Entity> Camera::EMPLACE_TO_WORLD( Engine& engine, World& world )
@@ -92,23 +106,32 @@ namespace kg
 
 	sf::Vector2u Camera::getRenderResolution() const
 	{
-		return m_renderTexture.getSize();
+		m_renderTextureSizeMutex.lock();
+		auto retVal = m_renderTexture.getSize();
+		m_renderTextureSizeMutex.unlock();
+		return retVal;
 	}
 
-	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow, const EntityManager::EntityContainer& toDraw )
+	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
+											const EntityManager::EntityContainer& toDraw )
 	{
-		if( getRenderResolution() != m_renderTextureSize )
+		m_renderTextureSizeMutex.lock();
+		if( m_renderTexture.getSize() != m_renderTextureSize )
 			m_renderTexture.create( m_renderTextureSize.x, m_renderTextureSize.y );
+		m_renderTextureSizeMutex.unlock();
 
 		map<int, map<int, map<int, std::vector<Graphics*>>>> toDrawSorted;//Z Y X
-		auto& thisGlobalBounds = r_transformation->getGlobalBounds();
+		auto thisGlobalBounds = r_transformation->getGlobalBounds();
+		m_viewMutex.lock();
+		auto view_copy = m_view;
+		m_viewMutex.unlock();
 
 		//sort toDraws
 		for( const auto& obj : toDraw )
 		{
 			auto transformationComponent = obj->getComponent<Transformation>();
 			auto graphicsComponent = obj->getComponent<Graphics>();
-			auto& globalBounds = transformationComponent->getGlobalBounds();
+			auto globalBounds = transformationComponent->getGlobalBounds();
 
 			//if toDraw is seen on camera
 			if( thisGlobalBounds.intersects( globalBounds ) )
@@ -118,7 +141,7 @@ namespace kg
 					[transformationComponent->getZValue()]//Z
 				[globalBounds.top + globalBounds.height]//Y
 				[globalBounds.left]//X
-				.emplace_back( graphicsComponent.get() );
+				.emplace_back( graphicsComponent );
 			}
 		}
 
@@ -126,11 +149,9 @@ namespace kg
 		m_renderTexture.clear( Color::Green );
 
 		batch::SpriteBatch spriteBatch;
-		/*RenderStates states( m_view.getTransform() );
-		spriteBatch.setRenderStates( states );*/
 		spriteBatch.setRenderTarget( m_renderTexture );
 
-		m_renderTexture.setView( m_view );
+		m_renderTexture.setView( view_copy );
 		for( const auto& Z : toDrawSorted )
 			for( const auto& Y : Z.second )
 				for( const auto& X : Y.second )
@@ -140,15 +161,19 @@ namespace kg
 		spriteBatch.display();
 		m_renderTexture.display();
 
-
 		renderTextureSprite.setTexture( m_renderTexture.getTexture() );
 		auto renderTextureSpriteBounds = renderTextureSprite.getGlobalBounds();
+		m_finalSizeAndScreenOffsetMutex.lock();
 		renderTextureSprite.scale( m_finalSize.x / renderTextureSpriteBounds.width,
 								   m_finalSize.y / renderTextureSpriteBounds.height );
 		renderTextureSprite.setPosition( sf::Vector2f( m_screenOffset ) );
+		m_finalSizeAndScreenOffsetMutex.unlock();
 
 		renderWindow.draw( renderTextureSprite );
 	}
 
 	const std::string Camera::PLUGIN_NAME = "Camera";
+
+	const size_t Camera::type_hash = getRuntimeTypeInfo<Camera>();
+
 }

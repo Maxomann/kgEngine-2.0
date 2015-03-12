@@ -5,10 +5,13 @@
 
 namespace kg
 {
-	/*Transformation, Camera, Graphics*/
 
 	class Camera : public Component, public CallbackReciever
 	{
+		mutable std::mutex m_renderTextureSizeMutex;
+		mutable std::mutex m_viewMutex;
+		mutable std::mutex m_finalSizeAndScreenOffsetMutex;
+
 		Transformation* r_transformation;
 
 		sf::View m_view;
@@ -43,11 +46,11 @@ namespace kg
 		// size of the area rendered from the world. Final size is the size that the rendered
 		// area will get scaled to before being drawn to the screen
 		void setFinalSize( const sf::Vector2u& size );
-		const sf::Vector2u& getFinalSize()const;
+		sf::Vector2u getFinalSize()const;
 
 		// the offset that will be applied to the rendered image of the camera before drawing on the screen
 		void setScreenOffset( const sf::Vector2i& offset );
-		const sf::Vector2i& getScreenOffset()const;
+		sf::Vector2i getScreenOffset()const;
 
 		// the size in pixel the camera will render to its internal buffer
 		// if finalSize is set to 1600*1600
@@ -58,9 +61,12 @@ namespace kg
 		void setRenderResolution( const sf::Vector2u& resolution );
 		sf::Vector2u getRenderResolution()const;
 		
-		void drawSpritesToRenderWindow( sf::RenderWindow& renderWindow, const EntityManager::EntityContainer& toDraw );
+		void drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
+										const EntityManager::EntityContainer& toDraw );
 
 		static const std::string PLUGIN_NAME;
+
+		static const size_t type_hash;
 
 		//creates a new camera, adds it to the world and returns a pointer to it
 		static std::shared_ptr<Entity> EMPLACE_TO_WORLD( Engine& engine, World& world );

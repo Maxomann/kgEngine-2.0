@@ -54,7 +54,7 @@
 
 
 template< class T >
-std::size_t getRuntimeTypeIdentifier()
+const std::size_t getRuntimeTypeInfo()
 {
 	return typeid(T).hash_code();
 }

@@ -62,4 +62,7 @@ namespace kg
 	}
 
 	const std::string ChunkGenerator::PLUGIN_NAME = "ChunkGenerator";
+
+	const size_t ChunkGenerator::type_hash = getRuntimeTypeInfo<ChunkGenerator>();
+
 }

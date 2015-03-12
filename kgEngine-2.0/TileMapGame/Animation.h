@@ -81,6 +81,8 @@ namespace kg
 
 		static const std::string PLUGIN_NAME;
 
+		static const size_t type_hash;
+
 		static const std::string BLUEPRINT_SYNC;
 	};
 }

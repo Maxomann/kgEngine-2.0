@@ -7,16 +7,19 @@ namespace kg
 {
 
 	//cameraStates, graphicsInformations
-	typedef std::pair<std::vector<std::shared_ptr<Entity>>, EntityManager::EntityContainer> DrawingStateInformation;
-	typedef SwapContainer<DrawingStateInformation, std::stack<DrawingStateInformation, std::vector<DrawingStateInformation>>> DrawingInformationSwapContainer;
+	//std::vector<std::shared_ptr<Entity>>
+	typedef std::vector<std::shared_ptr<Entity>> CameraContainer;
 
 	void drawingThreadFunction( sf::RenderWindow& renderWindow,
-								DrawingInformationSwapContainer& drawingInformationContainer,
+								std::mutex& drawableEntitiesMutex,
+								EntityManager::EntityContainer& drawableEntities,
+								std::mutex& cameraContainerMutex,
+								CameraContainer& cameraContainer,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
 								bool& drawingIsActive );
 
-	class GraphicsSystem : public System, public EntityThatHasComponentContainer < Graphics >
+	class GraphicsSystem : public System, public CallbackReciever
 	{
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
@@ -31,18 +34,22 @@ namespace kg
 			std::string* window_name;
 		}m_configValues;
 
-		std::vector<std::shared_ptr<Entity>> m_cameras;
-
+		mutable std::mutex m_cameraContainerMutex;
+		CameraContainer m_cameras;
 		bool m_shouldInitCameras = true;
+		void m_initCameras( Engine& engine, World& world );
+
+		mutable std::mutex m_drawableEntityMutex;
+		EntityManager::EntityContainer m_drawableEntities;
+		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity );
+		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity );
+
 
 		void m_onSavegameOpened( Engine& engine );
 		void m_onSavegameClosed();
 
-		void m_initCameras( Engine& engine, World& world );
-
 		void m_launchDrawingThread( sf::RenderWindow& renderWindow );
 		void m_terminateDrawingThread();
-		DrawingInformationSwapContainer m_drawingInformationContainer;
 		bool m_drawingShouldTerminate = false;
 		bool m_drawingIsActive = false;
 		int m_drawingThreadFrameTime = -1;
@@ -62,13 +69,15 @@ namespace kg
 
 		virtual Plugin::Id getPluginId()const;
 
-		std::shared_ptr<Entity>& getCamera( int index );
-		std::vector<std::shared_ptr<Entity>>& getCameras();
+		std::shared_ptr<Entity> getCamera( int index );
+		std::vector<std::shared_ptr<Entity>> getCameras()const;
 
 		/*void setWindowSize( const sf::Vector2i& size );
 		void setWindowTitle( const std::string& title );*/
 
 		static const std::string PLUGIN_NAME;
+
+		static const size_t type_hash;
 
 		//configuration default values:
 		static const std::string ANTIALIASING;//

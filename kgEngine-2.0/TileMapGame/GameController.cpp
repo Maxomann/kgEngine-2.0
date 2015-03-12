@@ -6,7 +6,7 @@ namespace kg
 {
 	void GameController::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
-		r_graphicsSystem = world.getSystem<GraphicsSystem>().get();
+		r_graphicsSystem = world.getSystem<GraphicsSystem>();
 
 		saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
 		//saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
@@ -94,4 +94,7 @@ namespace kg
 	}
 
 	const std::string GameController::PLUGIN_NAME = "GameControllerSystem";
+
+	const size_t GameController::type_hash = getRuntimeTypeInfo<GameController>();
+
 }

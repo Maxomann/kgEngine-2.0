@@ -86,6 +86,8 @@ namespace kg
 
 		static const std::string PLUGIN_NAME;
 
+		static const size_t type_hash;
+
 		EntitySaveInformation writeSaveInformation()const;
 		void loadSaveInformation( EntitySaveInformation& information );
 
@@ -100,6 +102,8 @@ namespace kg
 
 		std::map<Plugin::Id, Signal<const std::vector<std::string>&>> s_loadSaveInformation;//first: componentId, second: signal
 	};
+
+	__declspec(selectany) const size_t Save::type_hash = getRuntimeTypeInfo<Save>();
 
 	//void onLoadSaveInformation( const std::vector<std::string>& information )
 	//std::vector<std::string> onWriteSaveInformation( )
