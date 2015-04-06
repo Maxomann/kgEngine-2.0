@@ -4,10 +4,8 @@
 #include "ChunkGenerator.h"
 #include "GraphicsSystem.h"
 
-#define GENERATE_CHUNK_INSTEAD_OF_LOADING_FROM_FILE 0
 #define LOAD_CHUNKS_ONLY_ONCE 0
 #define DONT_UNLOAD_CHUNKS 0
-#define DONT_SAVE_CHUNKS_ON_UNLOAD 0
 #define UNLOAD_ALL_CHUNKS_EVERY_FRAME 0
 
 namespace kg
@@ -28,9 +26,17 @@ namespace kg
 		std::string getChunkSavename( const sf::Vector2i chunkPosition )const;
 		bool loadChunkFromFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );//returns false if file did not exist
 		void saveChunkToFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
+
+		void addChunkToLoadQueue( const sf::Vector2i& chunkPosition );
+		void addChunkToUnloadQueue( const sf::Vector2i& chunkPosition );
+		void ensureChunksOnLoadUnloadListAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector2i>& cameraPositions );
+
+		std::list<sf::Vector2i> m_chunkLoadQueue;
+		std::list<sf::Vector2i> m_chunkUnloadQueue;
 		void ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
 		void ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
-		void ensureChunksLoadedAroundCameraPositionsUnloadOther( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector2i>& cameraPositions );
+		void loadAndUnloadChunksFromQueue( Engine& engine, World& world, SaveManager& saveManager );
+
 
 		// ENTITY POSITION DATA:
 		std::map< int, std::map<int, EntityContainer >> m_chunkData;//int x, int y

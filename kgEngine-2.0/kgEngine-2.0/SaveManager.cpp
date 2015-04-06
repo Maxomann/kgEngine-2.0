@@ -115,12 +115,17 @@ namespace kg
 			if( el != "" )
 				information.push_back( EntitySaveInformation( el ) );
 
+		vector<shared_ptr<Entity>> entities;
+
 		for( auto& el : information )
 		{
 			auto entity = world.createNewSaveableEntity( engine, world, el.getBlueprintEntityId(), el.getUniqueEntityId() );
 			entity->getComponent<Save>()->loadSaveInformation( el );
-			world.addEntity( entity );
+			entities.push_back( entity );
 		}
+
+		for( auto& entity : entities )
+			world.addEntity( entity );
 
 		file.close();
 		return true;

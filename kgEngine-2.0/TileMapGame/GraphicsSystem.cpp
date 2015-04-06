@@ -84,7 +84,6 @@ namespace kg
 			m_shouldInitCameras = false;
 		}
 
-
 		engine.renderWindow.setTitle( *m_configValues.window_name +
 									  " " +
 									  to_string( frameTime.asMilliseconds() ) +

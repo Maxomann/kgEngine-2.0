@@ -37,7 +37,9 @@ namespace kg
 		std::vector<sf::Vector2i> cameraPositions;
 		for( const auto& camera : cameras )
 			cameraPositions.push_back( camera->getComponent<Transformation>()->getPosition() );
-		ensureChunksLoadedAroundCameraPositionsUnloadOther( engine, world, saveManager, cameraPositions );
+		ensureChunksOnLoadUnloadListAroundCameraPositions( engine, world, saveManager, cameraPositions );
+
+		loadAndUnloadChunksFromQueue( engine, world, saveManager );
 
 		return;
 	}
@@ -159,23 +161,6 @@ namespace kg
 		// its a bug -.-
 	}
 
-#if GENERATE_CHUNK_INSTEAD_OF_LOADING_FROM_FILE == 1
-
-	void ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
-	{
-		if( !m_loadedChunks[chunkPosition.x][chunkPosition.y] )
-		{
-			//chunk not loaded
-			world.getSystem<ChunkGenerator>()->generateChunk( engine, world, chunkPosition );
-		}
-		else
-		{
-			//chunk loaded
-		}
-
-		m_loadedChunks[chunkPosition.x][chunkPosition.y] = true;
-	}
-#else
 	void ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
 	{
 		if( !m_loadedChunks[chunkPosition.x][chunkPosition.y] )
@@ -199,16 +184,12 @@ namespace kg
 		m_loadedChunks[chunkPosition.x][chunkPosition.y] = true;
 	}
 
-#endif//REGENERATE_CHUNK_INSTEAD_OF_LOADING_FROM_FILE
-
 	void ChunkSystem::ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
 	{
 		if( m_loadedChunks[chunkPosition.x][chunkPosition.y] )
 		{
 			//chunk loaded
-#if DONT_SAVE_CHUNKS_ON_UNLOAD != 1
 			saveChunkToFile( engine, world, saveManager, chunkPosition );
-#endif
 			//remove entities in that chunk from world
 			const auto temp = getEntitiesInChunk( chunkPosition );
 			for( const auto& entity : temp )
@@ -233,12 +214,24 @@ namespace kg
 		saveManager.saveEntitiesToFile( getChunkSavename( chunkPosition ), getEntitiesInChunk( chunkPosition ) );
 	}
 
+	void ChunkSystem::addChunkToLoadQueue( const sf::Vector2i& chunkPosition )
+	{
+		if( find( m_chunkLoadQueue.begin(), m_chunkLoadQueue.end(), chunkPosition ) == m_chunkLoadQueue.end() )
+			m_chunkLoadQueue.push_back( chunkPosition );
+	}
+
+	void ChunkSystem::addChunkToUnloadQueue( const sf::Vector2i& chunkPosition )
+	{
+		if( find( m_chunkUnloadQueue.begin(), m_chunkUnloadQueue.end(), chunkPosition ) == m_chunkUnloadQueue.end() )
+			m_chunkUnloadQueue.push_back( chunkPosition );
+	}
+
 	std::string ChunkSystem::getChunkSavename( const sf::Vector2i chunkPosition ) const
 	{
 		return "Chunk#" + to_string( chunkPosition.x ) + "#" + to_string( chunkPosition.y );
 	}
 
-	void ChunkSystem::ensureChunksLoadedAroundCameraPositionsUnloadOther( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector2i>& cameraPositions )
+	void ChunkSystem::ensureChunksOnLoadUnloadListAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector2i>& cameraPositions )
 	{
 		vector<Vector2i> chunkPositions;
 		for( const auto& el : cameraPositions )
@@ -287,7 +280,7 @@ namespace kg
 						end( chunksToEnsureLoaded ) )
 					{
 						//chunk is not on ensure loaded list
-						ensureChunkUnloaded( engine, world, saveManager, chunkPosition );
+						addChunkToUnloadQueue( chunkPosition );
 					}
 #endif
 				}
@@ -297,7 +290,29 @@ namespace kg
 
 		/*load chunks*/
 		for( const auto& el : chunksToEnsureLoaded )
-			ensureChunkLoaded( engine, world, saveManager, el );
+			addChunkToLoadQueue( el );
+	}
+
+	void ChunkSystem::loadAndUnloadChunksFromQueue( Engine& engine, World& world, SaveManager& saveManager )
+	{
+		while( m_chunkUnloadQueue.size()>0 )
+		{
+			auto it = m_chunkUnloadQueue.begin();
+
+			//remove all chunks to be unloaded from the load list
+			auto itLoad = find( m_chunkLoadQueue.begin(), m_chunkLoadQueue.end(), *it );
+			if( itLoad != m_chunkLoadQueue.end() )
+				m_chunkLoadQueue.erase( itLoad );
+
+			ensureChunkUnloaded( engine, world, saveManager, *it );
+			m_chunkUnloadQueue.pop_front();
+		}
+
+		if( m_chunkLoadQueue.size() > 0 )
+		{
+			ensureChunkLoaded( engine, world, saveManager, m_chunkLoadQueue.front() );
+			m_chunkLoadQueue.pop_front();
+		}
 	}
 
 	void ChunkSystem::saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager )
