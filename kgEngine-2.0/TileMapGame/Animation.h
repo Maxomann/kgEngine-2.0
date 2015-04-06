@@ -6,7 +6,7 @@
 namespace kg
 {
 	typedef std::map<std::string, std::pair<std::vector<std::vector<int>>, bool>> AnimationFileData;
-	typedef std::map<std::string, std::vector<std::pair<sf::IntRect, int>>> FrameDurationAndTexrectByState;
+	typedef std::map<std::string, std::pair<std::vector<std::pair<sf::IntRect, int>>, bool>> FrameDurationAndTexrectByState;
 
 	class AnimationInterpreter
 	{
@@ -21,7 +21,7 @@ namespace kg
 		virtual FrameDurationAndTexrectByState& interpretAnimationFileData( const AnimationFileData& animationFileData ) const override;
 	};
 
-	class EasyAnimation : public AnimationInterpreter
+	class MultiplyAnimation : public AnimationInterpreter
 	{
 	public:
 		virtual FrameDurationAndTexrectByState& interpretAnimationFileData( const AnimationFileData& animationFileData ) const override;
@@ -29,6 +29,8 @@ namespace kg
 
 	class AnimationFile : public Resource
 	{
+		static const std::map<std::string, std::shared_ptr<AnimationInterpreter>> INTERPRETER_BY_NAME;
+
 		std::string m_interpreterType = "-1";
 		AnimationFileData m_animationFileData;
 		FrameDurationAndTexrectByState m_interpretedData;
@@ -40,15 +42,16 @@ namespace kg
 		FrameDurationAndTexrectByState& operator()()const;//equals get()
 
 		static const std::string FREE_ANIMATION;//type of interpreter
-		static const std::string EASY_ANIMATION;//type of interpreter
+		static const std::string MULTIPLY_ANIMATION;//type of interpreter
 	};
 
 	class Animation : public Component
 	{
+
 		AnimationSystem* r_animationSystem = nullptr;
 		Graphics* r_graphicsComponent = nullptr;
 
-		FrameDurationAndTexrectByState& m_animationData;
+		FrameDurationAndTexrectByState* m_animationData;
 
 		std::string m_state;
 		int m_frame;

@@ -12,7 +12,7 @@ namespace kg
 	 *
 	 * @param	path	Full pathname of the file.
 	 *
-	 * @return	The file to vector.
+	 * @return	The file. One string is one line.
 	 **************************************************************************************************/
 
 	std::vector<std::string> readFileToVector( const std::string& path );

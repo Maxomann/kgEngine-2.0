@@ -56,6 +56,9 @@ namespace kg
 			if( Keyboard::isKeyPressed( Keyboard::Subtract ) )
 				m_cameraZoomFactor += 0.01*frameTimeInMilliseconds;
 
+			if( Keyboard::isKeyPressed( Keyboard::Space ) )
+				cameraMovement *= 4;
+
 			camera->getComponent<Transformation>()->move( cameraMovement );
 		}
 		if( m_cameraZoomFactor < 0 )
