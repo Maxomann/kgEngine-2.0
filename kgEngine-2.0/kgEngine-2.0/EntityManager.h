@@ -9,7 +9,7 @@ namespace kg
 	class DLL_EXPORT EntityManager : public EntityFactory
 	{
 	public:
-		typedef std::list<std::shared_ptr<Entity>> EntityContainer;
+		typedef std::deque<std::shared_ptr<Entity>> EntityContainer;
 
 	private:
 		EntityContainer m_entities;

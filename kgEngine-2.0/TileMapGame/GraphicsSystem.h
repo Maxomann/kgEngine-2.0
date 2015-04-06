@@ -16,13 +16,12 @@ namespace kg
 								std::mutex& m_drawableEntityMutex,
 								std::mutex& cameraContainerMutex,
 								CameraContainer& cameraContainer,
-								EntityTempContainer& addedEntities,
-								EntityTempContainer& removedEntities,
+								EntityManager::EntityContainer& toDrawEntitiesCopy,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
 								bool& drawingIsActive );
 
-	class GraphicsSystem : public System, public CallbackReciever
+	class GraphicsSystem : public System/*, public CallbackReciever*/, public EntityThatHasComponentContainer<Graphics>
 	{
 	private:
 
@@ -46,11 +45,7 @@ namespace kg
 		void m_initCameras( Engine& engine, World& world );
 
 		mutable std::mutex m_drawableEntityMutex;
-		EntityTempContainer m_addedEntities;
-		EntityTempContainer m_removedEntities;
-		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity );
-		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity );
-
+		EntityManager::EntityContainer m_toDrawEntitiesCopy;
 
 		void m_onSavegameOpened( Engine& engine );
 		void m_onSavegameClosed();

@@ -62,7 +62,7 @@ namespace kg
 		sf::Vector2u getRenderResolution()const;
 		
 		void drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-										const std::unordered_set<std::shared_ptr<Entity>>& toDraw );
+										const EntityManager::EntityContainer& toDraw );
 
 		static const std::string PLUGIN_NAME;
 

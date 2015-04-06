@@ -18,6 +18,7 @@ namespace kg
 		struct ConfigValues
 		{
 			std::string* chunkLoadRadiusAroundCamera;
+			std::string* chunkLoadCountPerFrame;
 		}m_configValues;
 
 		// CHUNK LOAD STATE DATA:
@@ -31,6 +32,7 @@ namespace kg
 		void addChunkToUnloadQueue( const sf::Vector2i& chunkPosition );
 		void ensureChunksOnLoadUnloadListAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector2i>& cameraPositions );
 
+		int m_chunkLoadCountPerFrame;
 		std::list<sf::Vector2i> m_chunkLoadQueue;
 		std::list<sf::Vector2i> m_chunkUnloadQueue;
 		void ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
@@ -87,5 +89,9 @@ namespace kg
 		//configuration default values:
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA;
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT;
+
+		static const std::string CHUNK_LOAD_COUNT_PER_FRAME;
+		static const std::string CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT;
+
 	};
 }

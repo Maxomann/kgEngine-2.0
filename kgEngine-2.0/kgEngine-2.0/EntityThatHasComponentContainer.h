@@ -13,12 +13,12 @@ namespace kg
 		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity )
 		{
 			if( entity->hasComponent<ComponentType>() )
-				m_entities.insert( entity );
+				m_entities.push_back( entity );
 		}
 		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
 		{
 			if( entity->hasComponent<ComponentType>() )
-				m_entities.erase( entity );
+				m_entities.erase( find( m_entities.begin(), m_entities.end(), entity ));
 		}
 
 	protected:

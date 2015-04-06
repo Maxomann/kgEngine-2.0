@@ -6,12 +6,12 @@ namespace kg
 {
 	void GraphicsSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
+		EntityThatHasComponentContainer::init( world );
+
 		m_configFile = configFile;
 
 		m_connectToSignal( saveManager.s_savegameOpened, &GraphicsSystem::m_onSavegameOpened );
 		m_connectToSignal( saveManager.s_savegameClosed, &GraphicsSystem::m_onSavegameClosed );
-		m_connectToSignal( world.s_entity_added, &GraphicsSystem::m_onEntityAddedToWorld );
-		m_connectToSignal( world.s_entity_removed, &GraphicsSystem::m_onEntityRemovedFromWorld );
 
 		//get config values
 		m_configValues.antialiasing = &configFile->getData( ANTIALIASING );
@@ -84,6 +84,10 @@ namespace kg
 			m_shouldInitCameras = false;
 		}
 
+		m_drawableEntityMutex.lock();
+		m_toDrawEntitiesCopy = getEntitiesThatHaveComponent();
+		m_drawableEntityMutex.unlock();
+
 		engine.renderWindow.setTitle( *m_configValues.window_name +
 									  " " +
 									  to_string( frameTime.asMilliseconds() ) +
@@ -132,22 +136,6 @@ namespace kg
 		m_cameraContainerMutexA.unlock();
 	}
 
-	void GraphicsSystem::m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity )
-	{
-		m_drawableEntityMutex.lock();
-		if( entity->hasComponent<Graphics>() )
-			m_addedEntities.push_back( entity );
-		m_drawableEntityMutex.unlock();
-	}
-
-	void GraphicsSystem::m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
-	{
-		m_drawableEntityMutex.lock();
-		if( entity->hasComponent<Graphics>() )
-			m_removedEntities.push_back( entity );
-		m_drawableEntityMutex.unlock();
-	}
-
 	void GraphicsSystem::m_initCameras( Engine& engine, World& world )
 	{
 		//init camera
@@ -194,7 +182,7 @@ namespace kg
 		sleep( sf::milliseconds( 1 ) );
 	}
 
-	void GraphicsSystem::m_launchDrawingThread( RenderWindow& renderWindow )
+	void GraphicsSystem::m_launchDrawingThread( sf::RenderWindow& renderWindow )
 	{
 		m_drawingShouldTerminate = false;
 		m_drawingIsActive = true;
@@ -206,8 +194,7 @@ namespace kg
 			ref( m_drawableEntityMutex ),
 			ref( m_cameraContainerMutexB ),
 			ref( m_cameras ),
-			ref( m_addedEntities ),
-			ref( m_removedEntities ),
+			ref( m_toDrawEntitiesCopy ),
 			ref( m_drawingThreadFrameTime ),
 			ref( m_drawingShouldTerminate ),
 			ref( m_drawingIsActive )
@@ -219,36 +206,27 @@ namespace kg
 								std::mutex& m_drawableEntityMutex,
 								std::mutex& cameraContainerMutex,
 								CameraContainer& cameraContainer,
-								EntityTempContainer& addedEntities,
-								EntityTempContainer& removedEntities,
+								EntityManager::EntityContainer& toDrawEntitiesCopy,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
 								bool& drawingIsActive )
 	{
 		renderWindow.setActive( true );
 		sf::Clock thisFrameTime;
-		std::unordered_set<std::shared_ptr<Entity>> drawableEntities;
 
 		while( !shouldTerminate )
 		{
-			m_drawableEntityMutex.lock();
-			for( const auto& el : addedEntities )
-				drawableEntities.emplace( el );
-			for( const auto& el : removedEntities )
-				drawableEntities.erase( el );
-			addedEntities.clear();
-			removedEntities.clear();
-			m_drawableEntityMutex.unlock();
-
 
 			drawingThreadFrameTime = thisFrameTime.restart().asMilliseconds();
 
 			renderWindow.clear( Color::Red );
 
 			cameraContainerMutex.lock();
+			m_drawableEntityMutex.lock();
 			//for every camera state information
 			for( const auto& camera : cameraContainer )
-				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, drawableEntities );
+				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, toDrawEntitiesCopy );
+			m_drawableEntityMutex.unlock();
 			cameraContainerMutex.unlock();
 
 

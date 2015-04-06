@@ -113,7 +113,7 @@ namespace kg
 	}
 
 	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-											const std::unordered_set<std::shared_ptr<Entity>>& toDraw )
+											const EntityManager::EntityContainer& toDraw )
 	{
 		m_renderTextureSizeMutex.lock();
 		if( m_renderTexture.getSize() != m_renderTextureSize )

@@ -15,12 +15,16 @@ namespace kg
 
 		//get config values
 		m_configValues.chunkLoadRadiusAroundCamera = &configFile->getData( CHUNK_LOAD_RADIUS_AROUND_CAMERA );
+		m_configValues.chunkLoadCountPerFrame = &configFile->getData( CHUNK_LOAD_COUNT_PER_FRAME );
 
 		//set them if invalid ( and retrieve them a second time )
 		if( !m_configValues.chunkLoadRadiusAroundCamera->size() )
 			*m_configValues.chunkLoadRadiusAroundCamera = CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT;
+		if( !m_configValues.chunkLoadCountPerFrame->size() )
+			*m_configValues.chunkLoadCountPerFrame = CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT;
 
 		m_chunkLoadRadiusAroundCamera = boost::lexical_cast< int >(*m_configValues.chunkLoadRadiusAroundCamera);
+		m_chunkLoadCountPerFrame = boost::lexical_cast< int >(*m_configValues.chunkLoadCountPerFrame);
 
 		return;
 	}
@@ -216,14 +220,26 @@ namespace kg
 
 	void ChunkSystem::addChunkToLoadQueue( const sf::Vector2i& chunkPosition )
 	{
-		if( find( m_chunkLoadQueue.begin(), m_chunkLoadQueue.end(), chunkPosition ) == m_chunkLoadQueue.end() )
-			m_chunkLoadQueue.push_back( chunkPosition );
+		if( !m_loadedChunks[chunkPosition.x][chunkPosition.y] )
+			if( find( m_chunkLoadQueue.begin(), m_chunkLoadQueue.end(), chunkPosition ) == m_chunkLoadQueue.end() )
+				m_chunkLoadQueue.push_back( chunkPosition );
+
+		//remove from unload queue
+		auto itLoad = find( m_chunkUnloadQueue.begin(), m_chunkUnloadQueue.end(), chunkPosition );
+		if( itLoad != m_chunkUnloadQueue.end() )
+			m_chunkUnloadQueue.erase( itLoad );
 	}
 
 	void ChunkSystem::addChunkToUnloadQueue( const sf::Vector2i& chunkPosition )
 	{
-		if( find( m_chunkUnloadQueue.begin(), m_chunkUnloadQueue.end(), chunkPosition ) == m_chunkUnloadQueue.end() )
-			m_chunkUnloadQueue.push_back( chunkPosition );
+		if( m_loadedChunks[chunkPosition.x][chunkPosition.y] )
+			if( find( m_chunkUnloadQueue.begin(), m_chunkUnloadQueue.end(), chunkPosition ) == m_chunkUnloadQueue.end() )
+				m_chunkUnloadQueue.push_back( chunkPosition );
+
+		//remove from load queue
+		auto itLoad = find( m_chunkLoadQueue.begin(), m_chunkLoadQueue.end(), chunkPosition );
+		if( itLoad != m_chunkLoadQueue.end() )
+			m_chunkLoadQueue.erase( itLoad );
 	}
 
 	std::string ChunkSystem::getChunkSavename( const sf::Vector2i chunkPosition ) const
@@ -290,29 +306,26 @@ namespace kg
 
 		/*load chunks*/
 		for( const auto& el : chunksToEnsureLoaded )
-			addChunkToLoadQueue( el );
+				addChunkToLoadQueue( el );
 	}
 
 	void ChunkSystem::loadAndUnloadChunksFromQueue( Engine& engine, World& world, SaveManager& saveManager )
 	{
-		while( m_chunkUnloadQueue.size()>0 )
-		{
-			auto it = m_chunkUnloadQueue.begin();
+		//unload
+		for( int i = 0; i < m_chunkLoadCountPerFrame; ++i )
+			if( m_chunkUnloadQueue.size() > 0 )
+			{
+				ensureChunkUnloaded( engine, world, saveManager, m_chunkUnloadQueue.front() );
+				m_chunkUnloadQueue.pop_front();
+			}
 
-			//remove all chunks to be unloaded from the load list
-			auto itLoad = find( m_chunkLoadQueue.begin(), m_chunkLoadQueue.end(), *it );
-			if( itLoad != m_chunkLoadQueue.end() )
-				m_chunkLoadQueue.erase( itLoad );
-
-			ensureChunkUnloaded( engine, world, saveManager, *it );
-			m_chunkUnloadQueue.pop_front();
-		}
-
-		if( m_chunkLoadQueue.size() > 0 )
-		{
-			ensureChunkLoaded( engine, world, saveManager, m_chunkLoadQueue.front() );
-			m_chunkLoadQueue.pop_front();
-		}
+		//load
+		for( int i = 0; i < m_chunkLoadCountPerFrame; ++i )
+			if( m_chunkLoadQueue.size() > 0 )
+			{
+				ensureChunkLoaded( engine, world, saveManager, m_chunkLoadQueue.front() );
+				m_chunkLoadQueue.pop_front();
+			}
 	}
 
 	void ChunkSystem::saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager )
@@ -331,6 +344,10 @@ namespace kg
 	}
 
 	const std::string ChunkSystem::CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT = "2";
+
+	const std::string ChunkSystem::CHUNK_LOAD_COUNT_PER_FRAME = "iChunkLoadCountPerFrame";
+
+	const std::string ChunkSystem::CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT = "2";
 
 	const std::string ChunkSystem::CHUNK_LOAD_RADIUS_AROUND_CAMERA = "iChunkLoadRadiusAroundCamera";
 
