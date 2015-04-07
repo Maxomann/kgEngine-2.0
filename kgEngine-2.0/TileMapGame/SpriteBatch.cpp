@@ -37,7 +37,7 @@ namespace kg
 
 		void SpriteBatch::draw( const Sprite &sprite )
 		{
-			draw( sprite.getTexture(), Vector2i( sprite.getPosition() ), sprite.getTextureRect(), sprite.getColor(), Vector2i( sprite.getScale() ), Vector2i(sprite.getOrigin()), sprite.getRotation() );
+			draw( sprite.getTexture(), Vector2i( sprite.getPosition() ), sprite.getTextureRect(), sprite.getColor(), Vector2i(sprite.getScale()), Vector2i( sprite.getOrigin() ), sprite.getRotation() );
 		}
 
 		void SpriteBatch::flush()
@@ -106,34 +106,34 @@ namespace kg
 			auto pX = -origin.x * scale.x;
 			auto pY = -origin.y * scale.y;
 
-			ptr->position.x = pX * _cos - pY * _sin + position.x;
-			ptr->position.y = pX * _sin + pY * _cos + position.y;
-			ptr->texCoords.x = rec.left;
-			ptr->texCoords.y = rec.top;
+			ptr->position.x = floor(pX * _cos - pY * _sin + position.x);
+			ptr->position.y = floor( pX * _sin + pY * _cos + position.y );
+			ptr->texCoords.x = floor( rec.left );
+			ptr->texCoords.y = floor( rec.top );
 			ptr->color = color;
 			ptr++;
 
 			pX += scalex;
-			ptr->position.x = pX * _cos - pY * _sin + position.x;
-			ptr->position.y = pX * _sin + pY * _cos + position.y;
-			ptr->texCoords.x = rec.left + rec.width;
-			ptr->texCoords.y = rec.top;
+			ptr->position.x = floor( pX * _cos - pY * _sin + position.x );
+			ptr->position.y = floor( pX * _sin + pY * _cos + position.y );
+			ptr->texCoords.x = floor( rec.left + rec.width );
+			ptr->texCoords.y = floor( rec.top );
 			ptr->color = color;
 			ptr++;
 
 			pY += scaley;
-			ptr->position.x = pX * _cos - pY * _sin + position.x;
-			ptr->position.y = pX * _sin + pY * _cos + position.y;
-			ptr->texCoords.x = rec.left + rec.width;
-			ptr->texCoords.y = rec.top + rec.height;
+			ptr->position.x = floor( pX * _cos - pY * _sin + position.x );
+			ptr->position.y = floor( pX * _sin + pY * _cos + position.y );
+			ptr->texCoords.x = floor( rec.left + rec.width );
+			ptr->texCoords.y = floor( rec.top + rec.height );
 			ptr->color = color;
 			ptr++;
 
 			pX -= scalex;
-			ptr->position.x = pX * _cos - pY * _sin + position.x;
-			ptr->position.y = pX * _sin + pY * _cos + position.y;
-			ptr->texCoords.x = rec.left;
-			ptr->texCoords.y = rec.top + rec.height;
+			ptr->position.x = floor( pX * _cos - pY * _sin + position.x );
+			ptr->position.y = floor( pX * _sin + pY * _cos + position.y );
+			ptr->texCoords.x = floor( rec.left );
+			ptr->texCoords.y = floor( rec.top + rec.height );
 			ptr->color = color;
 		}
 

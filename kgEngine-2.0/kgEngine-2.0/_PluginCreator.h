@@ -2,6 +2,8 @@
 #ifndef _PLUGIN_CREATOR_H
 #define _PLUGIN_CREATOR_H
 
+#include "sfml_vector_extension.h"
+
 #include "core.h"
 #include "Callback.h"
 #include "ConfigFile.h"

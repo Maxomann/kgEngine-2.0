@@ -18,8 +18,6 @@ namespace kg
 		m_configValues.fullscreen = &configFile->getData( FULLSCREEN );
 		m_configValues.window_resx = &configFile->getData( WINDOW_RESX );
 		m_configValues.window_resy = &configFile->getData( WINDOW_RESY );
-		m_configValues.render_resx = &configFile->getData( RENDER_RESX );
-		m_configValues.render_resy = &configFile->getData( RENDER_RESY );
 		m_configValues.vsync = &configFile->getData( VSYNC );
 		m_configValues.window_name = &configFile->getData( WINDOW_NAME );
 
@@ -32,10 +30,6 @@ namespace kg
 			*m_configValues.window_resx = WINDOW_RESX_DEFAULT;
 		if( !m_configValues.window_resy->size() )
 			*m_configValues.window_resy = WINDOW_RESY_DEFAULT;
-		if( !m_configValues.render_resx->size() )
-			*m_configValues.render_resx = RENDER_RESX_DEFAULT;
-		if( !m_configValues.render_resy->size() )
-			*m_configValues.render_resy = RENDER_RESY_DEFAULT;
 		if( !m_configValues.vsync->size() )
 			*m_configValues.vsync = VSYNC_DEFAULT;
 		if( !m_configValues.window_name->size() )
@@ -143,19 +137,6 @@ namespace kg
 	{
 		//init camera
 		auto camera = Camera::EMPLACE_TO_WORLD( engine, world );
-		if( boost::lexical_cast< bool >(*m_configValues.fullscreen) )
-		{
-			//fullscreen
-			camera->getComponent<Camera>()->setRenderResolution(
-				sf::Vector2u(
-				boost::lexical_cast< int >(*m_configValues.render_resx),
-				boost::lexical_cast< int >(*m_configValues.render_resy) ) );
-		}
-		else
-		{
-			//no fullscreen
-			//ignores: render_resx, render_resy
-		}
 		m_cameraContainerMutexA.lock();
 		m_cameraContainerMutexB.lock();
 		m_cameras.push_back( camera );
@@ -223,6 +204,8 @@ namespace kg
 	{
 		renderWindow.setActive( true );
 		sf::Clock thisFrameTime;
+		batch::SpriteBatch spriteBatch;
+		spriteBatch.setRenderTarget( renderWindow );
 
 		while( !shouldTerminate )
 		{
@@ -244,17 +227,17 @@ namespace kg
 
 			drawingThreadFrameTime = thisFrameTime.restart().asMilliseconds();
 
-			renderWindow.clear( Color::Red );
+			renderWindow.clear( Color::Green );
 
 			cameraContainerMutex.lock();
 			m_drawableEntityMutex.lock();
 			//for every camera state information
 			for( const auto& camera : cameraContainer )
-				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, toDrawEntitiesCopy );
+				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, spriteBatch, toDrawEntitiesCopy );
 			m_drawableEntityMutex.unlock();
 			cameraContainerMutex.unlock();
 
-
+			spriteBatch.display();
 			renderWindow.display();
 		}
 		drawingIsActive = false;
@@ -263,27 +246,19 @@ namespace kg
 
 	const std::string GraphicsSystem::WINDOW_NAME_DEFAULT = "DefaultWindowName";
 
-	const std::string GraphicsSystem::VSYNC_DEFAULT = "true";
+	const std::string GraphicsSystem::VSYNC_DEFAULT = "1";
 
-	const std::string GraphicsSystem::RENDER_RESY_DEFAULT = "1080px";
+	const std::string GraphicsSystem::WINDOW_RESY_DEFAULT = "720";
 
-	const std::string GraphicsSystem::RENDER_RESX_DEFAULT = "1920px";
+	const std::string GraphicsSystem::WINDOW_RESX_DEFAULT = "1080";
 
-	const std::string GraphicsSystem::WINDOW_RESY_DEFAULT = "720px";
-
-	const std::string GraphicsSystem::WINDOW_RESX_DEFAULT = "1080px";
-
-	const std::string GraphicsSystem::FULLSCREEN_DEFAULT = "false";
+	const std::string GraphicsSystem::FULLSCREEN_DEFAULT = "0";
 
 	const std::string GraphicsSystem::ANTIALIASING_DEFAULT = "0";
 
 	const std::string GraphicsSystem::ANTIALIASING = "iAntialiasing";
 
 	const std::string GraphicsSystem::VSYNC = "bVsync";
-
-	const std::string GraphicsSystem::RENDER_RESY = "iRender_resy";
-
-	const std::string GraphicsSystem::RENDER_RESX = "iRender_resx";
 
 	const std::string GraphicsSystem::WINDOW_RESY = "iWindow_resy";
 

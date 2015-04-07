@@ -63,7 +63,7 @@ namespace kg
 		}
 		if( m_cameraZoomFactor < 0 )
 			m_cameraZoomFactor = 0;
-		camera->getComponent<Transformation>()->setSize( Vector2i( 1080.0 * m_cameraZoomFactor, 720.0 * m_cameraZoomFactor ) );
+		camera->getComponent<Transformation>()->setSize( Vector2i( 1080.f * m_cameraZoomFactor, 720.f * m_cameraZoomFactor ) );
 
 		if( Keyboard::isKeyPressed( Keyboard::F5 ) )
 		{
