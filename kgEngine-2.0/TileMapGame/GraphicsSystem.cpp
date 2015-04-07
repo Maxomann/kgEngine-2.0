@@ -87,6 +87,9 @@ namespace kg
 		m_drawableEntityMutex.lock();
 		m_toDrawEntitiesCopy = getEntitiesThatHaveComponent();
 		m_drawableEntityMutex.unlock();
+		m_drawingThreadSyncMutex.lock();
+		m_drawingThreadHasToWait = false;
+		m_drawingThreadSyncMutex.unlock();
 
 		engine.renderWindow.setTitle( *m_configValues.window_name +
 									  " " +
@@ -161,7 +164,7 @@ namespace kg
 	}
 
 	kg::CameraContainer GraphicsSystem::getCameras() const
-{
+	{
 		m_cameraContainerMutexA.lock();
 		auto retVal = m_cameras;
 		m_cameraContainerMutexA.unlock();
@@ -177,6 +180,9 @@ namespace kg
 	{
 		//safely terminate drawing thread
 		m_drawingShouldTerminate = true;
+		m_drawingThreadSyncMutex.lock();
+		m_drawingThreadHasToWait = false;
+		m_drawingThreadSyncMutex.unlock();
 		while( m_drawingIsActive )
 			sleep( sf::milliseconds( 1 ) );
 		sleep( sf::milliseconds( 1 ) );
@@ -197,7 +203,9 @@ namespace kg
 			ref( m_toDrawEntitiesCopy ),
 			ref( m_drawingThreadFrameTime ),
 			ref( m_drawingShouldTerminate ),
-			ref( m_drawingIsActive )
+			ref( m_drawingIsActive ),
+			ref( m_drawingThreadSyncMutex ),
+			ref( m_drawingThreadHasToWait )
 			);
 		drawingThread.detach();
 	}
@@ -209,13 +217,30 @@ namespace kg
 								EntityManager::EntityContainer& toDrawEntitiesCopy,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
-								bool& drawingIsActive )
+								bool& drawingIsActive,
+								std::mutex& syncMutex,
+								bool& threadHasToWait )
 	{
 		renderWindow.setActive( true );
 		sf::Clock thisFrameTime;
 
 		while( !shouldTerminate )
 		{
+
+			while( true )
+			{
+				//lock
+				syncMutex.lock();
+				if( !threadHasToWait )
+				{
+					threadHasToWait = true;
+					break;
+				}
+				else
+					syncMutex.unlock();
+			}
+			syncMutex.unlock();
+
 
 			drawingThreadFrameTime = thisFrameTime.restart().asMilliseconds();
 

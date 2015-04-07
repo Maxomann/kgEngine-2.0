@@ -14,9 +14,9 @@ namespace kg
 
 			void display( bool reset = true, bool flush = true );
 			void draw( const sf::Sprite &sprite );
-			void draw( const sf::Texture *texture, const sf::Vector2f &position,
-					   const sf::IntRect &rec, const sf::Color &color, const sf::Vector2f &scale,
-					   const sf::Vector2f &origin, float rotation = 0 );
+			void draw( const sf::Texture *texture, const sf::Vector2i &position,
+					   const sf::IntRect &rec, const sf::Color &color, const sf::Vector2i &scale,
+					   const sf::Vector2i &origin, float rotation = 0 );
 
 			void draw( const sf::Texture *texture, const sf::FloatRect &dest, const sf::IntRect &rec, const sf::Color &color );
 

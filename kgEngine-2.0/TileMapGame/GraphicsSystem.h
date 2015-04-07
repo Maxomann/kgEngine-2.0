@@ -19,7 +19,9 @@ namespace kg
 								EntityManager::EntityContainer& toDrawEntitiesCopy,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
-								bool& drawingIsActive );
+								bool& drawingIsActive,
+								std::mutex& syncMutex ,
+								bool& threadHasToWait );
 
 	class GraphicsSystem : public System/*, public CallbackReciever*/, public EntityThatHasComponentContainer<Graphics>
 	{
@@ -55,6 +57,9 @@ namespace kg
 		bool m_drawingShouldTerminate = false;
 		bool m_drawingIsActive = false;
 		int m_drawingThreadFrameTime = -1;
+
+		mutable std::mutex m_drawingThreadSyncMutex;
+		bool m_drawingThreadHasToWait = false;
 
 	public:
 		~GraphicsSystem();

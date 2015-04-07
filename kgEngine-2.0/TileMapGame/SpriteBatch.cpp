@@ -37,7 +37,7 @@ namespace kg
 
 		void SpriteBatch::draw( const Sprite &sprite )
 		{
-			draw( sprite.getTexture(), sprite.getPosition(), sprite.getTextureRect(), sprite.getColor(), sprite.getScale(), sprite.getOrigin(), sprite.getRotation() );
+			draw( sprite.getTexture(), Vector2i( sprite.getPosition() ), sprite.getTextureRect(), sprite.getColor(), Vector2i( sprite.getScale() ), Vector2i(sprite.getOrigin()), sprite.getRotation() );
 		}
 
 		void SpriteBatch::flush()
@@ -85,9 +85,9 @@ namespace kg
 		}
 
 		void SpriteBatch::draw(
-			const Texture *texture, const Vector2f &position,
-			const IntRect &rec, const Color &color, const Vector2f &scale,
-			const Vector2f &origin, float rotation )
+			const Texture *texture, const Vector2i &position,
+			const IntRect &rec, const Color &color, const Vector2i &scale,
+			const Vector2i &origin, float rotation )
 		{
 			auto index = create( texture );
 
@@ -139,7 +139,7 @@ namespace kg
 
 		void SpriteBatch::draw( const Texture *texture, const FloatRect &dest, const IntRect &rec, const Color &color )
 		{
-			draw( texture, Vector2f( dest.left, dest.top ), rec, color, Vector2f( 1, 1 ), Vector2f( 0, 0 ), 0 );
+			draw( texture, Vector2i( dest.left, dest.top ), rec, color, Vector2i( 1, 1 ), Vector2i( 0, 0 ), 0 );
 		}
 
 	}

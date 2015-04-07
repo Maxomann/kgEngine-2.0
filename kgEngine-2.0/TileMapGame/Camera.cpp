@@ -164,8 +164,8 @@ namespace kg
 		renderTextureSprite.setTexture( m_renderTexture.getTexture() );
 		auto renderTextureSpriteBounds = renderTextureSprite.getGlobalBounds();
 		m_finalSizeAndScreenOffsetMutex.lock();
-		renderTextureSprite.scale( m_finalSize.x / renderTextureSpriteBounds.width,
-								   m_finalSize.y / renderTextureSpriteBounds.height );
+		renderTextureSprite.scale( static_cast<int>(m_finalSize.x / renderTextureSpriteBounds.width),
+								   static_cast<int>(m_finalSize.y / renderTextureSpriteBounds.height));
 		renderTextureSprite.setPosition( sf::Vector2f( m_screenOffset ) );
 		m_finalSizeAndScreenOffsetMutex.unlock();
 
