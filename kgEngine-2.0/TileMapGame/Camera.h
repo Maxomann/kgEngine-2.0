@@ -38,7 +38,6 @@ namespace kg
 		sf::FloatRect getViewport()const;
 		
 		void drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-										batch::SpriteBatch& spriteBatch ,
 										const EntityManager::EntityContainer& toDraw );
 
 		static const std::string PLUGIN_NAME;

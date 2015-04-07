@@ -204,8 +204,6 @@ namespace kg
 	{
 		renderWindow.setActive( true );
 		sf::Clock thisFrameTime;
-		batch::SpriteBatch spriteBatch;
-		spriteBatch.setRenderTarget( renderWindow );
 
 		while( !shouldTerminate )
 		{
@@ -233,11 +231,10 @@ namespace kg
 			m_drawableEntityMutex.lock();
 			//for every camera state information
 			for( const auto& camera : cameraContainer )
-				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, spriteBatch, toDrawEntitiesCopy );
+				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, toDrawEntitiesCopy);
 			m_drawableEntityMutex.unlock();
 			cameraContainerMutex.unlock();
 
-			spriteBatch.display();
 			renderWindow.display();
 		}
 		drawingIsActive = false;
@@ -250,7 +247,7 @@ namespace kg
 
 	const std::string GraphicsSystem::WINDOW_RESY_DEFAULT = "720";
 
-	const std::string GraphicsSystem::WINDOW_RESX_DEFAULT = "1080";
+	const std::string GraphicsSystem::WINDOW_RESX_DEFAULT = "1280";
 
 	const std::string GraphicsSystem::FULLSCREEN_DEFAULT = "0";
 

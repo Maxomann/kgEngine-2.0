@@ -6,7 +6,7 @@ namespace kg
 {
 	namespace batch
 	{
-		const float Pi = 3.14159265;
+		const double Pi = 3.14159265;
 		const unsigned int MaxCapacity = std::numeric_limits<unsigned int>::max();
 		const int LookupSize = 512;
 
@@ -106,34 +106,34 @@ namespace kg
 			auto pX = -origin.x * scale.x;
 			auto pY = -origin.y * scale.y;
 
-			ptr->position.x = floor(pX * _cos - pY * _sin + position.x);
-			ptr->position.y = floor( pX * _sin + pY * _cos + position.y );
-			ptr->texCoords.x = floor( rec.left );
-			ptr->texCoords.y = floor( rec.top );
+			ptr->position.x = pX * _cos - pY * _sin + position.x;
+			ptr->position.y = pX * _sin + pY * _cos + position.y;
+			ptr->texCoords.x = rec.left + 0.0075;
+			ptr->texCoords.y = rec.top + 0.0075;
 			ptr->color = color;
 			ptr++;
 
 			pX += scalex;
-			ptr->position.x = floor( pX * _cos - pY * _sin + position.x );
-			ptr->position.y = floor( pX * _sin + pY * _cos + position.y );
-			ptr->texCoords.x = floor( rec.left + rec.width );
-			ptr->texCoords.y = floor( rec.top );
+			ptr->position.x =  pX * _cos - pY * _sin + position.x;
+			ptr->position.y = pX * _sin + pY * _cos + position.y;
+			ptr->texCoords.x = rec.left + rec.width - 0.0075;
+			ptr->texCoords.y = rec.top + 0.0075;
 			ptr->color = color;
 			ptr++;
 
 			pY += scaley;
-			ptr->position.x = floor( pX * _cos - pY * _sin + position.x );
-			ptr->position.y = floor( pX * _sin + pY * _cos + position.y );
-			ptr->texCoords.x = floor( rec.left + rec.width );
-			ptr->texCoords.y = floor( rec.top + rec.height );
+			ptr->position.x =  pX * _cos - pY * _sin + position.x ;
+			ptr->position.y =  pX * _sin + pY * _cos + position.y ;
+			ptr->texCoords.x = rec.left + rec.width - 0.0075;
+			ptr->texCoords.y = rec.top + rec.height - 0.0075;
 			ptr->color = color;
 			ptr++;
 
 			pX -= scalex;
-			ptr->position.x = floor( pX * _cos - pY * _sin + position.x );
-			ptr->position.y = floor( pX * _sin + pY * _cos + position.y );
-			ptr->texCoords.x = floor( rec.left );
-			ptr->texCoords.y = floor( rec.top + rec.height );
+			ptr->position.x =  pX * _cos - pY * _sin + position.x ;
+			ptr->position.y =  pX * _sin + pY * _cos + position.y ;
+			ptr->texCoords.x = rec.left + 0.0075;
+			ptr->texCoords.y = rec.top + rec.height - 0.0075;
 			ptr->color = color;
 		}
 

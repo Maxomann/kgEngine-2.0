@@ -28,6 +28,7 @@
 #include <set>
 #include <unordered_set>
 #include <atomic>
+#include <iomanip>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

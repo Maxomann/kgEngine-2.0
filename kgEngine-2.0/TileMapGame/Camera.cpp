@@ -46,14 +46,14 @@ namespace kg
 	void Camera::onPositionChanged( const sf::Vector2i& newPosition )
 	{
 		m_viewMutex.lock();
-		m_view.setCenter( sf::Vector2f( floor( newPosition ) );
+		m_view.setCenter( sf::Vector2f( newPosition ) );
 		m_viewMutex.unlock();
 	}
 
 	void Camera::onSizeChanged( const sf::Vector2i& newSize )
 	{
 		m_viewMutex.lock();
-		m_view.setSize( sf::Vector2f( floor( newSize ) ) );
+		m_view.setSize( sf::Vector2f( newSize ) );
 		m_viewMutex.unlock();
 	}
 
@@ -83,9 +83,11 @@ namespace kg
 	}
 
 	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-											batch::SpriteBatch& spriteBatch,
 											const EntityManager::EntityContainer& toDraw )
 	{
+		batch::SpriteBatch spriteBatch;
+		spriteBatch.setRenderTarget( renderWindow );
+
 		map<int, map<int, map<int, std::vector<Graphics*>>>> toDrawSorted;//Z Y X
 		auto thisGlobalBounds = r_transformation->getGlobalBounds();
 		m_viewMutex.lock();
@@ -111,12 +113,18 @@ namespace kg
 			}
 		}
 
+
 		renderWindow.setView( view_copy );
+
 		for( const auto& Z : toDrawSorted )
 			for( const auto& Y : Z.second )
 				for( const auto& X : Y.second )
 					for( const auto& toDraw : X.second )
 						toDraw->drawToSpriteBatch( spriteBatch );
+		//renderWindow.draw( *toDraw );
+		spriteBatch.display();
+
+		renderWindow.setView( renderWindow.getDefaultView() );
 	}
 
 	const std::string Camera::PLUGIN_NAME = "Camera";

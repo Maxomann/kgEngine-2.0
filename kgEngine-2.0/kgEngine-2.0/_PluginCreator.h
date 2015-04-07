@@ -2,7 +2,6 @@
 #ifndef _PLUGIN_CREATOR_H
 #define _PLUGIN_CREATOR_H
 
-#include "sfml_vector_extension.h"
 
 #include "core.h"
 #include "Callback.h"
@@ -18,5 +17,7 @@
 #include "PluginRegistrationException.h"
 #include "PluginRequestException.h"
 #include "WrongCallbackSignatureException.h"
+
+#include "sfml_vector_extension.h"
 
 #endif

@@ -75,11 +75,6 @@ namespace kg
 		return id::ComponentPluginId::GRAPHICS;
 	}
 
-	/*void Graphics::draw( RenderTarget& target, RenderStates states ) const
-	{
-	target.draw( m_sprite, states );
-	}*/
-
 	void Graphics::setTextureRect( const sf::IntRect& rect )
 	{
 		m_mutex.lock();
@@ -104,7 +99,7 @@ namespace kg
 	{
 		m_mutex.lock();
 
-		m_sprite.setOrigin( sf::Vector2f( m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2 ) );
+		m_sprite.setOrigin( sf::Vector2f( m_sprite.getGlobalBounds().width / 2.f, m_sprite.getGlobalBounds().height / 2.f ) );
 
 		m_mutex.unlock();
 	}
@@ -115,9 +110,11 @@ namespace kg
 
 		auto globalBounds = m_sprite.getGlobalBounds();
 
-		m_sprite.scale( sf::Vector2f(
+		auto scale = sf::Vector2f(
 			r_transformation->getSize().x / globalBounds.width,
-			r_transformation->getSize().y / globalBounds.height ) );
+			r_transformation->getSize().y / globalBounds.height );
+
+		m_sprite.scale( scale );
 
 		m_mutex.unlock();
 	}
@@ -147,6 +144,25 @@ namespace kg
 	{
 		m_mutex.lock();
 		target.draw( m_sprite, states );
+
+		/*float temp = 0;
+
+		auto pos = m_sprite.getPosition();
+		auto ori = m_sprite.getOrigin();
+		auto scale = m_sprite.getScale();
+
+		auto px = modf( pos.x, &temp );
+		auto py = modf( pos.y, &temp );
+
+		auto ox = modf( ori.x, &temp );
+		auto oy = modf( ori.y, &temp );
+
+		auto sx = modf( scale.x, &temp );
+		auto sy = modf( scale.y, &temp );
+
+		if( px != 0 || py != 0 || ox != 0 || oy != 0 || sx != 0 || sy != 0 )
+			int a = 0;*/
+
 		m_mutex.unlock();
 	}
 

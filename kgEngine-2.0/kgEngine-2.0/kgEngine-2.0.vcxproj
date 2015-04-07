@@ -95,6 +95,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SaveManager.cpp" />
     <ClCompile Include="SaveComponent.cpp" />
+    <ClCompile Include="sfml_vector_extension.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="World.cpp" />
