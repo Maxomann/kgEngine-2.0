@@ -2,6 +2,7 @@
 
 namespace kg
 {
+
 	void PluginManager::addComponentPlugin( const std::shared_ptr<PluginFactoryInterface<Component>>& componentPluginFactory )
 	{
 		int id = componentPluginFactory->getId();

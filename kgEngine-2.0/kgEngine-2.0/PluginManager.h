@@ -26,14 +26,14 @@ namespace kg
 
 	class DLL_EXPORT PluginManager
 	{
-		/// The component plugin factorys sorted by ID.
+		/// The component plugin factories sorted by ID.
 		std::map<int, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysById;
-		/// The system plugin factorys sorted by ID.
+		/// The system plugin factories sorted by ID.
 		std::map<int, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysById;
 
-		/// The component plugin factorys sorted by name.
+		/// The component plugin factories sorted by name.
 		std::map<std::string, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysByName;
-		/// The system plugin factorys sorted by name.
+		/// The system plugin factories sorted by name.
 		std::map<std::string, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysByName;
 
 		std::map<int, std::string> m_componentPluginNamesByIds;
@@ -42,7 +42,27 @@ namespace kg
 		std::map<int, std::string> m_systemPluginNamesByIds;
 		std::map<std::string, int> m_systemPluginIdsByNames;
 
+		std::map<size_t, std::map<int, std::shared_ptr<PluginFactoryInterface<Plugin>>>> m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash;
+
 	public:
+
+		template<class GenericUserDefinedPluginType>
+		void addUserDefinedPlugin( std::shared_ptr<PluginFactoryInterface<Plugin>>& pluginFactory )
+		{
+			m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash
+				[typeid(GenericUserDefinedPluginType).hash_code()]
+			[pluginFactory->getId()]
+			= pluginFactory;
+		};
+
+		template<class GenericUserDefinedPluginType>
+		std::shared_ptr<GenericUserDefinedPluginType> createUserDefinedPlugin( int pluginId )
+		{
+			return static_pointer_cast< GenericUserDefinedPluginType >(
+				m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash
+				[typeid(GenericUserDefinedPluginType).hash_code()]
+			[pluginId]->create());
+		};
 
 		/// Adds a component plugin.
 		///

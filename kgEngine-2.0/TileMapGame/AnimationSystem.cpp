@@ -43,7 +43,7 @@ namespace kg
 		return id::SystemPluginId::ANIMATION_SYSTEM;
 	}
 
-	int AnimationSystem::getSyncedTimeForAnimationDuration( const int stateDurationInMilliseconds )
+	int AnimationSystem::getSyncedTimeForAnimationStateDuration( const int stateDurationInMilliseconds )
 	{
 		return m_syncedTimeByStateDuration[stateDurationInMilliseconds];
 	}

@@ -18,6 +18,8 @@ namespace kg
 		void onPositionChanged( const sf::Vector2i& newPosition );
 		void onSizeChanged( const sf::Vector2i& newSize );
 
+		batch::SpriteBatch m_spriteBatch;
+
 	public:
 		virtual void preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )override;
 

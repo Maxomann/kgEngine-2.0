@@ -61,6 +61,8 @@ namespace kg
 
 		//GlobalBounds
 		sf::FloatRect getGlobalBounds()const;/*thread safe*/
+		bool intersects( const sf::FloatRect& rect )const;
+		sf::Vector3i getXYZValues()const;
 
 		static const std::string PLUGIN_NAME;
 

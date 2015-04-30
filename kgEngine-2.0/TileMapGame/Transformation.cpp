@@ -57,13 +57,32 @@ namespace kg
 	}
 
 	sf::FloatRect Transformation::getGlobalBounds() const
-{
+	{
 		m_globalBoundsMutex.lock();
 
 		auto retVal = m_globalBounds;
 
 		m_globalBoundsMutex.unlock();
 
+		return retVal;
+	}
+
+	bool Transformation::intersects( const sf::FloatRect& rect )const
+	{
+		m_globalBoundsMutex.lock();
+		bool retVal = m_globalBounds.intersects( rect );
+		m_globalBoundsMutex.unlock();
+
+		return retVal;
+	}
+
+	sf::Vector3i Transformation::getXYZValues() const
+	{
+		m_globalBoundsMutex.lock();
+		auto retVal = Vector3i( m_globalBounds.left,
+								m_globalBounds.top + m_globalBounds.height,//feet position
+								m_zValue );
+		m_globalBoundsMutex.unlock();
 		return retVal;
 	}
 

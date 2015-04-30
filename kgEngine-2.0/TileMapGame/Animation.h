@@ -38,8 +38,8 @@ namespace kg
 	public:
 		virtual bool loadFromFile( const std::string& path ) override;
 
-		FrameDurationAndTexrectByState& get()const;
-		FrameDurationAndTexrectByState& operator()()const;//equals get()
+		FrameDurationAndTexrectByState& get( std::shared_ptr<Entity>& forEntity )const;
+		FrameDurationAndTexrectByState& operator()( std::shared_ptr<Entity>& forEntity )const;//equals get()
 
 		static const std::string FREE_ANIMATION;//type of interpreter
 		static const std::string MULTIPLY_ANIMATION;//type of interpreter
@@ -74,6 +74,9 @@ namespace kg
 
 		virtual Plugin::Id getPluginId() const override;
 
+		//
+
+		//playing related:
 		std::string getState()const;
 		int getFrame()const;
 

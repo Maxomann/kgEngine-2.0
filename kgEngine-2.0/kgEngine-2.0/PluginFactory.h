@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "Plugin.h"
 
 namespace kg
 {
@@ -46,6 +47,26 @@ namespace kg
 		virtual size_t getRealTypeHashCode() const
 		{
 			return RealType::type_hash;
+		}
+	};
+
+	template<class FakeType, class RealType>
+	class DLL_EXPORT UserDefinedPluginFactory : public PluginFactoryInterface < Plugin >
+	{
+	public:
+		UserDefinedPluginFactory( const int& pluginId, const std::string& pluginName )
+			: PluginFactoryInterface( pluginId, pluginName )
+		{ }
+
+		virtual std::shared_ptr<Plugin> create()const
+		{
+			return std::static_pointer_cast< Plugin >(std::make_shared<RealType>());
+		};
+
+		virtual size_t getRealTypeHashCode() const
+		{
+			throw "Should not be used!";
+			return typeid(RealType).hash_code();
 		}
 	};
 }

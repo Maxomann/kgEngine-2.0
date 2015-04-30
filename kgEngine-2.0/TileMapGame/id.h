@@ -36,6 +36,20 @@ namespace kg
 			};
 		};
 
+		namespace SpecialPluginId
+		{
+			enum
+			{
+				FIRST_ELEMENT = ComponentPluginId::LAST_ELEMENT,
+
+				ANIMATION_FILE_INTERPRETER,
+
+				LAST_ELEMENT
+			};
+		}
+
+
+
 		namespace SystemUpdateImportance
 		{
 			enum

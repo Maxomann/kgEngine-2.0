@@ -85,44 +85,65 @@ namespace kg
 	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
 											const EntityManager::EntityContainer& toDraw )
 	{
-		batch::SpriteBatch spriteBatch;
-		spriteBatch.setRenderTarget( renderWindow );
+		m_spriteBatch.setRenderTarget( renderWindow );
 
-		map<int, map<int, map<int, std::vector<Graphics*>>>> toDrawSorted;//Z Y X
-		auto thisGlobalBounds = r_transformation->getGlobalBounds();
+		//map<int, map<int, map<int, std::vector<Graphics*>>>> toDrawSorted;//Z Y X
+		vector<pair<Vector3i, Graphics*>> toDrawSorted;
+		const auto thisGlobalBounds = r_transformation->getGlobalBounds();
 		m_viewMutex.lock();
-		auto view_copy = m_view;
+		const auto view_copy = m_view;
 		m_viewMutex.unlock();
 
 		//sort toDraws
 		for( const auto& obj : toDraw )
 		{
-			auto transformationComponent = obj->getComponent<Transformation>();
-			auto graphicsComponent = obj->getComponent<Graphics>();
-			auto globalBounds = transformationComponent->getGlobalBounds();
+			const auto transformationComponent = obj->getComponent<Transformation>();
+			const auto graphicsComponent = obj->getComponent<Graphics>();
 
 			//if toDraw is seen on camera
-			if( thisGlobalBounds.intersects( globalBounds ) )
+			if( transformationComponent->intersects( thisGlobalBounds ) )
 			{
 				//sort
-				toDrawSorted
-					[transformationComponent->getZValue()]//Z
-				[globalBounds.top + globalBounds.height]//Y
-				[globalBounds.left]//X
-				.emplace_back( graphicsComponent );
+				//toDrawSorted
+				//	[transformationComponent->getZValue()]//Z
+				//[globalBounds.top + globalBounds.height]//Y
+				//[globalBounds.left]//X
+				//.emplace_back( graphicsComponent );
+				toDrawSorted.push_back( make_pair(
+					transformationComponent->getXYZValues(),
+					move(graphicsComponent) ) );
 			}
 		}
+		sort( begin( toDrawSorted ), end( toDrawSorted ), [](
+			const pair<Vector3i, Graphics*>& lhs,
+			const pair<Vector3i, Graphics*>& rhs )
+		{
+			const auto& vecl = lhs.first;
+			const auto& vecr = rhs.first;
+
+			if( vecr.z > vecl.z )
+				return true;
+			else if( vecr.z == vecl.z && vecr.y > vecl.y )
+				return true;
+			else if( vecr.y == vecl.y && vecr.x > vecl.x )
+				return true;
+
+			return false;
+		} );
 
 
 		renderWindow.setView( view_copy );
 
-		for( const auto& Z : toDrawSorted )
+		/*for( const auto& Z : toDrawSorted )
 			for( const auto& Y : Z.second )
-				for( const auto& X : Y.second )
-					for( const auto& toDraw : X.second )
-						toDraw->drawToSpriteBatch( spriteBatch );
+			for( const auto& X : Y.second )
+			for( const auto& toDraw : X.second )
+			toDraw->drawToSpriteBatch( m_spriteBatch );*/
+		for( const auto& toDraw : toDrawSorted )
+			toDraw.second->drawToSpriteBatch( m_spriteBatch );
+
 		//renderWindow.draw( *toDraw );
-		spriteBatch.display();
+		m_spriteBatch.display();
 
 		renderWindow.setView( renderWindow.getDefaultView() );
 	}

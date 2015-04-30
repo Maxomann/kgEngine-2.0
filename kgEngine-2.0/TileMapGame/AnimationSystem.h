@@ -20,7 +20,7 @@ namespace kg
 
 		virtual Plugin::Id getPluginId() const override;
 
-		int getSyncedTimeForAnimationDuration( const int stateDurationInMilliseconds );
+		int getSyncedTimeForAnimationStateDuration( const int stateDurationInMilliseconds );
 
 		static const std::string PLUGIN_NAME;
 

@@ -6,8 +6,9 @@ namespace kg
 {
 	namespace batch
 	{
+		const float magic_number = 0.0075;
 		const double Pi = 3.14159265;
-		const unsigned int MaxCapacity = std::numeric_limits<unsigned int>::max();
+		const size_t MaxCapacity = 1000000;//LIMITS THE NUMBER OF SPRITES DRAWN TO 1.000.000/4 = 250.000!
 		const int LookupSize = 512;
 
 		float getSin[LookupSize];
@@ -24,9 +25,8 @@ namespace kg
 			initialized = true;
 		}
 
-		SpriteBatch::SpriteBatch( void ) : count( 0 ), capacity( 40 )
+		SpriteBatch::SpriteBatch( void ) : count( 0 ), capacity( 40 ), vertices( MaxCapacity )
 		{
-			vertices.resize( capacity );
 
 			if( !initialized )
 				create_lookup();
@@ -78,7 +78,7 @@ namespace kg
 				{
 					capacity *= 2;
 					if( capacity > MaxCapacity ) capacity = MaxCapacity;
-					vertices.resize( capacity );
+						//vertices.resize( capacity );
 				}
 			}
 			return 4 * count++;
