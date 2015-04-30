@@ -30,8 +30,11 @@ namespace kg
 	private:
 		std::vector<std::shared_ptr<Component>> m_components;
 		ComponentsByTypeContainer m_componentsByType;
-		std::map<double, std::vector<Component*>> m_componentsByUpdateImportance;/*not unordered*/
-		/*std::unordered_map<Plugin::Id, std::shared_ptr<Component>> m_componentsByPluginId;*/
+		std::vector<Component*> m_componentsByUpdateImportance;
+
+		bool m_componentsSorted = false;
+		inline void m_checkComponentsSortedByUpdateImportance();
+
 	public:
 		// If this function returns true a system of type T has already been registered.
 		// This function overwrites the old system with the parameter of this function
@@ -39,14 +42,11 @@ namespace kg
 
 		bool addComponent( std::shared_ptr<Component>& component, size_t realTypeHashCode )
 		{
-			double updateImportance = component->getUpdateImportance();
-
 			auto it = m_componentsByType.find( realTypeHashCode );
 
 			m_components.emplace_back( component );
 			m_componentsByType[realTypeHashCode] = component.get();
-			m_componentsByUpdateImportance[updateImportance].emplace_back(component.get());
-			/*m_componentsByPluginId[component->getPluginId()] = component;*/
+			m_componentsByUpdateImportance.emplace_back(component.get());
 
 			//if [it != m_systemsByType.end();] a system has been overwritten
 			return it != m_componentsByType.end();
