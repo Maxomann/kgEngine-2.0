@@ -25,7 +25,7 @@ namespace kg
 			initialized = true;
 		}
 
-		SpriteBatch::SpriteBatch( void ) : count( 0 ), capacity( 40 ), vertices( MaxCapacity )
+		SpriteBatch::SpriteBatch( void ) : count( 0 ), vertices( MaxCapacity )
 		{
 
 			if( !initialized )
@@ -37,7 +37,13 @@ namespace kg
 
 		void SpriteBatch::draw( const Sprite &sprite )
 		{
-			draw( sprite.getTexture(), Vector2i( sprite.getPosition() ), sprite.getTextureRect(), sprite.getColor(), Vector2i(sprite.getScale()), Vector2i( sprite.getOrigin() ), sprite.getRotation() );
+			draw( sprite.getTexture(),
+				  ( Vector2i )sprite.getPosition(),
+				  sprite.getTextureRect(),
+				  sprite.getColor(),
+				  ( Vector2i )sprite.getScale(),
+				  ( Vector2i )sprite.getOrigin(),
+				  sprite.getRotation() );
 		}
 
 		void SpriteBatch::flush()
@@ -59,41 +65,40 @@ namespace kg
 		void SpriteBatch::display( bool reset, bool flush )
 		{
 			rt->draw( &vertices[0], count * 4, PrimitiveType::Quads, state );
-			if( flush ) count = 0;
-			if( reset ) state = RenderStates();
+			if( flush )
+				count = 0;
+			if( reset )
+				state = RenderStates();
 		}
 
 		int SpriteBatch::create( const Texture *texture )
 		{
 			if( texture != state.texture )
 			{
-				display( false );
+				if( state.texture != nullptr )
+					display( false );
+				else
+					count = 0;
 				state.texture = texture;
 			}
 
-			if( count * 4 >= capacity )
-			{
-				//display(false);
-				if( capacity < MaxCapacity )
-				{
-					capacity *= 2;
-					if( capacity > MaxCapacity ) capacity = MaxCapacity;
-						//vertices.resize( capacity );
-				}
-			}
 			return 4 * count++;
 		}
 
 		void SpriteBatch::draw(
-			const Texture *texture, const Vector2i &position,
-			const IntRect &rec, const Color &color, const Vector2i &scale,
-			const Vector2i &origin, float rotation )
+			const Texture *texture,
+			const Vector2i &position,
+			const IntRect &rec,
+			const Color &color,
+			const Vector2i &scale,
+			const Vector2i &origin,
+			float rotation )
 		{
 			auto index = create( texture );
 
 			int rot = static_cast< int >(rotation / 360 * LookupSize + 0.5) & (LookupSize - 1);
-			float _sin = getSin[rot];
-			float _cos = getCos[rot];
+			float& _sin = getSin[rot];
+			float& _cos = getCos[rot];
 
 			//float _sin = sinf(rotation);
 			//float _cos = cosf(rotation);
@@ -114,7 +119,7 @@ namespace kg
 			ptr++;
 
 			pX += scalex;
-			ptr->position.x =  pX * _cos - pY * _sin + position.x;
+			ptr->position.x = pX * _cos - pY * _sin + position.x;
 			ptr->position.y = pX * _sin + pY * _cos + position.y;
 			ptr->texCoords.x = rec.left + rec.width - 0.0075;
 			ptr->texCoords.y = rec.top + 0.0075;
@@ -122,16 +127,16 @@ namespace kg
 			ptr++;
 
 			pY += scaley;
-			ptr->position.x =  pX * _cos - pY * _sin + position.x ;
-			ptr->position.y =  pX * _sin + pY * _cos + position.y ;
+			ptr->position.x = pX * _cos - pY * _sin + position.x;
+			ptr->position.y = pX * _sin + pY * _cos + position.y;
 			ptr->texCoords.x = rec.left + rec.width - 0.0075;
 			ptr->texCoords.y = rec.top + rec.height - 0.0075;
 			ptr->color = color;
 			ptr++;
 
 			pX -= scalex;
-			ptr->position.x =  pX * _cos - pY * _sin + position.x ;
-			ptr->position.y =  pX * _sin + pY * _cos + position.y ;
+			ptr->position.x = pX * _cos - pY * _sin + position.x;
+			ptr->position.y = pX * _sin + pY * _cos + position.y;
 			ptr->texCoords.x = rec.left + 0.0075;
 			ptr->texCoords.y = rec.top + rec.height - 0.0075;
 			ptr->color = color;
@@ -139,7 +144,12 @@ namespace kg
 
 		void SpriteBatch::draw( const Texture *texture, const FloatRect &dest, const IntRect &rec, const Color &color )
 		{
-			draw( texture, Vector2i( dest.left, dest.top ), rec, color, Vector2i( 1, 1 ), Vector2i( 0, 0 ), 0 );
+			draw( texture,
+				  Vector2i( dest.left, dest.top ),
+				  rec,
+				  color,
+				  Vector2i( 1, 1 ),
+				  Vector2i( 0, 0 ), 0 );
 		}
 
 	}

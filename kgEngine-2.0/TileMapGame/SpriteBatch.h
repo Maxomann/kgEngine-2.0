@@ -29,7 +29,6 @@ namespace kg
 			sf::RenderStates state;
 			std::vector<sf::Vertex> vertices;
 			int count;
-			unsigned int capacity;
 
 			int create( const sf::Texture *texture );
 

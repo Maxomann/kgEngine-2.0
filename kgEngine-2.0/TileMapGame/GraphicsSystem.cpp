@@ -231,7 +231,7 @@ namespace kg
 			m_drawableEntityMutex.lock();
 			//for every camera state information
 			for( const auto& camera : cameraContainer )
-				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, toDrawEntitiesCopy);
+				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, toDrawEntitiesCopy );
 			m_drawableEntityMutex.unlock();
 			cameraContainerMutex.unlock();
 

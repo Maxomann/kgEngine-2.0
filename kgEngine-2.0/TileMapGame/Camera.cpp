@@ -87,7 +87,6 @@ namespace kg
 	{
 		m_spriteBatch.setRenderTarget( renderWindow );
 
-		//map<int, map<int, map<int, std::vector<Graphics*>>>> toDrawSorted;//Z Y X
 		vector<pair<Vector3i, Graphics*>> toDrawSorted;
 		const auto thisGlobalBounds = r_transformation->getGlobalBounds();
 		m_viewMutex.lock();
@@ -101,18 +100,10 @@ namespace kg
 			const auto graphicsComponent = obj->getComponent<Graphics>();
 
 			//if toDraw is seen on camera
-			if( transformationComponent->intersects( thisGlobalBounds ) )
-			{
-				//sort
-				//toDrawSorted
-				//	[transformationComponent->getZValue()]//Z
-				//[globalBounds.top + globalBounds.height]//Y
-				//[globalBounds.left]//X
-				//.emplace_back( graphicsComponent );
-				toDrawSorted.push_back( make_pair(
-					transformationComponent->getXYZValues(),
-					move(graphicsComponent) ) );
-			}
+			//if( transformationComponent->intersects( thisGlobalBounds ) )
+			toDrawSorted.push_back( make_pair(
+				transformationComponent->getXYZValues(),
+				move( graphicsComponent ) ) );
 		}
 		sort( begin( toDrawSorted ), end( toDrawSorted ), [](
 			const pair<Vector3i, Graphics*>& lhs,
@@ -134,15 +125,9 @@ namespace kg
 
 		renderWindow.setView( view_copy );
 
-		/*for( const auto& Z : toDrawSorted )
-			for( const auto& Y : Z.second )
-			for( const auto& X : Y.second )
-			for( const auto& toDraw : X.second )
-			toDraw->drawToSpriteBatch( m_spriteBatch );*/
 		for( const auto& toDraw : toDrawSorted )
 			toDraw.second->drawToSpriteBatch( m_spriteBatch );
-
-		//renderWindow.draw( *toDraw );
+			//renderWindow.draw( *toDraw.second );
 		m_spriteBatch.display();
 
 		renderWindow.setView( renderWindow.getDefaultView() );

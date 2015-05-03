@@ -18,7 +18,7 @@ namespace kg
 		void onSizeChanged( const sf::Vector2i& newSize );
 		void onRotationChanged( const float& newRotation );
 
-		//only works when position is {0,0} and rotation is 0
+		//only work when position is {0,0} and rotation is 0
 		void centerOrigin();
 		void scaleToObjectSize();
 
