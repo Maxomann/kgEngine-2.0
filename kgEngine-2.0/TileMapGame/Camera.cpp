@@ -83,50 +83,19 @@ namespace kg
 	}
 
 	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-											const EntityManager::EntityContainer& toDraw )
+											const vector<std::shared_ptr<Entity>>& toDrawSorted )
 	{
 		m_spriteBatch.setRenderTarget( renderWindow );
 
-		vector<pair<Vector3i, Graphics*>> toDrawSorted;
 		const auto thisGlobalBounds = r_transformation->getGlobalBounds();
 		m_viewMutex.lock();
 		const auto view_copy = m_view;
 		m_viewMutex.unlock();
 
-		//sort toDraws
-		for( const auto& obj : toDraw )
-		{
-			const auto transformationComponent = obj->getComponent<Transformation>();
-			const auto graphicsComponent = obj->getComponent<Graphics>();
-
-			//if toDraw is seen on camera
-			//if( transformationComponent->intersects( thisGlobalBounds ) )
-			toDrawSorted.push_back( make_pair(
-				transformationComponent->getXYZValues(),
-				move( graphicsComponent ) ) );
-		}
-		sort( begin( toDrawSorted ), end( toDrawSorted ), [](
-			const pair<Vector3i, Graphics*>& lhs,
-			const pair<Vector3i, Graphics*>& rhs )
-		{
-			const auto& vecl = lhs.first;
-			const auto& vecr = rhs.first;
-
-			if( vecr.z > vecl.z )
-				return true;
-			else if( vecr.z == vecl.z && vecr.y > vecl.y )
-				return true;
-			else if( vecr.y == vecl.y && vecr.x > vecl.x )
-				return true;
-
-			return false;
-		} );
-
-
 		renderWindow.setView( view_copy );
 
 		for( const auto& toDraw : toDrawSorted )
-			toDraw.second->drawToSpriteBatch( m_spriteBatch );
+			toDraw->getComponent<Graphics>()->drawToSpriteBatch( m_spriteBatch );
 			//renderWindow.draw( *toDraw.second );
 		m_spriteBatch.display();
 

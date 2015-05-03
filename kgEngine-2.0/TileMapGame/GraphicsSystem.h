@@ -16,14 +16,15 @@ namespace kg
 								std::mutex& m_drawableEntityMutex,
 								std::mutex& cameraContainerMutex,
 								CameraContainer& cameraContainer,
-								EntityManager::EntityContainer& toDrawEntitiesCopy,
+								EntityManager::EntityContainer& addedEntitiesCopy,
+								EntityManager::EntityContainer& removedEntitiesCopy,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
 								bool& drawingIsActive,
-								std::mutex& syncMutex ,
+								std::mutex& syncMutex,
 								bool& threadHasToWait );
 
-	class GraphicsSystem : public System/*, public CallbackReciever*/, public EntityThatHasComponentContainer<Graphics>
+	class GraphicsSystem : public System, public CallbackReciever
 	{
 	private:
 
@@ -45,7 +46,13 @@ namespace kg
 		void m_initCameras( Engine& engine, World& world );
 
 		mutable std::mutex m_drawableEntityMutex;
-		EntityManager::EntityContainer m_toDrawEntitiesCopy;
+
+		EntityManager::EntityContainer m_addedEntities;
+		EntityManager::EntityContainer m_removedEntities;
+		EntityManager::EntityContainer m_addedEntitiesCopy;
+		EntityManager::EntityContainer m_removedEntitiesCopy;
+		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity );
+		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity );
 
 		void m_onSavegameOpened( Engine& engine );
 		void m_onSavegameClosed();
@@ -57,7 +64,7 @@ namespace kg
 		int m_drawingThreadFrameTime = -1;
 
 		mutable std::mutex m_drawingThreadSyncMutex;
-		bool m_drawingThreadHasToWait = false;
+		bool m_drawingThreadHasToWait = true;
 
 	public:
 		~GraphicsSystem();

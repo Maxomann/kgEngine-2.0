@@ -40,7 +40,7 @@ namespace kg
 		sf::FloatRect getViewport()const;
 		
 		void drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-										const EntityManager::EntityContainer& toDraw );
+										const std::vector<std::shared_ptr<Entity>>& toDrawSorted );
 
 		static const std::string PLUGIN_NAME;
 
