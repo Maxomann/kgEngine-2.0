@@ -78,12 +78,14 @@ namespace kg
 					rt->applyShader( states.shader );
 
 				// Setup the pointers to the vertices' components
+				glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*vertexCount, ( const void* )vertices, GL_STATIC_DRAW );
+
 				if( vertices )
 				{
 					const char* data = reinterpret_cast< const char* >(vertices);
-					glVertexPointer( 2, GL_FLOAT, sizeof( Vertex ), data + 0 );
-					glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( Vertex ), data + 8 );
-					glTexCoordPointer( 2, GL_FLOAT, sizeof( Vertex ), data + 12 );
+					glVertexPointer( 2, GL_FLOAT, sizeof( Vertex ), (const void*)0 );
+					glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( Vertex ), ( const void* )8 );
+					glTexCoordPointer( 2, GL_FLOAT, sizeof( Vertex ), ( const void* )12 );
 				}
 
 				// Find the OpenGL primitive type
@@ -92,7 +94,8 @@ namespace kg
 				GLenum mode = modes[type];
 
 				// Draw the primitives
-				glDrawArrays( mode, 0, vertexCount );
+				//glInterleavedArrays( GL_T2F_C4UB_V3F, sizeof( Vertex ), NULL );
+				glDrawArrays( GL_QUADS, 0, vertexCount );
 
 				// Unbind the shader, if any
 				if( states.shader )
@@ -102,7 +105,12 @@ namespace kg
 
 		void SpriteBatch::initVBO()
 		{
-			isVBOinit = true;
+			rt->activate( true );
+			glGenBuffers( 1, &m_vbo );
+			glEnableClientState( GL_VERTEX_ARRAY );
+			glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
+
+			m_isVBOinit = true;
 		}
 
 		void SpriteBatch::draw( const Sprite &sprite )
@@ -166,8 +174,10 @@ namespace kg
 			const Vector2i &origin,
 			float rotation )
 		{
-			auto index = create( texture );
+			if( !m_isVBOinit )
+				initVBO();
 
+			auto index = create( texture );
 
 			int rot = static_cast< int >(rotation / 360 * LookupSize + 0.5) & (LookupSize - 1);
 			float& _sin = getSin[rot];

@@ -174,6 +174,11 @@ namespace kg
 		return retVal;
 	}
 
+	GraphicsSystem::GraphicsSystem()
+	{
+		glewInit();
+	}
+
 	GraphicsSystem::~GraphicsSystem()
 	{
 		m_terminateDrawingThread();

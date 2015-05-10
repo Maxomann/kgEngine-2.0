@@ -35,7 +35,8 @@ namespace kg
 			void openGlDraw( const sf::Vertex* vertices, std::size_t vertexCount,
 							 sf::PrimitiveType type, const sf::RenderStates& states );
 
-			bool isVBOinit = false;
+			GLuint m_vbo = 0;
+			bool m_isVBOinit = false;
 			void initVBO();
 		};
 	}

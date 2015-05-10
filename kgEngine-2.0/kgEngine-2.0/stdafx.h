@@ -36,6 +36,8 @@
 #include <SFML/Main.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <gl/glew.h>
+#include <gl/glut.h>
 #include <SFML/OpenGL.hpp>
 
 #include <boost/core/noncopyable.hpp>

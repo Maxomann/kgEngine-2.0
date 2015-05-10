@@ -67,6 +67,7 @@ namespace kg
 		bool m_drawingThreadHasToWait = true;
 
 	public:
+		GraphicsSystem();
 		~GraphicsSystem();
 
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );
