@@ -80,8 +80,8 @@ namespace kg
 		}
 
 		m_drawableEntityMutex.lock();
-		m_addedEntitiesCopy = m_addedEntities;
-		m_removedEntitiesCopy = m_removedEntities;
+		m_addedEntitiesCopy.insert(end(m_addedEntitiesCopy), begin(m_addedEntities), end(m_addedEntities));
+		m_removedEntitiesCopy.insert( end(m_removedEntities), begin( m_removedEntities ), end( m_removedEntities ) );
 		m_addedEntities.clear();
 		m_removedEntities.clear();
 		m_drawableEntityMutex.unlock();
@@ -274,7 +274,7 @@ namespace kg
 				const auto transformationComponent = el->getComponent<Transformation>();
 				toDrawSorted.push_back( make_pair( transformationComponent->getXYZValues(), el ) );
 			}
-			cout << addedEntitiesCopy.size() << "::";
+			//cout << addedEntitiesCopy.size() << "::";
 
 			addedEntitiesCopy.clear();
 			removedEntitiesCopy.clear();
@@ -312,7 +312,7 @@ namespace kg
 			}
 			for( auto it = toRemove.rbegin(); it != toRemove.rend(); ++it )
 				toDrawSorted.erase( *it );
-			cout << toRemove.size() << endl;
+			//cout << toRemove.size() << endl;
 			toRemove.clear();
 
 
