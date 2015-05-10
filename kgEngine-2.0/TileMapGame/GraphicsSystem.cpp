@@ -80,8 +80,8 @@ namespace kg
 		}
 
 		m_drawableEntityMutex.lock();
-		m_addedEntitiesCopy.insert(end(m_addedEntitiesCopy), begin(m_addedEntities), end(m_addedEntities));
-		m_removedEntitiesCopy.insert( end(m_removedEntities), begin( m_removedEntities ), end( m_removedEntities ) );
+		m_addedEntitiesCopy.insert( end( m_addedEntitiesCopy ), begin( m_addedEntities ), end( m_addedEntities ) );
+		m_removedEntitiesCopy.insert( end( m_removedEntitiesCopy ), begin( m_removedEntities ), end( m_removedEntities ) );
 		m_addedEntities.clear();
 		m_removedEntities.clear();
 		m_drawableEntityMutex.unlock();
@@ -127,9 +127,9 @@ namespace kg
 	{
 		if( entity->hasComponent<Graphics>() )
 			m_addedEntities.push_back( entity );
-		/*auto it = find( m_removedEntities.begin(), m_removedEntities.end(), entity );
+		auto it = find( m_removedEntities.begin(), m_removedEntities.end(), entity );
 		if( it != m_removedEntities.end() )
-		m_removedEntities.erase( it );*/
+			m_removedEntities.erase( it );
 	}
 
 	void GraphicsSystem::m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
@@ -238,11 +238,10 @@ namespace kg
 		renderWindow.setActive( true );
 		sf::Clock thisFrameTime;
 
-		vector<pair<Vector3i, std::weak_ptr<Entity>>> toDrawSorted;
+		vector<pair<Vector3i, std::shared_ptr<Entity>>> toDrawSorted;
 
 		while( !shouldTerminate )
 		{
-
 			while( true )
 			{
 				//lock
@@ -266,15 +265,20 @@ namespace kg
 			cameraContainerMutex.lock();
 			m_drawableEntityMutex.lock();
 
+			//remove
+			for( const auto& el : removedEntitiesCopy )
+			{
+				toDrawSorted.erase( findInToDraw( toDrawSorted, el ) );
+			}
+
 			//add
-			bool needsSort = (removedEntitiesCopy.size() != 0 || addedEntitiesCopy.size() != 0);
+			bool needsSort = (addedEntitiesCopy.size() != 0);
 
 			for( auto& el : addedEntitiesCopy )
 			{
 				const auto transformationComponent = el->getComponent<Transformation>();
 				toDrawSorted.push_back( make_pair( transformationComponent->getXYZValues(), el ) );
 			}
-			//cout << addedEntitiesCopy.size() << "::";
 
 			addedEntitiesCopy.clear();
 			removedEntitiesCopy.clear();
@@ -283,8 +287,8 @@ namespace kg
 			if( needsSort )
 			{
 				sort( begin( toDrawSorted ), end( toDrawSorted ), [](
-					const pair<Vector3i, std::weak_ptr<Entity>>& lhs,
-					const pair<Vector3i, std::weak_ptr<Entity>>& rhs )
+					const pair<Vector3i, std::shared_ptr<Entity>>& lhs,
+					const pair<Vector3i, std::shared_ptr<Entity>>& rhs )
 				{
 					const auto& vecl = lhs.first;
 					const auto& vecr = rhs.first;
@@ -300,25 +304,10 @@ namespace kg
 				} );
 			}
 
-			//validate and remove
-			std::vector<std::shared_ptr<Entity>> toDrawSortedValidated;
-			vector<vector<pair<Vector3i, std::weak_ptr<Entity>>>::iterator> toRemove;
-			for( auto it = toDrawSorted.begin(); it != toDrawSorted.end(); ++it )
-			{
-				if( auto spt = it->second.lock() )
-					toDrawSortedValidated.push_back( spt );
-				else
-					toRemove.push_back( it );
-			}
-			for( auto it = toRemove.rbegin(); it != toRemove.rend(); ++it )
-				toDrawSorted.erase( *it );
-			//cout << toRemove.size() << endl;
-			toRemove.clear();
-
 
 			//draw
 			for( const auto& camera : cameraContainer )
-				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, toDrawSortedValidated );
+				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, toDrawSorted );
 
 			m_drawableEntityMutex.unlock();
 			cameraContainerMutex.unlock();

@@ -1,6 +1,7 @@
 #include "SpriteBatch.h"
 using namespace std;
 using namespace sf;
+using namespace priv;
 
 namespace kg
 {
@@ -27,13 +28,82 @@ namespace kg
 
 		SpriteBatch::SpriteBatch( void ) : count( 0 ), vertices( MaxCapacity )
 		{
-
 			if( !initialized )
 				create_lookup();
 		}
 
 		SpriteBatch::~SpriteBatch( void )
 		{ }
+
+		void SpriteBatch::openGlDraw( const Vertex* vertices, std::size_t vertexCount,
+									  PrimitiveType type, const RenderStates& states )
+		{
+			// Nothing to draw?
+			if( !vertices || (vertexCount == 0) )
+				return;
+
+			// GL_QUADS is unavailable on OpenGL ES
+#ifdef SFML_OPENGL_ES
+			if (type == Quads)
+			{
+				err() << "sf::Quads primitive type is not supported on OpenGL ES platforms, drawing skipped" << std::endl;
+				return;
+			}
+#define GL_QUADS 0
+#endif
+
+			if( rt->activate( true ) )
+			{
+				// First set the persistent OpenGL states if it's the very first call
+				if( !rt->m_cache.glStatesSet )
+					rt->resetGLStates();
+
+				rt->applyTransform( states.transform );
+				
+				// Apply the view
+				if( rt->m_cache.viewChanged )
+					rt->applyCurrentView();
+
+				// Apply the blend mode
+				if( states.blendMode != rt->m_cache.lastBlendMode )
+					rt->applyBlendMode( states.blendMode );
+
+				// Apply the texture
+				Uint64 textureId = states.texture ? states.texture->m_cacheId : 0;
+				if( textureId != rt->m_cache.lastTextureId )
+					rt->applyTexture( states.texture );
+
+				// Apply the shader
+				if( states.shader )
+					rt->applyShader( states.shader );
+
+				// Setup the pointers to the vertices' components
+				if( vertices )
+				{
+					const char* data = reinterpret_cast< const char* >(vertices);
+					glVertexPointer( 2, GL_FLOAT, sizeof( Vertex ), data + 0 );
+					glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( Vertex ), data + 8 );
+					glTexCoordPointer( 2, GL_FLOAT, sizeof( Vertex ), data + 12 );
+				}
+
+				// Find the OpenGL primitive type
+				static const GLenum modes[] = { GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_TRIANGLES,
+					GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS };
+				GLenum mode = modes[type];
+
+				// Draw the primitives
+				glDrawArrays( mode, 0, vertexCount );
+
+				// Unbind the shader, if any
+				if( states.shader )
+					rt->applyShader( NULL );
+			}
+		}
+
+		void SpriteBatch::initVBO()
+		{
+			isVBOinit = true;
+		}
 
 		void SpriteBatch::draw( const Sprite &sprite )
 		{
@@ -64,7 +134,9 @@ namespace kg
 
 		void SpriteBatch::display( bool reset, bool flush )
 		{
-			rt->draw( &vertices[0], count * 4, PrimitiveType::Quads, state );
+			//rt->draw( &vertices[0], count * 4, PrimitiveType::Quads, state );
+			openGlDraw( &vertices[0], count * 4, PrimitiveType::Quads, state );
+
 			if( flush )
 				count = 0;
 			if( reset )
@@ -95,6 +167,7 @@ namespace kg
 			float rotation )
 		{
 			auto index = create( texture );
+
 
 			int rot = static_cast< int >(rotation / 360 * LookupSize + 0.5) & (LookupSize - 1);
 			float& _sin = getSin[rot];

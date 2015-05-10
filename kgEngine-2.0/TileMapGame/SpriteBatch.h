@@ -11,7 +11,6 @@ namespace kg
 			SpriteBatch( void );
 			~SpriteBatch( void );
 
-
 			void display( bool reset = true, bool flush = true );
 			void draw( const sf::Sprite &sprite );
 			void draw( const sf::Texture *texture, const sf::Vector2i &position,
@@ -25,13 +24,19 @@ namespace kg
 			void setRenderTarget( sf::RenderTarget &rt );
 
 		private:
-			sf::RenderTarget *rt;
+			sf::RenderTarget *rt = nullptr;
 			sf::RenderStates state;
 			std::vector<sf::Vertex> vertices;
 			int count;
 
 			int create( const sf::Texture *texture );
 
+
+			void openGlDraw( const sf::Vertex* vertices, std::size_t vertexCount,
+							 sf::PrimitiveType type, const sf::RenderStates& states );
+
+			bool isVBOinit = false;
+			void initVBO();
 		};
 	}
 }

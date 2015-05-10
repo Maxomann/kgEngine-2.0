@@ -39,6 +39,13 @@
 #include <SFML/Graphics/Vertex.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
+namespace kg
+{
+	namespace batch
+	{
+		class SpriteBatch;
+	}
+}
 
 namespace sf
 {
@@ -50,6 +57,7 @@ class Drawable;
 ////////////////////////////////////////////////////////////
 class SFML_GRAPHICS_API RenderTarget : NonCopyable
 {
+	friend class kg::batch::SpriteBatch;
 public:
 
     ////////////////////////////////////////////////////////////

@@ -32,6 +32,13 @@
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Window/GlResource.hpp>
 
+namespace kg
+{
+	namespace batch
+	{
+		class SpriteBatch;
+	}
+}
 
 namespace sf
 {
@@ -46,6 +53,7 @@ class InputStream;
 ////////////////////////////////////////////////////////////
 class SFML_GRAPHICS_API Texture : GlResource
 {
+	friend class kg::batch::SpriteBatch;
 public:
 
     ////////////////////////////////////////////////////////////
