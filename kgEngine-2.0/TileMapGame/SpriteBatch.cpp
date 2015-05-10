@@ -26,7 +26,7 @@ namespace kg
 			initialized = true;
 		}
 
-		SpriteBatch::SpriteBatch( void ) : count( 0 ), vertices( MaxCapacity )
+		SpriteBatch::SpriteBatch( void ) : count( 0 )
 		{
 			if( !initialized )
 				create_lookup();
@@ -35,11 +35,12 @@ namespace kg
 		SpriteBatch::~SpriteBatch( void )
 		{ }
 
-		void SpriteBatch::openGlDraw( const Vertex* vertices, std::size_t vertexCount,
-									  PrimitiveType type, const RenderStates& states )
+		void SpriteBatch::openGlDraw( std::size_t vertexCount,
+									  PrimitiveType type,
+									  const RenderStates& states )
 		{
 			// Nothing to draw?
-			if( !vertices || (vertexCount == 0) )
+			if( vertexCount == 0 )
 				return;
 
 			// GL_QUADS is unavailable on OpenGL ES
@@ -54,12 +55,14 @@ namespace kg
 
 			if( rt->activate( true ) )
 			{
+				glUnmapBuffer( GL_ARRAY_BUFFER );
+
 				// First set the persistent OpenGL states if it's the very first call
 				if( !rt->m_cache.glStatesSet )
 					rt->resetGLStates();
 
 				rt->applyTransform( states.transform );
-				
+
 				// Apply the view
 				if( rt->m_cache.viewChanged )
 					rt->applyCurrentView();
@@ -77,16 +80,10 @@ namespace kg
 				if( states.shader )
 					rt->applyShader( states.shader );
 
-				// Setup the pointers to the vertices' components
-				glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*vertexCount, ( const void* )vertices, GL_STATIC_DRAW );
-
-				if( vertices )
-				{
-					const char* data = reinterpret_cast< const char* >(vertices);
-					glVertexPointer( 2, GL_FLOAT, sizeof( Vertex ), (const void*)0 );
-					glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( Vertex ), ( const void* )8 );
-					glTexCoordPointer( 2, GL_FLOAT, sizeof( Vertex ), ( const void* )12 );
-				}
+				// Setup the pointers to the vertices components
+				glVertexPointer( 2, GL_FLOAT, sizeof( Vertex ), ( const void* )0 );
+				glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( Vertex ), ( const void* )8 );
+				glTexCoordPointer( 2, GL_FLOAT, sizeof( Vertex ), ( const void* )12 );
 
 				// Find the OpenGL primitive type
 				static const GLenum modes[] = { GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_TRIANGLES,
@@ -95,11 +92,13 @@ namespace kg
 
 				// Draw the primitives
 				//glInterleavedArrays( GL_T2F_C4UB_V3F, sizeof( Vertex ), NULL );
-				glDrawArrays( GL_QUADS, 0, vertexCount );
+				glDrawArrays( mode, 0, vertexCount );
 
 				// Unbind the shader, if any
 				if( states.shader )
 					rt->applyShader( NULL );
+
+				m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 			}
 		}
 
@@ -109,6 +108,8 @@ namespace kg
 			glGenBuffers( 1, &m_vbo );
 			glEnableClientState( GL_VERTEX_ARRAY );
 			glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
+			glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STATIC_DRAW );
+			m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 
 			m_isVBOinit = true;
 		}
@@ -142,8 +143,7 @@ namespace kg
 
 		void SpriteBatch::display( bool reset, bool flush )
 		{
-			//rt->draw( &vertices[0], count * 4, PrimitiveType::Quads, state );
-			openGlDraw( &vertices[0], count * 4, PrimitiveType::Quads, state );
+			openGlDraw( count * 4, PrimitiveType::Quads, state );
 
 			if( flush )
 				count = 0;
@@ -189,7 +189,7 @@ namespace kg
 			auto scalex = rec.width * scale.x;
 			auto scaley = rec.height * scale.y;
 
-			Vertex *ptr = &vertices[index];
+			Vertex *ptr = m_bufferPtr + index;
 
 			auto pX = -origin.x * scale.x;
 			auto pY = -origin.y * scale.y;

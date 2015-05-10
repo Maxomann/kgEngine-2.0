@@ -273,7 +273,9 @@ namespace kg
 			//remove
 			for( const auto& el : removedEntitiesCopy )
 			{
-				toDrawSorted.erase( findInToDraw( toDrawSorted, el ) );
+				auto it = findInToDraw( toDrawSorted, el );
+				if( it != toDrawSorted.end() )
+					toDrawSorted.erase( findInToDraw( toDrawSorted, el ) );
 			}
 
 			//add

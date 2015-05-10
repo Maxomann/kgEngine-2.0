@@ -26,18 +26,20 @@ namespace kg
 		private:
 			sf::RenderTarget *rt = nullptr;
 			sf::RenderStates state;
-			std::vector<sf::Vertex> vertices;
 			int count;
 
 			int create( const sf::Texture *texture );
 
 
-			void openGlDraw( const sf::Vertex* vertices, std::size_t vertexCount,
-							 sf::PrimitiveType type, const sf::RenderStates& states );
+			void openGlDraw( std::size_t vertexCount,
+							 sf::PrimitiveType type,
+							 const sf::RenderStates& states );
 
 			GLuint m_vbo = 0;
 			bool m_isVBOinit = false;
 			void initVBO();
+
+			sf::Vertex* m_bufferPtr = nullptr;
 		};
 	}
 }
