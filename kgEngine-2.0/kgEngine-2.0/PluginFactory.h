@@ -4,7 +4,7 @@
 
 namespace kg
 {
-	template<class T>
+	template<class PluginType>
 	class DLL_EXPORT PluginFactoryInterface
 	{
 		const int m_pluginId = -1;
@@ -26,31 +26,31 @@ namespace kg
 			return m_name;
 		}
 
-		virtual std::shared_ptr<T> create()const = 0;
+		virtual std::shared_ptr<PluginType> create()const = 0;
 
 		virtual size_t getRealTypeHashCode()const = 0;
 	};
 
-	template<class FakeType, class RealType>
-	class DLL_EXPORT PluginFactory : public PluginFactoryInterface < FakeType >
+	template<class PluginType, class ClassType>
+	class DLL_EXPORT PluginFactory : public PluginFactoryInterface < PluginType >
 	{
 	public:
 		PluginFactory( const int& pluginId, const std::string& pluginName )
 			: PluginFactoryInterface( pluginId, pluginName )
 		{ }
 
-		virtual std::shared_ptr<FakeType> create()const
+		virtual std::shared_ptr<PluginType> create()const
 		{
-			return std::static_pointer_cast< FakeType >(std::make_shared<RealType>());
+			return std::static_pointer_cast< PluginType >(std::make_shared<ClassType>());
 		};
 
 		virtual size_t getRealTypeHashCode() const
 		{
-			return RealType::type_hash;
+			return ClassType::type_hash;
 		}
 	};
 
-	template<class FakeType, class RealType>
+	template<class ClassType>
 	class DLL_EXPORT UserDefinedPluginFactory : public PluginFactoryInterface < Plugin >
 	{
 	public:
@@ -60,13 +60,13 @@ namespace kg
 
 		virtual std::shared_ptr<Plugin> create()const
 		{
-			return std::static_pointer_cast< Plugin >(std::make_shared<RealType>());
+			return std::static_pointer_cast< Plugin >(std::make_shared<ClassType>());
 		};
 
 		virtual size_t getRealTypeHashCode() const
 		{
 			throw "Should not be used!";
-			return typeid(RealType).hash_code();
+			return typeid(ClassType).hash_code();
 		}
 	};
 }

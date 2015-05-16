@@ -143,7 +143,7 @@ namespace kg
 		///
 		/// @return	The plugin information by real type hash code. <first:pluginId second:pluginName>
 
-		const std::pair<int, std::string> getPluginInformationByRealTypeHashCode( size_t hashCode )const;
+		const std::pair<int, std::string> getComponentPluginInformationByRealTypeHashCode( size_t hashCode )const;
 
 		const std::string& getComponentPluginNameForId( const int& id )const;
 		const int& getComponentPluginIdForName( const std::string& name )const;

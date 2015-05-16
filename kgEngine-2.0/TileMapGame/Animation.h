@@ -91,4 +91,12 @@ namespace kg
 
 		static const std::string BLUEPRINT_SYNC;
 	};
+
+	class AnimationHandler
+	{
+		std::vector<std::pair<sf::IntRect, sf::Time>> m_framesAndDuration;
+
+	public:
+
+	};
 }

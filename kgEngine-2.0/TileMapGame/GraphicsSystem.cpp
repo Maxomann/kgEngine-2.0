@@ -219,11 +219,11 @@ namespace kg
 		drawingThread.detach();
 	}
 
-	vector<pair<Vector3i, std::shared_ptr<Entity>>>::iterator findInToDraw( vector<pair<Vector3i, std::shared_ptr<Entity>>>& container,
-																			std::shared_ptr<Entity> el )
+	vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>>::iterator findInToDraw( vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>>& container,
+																						std::shared_ptr<Entity> el )
 	{
 		for( auto it = container.begin(); it != container.end(); ++it )
-			if( it->second == el )
+			if( get<1>( *it ) == el )
 				return it;
 		return container.end();
 	};
@@ -243,7 +243,7 @@ namespace kg
 		renderWindow.setActive( true );
 		sf::Clock thisFrameTime;
 
-		vector<pair<Vector3i, std::shared_ptr<Entity>>> toDrawSorted;
+		vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>> toDrawSorted;
 
 		while( !shouldTerminate )
 		{
@@ -284,7 +284,7 @@ namespace kg
 			for( auto& el : addedEntitiesCopy )
 			{
 				const auto transformationComponent = el->getComponent<Transformation>();
-				toDrawSorted.push_back( make_pair( transformationComponent->getXYZValues(), el ) );
+				toDrawSorted.push_back( make_tuple( transformationComponent->getXYZValues(), el, el->getComponent<Graphics>() ) );
 			}
 
 			addedEntitiesCopy.clear();
@@ -294,11 +294,11 @@ namespace kg
 			if( needsSort )
 			{
 				sort( begin( toDrawSorted ), end( toDrawSorted ), [](
-					const pair<Vector3i, std::shared_ptr<Entity>>& lhs,
-					const pair<Vector3i, std::shared_ptr<Entity>>& rhs )
+					const tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>& lhs,
+					const tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>& rhs )
 				{
-					const auto& vecl = lhs.first;
-					const auto& vecr = rhs.first;
+					const auto& vecl = get<0>( lhs );
+					const auto& vecr = get<0>( rhs );
 
 					if( vecr.z > vecl.z )
 						return true;

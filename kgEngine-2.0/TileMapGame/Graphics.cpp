@@ -144,25 +144,6 @@ namespace kg
 	{
 		m_mutex.lock();
 		target.draw( m_sprite, states );
-
-		/*float temp = 0;
-
-		auto pos = m_sprite.getPosition();
-		auto ori = m_sprite.getOrigin();
-		auto scale = m_sprite.getScale();
-
-		auto px = modf( pos.x, &temp );
-		auto py = modf( pos.y, &temp );
-
-		auto ox = modf( ori.x, &temp );
-		auto oy = modf( ori.y, &temp );
-
-		auto sx = modf( scale.x, &temp );
-		auto sy = modf( scale.y, &temp );
-
-		if( px != 0 || py != 0 || ox != 0 || oy != 0 || sx != 0 || sy != 0 )
-			int a = 0;*/
-
 		m_mutex.unlock();
 	}
 

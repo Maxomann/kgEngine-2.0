@@ -6,7 +6,7 @@ namespace kg
 {
 	void ComponentManager::updateAllComponentsByImportance( Engine& engine, World& world, const sf::Time& frameTime )
 	{
-		m_checkComponentsSortedByUpdateImportance();
+		//m_checkComponentsSortedByUpdateImportance();
 
 		// the lower the importance, the earlier the component gets updated
 		// this is due to sorting from low to high key values in std::map
@@ -31,6 +31,14 @@ namespace kg
 		}
 	}
 
+	std::vector<std::pair<size_t, Component*>>::const_iterator ComponentManager::m_findComponentByType( const size_t& hash_code )const
+	{
+		for( auto it = m_componentsByType.begin(); it != m_componentsByType.end(); ++it )
+			if( it->first == hash_code )
+				return it;
+		return m_componentsByType.end();
+	}
+
 	void ComponentManager::initComponentsByImportance( Engine& engine, World& world )
 	{
 		m_checkComponentsSortedByUpdateImportance();
@@ -44,12 +52,12 @@ namespace kg
 		auto entIt = end( m_componentsByType );
 
 		for( const auto& type : componentTypes )
-			if( m_componentsByType.find( type ) == entIt )
+			if( m_findComponentByType(type) == entIt )
 				return false;
 		return true;
 	}
 
-	const ComponentManager::ComponentsByTypeContainer& ComponentManager::getAllComponentsByTypeHash() const
+	const std::vector<std::pair<size_t, Component*>>& ComponentManager::getAllComponentsByTypeHash() const
 	{
 		return m_componentsByType;
 	}

@@ -24,52 +24,48 @@ namespace kg
 
 	class DLL_EXPORT ComponentManager
 	{
-	public:
-		typedef std::map<size_t, Component*> ComponentsByTypeContainer;
-
 	private:
 		std::vector<std::shared_ptr<Component>> m_components;
-		ComponentsByTypeContainer m_componentsByType;
+		std::vector<std::pair<size_t, Component*>> m_componentsByType;
 		std::vector<Component*> m_componentsByUpdateImportance;
 
 		bool m_componentsSorted = false;
 		inline void m_checkComponentsSortedByUpdateImportance();
+
+		inline std::vector<std::pair<size_t, Component*>>::const_iterator m_findComponentByType( const std::size_t& hash_code )const;
 
 	public:
 		// If this function returns true a system of type T has already been registered.
 		// This function overwrites the old system with the parameter of this function
 		// component->init() will be called
 
-		bool addComponent( std::shared_ptr<Component>& component, size_t realTypeHashCode )
+		void addComponent( std::shared_ptr<Component>& component, const std::size_t& realTypeHashCode )
 		{
-			auto it = m_componentsByType.find( realTypeHashCode );
+			auto it = m_findComponentByType( realTypeHashCode );
 
 			m_components.emplace_back( component );
-			m_componentsByType[realTypeHashCode] = component.get();
-			m_componentsByUpdateImportance.emplace_back(component.get());
-
-			//if [it != m_systemsByType.end();] a system has been overwritten
-			return it != m_componentsByType.end();
+			m_componentsByType.emplace_back( realTypeHashCode, component.get() );
+			m_componentsByUpdateImportance.emplace_back( component.get() );
 		}
 
 		template<class T>
-		bool addComponent( std::shared_ptr<Component>& component )
+		void addComponent( std::shared_ptr<Component>& component )
 		{
-			return addComponent( component, T::type_hash );
+			addComponent( component, T::type_hash );
 		};
 
 		void initComponentsByImportance( Engine& engine, World& world );
 
 		template<class T>
-		T* getComponent()const
+		inline T* getComponent()const
 		{
-			return static_cast< T* >(m_componentsByType.at( T::type_hash ));
+			return static_cast< T* >(m_findComponentByType( T::type_hash )->second);
 		};
 
 		template<class T>
-		T* getComponentTry()const
+		inline T* getComponentTry()const
 		{
-			auto it = m_componentsByType.find( T::type_hash );
+			auto it = m_findComponentByType( T::type_hash );
 			if( it == m_componentsByType.end() )
 				return static_cast< T* >(nullptr);
 			else
@@ -96,7 +92,7 @@ namespace kg
 		//returns true if all components of type ComponentType are registered
 		bool hasComponent( const std::vector<size_t>& componentTypes )const;
 
-		const ComponentsByTypeContainer& getAllComponentsByTypeHash()const;
+		const std::vector<std::pair<size_t, Component*>>& getAllComponentsByTypeHash()const;
 
 		/*const std::unordered_map<Plugin::Id, std::shared_ptr<Component>>& getAllComponentsByPluginId()const;*/
 	};

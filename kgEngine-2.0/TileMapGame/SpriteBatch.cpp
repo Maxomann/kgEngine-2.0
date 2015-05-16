@@ -91,7 +91,6 @@ namespace kg
 				GLenum mode = modes[type];
 
 				// Draw the primitives
-				//glInterleavedArrays( GL_T2F_C4UB_V3F, sizeof( Vertex ), NULL );
 				glDrawArrays( mode, 0, vertexCount );
 
 				// Unbind the shader, if any
@@ -108,7 +107,7 @@ namespace kg
 			glGenBuffers( 1, &m_vbo );
 			glEnableClientState( GL_VERTEX_ARRAY );
 			glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-			glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STATIC_DRAW );
+			glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STREAM_DRAW );
 			m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 
 			m_isVBOinit = true;

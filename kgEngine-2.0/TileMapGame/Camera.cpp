@@ -83,7 +83,7 @@ namespace kg
 	}
 
 	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-											const vector<pair<Vector3i, std::shared_ptr<Entity>>>& toDrawSorted )
+											const vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>>& toDrawSorted )
 	{
 		m_spriteBatch.setRenderTarget( renderWindow );
 
@@ -95,7 +95,7 @@ namespace kg
 		renderWindow.setView( view_copy );
 
 		for( const auto& el : toDrawSorted )
-			el.second->getComponent<Graphics>()->drawToSpriteBatch( m_spriteBatch );
+			get<2>( el )->drawToSpriteBatch( m_spriteBatch );
 			//renderWindow.draw( *toDraw.second );
 		m_spriteBatch.display();
 

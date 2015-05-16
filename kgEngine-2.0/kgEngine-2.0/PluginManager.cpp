@@ -51,7 +51,7 @@ namespace kg
 		return returnValue;
 	}
 
-	const std::pair<int, std::string> PluginManager::getPluginInformationByRealTypeHashCode( size_t hashCode )const
+	const std::pair<int, std::string> PluginManager::getComponentPluginInformationByRealTypeHashCode( size_t hashCode )const
 	{
 		for( const auto& el : m_componentPluginFactorysById )
 			if( el.second->getRealTypeHashCode() == hashCode )
