@@ -53,7 +53,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../SFML-Visual_Studio2013x32/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../boost_include/stage/lib;../SFML-Visual_Studio2013x32/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-main-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-network-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;opengl32.lib;glu32.lib;glew32.lib;glut32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -75,7 +75,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>../SFML-Visual_Studio2013x32/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../boost_include/stage/lib;../SFML-Visual_Studio2013x32/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-main.lib;sfml-window.lib;sfml-system.lib;sfml-network.lib;sfml-graphics.lib;sfml-audio.lib;opengl32.lib;glu32.lib;glew32.lib;glut32.lib</AdditionalDependencies>
       <Profile>true</Profile>
     </Link>

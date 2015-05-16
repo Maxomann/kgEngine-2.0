@@ -7,7 +7,7 @@ namespace kg
 
 	class Graphics : public Component, public CallbackReciever, public sf::Drawable
 	{
-		mutable std::mutex m_mutex;
+		mutable boost::mutex m_mutex;
 
 		Transformation* r_transformation = nullptr;
 

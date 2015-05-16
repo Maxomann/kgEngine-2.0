@@ -46,6 +46,7 @@
 #include <boost/optional.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/container/flat_set.hpp>
+#include <boost/thread/mutex.hpp>
 
 #ifdef _WIN32
 #include<windows.h>

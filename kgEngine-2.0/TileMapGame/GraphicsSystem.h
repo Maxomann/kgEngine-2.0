@@ -13,15 +13,15 @@ namespace kg
 	typedef std::vector<std::shared_ptr<Entity>>EntityTempContainer;
 
 	void drawingThreadFunction( sf::RenderWindow& renderWindow,
-								std::mutex& m_drawableEntityMutex,
-								std::mutex& cameraContainerMutex,
+								boost::mutex& m_drawableEntityMutex,
+								boost::mutex& cameraContainerMutex,
 								CameraContainer& cameraContainer,
 								EntityManager::EntityContainer& addedEntitiesCopy,
 								EntityManager::EntityContainer& removedEntitiesCopy,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
 								bool& drawingIsActive,
-								std::mutex& syncMutex,
+								boost::mutex& syncMutex,
 								bool& threadHasToWait );
 
 	class GraphicsSystem : public System, public CallbackReciever
@@ -39,13 +39,13 @@ namespace kg
 			std::string* window_name;
 		}m_configValues;
 
-		mutable std::mutex m_cameraContainerMutexA;
-		mutable std::mutex m_cameraContainerMutexB;
+		mutable boost::mutex m_cameraContainerMutexA;
+		mutable boost::mutex m_cameraContainerMutexB;
 		CameraContainer m_cameras;
 		bool m_shouldInitCameras = true;
 		void m_initCameras( Engine& engine, World& world );
 
-		mutable std::mutex m_drawableEntityMutex;
+		mutable boost::mutex m_drawableEntityMutex;
 
 		EntityManager::EntityContainer m_addedEntities;
 		EntityManager::EntityContainer m_removedEntities;
@@ -63,7 +63,7 @@ namespace kg
 		bool m_drawingIsActive = false;
 		int m_drawingThreadFrameTime = -1;
 
-		mutable std::mutex m_drawingThreadSyncMutex;
+		mutable boost::mutex m_drawingThreadSyncMutex;
 		bool m_drawingThreadHasToWait = true;
 
 	public:

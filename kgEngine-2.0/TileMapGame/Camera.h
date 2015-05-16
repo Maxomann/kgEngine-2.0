@@ -8,7 +8,7 @@ namespace kg
 
 	class Camera : public Component, public CallbackReciever
 	{
-		mutable std::mutex m_viewMutex;
+		mutable boost::mutex m_viewMutex;
 
 		Transformation* r_transformation;
 

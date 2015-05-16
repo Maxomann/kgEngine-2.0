@@ -55,6 +55,6 @@ namespace kg
 		std::unique_ptr<Container>* m_activeContainer;
 		std::unique_ptr<Container>* m_inActiveContainer;
 
-		std::mutex m_rwMutex;
+		boost::mutex m_rwMutex;
 	};
 }

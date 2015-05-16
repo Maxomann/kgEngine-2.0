@@ -204,17 +204,17 @@ namespace kg
 		//launch drawing thread
 		thread drawingThread(
 			drawingThreadFunction,
-			ref( renderWindow ),
-			ref( m_drawableEntityMutex ),
-			ref( m_cameraContainerMutexB ),
-			ref( m_cameras ),
-			ref( m_addedEntitiesCopy ),
-			ref( m_removedEntitiesCopy ),
-			ref( m_drawingThreadFrameTime ),
-			ref( m_drawingShouldTerminate ),
-			ref( m_drawingIsActive ),
-			ref( m_drawingThreadSyncMutex ),
-			ref( m_drawingThreadHasToWait )
+			std::ref( renderWindow ),
+			std::ref( m_drawableEntityMutex ),
+			std::ref( m_cameraContainerMutexB ),
+			std::ref( m_cameras ),
+			std::ref( m_addedEntitiesCopy ),
+			std::ref( m_removedEntitiesCopy ),
+			std::ref( m_drawingThreadFrameTime ),
+			std::ref( m_drawingShouldTerminate ),
+			std::ref( m_drawingIsActive ),
+			std::ref( m_drawingThreadSyncMutex ),
+			std::ref( m_drawingThreadHasToWait )
 			);
 		drawingThread.detach();
 	}
@@ -229,15 +229,15 @@ namespace kg
 	};
 
 	void drawingThreadFunction( sf::RenderWindow& renderWindow,
-								std::mutex& m_drawableEntityMutex,
-								std::mutex& cameraContainerMutex,
+								boost::mutex& m_drawableEntityMutex,
+								boost::mutex& cameraContainerMutex,
 								CameraContainer& cameraContainer,
 								EntityManager::EntityContainer& addedEntitiesCopy,
 								EntityManager::EntityContainer& removedEntitiesCopy,
 								int& drawingThreadFrameTime,
 								bool& shouldTerminate,
 								bool& drawingIsActive,
-								std::mutex& syncMutex,
+								boost::mutex& syncMutex,
 								bool& threadHasToWait )
 	{
 		renderWindow.setActive( true );
