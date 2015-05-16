@@ -48,13 +48,13 @@
     <ClCompile Include="ChunkGenerator.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="SpriteBatch.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="AnimationSystem.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,9 +86,6 @@
     <ClInclude Include="constants.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Headerdateien\Components</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicsSystem.h">
       <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
@@ -97,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="AnimationSystem.h">
       <Filter>Headerdateien\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>Headerdateien\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

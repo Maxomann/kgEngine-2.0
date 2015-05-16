@@ -42,7 +42,7 @@ namespace kg
 		std::map<int, std::string> m_systemPluginNamesByIds;
 		std::map<std::string, int> m_systemPluginIdsByNames;
 
-		std::map<size_t, std::map<int, std::shared_ptr<PluginFactoryInterface<Plugin>>>> m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash;
+		std::map<size_t, std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<Plugin>>>> m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash;
 
 	public:
 
@@ -56,13 +56,24 @@ namespace kg
 		};
 
 		template<class GenericUserDefinedPluginType>
-		std::shared_ptr<GenericUserDefinedPluginType> createUserDefinedPlugin( int pluginId )
+		std::shared_ptr<GenericUserDefinedPluginType> createUserDefinedPlugin( Plugin::Id pluginId )
 		{
 			return static_pointer_cast< GenericUserDefinedPluginType >(
 				m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash
 				[typeid(GenericUserDefinedPluginType).hash_code()]
 			[pluginId]->create());
 		};
+
+		template<class GenericUserDefinedPluginType>
+		std::vector<std::pair<Plugin::Id, std::shared_ptr<GenericUserDefinedPluginType>>> createEveryUserDefinedPlugin()
+		{
+			std::vector<std::pair<Plugin::Id, std::shared_ptr<GenericUserDefinedPluginType>>> retVal;
+
+			for( const auto& el : m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash[typeid(GenericUserDefinedPluginType).hash_code()] )
+				retVal.emplace_back( el.first, el.second->create() );
+
+			return retVal;
+		}
 
 		/// Adds a component plugin.
 		///

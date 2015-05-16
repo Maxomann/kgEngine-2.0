@@ -16,15 +16,9 @@ namespace kg
 
 	void AnimationSystem::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
-		int passedTime = frameTime.asMilliseconds();
-
-		for( auto& el : m_syncedTimeByStateDuration )
-		{
-			el.second += passedTime;
-			if( el.first > el.second )
-				el.second = 0;
-		}
-
+		m_syncedTime += frameTime;
+		if( m_syncedTime > Constants::ANIMATION_MAX_SYNCED_TIME )
+			m_syncedTime = sf::Time();
 		return;
 	}
 
@@ -43,13 +37,39 @@ namespace kg
 		return id::SystemPluginId::ANIMATION_SYSTEM;
 	}
 
-	int AnimationSystem::getSyncedTimeForAnimationStateDuration( const int stateDurationInMilliseconds )
+	AnimationHandler* AnimationSystem::getAnimationHandler( Engine& engine, const std::string& package, const std::string& path )
 	{
-		return m_syncedTimeByStateDuration[stateDurationInMilliseconds];
+		auto& el = m_animationHandlersByPackageByPath[package][path];
+		if( el == nullptr )
+		{
+			auto animationFile = engine.resourceManager.getResource<AnimationFile>( package, path );
+			el = animationFile->getAnimationHandler();
+			el->updateSyncedTimeRef( m_syncedTime );
+		}
+
+		return el.get();
 	}
 
 	const std::string AnimationSystem::PLUGIN_NAME = "AnimationSystem";
 
 	const size_t AnimationSystem::type_hash = getRuntimeTypeInfo<AnimationSystem>();
+
+	void AnimationHandler::updateSyncedTimeRef( const sf::Time& time )
+	{
+		r_syncedTime = &time;
+	}
+
+	bool AnimationFile::loadFromFile( const std::string& path )
+	{
+		auto file = readFileToVector( path );
+
+
+		return true;
+	}
+
+	std::shared_ptr<AnimationHandler> AnimationFile::getAnimationHandler() const
+	{
+		return m_animationHandler;
+	}
 
 }

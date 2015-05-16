@@ -6,7 +6,6 @@ namespace kg
 {
 	void Graphics::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
 	{
-
 		string texturePackage;
 		string texturePath;
 
@@ -33,7 +32,6 @@ namespace kg
 		if( it != blueprintValues.end() )
 			textureRect.left = it->second->asInt();
 		m_sprite.setTextureRect( textureRect );
-
 	}
 
 	void Graphics::init( Engine& engine, World& world, ComponentManager& thisEntity )

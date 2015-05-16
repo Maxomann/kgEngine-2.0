@@ -86,7 +86,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="ChunkGenerator.cpp" />
     <ClCompile Include="ChunkSystem.cpp" />
@@ -99,7 +99,7 @@
     <ClCompile Include="Transformation.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="ChunkGenerator.h" />
     <ClInclude Include="ChunkSystem.h" />

@@ -15,7 +15,7 @@ namespace kg
 	 * @return	The file. One string is one line.
 	 **************************************************************************************************/
 
-	std::vector<std::string> readFileToVector( const std::string& path );
+	DLL_EXPORT std::vector<std::string> readFileToVector( const std::string& path );
 
 	/**********************************************************************************************//**
 	 * A helper class for creating classes that are loadable through ResourceManager.

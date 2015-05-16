@@ -4,7 +4,7 @@ using namespace sf;
 
 namespace kg
 {
-	std::vector<std::string> readFileToVector( const std::string& path )
+	DLL_EXPORT std::vector<std::string> readFileToVector( const std::string& path )
 	{
 		std::vector<std::string> returnValue;
 

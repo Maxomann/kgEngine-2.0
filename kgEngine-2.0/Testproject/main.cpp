@@ -84,16 +84,7 @@ system( "pause" );
 
 int main()
 {
-	unordered_set<shared_ptr<int>> mySet;
-
-	auto toFind = make_shared<int>( 325 );
-
-	mySet.insert( make_shared<int>( 5 ) );
-	mySet.insert( toFind );
-	mySet.insert( make_shared<int>( 32 ) );
-	mySet.insert( make_shared<int>( 65 ) );
-
-	auto it = mySet.find( toFind );
+	cout << std::numeric_limits<sf::Int64>::max()<<endl;
 
 	system( "pause" );
 }

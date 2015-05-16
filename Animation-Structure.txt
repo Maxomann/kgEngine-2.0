@@ -18,3 +18,8 @@ FREE (texture rect has size and position defined in this file {x,y,width,height,
 "walk_left"{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}
 "walk_up"{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}
 "walk_down"{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}
+
+EASY
+16,16 //textect x,y
+50 //duration per frame in ms
+"state name"
