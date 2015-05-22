@@ -14,7 +14,7 @@ namespace kg
 		{
 			path currentPath = *saveIt;
 			if( is_directory( currentPath ) )
-				retVal.push_back( currentPath.filename() );
+				retVal.push_back( currentPath.filename()/*.string()*/ );
 		}
 
 		return retVal;

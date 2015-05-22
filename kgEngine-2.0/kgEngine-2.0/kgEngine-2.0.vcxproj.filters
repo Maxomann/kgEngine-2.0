@@ -124,9 +124,6 @@
     <ClInclude Include="ComponentMissingException.h">
       <Filter>Headerdateien\Exceptions</Filter>
     </ClInclude>
-    <ClInclude Include="Plugin.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="PathNotAvailableException.h">
       <Filter>Headerdateien\Exceptions</Filter>
     </ClInclude>
@@ -171,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="sfml_vector_extension.h">
       <Filter>Headerdateien\Toolset</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugin.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

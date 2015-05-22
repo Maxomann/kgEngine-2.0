@@ -171,11 +171,3 @@ namespace kg
 		}
 	}
 }
-
-namespace kg
-{
-	namespace WIP
-	{
-
-	}
-}

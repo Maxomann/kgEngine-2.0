@@ -67,12 +67,12 @@ namespace kg
 
 		//load blueprints
 		for( const auto& el : blueprintsToParse )
-			m_engine.blueprint.parse( el );
+			m_engine.blueprint.parse( el.string() );
 
 		for( const auto& el : dllsToLoad )
 		{
 #ifdef _WIN32
-			HMODULE dllHandle = LoadLibrary( std::string( el ).c_str() );
+			HMODULE dllHandle = LoadLibrary( el.string().c_str() );
 			if( dllHandle )
 			{
 				CONNECT connectFunction = ( CONNECT )GetProcAddress( dllHandle, "kgConnect" );

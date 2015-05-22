@@ -26,14 +26,14 @@ namespace kg
 
 	class DLL_EXPORT PluginManager
 	{
-		/// The component plugin factories sorted by ID.
+		// The component plugin factories sorted by ID.
 		std::map<int, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysById;
-		/// The system plugin factories sorted by ID.
+		// The system plugin factories sorted by ID.
 		std::map<int, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysById;
 
-		/// The component plugin factories sorted by name.
+		// The component plugin factories sorted by name.
 		std::map<std::string, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysByName;
-		/// The system plugin factories sorted by name.
+		// The system plugin factories sorted by name.
 		std::map<std::string, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysByName;
 
 		std::map<int, std::string> m_componentPluginNamesByIds;
@@ -171,30 +171,85 @@ namespace kg
 
 	namespace WIP
 	{
-		class PluginManager
+		class DLL_EXPORT PluginManager
 		{
-			/// The component plugin factories sorted by ID.
+			// The component plugin factories sorted by ID.
 			std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysById;
-			/// The system plugin factories sorted by ID.
+			// The system plugin factories sorted by ID.
 			std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysById;
 
 
-			/// The component plugin factories sorted by name.
+			// The component plugin factories sorted by name.
 			std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysByName;
-			/// The system plugin factories sorted by name.
+			// The system plugin factories sorted by name.
 			std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysByName;
 
 
 			std::map<size_t, std::pair<
 				std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<Plugin>>>,
-				std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<Plugin>>>>>m_pluginsByGenericTypeHash;
+				std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<Plugin>> >> >m_pluginsByGenericTypeHash;
 
 		public:
 			template<class GenericPluginType>
-			void addPluginFactory( const std::shared_ptr<PluginFactoryInterface<GenericPluginType>>& pluginFactory );
+			void addPluginFactory( const std::shared_ptr<PluginFactoryInterface<GenericPluginType>>& pluginFactory )
+			{
+				size_t genericPluginType = typeid(genericPluginType).hash_code();
+				auto& pair = m_pluginsByGenericTypeHash[genericPluginType];
+
+				if( pair.first != nullptr || pair.second != nullptr )
+					throw PluginRegistrationException( pluginFactory->getId() );
+
+				pair.first[pluginFactory->getId()] = pluginFactory;
+				pair.second[pluginFactory->getName()] = pluginFactory;
+			};
+			template<>
+			void addPluginFactory<Component>( const std::shared_ptr<PluginFactoryInterface<Component>>& pluginFactory )
+			{
+				m_componentPluginFactorysById[pluginFactory->getId()] = pluginFactory;
+				m_componentPluginFactorysByName[pluginFactory->getName()] = pluginFactory;
+			}
+			template<>
+			void addPluginFactory<System>( const std::shared_ptr<PluginFactoryInterface<System>>& pluginFactory )
+			{
+				m_systemPluginFactorysById[pluginFactory->getId()] = pluginFactory;
+				m_systemPluginFactorysByName[pluginFactory->getName()] = pluginFactory;
+			}
+
 
 			template<class GenericPluginType>
-			void createPlugin();
+			std::shared_ptr<GenericPluginType> createPlugin( const Plugin::Id& id )const
+			{
+				size_t genericPluginType = typeid(genericPluginType).hash_code();
+				return m_pluginsByGenericTypeHash.at( genericPluginType ).first.at( id )->create();
+			}
+			template<>
+			std::shared_ptr<Component> createPlugin<Component>( const Plugin::Id& id )const
+			{
+
+			}
+			template<>
+			std::shared_ptr<System> createPlugin<System>( const Plugin::Id& id )const
+			{
+
+			}
+
+			template<class GenericPluginType>
+			std::shared_ptr<GenericPluginType> createPlugin( const Plugin::Name& name )const
+			{
+
+			}
+			template<>
+			std::shared_ptr<Component> createPlugin<Component>( const Plugin::Name& name )const
+			{
+
+			}
+			template<>
+			std::shared_ptr<System> createPlugin<System>( const Plugin::Name& name )const
+			{
+
+			}
+
 		};
+
 	}
 }

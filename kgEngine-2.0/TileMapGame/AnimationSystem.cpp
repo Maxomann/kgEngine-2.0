@@ -92,7 +92,7 @@ namespace kg
 
 		int state_count = 0;
 
-		for( int i = 4; i < lines.size(); ++i )
+		for( unsigned int i = 4; i < lines.size(); ++i )
 		{
 			std::vector<std::string> vec;
 			boost::split( vec, lines.at( i ), boost::is_any_of(",") );

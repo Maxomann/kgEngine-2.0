@@ -1,5 +1,7 @@
 #pragma once
 #include "stdafx.h"
+#pragma warning(push)
+#pragma warning(disable: 4275) // possible loss of data
 
 namespace kg
 {
@@ -18,3 +20,5 @@ namespace kg
 		};
 	};
 }
+
+#pragma warning(pop)

@@ -86,5 +86,7 @@ int main()
 {
 	cout << std::numeric_limits<sf::Int64>::max()<<endl;
 
+	cout << "It works!" << endl;
+
 	system( "pause" );
 }
