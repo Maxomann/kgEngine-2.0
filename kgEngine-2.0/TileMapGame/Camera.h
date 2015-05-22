@@ -29,11 +29,14 @@ namespace kg
 
 		virtual double getUpdateImportance() const override;
 
-		virtual std::vector<size_t> getRequieredComponents() const override;
+		virtual std::vector<Plugin::Id> getRequieredComponents()const override;
 
 		virtual const Plugin::Name& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId()const override;
+
+		virtual const size_t& getRTTI_hash() const override;
+
 
 		// the viewport of the camera on the screen
 		void setViewport( const sf::FloatRect& viewport );
@@ -48,5 +51,7 @@ namespace kg
 
 		//creates a new camera, adds it to the world and returns a pointer to it
 		static std::shared_ptr<Entity> EMPLACE_TO_WORLD( Engine& engine, World& world );
+
+
 	};
 }

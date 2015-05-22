@@ -207,7 +207,7 @@ namespace kg
 
 	void Save::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
 	{
-		return;
+		throw std::exception( "should not be called since Save is an internal Component and does not get initialized through this funtion" );
 	}
 
 	void Save::init( Engine& engine, World& world, ComponentManager& thisEntity )
@@ -225,8 +225,8 @@ namespace kg
 		return id::SAVE_UPDATE_IMPORTANCE;
 	}
 
-	std::vector<size_t> Save::getRequieredComponents() const
-	{
+	std::vector<Plugin::Id> Save::getRequieredComponents() const
+{
 		return{ };
 	}
 
@@ -282,6 +282,11 @@ namespace kg
 	const blueprint::Entity& Save::getBlueprint() const
 	{
 		return m_blueprint;
+	}
+
+	const size_t& Save::getRTTI_hash() const
+	{
+		return type_hash;
 	}
 
 	const std::string Save::PLUGIN_NAME = "internal_save";

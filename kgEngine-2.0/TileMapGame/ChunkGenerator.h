@@ -21,6 +21,8 @@ namespace kg
 
 		void generateChunk( Engine& engine, World& world, const sf::Vector2i chunkPositionInChunks );
 
+		virtual const size_t& getRTTI_hash() const override;
+
 		static const std::string PLUGIN_NAME;
 
 		static const size_t type_hash;

@@ -174,6 +174,11 @@ namespace kg
 		return retVal;
 	}
 
+	const size_t& GraphicsSystem::getRTTI_hash() const
+	{
+		return type_hash;
+	}
+
 	GraphicsSystem::GraphicsSystem()
 	{
 		glewInit();

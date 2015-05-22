@@ -29,6 +29,8 @@ namespace kg
 
 		virtual Plugin::Id getPluginId()const;
 
+		virtual const size_t& getRTTI_hash() const override;
+
 		static const std::string PLUGIN_NAME;
 
 		static const size_t type_hash;

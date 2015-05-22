@@ -7,7 +7,7 @@ namespace kg
 	void AnimationSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
 		for( const auto& el : engine.pluginManager.getEveryUserDefinedPlugin<AnimationHandler>() )
-			m_AnimationHandlerPluginsbyName[el.second->getName()] = el.second;
+			m_AnimationHandlerPluginsbyName[el->getName()] = el;
 
 		return;
 	}
@@ -53,6 +53,11 @@ namespace kg
 		return el.get();
 	}
 
+	const size_t& AnimationSystem::getRTTI_hash() const
+	{
+		return type_hash;
+	}
+
 	const std::string AnimationSystem::PLUGIN_NAME = "AnimationSystem";
 
 	const size_t AnimationSystem::type_hash = getRuntimeTypeInfo<AnimationSystem>();
@@ -63,11 +68,11 @@ namespace kg
 	}
 
 	bool AnimationFile::loadFromFile( const std::string& path,
-									  std::map<std::string, std::shared_ptr<PluginFactoryInterface<Plugin>>>& animationHandlers )
+									  std::map<std::string, std::shared_ptr<PluginFactoryInterface<AnimationHandler>>>& animationHandlers )
 	{
 		auto file = readFileToVector( path );
 
-		m_animationHandler = static_pointer_cast<AnimationHandler>(animationHandlers[file.at( 0 )]->create());
+		m_animationHandler = animationHandlers[file.at( 0 )]->create();
 
 		if( m_animationHandler == nullptr )
 			throw exception();

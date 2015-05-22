@@ -10,7 +10,7 @@ namespace kg
 	class World;
 	class EntitySaveInformation;
 
-	class DLL_EXPORT Component : public Plugin, public sf::NonCopyable
+	class DLL_EXPORT Component : public PluginRTTI, public sf::NonCopyable
 	{
 	public:
 		virtual ~Component()
@@ -32,6 +32,6 @@ namespace kg
 		//the lower the importance, the earlier this component gets updated
 		virtual double getUpdateImportance()const = 0;
 
-		virtual std::vector<size_t> getRequieredComponents()const = 0;
+		virtual std::vector<Plugin::Id> getRequieredComponents()const = 0;
 	};
 }

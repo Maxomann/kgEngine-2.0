@@ -31,6 +31,11 @@ namespace kg
 			}
 	}
 
+	const size_t& ChunkGenerator::getRTTI_hash() const
+	{
+		return type_hash;
+	}
+
 	void ChunkGenerator::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
 		return;

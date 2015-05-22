@@ -11,7 +11,7 @@ namespace kg
 		// the lower the importance, the earlier the component gets updated
 		// this is due to sorting from low to high key values in std::map
 		for( auto& el : m_componentsByUpdateImportance )
-				el->update( engine, world, *this, frameTime );
+			el->update( engine, world, *this, frameTime );
 	}
 
 	void ComponentManager::m_checkComponentsSortedByUpdateImportance()
@@ -35,7 +35,7 @@ namespace kg
 	{
 		for( auto it = m_componentsByType.begin(); it != m_componentsByType.end(); ++it )
 			if( it->first == hash_code )
-				return it;
+			return it;
 		return m_componentsByType.end();
 	}
 
@@ -44,7 +44,7 @@ namespace kg
 		m_checkComponentsSortedByUpdateImportance();
 
 		for( auto& el : m_componentsByUpdateImportance )
-				el->init( engine, world, *this );
+			el->init( engine, world, *this );
 	}
 
 	bool ComponentManager::hasComponent( const std::vector<size_t>& componentTypes )const
@@ -52,18 +52,22 @@ namespace kg
 		auto entIt = end( m_componentsByType );
 
 		for( const auto& type : componentTypes )
-			if( m_findComponentByType(type) == entIt )
-				return false;
+			if( m_findComponentByType( type ) == entIt )
+			return false;
 		return true;
 	}
 
-	const std::vector<std::pair<size_t, Component*>>& ComponentManager::getAllComponentsByTypeHash() const
+	bool ComponentManager::hasComponent( const Plugin::Id& componentId ) const
 	{
-		return m_componentsByType;
+		for( const auto& el : m_componentsByUpdateImportance )
+			if( el->getPluginId() == componentId )
+			return true;
+		return false;
 	}
 
-	/*const std::unordered_map<Plugin::Id, std::shared_ptr<Component>>& ComponentManager::getAllComponentsByPluginId() const
+	const std::vector<Component*>& ComponentManager::getAllComponents() const
 	{
-		return m_componentsByPluginId;
-	}*/
+		return m_componentsByUpdateImportance;
+	}
+
 }

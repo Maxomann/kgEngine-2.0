@@ -58,9 +58,9 @@ namespace kg
 		return id::ComponentUpdateImportance::GRAPHICS;
 	}
 
-	std::vector<size_t> Graphics::getRequieredComponents() const
-	{
-		return{ Transformation::type_hash };
+	std::vector<Plugin::Id> Graphics::getRequieredComponents() const
+{
+		return{ id::ComponentPluginId::TRANSFORMATION };
 	}
 
 	const std::string& Graphics::getPluginName() const
@@ -179,6 +179,11 @@ namespace kg
 			finalRect.height = m_textureRect.height;
 
 		m_sprite.setTextureRect( finalRect );
+	}
+
+	const size_t& Graphics::getRTTI_hash() const
+	{
+		return type_hash;
 	}
 
 	const size_t Graphics::type_hash = getRuntimeTypeInfo<Graphics>();

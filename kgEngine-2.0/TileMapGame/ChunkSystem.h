@@ -66,9 +66,12 @@ namespace kg
 
 		virtual Plugin::Id getPluginId()const;
 
+		virtual const size_t& getRTTI_hash() const override;
+
 		static const std::string PLUGIN_NAME;
 
 		static const size_t type_hash;
+
 
 		// returns a reference to the internal container
 		const EntityContainer& getEntitiesInChunk( const sf::Vector2i& chunk )const;
@@ -85,6 +88,7 @@ namespace kg
 
 		// returns the position in chunks for the position of an entity
 		static sf::Vector2i calculateChunkForPosition( const sf::Vector2i& position );
+
 
 		//configuration default values:
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA;

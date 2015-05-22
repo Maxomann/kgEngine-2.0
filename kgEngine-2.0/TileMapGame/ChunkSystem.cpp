@@ -151,6 +151,11 @@ namespace kg
 		return chunk;
 	}
 
+	const size_t& ChunkSystem::getRTTI_hash() const
+	{
+		return type_hash;
+	}
+
 	const sf::Vector2i& ChunkSystem::getChunkOfEntity( const std::shared_ptr<Entity>& entity )
 	{
 		auto& retVal = m_entityData.at( entity );

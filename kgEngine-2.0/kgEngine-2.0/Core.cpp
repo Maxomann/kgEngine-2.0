@@ -16,7 +16,7 @@ namespace kg
 		m_engine.blueprint.link();
 
 		for( auto& el : m_engine.pluginManager.createEverySystemAvailable() )
-			m_world.addSystem( get<2>( el ), get<1>( el ) );
+			m_world.addSystem( el );
 
 		//init systems
 		m_world.initSystemsByImportance( m_engine, m_world, m_saveManager );

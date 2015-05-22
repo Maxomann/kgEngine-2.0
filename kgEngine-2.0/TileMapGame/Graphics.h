@@ -40,11 +40,13 @@ namespace kg
 
 		virtual double getUpdateImportance() const override;
 
-		virtual std::vector<size_t> getRequieredComponents() const override;
+		virtual std::vector<Plugin::Id> getRequieredComponents()const override;
 
 		virtual const Plugin::Name& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId()const override;
+
+		virtual const size_t& getRTTI_hash() const override;
 
 
 		void setTextureRectOffset( const sf::IntRect& rect );
@@ -54,6 +56,7 @@ namespace kg
 		void drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const;
 
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const override;
+
 
 		static const std::string BLUEPRINT_TEXTURE_RECT_WIDTH;
 		static const std::string BLUEPRINT_TEXTURE_RECT_HEIGHT;

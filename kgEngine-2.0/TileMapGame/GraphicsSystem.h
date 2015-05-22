@@ -82,8 +82,12 @@ namespace kg
 
 		virtual Plugin::Id getPluginId()const;
 
+		virtual const size_t& getRTTI_hash() const override;
+
+
 		std::shared_ptr<Entity> getCamera( int index );
 		CameraContainer getCameras()const;
+
 
 		/*void setWindowSize( const sf::Vector2i& size );
 		void setWindowTitle( const std::string& title );*/

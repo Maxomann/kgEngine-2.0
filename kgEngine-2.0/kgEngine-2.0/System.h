@@ -10,7 +10,7 @@ namespace kg
 	class ConfigFile;
 	class SaveManager;
 
-	class DLL_EXPORT System : public Plugin, public sf::NonCopyable
+	class DLL_EXPORT System : public PluginRTTI, public sf::NonCopyable
 	{
 	public:
 		virtual ~System()

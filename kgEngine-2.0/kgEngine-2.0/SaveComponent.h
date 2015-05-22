@@ -78,15 +78,18 @@ namespace kg
 
 		virtual double getUpdateImportance() const override;
 
-		virtual std::vector<size_t> getRequieredComponents() const override;
+		virtual std::vector<Plugin::Id> getRequieredComponents()const override;
 
 		virtual const Plugin::Name& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId()const override;
 
+		virtual const size_t& getRTTI_hash() const override;
+
 		static const std::string PLUGIN_NAME;
 
 		static const size_t type_hash;
+
 
 		EntitySaveInformation writeSaveInformation()const;
 		void loadSaveInformation( EntitySaveInformation& information );

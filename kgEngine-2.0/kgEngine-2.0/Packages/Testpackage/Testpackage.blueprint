@@ -16,6 +16,17 @@ BLUEPRINT Tile
 	
 END BLUEPRINT
 
+BLUEPRINT AnimatedTile
+INHERIT Tile
+	Animation
+	
+	COMPONENT Animation
+		package:"Testpackage"
+		path:"testanimation.ani"
+	END
+
+END BLUEPRINT
+
 ENTITY TestTile:100
 INHERIT Tile
 	COMPONENT Graphics
@@ -47,7 +58,7 @@ INHERIT Tile
 END ENTITY
 
 ENTITY Sand:103
-INHERIT Tile
+INHERIT AnimatedTile
 	COMPONENT Graphics
 		texrect_top:0px
 		texrect_left:64px

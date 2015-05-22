@@ -28,9 +28,9 @@ namespace kg
 		return ( double )id::ComponentUpdateImportance::CAMERA;
 	}
 
-	std::vector<size_t> Camera::getRequieredComponents() const
-	{
-		return{ Transformation::type_hash };
+	std::vector<Plugin::Id> Camera::getRequieredComponents() const
+{
+		return{ id::ComponentPluginId::TRANSFORMATION };
 	}
 
 	const std::string& Camera::getPluginName() const
@@ -80,6 +80,11 @@ namespace kg
 		camera->getComponent<Camera>()->setViewport( FloatRect( 0.f, 0.f, 1.f, 1.f ) );
 		world.addEntity( camera );
 		return camera;
+	}
+
+	const size_t& Camera::getRTTI_hash() const
+	{
+		return type_hash;
 	}
 
 	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,

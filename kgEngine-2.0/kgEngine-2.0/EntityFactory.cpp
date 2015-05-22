@@ -35,39 +35,27 @@ namespace kg
 		auto& components = entityBlueprint.getComponentsByName();
 		for( const auto& comp : components )
 		{
-			auto createdComponent = engine.pluginManager.createComponentPlugin( comp.first );
-			auto component = std::get<2>( createdComponent );
-
-			//OLD CODE: add additional component values to the map
-			/*auto additionalComponentValuesForComponent = additionalBlueprintValues.find( name );
-			if( additionalComponentValuesForComponent != additionalBlueprintValues.end() )
-			for( const auto& el : (*additionalComponentValuesForComponent).second )
-			componentValues[el.first] = el.second;//override existing value (if it exists)*/
+			auto component = engine.pluginManager.createPlugin<Component>( comp.first );
 
 			component->preInit( engine, comp.second.getComponentValueReferencesByName() );
-			entity->addComponent( component, std::get<1>( createdComponent ) );
+			entity->addComponent( component );
 		}
 
-		entity->addComponent<Save>(
+		entity->addComponent(
 			std::static_pointer_cast< Component >(
 			std::make_shared<Save>( entityBlueprintId, entityBlueprint, uniqueId )
 			) );
 
 		// check component requirements of each component
 		// throw exception if not all requirements are met
-		for( const auto& component : entity->getAllComponentsByTypeHash() )
+		for( const auto& component : entity->getAllComponents() )
 		{
-			for( const auto& requieredComponentHash : component.second->getRequieredComponents() )
+			for( const auto& requieredComponentId : component->getRequieredComponents() )
 			{
-				if( !entity->hasComponent( { requieredComponentHash } ) )
+				if( !entity->hasComponent( requieredComponentId ) )
 				{
-					auto information = engine.pluginManager.getComponentPluginInformationByRealTypeHashCode( requieredComponentHash );
-					auto name = component.second->getPluginName();
-					auto id = component.second->getPluginId();
-					throw ComponentMissingException( name,
-													 id,
-													 information.second,
-													 information.first );
+					throw ComponentMissingException( component->getPluginId(),
+													 requieredComponentId );
 				}
 			}
 		}

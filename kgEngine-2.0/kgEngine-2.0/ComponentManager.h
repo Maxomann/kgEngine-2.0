@@ -39,20 +39,16 @@ namespace kg
 		// This function overwrites the old system with the parameter of this function
 		// component->init() will be called
 
-		void addComponent( std::shared_ptr<Component>& component, const std::size_t& realTypeHashCode )
-		{
-			auto it = m_findComponentByType( realTypeHashCode );
-
-			m_components.emplace_back( component );
-			m_componentsByType.emplace_back( realTypeHashCode, component.get() );
-			m_componentsByUpdateImportance.emplace_back( component.get() );
-		}
-
-		template<class T>
 		void addComponent( std::shared_ptr<Component>& component )
 		{
-			addComponent( component, T::type_hash );
-		};
+			auto typeHashCode = component->getRTTI_hash();
+
+			auto it = m_findComponentByType( typeHashCode );
+
+			m_components.emplace_back( component );
+			m_componentsByType.emplace_back( typeHashCode, component.get() );
+			m_componentsByUpdateImportance.emplace_back( component.get() );
+		}
 
 		void initComponentsByImportance( Engine& engine, World& world );
 
@@ -86,14 +82,14 @@ namespace kg
 			workaround::fill<ComponentType>( componentTypes );
 			//componentTypes.push_back( typeid(ComponentType).hash_code() );*/
 
-			return hasComponent( { ComponentType::type_hash } );
+			return hasComponent( std::vector<size_t>{ ComponentType::type_hash } );
 		};
 
 		//returns true if all components of type ComponentType are registered
 		bool hasComponent( const std::vector<size_t>& componentTypes )const;
 
-		const std::vector<std::pair<size_t, Component*>>& getAllComponentsByTypeHash()const;
+		bool hasComponent( const Plugin::Id& componentId )const;
 
-		/*const std::unordered_map<Plugin::Id, std::shared_ptr<Component>>& getAllComponentsByPluginId()const;*/
+		const std::vector<Component*>& getAllComponents()const;
 	};
 }

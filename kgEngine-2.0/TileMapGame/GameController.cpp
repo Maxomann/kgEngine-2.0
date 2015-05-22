@@ -90,6 +90,11 @@ namespace kg
 		return ( int )id::SystemPluginId::GAME_CONTROLLER;
 	}
 
+	const size_t& GameController::getRTTI_hash() const
+	{
+		return type_hash;
+	}
+
 	void GameController::shutDown( Engine& engine, World& world, SaveManager& saveManager )
 	{
 		saveOpenSavegame( engine, world, saveManager );

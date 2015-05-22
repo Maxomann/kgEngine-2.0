@@ -25,14 +25,14 @@ namespace kg
 		std::shared_ptr<AnimationHandler> m_animationHandler;
 
 	public:
-		bool loadFromFile( const std::string& path, std::map<std::string, std::shared_ptr<PluginFactoryInterface<Plugin>>>& animationHandlers );
+		bool loadFromFile( const std::string& path, std::map<std::string, std::shared_ptr<PluginFactoryInterface<AnimationHandler>>>& animationHandlers );
 
 		std::shared_ptr<AnimationHandler> getAnimationHandler()const;
 	};
 
 	class AnimationSystem : public System
 	{
-		std::map<std::string, std::shared_ptr<PluginFactoryInterface<Plugin>>> m_AnimationHandlerPluginsbyName;
+		std::map<std::string, std::shared_ptr<PluginFactoryInterface<AnimationHandler>>> m_AnimationHandlerPluginsbyName;
 
 		std::map<std::string, std::map<std::string, std::shared_ptr<AnimationHandler>>> m_animationHandlersByPackageByPath;
 
@@ -50,6 +50,8 @@ namespace kg
 		virtual const Plugin::Name& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId() const override;
+
+		virtual const size_t& getRTTI_hash() const override;
 
 
 		AnimationHandler* getAnimationHandler( Engine& engine, const std::string& package, const std::string& path );

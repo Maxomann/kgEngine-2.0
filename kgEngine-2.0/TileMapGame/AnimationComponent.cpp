@@ -64,9 +64,9 @@ namespace kg
 		return id::ComponentUpdateImportance::ANIMATION;
 	}
 
-	std::vector<size_t> AnimationComponent::getRequieredComponents() const
-	{
-		return{ Graphics::type_hash };
+	std::vector<Plugin::Id> AnimationComponent::getRequieredComponents() const
+{
+		return{ id::ComponentPluginId::GRAPHICS };
 	}
 
 	const std::string& AnimationComponent::getPluginName() const
@@ -108,7 +108,12 @@ namespace kg
 		m_stateTime = sf::Time();
 	}
 
-	const std::string AnimationComponent::PLUGIN_NAME = "AnimationComponent";
+	const size_t& AnimationComponent::getRTTI_hash() const
+	{
+		return type_hash;
+	}
+
+	const std::string AnimationComponent::PLUGIN_NAME = "Animation";
 
 	const size_t AnimationComponent::type_hash = getRuntimeTypeInfo<AnimationComponent>();
 

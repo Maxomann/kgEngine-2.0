@@ -41,8 +41,8 @@ namespace kg
 		return id::ComponentUpdateImportance::TRANSFORMATION;
 	}
 
-	std::vector<size_t> Transformation::getRequieredComponents() const
-	{
+	std::vector<Plugin::Id> Transformation::getRequieredComponents() const
+{
 		return{ };
 	}
 
@@ -84,6 +84,11 @@ namespace kg
 								m_zValue );
 		m_globalBoundsMutex.unlock();
 		return retVal;
+	}
+
+	const size_t& Transformation::getRTTI_hash() const
+	{
+		return type_hash;
 	}
 
 	void Transformation::setPosition( const sf::Vector2i& position )
