@@ -185,11 +185,16 @@ namespace kg
 			std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysByName;
 
 
-			std::map<size_t, std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<Plugin>>>> m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash;
+			std::map<size_t, std::pair<
+				std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<Plugin>>>,
+				std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<Plugin>>>>>m_pluginsByGenericTypeHash;
 
 		public:
 			template<class GenericPluginType>
-			void addPluginFactory( const std::shared_ptr<PluginFactoryInterface>& pluginFactory );
+			void addPluginFactory( const std::shared_ptr<PluginFactoryInterface<GenericPluginType>>& pluginFactory );
+
+			template<class GenericPluginType>
+			void createPlugin();
 		};
 	}
 }
