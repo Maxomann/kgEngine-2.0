@@ -42,7 +42,7 @@ namespace kg
 			{
 				FIRST_ELEMENT = ComponentPluginId::LAST_ELEMENT,
 
-				ANIMATION_FILE_INTERPRETER,
+				ANIMATION_HANDLER_EASY,
 
 				LAST_ELEMENT
 			};

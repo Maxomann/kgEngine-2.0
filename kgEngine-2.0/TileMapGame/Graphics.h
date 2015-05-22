@@ -22,6 +22,15 @@ namespace kg
 		void centerOrigin();
 		void scaleToObjectSize();
 
+
+		sf::IntRect m_textureRect;
+		sf::IntRect m_textureRectOffset;
+
+		void setTextureRect( const sf::IntRect& rect );
+		sf::IntRect getTextureRect()const;
+
+		void recalculateTextureRect();
+
 	public:
 		virtual void preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )override;
 
@@ -33,12 +42,13 @@ namespace kg
 
 		virtual std::vector<size_t> getRequieredComponents() const override;
 
-		virtual const std::string& getPluginName() const override;
+		virtual const Plugin::Name& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId()const override;
 
-		void setTextureRect( const sf::IntRect& rect );
-		const sf::IntRect getTextureRect()const;
+
+		void setTextureRectOffset( const sf::IntRect& rect );
+		sf::IntRect getTextureRectOffset()const;
 
 
 		void drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const;

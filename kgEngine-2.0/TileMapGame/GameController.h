@@ -25,7 +25,7 @@ namespace kg
 
 		virtual double getUpdateImportance() const;
 
-		virtual const std::string& getPluginName() const;
+		virtual const Plugin::Name& getPluginName() const;
 
 		virtual Plugin::Id getPluginId()const;
 

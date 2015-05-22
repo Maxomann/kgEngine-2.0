@@ -31,7 +31,7 @@ namespace kg
 		it = blueprintValues.find( BLUEPRINT_TEXTURE_RECT_LEFT );
 		if( it != blueprintValues.end() )
 			textureRect.left = it->second->asInt();
-		m_sprite.setTextureRect( textureRect );
+		setTextureRect( textureRect );
 	}
 
 	void Graphics::init( Engine& engine, World& world, ComponentManager& thisEntity )
@@ -76,14 +76,15 @@ namespace kg
 	void Graphics::setTextureRect( const sf::IntRect& rect )
 	{
 		m_mutex.lock();
-		m_sprite.setTextureRect( rect );
+		m_textureRect = rect;
+		recalculateTextureRect();
 		m_mutex.unlock();
 	}
 
-	const sf::IntRect Graphics::getTextureRect() const
-{
+	sf::IntRect Graphics::getTextureRect() const
+	{
 		m_mutex.lock();
-		auto retVal = m_sprite.getTextureRect();
+		auto retVal = m_textureRect;
 		m_mutex.unlock();
 		return retVal;
 	}
@@ -143,6 +144,41 @@ namespace kg
 		m_mutex.lock();
 		target.draw( m_sprite, states );
 		m_mutex.unlock();
+	}
+
+	void Graphics::setTextureRectOffset( const sf::IntRect& rect )
+	{
+		m_mutex.lock();
+		m_textureRectOffset = rect;
+		recalculateTextureRect();
+		m_mutex.unlock();
+	}
+
+	sf::IntRect Graphics::getTextureRectOffset() const
+	{
+		m_mutex.lock();
+		auto retVal = m_textureRectOffset;
+		m_mutex.unlock();
+		return retVal;
+	}
+
+	void Graphics::recalculateTextureRect()
+	{
+		sf::IntRect finalRect;
+		finalRect.left = m_textureRect.left + m_textureRectOffset.left;
+		finalRect.top = m_textureRect.top + m_textureRectOffset.top;
+
+		if( m_textureRectOffset.width != 0 )
+			finalRect.width = m_textureRectOffset.width;
+		else
+			finalRect.width = m_textureRect.width;
+
+		if( m_textureRectOffset.height != 0 )
+			finalRect.height = m_textureRectOffset.height;
+		else
+			finalRect.height = m_textureRect.height;
+
+		m_sprite.setTextureRect( finalRect );
 	}
 
 	const size_t Graphics::type_hash = getRuntimeTypeInfo<Graphics>();

@@ -46,19 +46,19 @@ namespace kg
 
 	public:
 
-		template<class GenericUserDefinedPluginType>
-		void addUserDefinedPlugin( std::shared_ptr<PluginFactoryInterface<Plugin>>& pluginFactory )
+		template<class GenericUserDefinedPluginType, class T>
+		void addUserDefinedPlugin( std::shared_ptr<PluginFactoryInterface<GenericUserDefinedPluginType>>& pluginFactory )
 		{
 			m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash
 				[typeid(GenericUserDefinedPluginType).hash_code()]
 			[pluginFactory->getId()]
-			= pluginFactory;
+			= static_pointer_cast<std::shared_ptr<PluginFactoryInterface<Plugin>>>(pluginFactory);
 		};
 
 		template<class GenericUserDefinedPluginType>
 		std::shared_ptr<GenericUserDefinedPluginType> createUserDefinedPlugin( Plugin::Id pluginId )
 		{
-			return static_pointer_cast< GenericUserDefinedPluginType >(
+			return std::static_pointer_cast< GenericUserDefinedPluginType >(
 				m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash
 				[typeid(GenericUserDefinedPluginType).hash_code()]
 			[pluginId]->create());
@@ -70,9 +70,15 @@ namespace kg
 			std::vector<std::pair<Plugin::Id, std::shared_ptr<GenericUserDefinedPluginType>>> retVal;
 
 			for( const auto& el : m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash[typeid(GenericUserDefinedPluginType).hash_code()] )
-				retVal.emplace_back( el.first, el.second->create() );
+				retVal.emplace_back( el.first, std::static_pointer_cast< GenericUserDefinedPluginType >(el.second->create()) );
 
 			return retVal;
+		}
+
+		template<class GenericUserDefinedPluginType>
+		const std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<Plugin>>>& getEveryUserDefinedPlugin()
+		{
+			return m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash[typeid(GenericUserDefinedPluginType).hash_code()];
 		}
 
 		/// Adds a component plugin.
@@ -162,4 +168,28 @@ namespace kg
 		const std::string& getSystemPluginNameForId( const int& id )const;
 		const int& getSystemPluginIdForName( const std::string& name )const;
 	};
+
+	namespace WIP
+	{
+		class PluginManager
+		{
+			/// The component plugin factories sorted by ID.
+			std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysById;
+			/// The system plugin factories sorted by ID.
+			std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysById;
+
+
+			/// The component plugin factories sorted by name.
+			std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysByName;
+			/// The system plugin factories sorted by name.
+			std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysByName;
+
+
+			std::map<size_t, std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<Plugin>>>> m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash;
+
+		public:
+			template<class GenericPluginType>
+			void addPluginFactory( const std::shared_ptr<PluginFactoryInterface>& pluginFactory );
+		};
+	}
 }

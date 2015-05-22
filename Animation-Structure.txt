@@ -20,6 +20,7 @@ FREE (texture rect has size and position defined in this file {x,y,width,height,
 "walk_down"{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}{0,0,0,0,0}
 
 EASY
-16,16 //textect x,y
+16	//textect x
+16 //textect y
 50 //duration per frame in ms
-"state name"
+"state name",246,sync //state name, frame cout, synced

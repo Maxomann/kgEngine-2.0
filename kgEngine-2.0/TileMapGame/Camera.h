@@ -31,7 +31,7 @@ namespace kg
 
 		virtual std::vector<size_t> getRequieredComponents() const override;
 
-		virtual const std::string& getPluginName() const override;
+		virtual const Plugin::Name& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId()const override;
 

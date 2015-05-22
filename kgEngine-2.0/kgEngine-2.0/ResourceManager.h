@@ -5,15 +5,15 @@
 namespace kg
 {
 	/**********************************************************************************************//**
-	 * Reads file to vector.
-	 *
-	 * @author	Kay
-	 * @date	07.02.2015
-	 *
-	 * @param	path	Full pathname of the file.
-	 *
-	 * @return	The file. One string is one line.
-	 **************************************************************************************************/
+	* Reads a file to vector<string>;.
+	*
+	* @author	Kay
+	* @date	07.02.2015
+	*
+	* @param	path	Full pathname of the file.
+	*
+	* @return	A vector where each line of the file is an element.
+	**************************************************************************************************/
 
 	DLL_EXPORT std::vector<std::string> readFileToVector( const std::string& path );
 
@@ -60,8 +60,8 @@ namespace kg
 		 * @return	The resource.
 		 **************************************************************************************************/
 
-		template< class T >
-		std::shared_ptr<T> getResource( const std::string& path )
+		template< class T, class ... Args >
+		std::shared_ptr<T> m_getResource( const std::string& path, Args& ... args )
 		{
 			const size_t typeID = typeid(T).hash_code();
 
@@ -73,7 +73,7 @@ namespace kg
 				auto res = std::make_shared<T>();
 				//neues element und signatur einfügen
 				m_resources[path][typeID] = std::static_pointer_cast< void >(res);
-				if( !res->loadFromFile( path ) )
+				if( !res->loadFromFile( path, args... ) )
 					new PathNotAvailableException( path );
 				return res;
 			}
@@ -88,7 +88,7 @@ namespace kg
 					auto res = std::make_shared<T>();
 					//neuen Typ (kein neues Path) einfügen
 					it->second[typeID] = std::static_pointer_cast< void >(res);
-					if( !res->loadFromFile( path ) )
+					if( !res->loadFromFile( path, args... ) )
 						new PathNotAvailableException( path );
 					return res;
 				}
@@ -112,8 +112,8 @@ namespace kg
 		 * @return	The resource;
 		 **************************************************************************************************/
 
-		template< class T >
-		std::shared_ptr<T> reloadResource( const std::string& path )
+		template< class T, class ... Args >
+		std::shared_ptr<T> m_reloadResource( const std::string& path, Args& ... args )
 		{
 			const size_t typeID = typeid(T).hash_code();
 
@@ -125,7 +125,7 @@ namespace kg
 				auto res = std::make_shared<T>();
 				//neues element und signatur einfügen
 				m_resources[path][typeID] = std::static_pointer_cast< void >(res);
-				if( !res->loadFromFile( path ) )
+				if( !res->loadFromFile( path, args... ) )
 					new PathNotAvailableException( path );
 				return res;
 			}
@@ -140,7 +140,7 @@ namespace kg
 					auto res = std::make_shared<T>();
 					//neuen Typ (kein neues Path) einfügen
 					it->second[typeID] = std::static_pointer_cast< void >(res);
-					if( !res->loadFromFile( path ) )
+					if( !res->loadFromFile( path, args... ) )
 						new PathNotAvailableException( path );
 					return res;
 				}
@@ -148,7 +148,7 @@ namespace kg
 				else
 				{
 					auto obj = std::static_pointer_cast< T >(secondIt->second);
-					obj->loadFromFile( path );
+					obj->loadFromFile( path, args... );
 					return obj;
 				}
 			}
@@ -176,10 +176,10 @@ namespace kg
 		 * @return	The resource.
 		 **************************************************************************************************/
 
-		template< class T >
-		std::shared_ptr<T> getResource( const std::string& packageName, const std::string& resourcePath )
+		template< class T, class ... Args >
+		std::shared_ptr<T> getResource( const std::string& packageName, const std::string& resourcePath, Args& ... args )
 		{
-			return getResource<T>( "./Packages/" + packageName + "/Resource/" + resourcePath );
+			return m_getResource<T, Args...>( "./Packages/" + packageName + "/Resource/" + resourcePath, args... );
 		}
 
 		/**********************************************************************************************//**
@@ -197,10 +197,10 @@ namespace kg
 		 * @return	The resource;
 		 **************************************************************************************************/
 
-		template< class T >
-		std::shared_ptr<T> reloadResource( const std::string& packageName, const std::string& resourcePath )
+		template< class T, class ... Args >
+		std::shared_ptr<T> reloadResource( const std::string& packageName, const std::string& resourcePath, Args& ... args )
 		{
-			return reloadResource<T>( "./Packages/" + packageName + "/Resource/" + resourcePath );
+			return m_reloadResource<T, Args...>( "./Packages/" + packageName + "/Resource/" + resourcePath, args... );
 		}
 
 		/**********************************************************************************************//**
@@ -218,20 +218,7 @@ namespace kg
 		template< class T >
 		std::shared_ptr<T> getConfigFile( const std::string& systemName )
 		{
-			return getResource<T>( "./Config/" + systemName + ".ini" );
+			return m_getResource<T>( "./Config/" + systemName + ".ini" );
 		}
 	};
-
-	/**********************************************************************************************//**
-	 * Reads a file to vector<string>;.
-	 *
-	 * @author	Kay
-	 * @date	07.02.2015
-	 *
-	 * @param	path	Full pathname of the file.
-	 *
-	 * @return	A vector where each line of the file is an element.
-	 **************************************************************************************************/
-
-	std::vector<std::string> readFileToVector( const std::string& path );
 }

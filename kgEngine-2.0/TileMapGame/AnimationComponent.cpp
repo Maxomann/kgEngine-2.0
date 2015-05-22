@@ -44,7 +44,7 @@ namespace kg
 		if( !r_animationHandler )
 			throw exception();
 
-		m_stateDuration = r_animationHandler->getStateDuration( m_state );
+		setState( Constants::ANIMATION_DEFAULT_STATE );
 	}
 
 	void AnimationComponent::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
@@ -55,7 +55,7 @@ namespace kg
 			if( m_stateTime > m_stateDuration )
 				m_stateTime = sf::Time();
 
-			r_graphicsComponent->setTextureRect( r_animationHandler->getTextureRect( m_state, m_stateTime ) );
+			r_graphicsComponent->setTextureRectOffset( r_animationHandler->getTextureRect( m_state, m_stateTime ) );
 		}
 	}
 
@@ -87,6 +87,9 @@ namespace kg
 	void AnimationComponent::setState( const std::string& state )
 	{
 		m_state = state;
+		m_stateTime = sf::Time();
+		m_stateDuration = r_animationHandler->getStateDuration( state );
+		m_stateSynced = r_animationHandler->getStateSynchronized( state );
 	}
 
 	void AnimationComponent::start()
