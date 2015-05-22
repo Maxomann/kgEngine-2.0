@@ -52,7 +52,7 @@ namespace kg
 			m_userDefinedPluginsByIdByGenericUserDefinedPluginTypeHash
 				[typeid(GenericUserDefinedPluginType).hash_code()]
 			[pluginFactory->getId()]
-			= static_pointer_cast<std::shared_ptr<PluginFactoryInterface<Plugin>>>(pluginFactory);
+			= static_pointer_cast< std::shared_ptr<PluginFactoryInterface<Plugin>> >(pluginFactory);
 		};
 
 		template<class GenericUserDefinedPluginType>
@@ -185,7 +185,7 @@ namespace kg
 			std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysByName;
 
 
-			std::map<size_t, std::pair<
+			std::map < size_t, std::pair <
 				std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<Plugin>>>,
 				std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<Plugin>> >> >m_pluginsByGenericTypeHash;
 
@@ -205,14 +205,26 @@ namespace kg
 			template<>
 			void addPluginFactory<Component>( const std::shared_ptr<PluginFactoryInterface<Component>>& pluginFactory )
 			{
-				m_componentPluginFactorysById[pluginFactory->getId()] = pluginFactory;
-				m_componentPluginFactorysByName[pluginFactory->getName()] = pluginFactory;
+				auto& byId = m_componentPluginFactorysById[pluginFactory->getId()];
+				auto& byName = m_componentPluginFactorysByName[pluginFactory->getName()];
+
+				if( byId != nullptr || byName != nullptr )
+					throw PluginRegistrationException( pluginFactory->getId() );
+
+				byId = pluginFactory;
+				byName = pluginFactory;
 			}
 			template<>
 			void addPluginFactory<System>( const std::shared_ptr<PluginFactoryInterface<System>>& pluginFactory )
 			{
-				m_systemPluginFactorysById[pluginFactory->getId()] = pluginFactory;
-				m_systemPluginFactorysByName[pluginFactory->getName()] = pluginFactory;
+				auto& byId = m_systemPluginFactorysById[pluginFactory->getId()];
+				auto& byName = m_systemPluginFactorysByName[pluginFactory->getName()];
+
+				if( byId != nullptr || byName != nullptr )
+					throw PluginRegistrationException( pluginFactory->getId() );
+
+				byId = pluginFactory;
+				byName = pluginFactory;
 			}
 
 
@@ -220,33 +232,104 @@ namespace kg
 			std::shared_ptr<GenericPluginType> createPlugin( const Plugin::Id& id )const
 			{
 				size_t genericPluginType = typeid(genericPluginType).hash_code();
-				return m_pluginsByGenericTypeHash.at( genericPluginType ).first.at( id )->create();
+				try
+				{
+					auto& plugin = m_pluginsByGenericTypeHash.at( genericPluginType ).first.at( id );
+					if( plugin == nullptr )
+						throw PluginRequestException( id );
+
+					return plugin->create();
+				}
+				catch( const std::exception& )
+				{
+					throw PluginRequestException( id );
+				}
 			}
 			template<>
 			std::shared_ptr<Component> createPlugin<Component>( const Plugin::Id& id )const
 			{
+				size_t genericPluginType = typeid(genericPluginType).hash_code();
+				try
+				{
+					auto& plugin = m_componentPluginFactorysById.at( id );
+					if( plugin == nullptr )
+						throw PluginRequestException( id );
 
+					return plugin->create();
+				}
+				catch( const std::exception& )
+				{
+					throw PluginRequestException( id );
+				}
 			}
 			template<>
 			std::shared_ptr<System> createPlugin<System>( const Plugin::Id& id )const
 			{
+				size_t genericPluginType = typeid(genericPluginType).hash_code();
+				try
+				{
+					auto& plugin = m_systemPluginFactorysById.at( id );
+					if( plugin == nullptr )
+						throw PluginRequestException( id );
 
+					return plugin->create();
+				}
+				catch( const std::exception& )
+				{
+					throw PluginRequestException( id );
+				}
 			}
 
 			template<class GenericPluginType>
 			std::shared_ptr<GenericPluginType> createPlugin( const Plugin::Name& name )const
 			{
+				size_t genericPluginType = typeid(genericPluginType).hash_code();
+				try
+				{
+					auto& plugin = m_pluginsByGenericTypeHash.at( genericPluginType ).second.at( name );
+					if( plugin == nullptr )
+						throw PluginRequestException( name );
 
+					return plugin->create();
+				}
+				catch( const std::exception& )
+				{
+					throw PluginRequestException( name );
+				}
 			}
 			template<>
 			std::shared_ptr<Component> createPlugin<Component>( const Plugin::Name& name )const
 			{
+				size_t genericPluginType = typeid(genericPluginType).hash_code();
+				try
+				{
+					auto& plugin = m_componentPluginFactorysByName.at( name );
+					if( plugin == nullptr )
+						throw PluginRequestException( name );
 
+					return plugin->create();
+				}
+				catch( const std::exception& )
+				{
+					throw PluginRequestException( name );
+				}
 			}
 			template<>
 			std::shared_ptr<System> createPlugin<System>( const Plugin::Name& name )const
 			{
+				size_t genericPluginType = typeid(genericPluginType).hash_code();
+				try
+				{
+					auto& plugin = m_systemPluginFactorysByName.at( name );
+					if( plugin == nullptr )
+						throw PluginRequestException( name );
 
+					return plugin->create();
+				}
+				catch( const std::exception& )
+				{
+					throw PluginRequestException( name );
+				}
 			}
 
 		};
