@@ -131,10 +131,10 @@ namespace kg
 		return true;
 	}
 
-	void SaveManager::saveEntitiesToFile( const std::string& filename/*relative to open savegame path*/,
-										  const std::unordered_set<std::shared_ptr<Entity>>& entities )
+	void SaveManager::saveEntitiesToFile( const std::string& path,
+										  const World::EntityContainer& entities )
 	{
-		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION,
+		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + path + SAVE_FILE_EXTENSION,
 					  fstream::out | fstream::trunc );
 
 		for( const auto& el : entities )

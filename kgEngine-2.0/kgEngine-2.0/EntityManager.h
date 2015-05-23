@@ -14,9 +14,6 @@ namespace kg
 	private:
 		EntityContainer m_entities;
 
-		void addEntityReferencesByComponentType( const std::shared_ptr<Entity>& entity );
-		void removeEntityReferencesByComponentType( const std::shared_ptr<Entity>& entity );
-
 		EntityContainer::iterator m_findEntity( const std::shared_ptr<Entity>& entity );
 	public:
 		// overwrites entity if it already exists

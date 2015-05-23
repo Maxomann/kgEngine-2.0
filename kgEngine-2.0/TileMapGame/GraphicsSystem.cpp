@@ -82,6 +82,8 @@ namespace kg
 		m_drawableEntityMutex.lock();
 		m_addedEntitiesCopy.insert( end( m_addedEntitiesCopy ), begin( m_addedEntities ), end( m_addedEntities ) );
 		m_removedEntitiesCopy.insert( end( m_removedEntitiesCopy ), begin( m_removedEntities ), end( m_removedEntities ) );
+		//m_addedEntitiesCopy.merge( m_addedEntities );
+		//m_removedEntitiesCopy.merge( m_removedEntities );
 		m_addedEntities.clear();
 		m_removedEntities.clear();
 		m_drawableEntityMutex.unlock();
@@ -127,18 +129,18 @@ namespace kg
 	{
 		if( entity->hasComponent<Graphics>() )
 			m_addedEntities.push_back( entity );
-		auto it = find( m_removedEntities.begin(), m_removedEntities.end(), entity );
+		/*auto it = find( m_removedEntities.begin(), m_removedEntities.end(), entity );
 		if( it != m_removedEntities.end() )
-			m_removedEntities.erase( it );
+			m_removedEntities.erase( it );*/
 	}
 
 	void GraphicsSystem::m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
 	{
 		if( entity->hasComponent<Graphics>() )
 			m_removedEntities.push_back( entity );
-		auto it = find( m_addedEntities.begin(), m_addedEntities.end(), entity );
+		/*auto it = find( m_addedEntities.begin(), m_addedEntities.end(), entity );
 		if( it != m_addedEntities.end() )
-			m_addedEntities.erase( it );
+			m_addedEntities.erase( it );*/
 	}
 
 	void GraphicsSystem::m_onSavegameOpened( Engine& engine )
@@ -266,7 +268,7 @@ namespace kg
 			}
 
 
-			drawingThreadFrameTime = thisFrameTime.restart().asMilliseconds();
+			thisFrameTime.restart().asMilliseconds();
 
 			renderWindow.clear( Color::Green );
 
@@ -326,7 +328,9 @@ namespace kg
 
 			renderWindow.display();
 
+			drawingThreadFrameTime = thisFrameTime.getElapsedTime().asMilliseconds();
 			syncMutex.unlock();
+
 		}
 		drawingIsActive = false;
 		return;

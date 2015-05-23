@@ -29,8 +29,9 @@ namespace kg
 
 		// filename without extension!
 		// PREVIOUSLY STORED INFORMATION IN FILE(filename) WILL BE DELETED!
-		void saveEntitiesToFile( const std::string& filename/*relative to open savegame path*/,
-								 const std::unordered_set<std::shared_ptr<Entity>>& entities );
+		// path relative to open savegame path
+		void saveEntitiesToFile( const std::string& path,
+								 const World::EntityContainer& entities );
 		//saves every system that is registered in systemManager to globals.save
 		void saveSystems( World& world );
 

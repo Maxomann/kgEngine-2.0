@@ -47,6 +47,9 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/container/flat_set.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/container/static_vector.hpp>
+#include <boost/container/slist.hpp>
+#include <boost/container/deque.hpp>
 
 #ifdef _WIN32
 #include<windows.h>

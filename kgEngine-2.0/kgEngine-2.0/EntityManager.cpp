@@ -14,7 +14,9 @@ namespace kg
 	void EntityManager::removeEntity( const std::shared_ptr<Entity>& entity )
 	{
 		s_entity_removed( entity );
-		m_entities.erase( m_findEntity(entity) );
+		auto it = m_findEntity( entity );
+		if( it != m_entities.end() )
+			m_entities.erase( it );
 	}
 
 	bool EntityManager::doesEntityExist( const std::shared_ptr<Entity>& entity )
@@ -45,6 +47,6 @@ namespace kg
 
 	EntityManager::EntityContainer::iterator EntityManager::m_findEntity( const std::shared_ptr<Entity>& entity )
 	{
-		return find( begin( m_entities ), end( m_entities ), entity );
+		return std::find( begin( m_entities ), end( m_entities ), entity );
 	}
 }

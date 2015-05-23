@@ -8,7 +8,7 @@ namespace kg
 
 	//cameraStates, graphicsInformations
 	//std::vector<std::shared_ptr<Entity>>
-	typedef std::vector<std::shared_ptr<Entity>> CameraContainer;
+	typedef World::EntityContainer CameraContainer;
 
 	typedef std::vector<std::shared_ptr<Entity>>EntityTempContainer;
 
