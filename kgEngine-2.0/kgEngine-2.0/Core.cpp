@@ -47,6 +47,7 @@ namespace kg
 		if( !m_engine.isPaused )//if engine is not paused, update entities
 			m_world.updateEntities( m_engine, m_world, frameTime );
 		m_world.updateAllSystemsByImportance( m_engine, m_world, m_saveManager, frameTime );
+		m_world.removeEntitiesOnRemoveList();
 	}
 
 	void Core::loadPackages()

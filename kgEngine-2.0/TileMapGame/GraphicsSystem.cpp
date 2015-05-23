@@ -54,8 +54,8 @@ namespace kg
 			//no fullscreen
 			engine.renderWindow.create(
 				sf::VideoMode(
-				boost::lexical_cast< int >(*m_configValues.window_resx),
-				boost::lexical_cast< int >(*m_configValues.window_resy), 32 ),
+					boost::lexical_cast< int >(*m_configValues.window_resx),
+					boost::lexical_cast< int >(*m_configValues.window_resy), 32 ),
 				*m_configValues.window_name,
 				sf::Style::Close,
 				contextSettings );
@@ -82,8 +82,6 @@ namespace kg
 		m_drawableEntityMutex.lock();
 		m_addedEntitiesCopy.insert( end( m_addedEntitiesCopy ), begin( m_addedEntities ), end( m_addedEntities ) );
 		m_removedEntitiesCopy.insert( end( m_removedEntitiesCopy ), begin( m_removedEntities ), end( m_removedEntities ) );
-		//m_addedEntitiesCopy.merge( m_addedEntities );
-		//m_removedEntitiesCopy.merge( m_removedEntities );
 		m_addedEntities.clear();
 		m_removedEntities.clear();
 		m_drawableEntityMutex.unlock();
@@ -231,7 +229,7 @@ namespace kg
 	{
 		for( auto it = container.begin(); it != container.end(); ++it )
 			if( get<1>( *it ) == el )
-				return it;
+			return it;
 		return container.end();
 	};
 
@@ -277,12 +275,16 @@ namespace kg
 			m_drawableEntityMutex.lock();
 
 			//remove
-			for( const auto& el : removedEntitiesCopy )
+			toDrawSorted.erase( std::remove_if( toDrawSorted.begin(), toDrawSorted.end(), [&]( const tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>& conel )
 			{
-				auto it = findInToDraw( toDrawSorted, el );
-				if( it != toDrawSorted.end() )
-					toDrawSorted.erase( findInToDraw( toDrawSorted, el ) );
-			}
+				for( const auto& el : removedEntitiesCopy )
+					if( get<1>( conel ) == el )
+					{
+						removedEntitiesCopy.erase( remove( removedEntitiesCopy.begin(), removedEntitiesCopy.end(), el ), removedEntitiesCopy.end() );
+						return true;
+					}
+				return false;
+			} ), toDrawSorted.end() );
 
 			//add
 			bool needsSort = (addedEntitiesCopy.size() != 0);

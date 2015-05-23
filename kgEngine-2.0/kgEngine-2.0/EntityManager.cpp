@@ -14,9 +14,8 @@ namespace kg
 	void EntityManager::removeEntity( const std::shared_ptr<Entity>& entity )
 	{
 		s_entity_removed( entity );
-		auto it = m_findEntity( entity );
-		if( it != m_entities.end() )
-			m_entities.erase( it );
+		m_toRemove.push_back( entity );
+		//m_entities.erase( std::remove( m_entities.begin(), m_entities.end(), entity ) );
 	}
 
 	bool EntityManager::doesEntityExist( const std::shared_ptr<Entity>& entity )
@@ -28,6 +27,21 @@ namespace kg
 	{
 		for( auto& entity : m_entities )
 			entity->updateAllComponentsByImportance( engine, world, frameTime );
+	}
+
+	void EntityManager::removeEntitiesOnRemoveList()
+	{
+		m_entities.erase( std::remove_if( m_entities.begin(), m_entities.end(), [&]( const shared_ptr<Entity>& conel )
+		{
+			for( const auto& el : m_toRemove )
+				if( conel == el )
+				{
+					m_toRemove.erase( remove( m_toRemove.begin(), m_toRemove.end(), el ), m_toRemove.end() );
+					return true;
+				}
+			return false;
+		} ), m_entities.end() );
+		m_toRemove.clear();
 	}
 
 	void EntityManager::clear()

@@ -8,9 +8,7 @@ namespace kg
 
 	//cameraStates, graphicsInformations
 	//std::vector<std::shared_ptr<Entity>>
-	typedef World::EntityContainer CameraContainer;
-
-	typedef std::vector<std::shared_ptr<Entity>>EntityTempContainer;
+	typedef std::vector<std::shared_ptr<Entity>> CameraContainer;
 
 	void drawingThreadFunction( sf::RenderWindow& renderWindow,
 								boost::mutex& m_drawableEntityMutex,

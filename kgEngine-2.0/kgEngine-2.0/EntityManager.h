@@ -13,6 +13,7 @@ namespace kg
 
 	private:
 		EntityContainer m_entities;
+		EntityContainer m_toRemove;
 
 		EntityContainer::iterator m_findEntity( const std::shared_ptr<Entity>& entity );
 	public:
@@ -31,6 +32,8 @@ namespace kg
 		const EntityContainer& getAllEntities()const;
 
 		void updateEntities( Engine& engine, World& world, const sf::Time& frameTime );
+
+		void removeEntitiesOnRemoveList();
 
 		//removes every entity
 		void clear();
