@@ -264,7 +264,6 @@ namespace kg
 				else
 					syncMutex.unlock();
 			}
-			syncMutex.unlock();
 
 
 			drawingThreadFrameTime = thisFrameTime.restart().asMilliseconds();
@@ -326,6 +325,8 @@ namespace kg
 			//UNLOCK
 
 			renderWindow.display();
+
+			syncMutex.unlock();
 		}
 		drawingIsActive = false;
 		return;
