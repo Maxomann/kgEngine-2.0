@@ -86,10 +86,6 @@ namespace kg
 		std::shared_ptr<Entity> getCamera( int index );
 		CameraContainer getCameras()const;
 
-
-		/*void setWindowSize( const sf::Vector2i& size );
-		void setWindowTitle( const std::string& title );*/
-
 		static const std::string PLUGIN_NAME;
 
 		static const size_t type_hash;

@@ -15,7 +15,6 @@ namespace kg
 	{
 		s_entity_removed( entity );
 		m_toRemove.push_back( entity );
-		//m_entities.erase( std::remove( m_entities.begin(), m_entities.end(), entity ) );
 	}
 
 	bool EntityManager::doesEntityExist( const std::shared_ptr<Entity>& entity )

@@ -31,7 +31,6 @@ namespace kg
 
 		auto& entityBlueprint = engine.blueprint.getEntityById( entityBlueprintId );
 
-		//OLD ADDITIONAL BLUEPRINT VALUES CODE
 		auto& components = entityBlueprint.getComponentsByName();
 		for( const auto& comp : components )
 		{
