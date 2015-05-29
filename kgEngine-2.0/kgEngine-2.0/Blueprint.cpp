@@ -678,7 +678,7 @@ namespace kg
 
 					overrideLocalComponentValueReferences();
 
-					for( const auto& name : m_isOverriddenByNames )
+					for( const auto& name : m_isOverriddenFromNames )
 					{
 						auto* currentContainer = componentContainersByName.at( name );
 						currentContainer->collectInheritReferences( linkingStack, componentContainersByName );
@@ -712,7 +712,7 @@ namespace kg
 
 		void ComponentContainer::addIsOverriddenBy( const Name& componentContainerThatOverrides )
 		{
-			m_isOverriddenByNames.push_back( componentContainerThatOverrides );
+			m_isOverriddenFromNames.push_back( componentContainerThatOverrides );
 		}
 
 		Component::Component( const Name& name )

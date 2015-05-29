@@ -167,7 +167,7 @@ namespace kg
 
 			std::map<std::string, Component> m_components;
 			std::vector<Name> m_inheritsFromNames;
-			std::vector<Name> m_isOverriddenByNames;
+			std::vector<Name> m_isOverriddenFromNames;
 
 			bool m_isCollectingInheritReferences = false;
 			bool m_hasCollectedInheritReferences = false;
