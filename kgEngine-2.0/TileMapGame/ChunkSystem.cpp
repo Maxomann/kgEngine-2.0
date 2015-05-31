@@ -170,46 +170,50 @@ namespace kg
 		// its a bug -.-
 	}
 
-	void ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
+	bool ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
 	{
 		if( !m_loadedChunks[chunkPosition.x][chunkPosition.y] )
 		{
-			//chunk not loaded
+			// chunk not loaded
 			if( !loadChunkFromFile( engine, world, saveManager, chunkPosition ) )
 			{
 				world.getSystem<ChunkGenerator>()->generateChunk( engine, world, chunkPosition );
-				//chunk loaded
+				// chunk loaded
 			}
 			else
 			{
-				//chunk loaded
+				// chunk loaded
 			}
+			m_loadedChunks[chunkPosition.x][chunkPosition.y] = true;
+			return true;
 		}
 		else
 		{
-			//chunk loaded
+			// chunk loaded
+			return false;
 		}
-
-		m_loadedChunks[chunkPosition.x][chunkPosition.y] = true;
 	}
 
-	void ChunkSystem::ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
+	bool ChunkSystem::ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
 	{
 		if( m_loadedChunks[chunkPosition.x][chunkPosition.y] )
 		{
-			//chunk loaded
+			// chunk loaded
 			saveChunkToFile( engine, world, saveManager, chunkPosition );
-			//remove entities in that chunk from world
+			// remove entities in that chunk from world
+			// copy entities here!(since removal of entities causes iterator invalidation
 			const auto temp = getEntitiesInChunk( chunkPosition );
 			for( const auto& entity : temp )
 				world.removeEntity( entity );
 
-			//chunk unloaded
+			// chunk unloaded
 			m_loadedChunks[chunkPosition.x][chunkPosition.y] = false;
+			return true;
 		}
 		else
 		{
-			//chunk unloaded
+			// chunk unloaded
+			return false;
 		}
 	}
 
@@ -256,7 +260,6 @@ namespace kg
 	{
 		vector<Vector2i> chunksToEnsureLoaded;
 
-#if LOAD_CHUNKS_ONLY_ONCE == 0
 		vector<Vector2i> chunkPositions;
 		for( const auto& el : cameraPositions )
 			chunkPositions.push_back( calculateChunkForPosition( el ) );
@@ -264,25 +267,27 @@ namespace kg
 		//add chunks that should be ensured to be loaded
 		for( const auto& position : chunkPositions )
 		{
+			vector<Vector2i> temp;
+
 			for( int x = (-1 * m_chunkLoadRadiusAroundCamera); x <= m_chunkLoadRadiusAroundCamera; ++x )
 			{
 				for( int y = (-1 * m_chunkLoadRadiusAroundCamera); y <= m_chunkLoadRadiusAroundCamera; ++y )
 				{
-					chunksToEnsureLoaded.push_back( Vector2i( position.x + x, position.y + y ) );
+					auto absoluteChunkPosition = Vector2i( position.x + x, position.y + y );
+
+					if( length( sf::Vector2i( x, y ) ) < m_chunkLoadRadiusAroundCamera )
+						temp.push_back( absoluteChunkPosition );
 				}
 			}
-		}
-#else
-		for( int x = (-1 * m_chunkLoadRadiusAroundCamera); x <= m_chunkLoadRadiusAroundCamera; ++x )
-		{
-			for( int y = (-1 * m_chunkLoadRadiusAroundCamera); y <= m_chunkLoadRadiusAroundCamera; ++y )
-			{
-				chunksToEnsureLoaded.push_back( Vector2i( x, y ) );
-			}
-		}
-#endif
 
-#if DONT_UNLOAD_CHUNKS != 1
+			//sort chunksToEnsureLoaded
+			sort( begin( temp ), end( temp ), [&]( const Vector2i& lhs, const Vector2i& rhs )
+			{
+				return (length( rhs-position ) > length( lhs-position ));
+			} );
+			chunksToEnsureLoaded.insert( end( chunksToEnsureLoaded ), begin( temp ), end( temp ) );
+		}
+
 		/*unload chunks*/
 		//for every chunks that is loaded atm and is not in chunksToEnsureLoaded: unload
 		for( const auto& x : m_loadedChunks )
@@ -292,10 +297,6 @@ namespace kg
 				if( y.second == true )//if chunk is loaded atm
 				{
 					sf::Vector2i chunkPosition( x.first, y.first );
-#if UNLOAD_ALL_CHUNKS_EVERY_FRAME == 1
-					//chunk is unloaded directly!
-					ensureChunkUnloaded( engine, world, saveManager, chunkPosition );
-#else
 					if( find( begin( chunksToEnsureLoaded ), end( chunksToEnsureLoaded ), chunkPosition )
 						==
 						end( chunksToEnsureLoaded ) )
@@ -303,11 +304,9 @@ namespace kg
 						//chunk is not on ensure loaded list
 						addChunkToUnloadQueue( chunkPosition );
 					}
-#endif
 				}
 			}
 		}
-#endif
 
 		/*load chunks*/
 		for( const auto& el : chunksToEnsureLoaded )
@@ -317,22 +316,31 @@ namespace kg
 	void ChunkSystem::loadAndUnloadChunksFromQueue( Engine& engine, World& world, SaveManager& saveManager )
 	{
 		//unload
-		for( int i = 0; i < m_chunkLoadCountPerFrame; ++i )
+		for( int i = 0; i < m_chunkLoadCountPerFrame; )
+		{
 			if( m_chunkUnloadQueue.size() > 0 )
 			{
-				ensureChunkUnloaded( engine, world, saveManager, m_chunkUnloadQueue.front() );
+				if( ensureChunkUnloaded( engine, world, saveManager, m_chunkUnloadQueue.front() ) )
+					i++;
 				m_chunkUnloadQueue.pop_front();
 			}
 			else break;
+		}
 
-			//load
-			for( int i = 0; i < m_chunkLoadCountPerFrame; ++i )
-				if( m_chunkLoadQueue.size() > 0 )
-				{
-					ensureChunkLoaded( engine, world, saveManager, m_chunkLoadQueue.front() );
-					m_chunkLoadQueue.pop_front();
-				}
-				else break;
+		//load
+		for( int i = 0; i < m_chunkLoadCountPerFrame; )
+		{
+			if( m_chunkLoadQueue.size() > 0 )
+			{
+				if( ensureChunkLoaded( engine, world, saveManager, m_chunkLoadQueue.front() ) )
+					i++;
+				m_chunkLoadQueue.pop_front();
+			}
+			else break;
+		}
+
+		m_chunkLoadQueue.clear();
+		m_chunkUnloadQueue.clear();
 	}
 
 	void ChunkSystem::saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager )

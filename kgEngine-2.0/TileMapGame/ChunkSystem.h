@@ -6,7 +6,7 @@
 
 #define LOAD_CHUNKS_ONLY_ONCE 0
 #define DONT_UNLOAD_CHUNKS 0
-#define UNLOAD_ALL_CHUNKS_EVERY_FRAME 1
+#define UNLOAD_ALL_CHUNKS_EVERY_FRAME 0
 
 namespace kg
 {
@@ -35,8 +35,10 @@ namespace kg
 		int m_chunkLoadCountPerFrame;
 		std::list<sf::Vector2i> m_chunkLoadQueue;
 		std::list<sf::Vector2i> m_chunkUnloadQueue;
-		void ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
-		void ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
+		//returns true if a chunk has been loaded, false if it was already loaded
+		bool ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
+		//returns true if a chunk has been unloaded, false if it was already unloaded
+		bool ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
 		void loadAndUnloadChunksFromQueue( Engine& engine, World& world, SaveManager& saveManager );
 
 

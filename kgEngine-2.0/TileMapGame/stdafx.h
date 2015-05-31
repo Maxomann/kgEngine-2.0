@@ -10,4 +10,4 @@
 
 #include "SpriteBatch.h"
 
-#endif//STDAFX_H
+#endif//TILE_MAP_STDAFX_H
