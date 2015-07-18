@@ -57,6 +57,9 @@
     <ClCompile Include="AnimationComponent.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="AnimationComponent.h">
       <Filter>Headerdateien\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>Headerdateien\Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

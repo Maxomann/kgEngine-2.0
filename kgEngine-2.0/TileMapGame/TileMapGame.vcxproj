@@ -96,6 +96,7 @@
     <ClCompile Include="connect.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="SpriteBatch.cpp" />
     <ClCompile Include="Transformation.cpp" />
   </ItemGroup>
@@ -106,6 +107,7 @@
     <ClInclude Include="ChunkSystem.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="GraphicsSystem.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Camera.h" />
