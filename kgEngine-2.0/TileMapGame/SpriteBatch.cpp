@@ -9,7 +9,7 @@ namespace kg
 	{
 		const float magic_number = 0.0075;
 		const double Pi = 3.14159265;
-		const size_t MaxCapacity = 4000000;//LIMITS THE NUMBER OF SPRITES DRAWN TO 4.000.000/4 = 1.000.000!
+		const size_t MaxCapacity = 4'000'000;//LIMITS THE NUMBER OF SPRITES DRAWN TO 4.000.000/4 = 1.000.000!
 		const int LookupSize = 512;
 
 		float getSin[LookupSize];
