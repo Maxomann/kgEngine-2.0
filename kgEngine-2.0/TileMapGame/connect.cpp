@@ -1,7 +1,5 @@
 #include<_PluginCreator.h>
 
-#include "QuadTree.h"
-
 #include "Graphics.h"
 #include "Transformation.h"
 #include "AnimationComponent.h"
@@ -13,37 +11,9 @@
 using namespace std;
 using namespace kg;
 
-class TestType : public QuadTreeUser<TestType>
-{
-	int m_int;
-
-public:
-	TestType( int i ) : m_int( i )
-	{ };
-
-	int getInt()const
-	{
-		return m_int;
-	};
-
-	bool operator== ( const TestType& rhs )
-	{
-		return m_int == rhs.m_int;
-	}
-};
-
 void testfunc()
 {
-	QuadTree<TestType>::ContainRule containRule = []( Node<TestType>& node, TestType& obj )
-	{
-		return true;
-	};
-	QuadTree<TestType> tree( 10, containRule );
 
-	for( int i = 0; i < 100; ++i )
-		tree.addObject( TestType( i ) );
-
-	system( "pause" );
 }
 
 extern "C"
