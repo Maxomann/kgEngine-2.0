@@ -21,6 +21,7 @@ namespace kg
 		m_configValues.window_resy = &configFile->getData( WINDOW_RESY );
 		m_configValues.vsync = &configFile->getData( VSYNC );
 		m_configValues.window_name = &configFile->getData( WINDOW_NAME );
+		m_configValues.drawDistance = &configFile->getData( DRAW_DISTANCE );
 
 		//set them if invalid ( and retrieve them a second time )
 		if( !m_configValues.antialiasing->size() )
@@ -35,6 +36,8 @@ namespace kg
 			*m_configValues.vsync = VSYNC_DEFAULT;
 		if( !m_configValues.window_name->size() )
 			*m_configValues.window_name = WINDOW_NAME_DEFAULT;
+		if( !m_configValues.drawDistance->size() )
+			*m_configValues.drawDistance = DRAW_DISTANCE_DEFAULT;
 
 		//init window
 		sf::ContextSettings contextSettings;
@@ -60,8 +63,11 @@ namespace kg
 				sf::Style::Close,
 				contextSettings );
 		}
+
 		engine.renderWindow.setVerticalSyncEnabled( boost::lexical_cast< bool >(*m_configValues.vsync) );
 		engine.renderWindow.setActive( false );
+
+		setDrawDistance( boost::lexical_cast< unsigned int >(*m_configValues.drawDistance) );
 
 		m_launchDrawingThread( engine.renderWindow );
 	}
@@ -158,7 +164,7 @@ namespace kg
 	void GraphicsSystem::m_initCameras( Engine& engine, World& world )
 	{
 		//init camera
-		auto camera = Camera::EMPLACE_TO_WORLD( engine, world );
+		auto camera = Camera::EMPLACE_TO_WORLD( engine, world, m_drawDistanceMutex, &m_drawDistance );
 		m_cameraContainerMutexA.lock();
 		m_cameraContainerMutexB.lock();
 		m_cameras.push_back( camera );
@@ -172,6 +178,21 @@ namespace kg
 		auto retVal = m_cameras;
 		m_cameraContainerMutexA.unlock();
 		return retVal;
+	}
+
+	void GraphicsSystem::setDrawDistance( const unsigned int& drawDistance )
+	{
+		m_drawDistanceMutex.lock();
+		m_drawDistance = drawDistance;
+		m_drawDistanceMutex.unlock();
+	}
+
+	unsigned int GraphicsSystem::getDrawDistance() const
+	{
+		m_drawDistanceMutex.lock();
+		auto copy = m_drawDistance;
+		m_drawDistanceMutex.unlock();
+		return copy;
 	}
 
 	const size_t& GraphicsSystem::getRTTI_hash() const
@@ -340,6 +361,8 @@ namespace kg
 
 	const std::string GraphicsSystem::WINDOW_NAME_DEFAULT = "DefaultWindowName";
 
+	const std::string GraphicsSystem::DRAW_DISTANCE_DEFAULT = "500";
+
 	const std::string GraphicsSystem::VSYNC_DEFAULT = "1";
 
 	const std::string GraphicsSystem::WINDOW_RESY_DEFAULT = "720";
@@ -361,6 +384,8 @@ namespace kg
 	const std::string GraphicsSystem::FULLSCREEN = "bFullscreen";
 
 	const std::string GraphicsSystem::WINDOW_NAME = "sWindow_name";
+
+	const std::string GraphicsSystem::DRAW_DISTANCE = "idrawDistance";
 
 	const std::string GraphicsSystem::PLUGIN_NAME = "GraphicsSystem";
 

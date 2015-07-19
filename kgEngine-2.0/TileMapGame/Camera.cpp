@@ -29,7 +29,7 @@ namespace kg
 	}
 
 	std::vector<Plugin::Id> Camera::getRequieredComponents() const
-{
+	{
 		return{ id::ComponentPluginId::TRANSFORMATION };
 	}
 
@@ -72,12 +72,15 @@ namespace kg
 		return retVal;
 	}
 
-	std::shared_ptr<Entity> Camera::EMPLACE_TO_WORLD( Engine& engine, World& world )
+	std::shared_ptr<Entity> Camera::EMPLACE_TO_WORLD( Engine& engine, World& world, boost::mutex& drawDistanceMutex, unsigned int* drawDistancePointer )
 	{
 		auto camera = world.createNewTemporaryEntity<Transformation, Camera>( engine, world );
 		camera->getComponent<Transformation>()->setPosition( sf::Vector2i( 0, 0 ) );
 		camera->getComponent<Transformation>()->setSize( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
-		camera->getComponent<Camera>()->setViewport( FloatRect( 0.f, 0.f, 1.f, 1.f ) );
+		auto cameraComponent = camera->getComponent<Camera>();
+		cameraComponent->setViewport( FloatRect( 0.f, 0.f, 1.f, 1.f ) );
+		cameraComponent->r_drawDistanceMutex = &drawDistanceMutex;
+		cameraComponent->r_drawDistance = drawDistancePointer;
 		world.addEntity( camera );
 		return camera;
 	}
@@ -99,9 +102,20 @@ namespace kg
 
 		renderWindow.setView( view_copy );
 
+		r_drawDistanceMutex->lock();
+
 		for( const auto& el : toDrawSorted )
-			get<2>( el )->drawToSpriteBatch( m_spriteBatch );
-			//renderWindow.draw( *toDraw.second );
+		{
+			auto spritePosition = get<0>( el );
+			auto thisPosition = r_transformation->getPosition();
+
+			auto distanceVec = sf::Vector2i( spritePosition.x - thisPosition.x, spritePosition.y - thisPosition.y );
+			if(length(distanceVec)<=*r_drawDistance )
+				get<2>( el )->drawToSpriteBatch( m_spriteBatch );
+		}
+
+		r_drawDistanceMutex->unlock();
+
 		m_spriteBatch.display();
 
 		renderWindow.setView( renderWindow.getDefaultView() );

@@ -55,6 +55,20 @@ namespace kg
 				m_cameraZoomFactor -= 0.01*frameTimeInMilliseconds;
 			if( Keyboard::isKeyPressed( Keyboard::Subtract ) )
 				m_cameraZoomFactor += 0.01*frameTimeInMilliseconds;
+			if( Keyboard::isKeyPressed( Keyboard::O ) )
+			{
+				if( Keyboard::isKeyPressed( Keyboard::LShift ) )
+					r_graphicsSystem->setDrawDistance( r_graphicsSystem->getDrawDistance() - 10 );
+				else
+					r_graphicsSystem->setDrawDistance( r_graphicsSystem->getDrawDistance() - 1 );
+			}
+			if( Keyboard::isKeyPressed( Keyboard::P ) )
+			{
+				if( Keyboard::isKeyPressed( Keyboard::LShift ) )
+					r_graphicsSystem->setDrawDistance( r_graphicsSystem->getDrawDistance() + 10 );
+				else
+					r_graphicsSystem->setDrawDistance( r_graphicsSystem->getDrawDistance() + 1 );
+			}
 
 			if( Keyboard::isKeyPressed( Keyboard::LControl ) )
 				cameraMovement /= 2;

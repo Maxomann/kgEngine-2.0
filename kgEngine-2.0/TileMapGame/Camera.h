@@ -12,6 +12,9 @@ namespace kg
 
 		Transformation* r_transformation;
 
+		boost::mutex* r_drawDistanceMutex;
+		unsigned int* r_drawDistance;
+
 		sf::View m_view;
 		sf::Vector2u m_finalSize;
 
@@ -50,7 +53,7 @@ namespace kg
 		static const size_t type_hash;
 
 		//creates a new camera, adds it to the world and returns a pointer to it
-		static std::shared_ptr<Entity> EMPLACE_TO_WORLD( Engine& engine, World& world );
+		static std::shared_ptr<Entity> EMPLACE_TO_WORLD( Engine& engine, World& world, boost::mutex& drawDistanceMutex, unsigned int* drawDistancePointer );
 
 
 	};

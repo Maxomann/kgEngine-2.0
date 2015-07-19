@@ -35,6 +35,7 @@ namespace kg
 			std::string* window_resy;
 			std::string* vsync;
 			std::string* window_name;
+			std::string* drawDistance;
 		}m_configValues;
 
 		mutable boost::mutex m_cameraContainerMutexA;
@@ -64,6 +65,9 @@ namespace kg
 		mutable boost::mutex m_drawingThreadSyncMutex;
 		bool m_drawingThreadHasToWait = true;
 
+		mutable boost::mutex m_drawDistanceMutex;
+		unsigned int m_drawDistance=0;
+
 	public:
 		GraphicsSystem();
 		~GraphicsSystem();
@@ -86,6 +90,9 @@ namespace kg
 		std::shared_ptr<Entity> getCamera( int index );
 		CameraContainer getCameras()const;
 
+		void setDrawDistance( const unsigned int& drawDistance );
+		unsigned int getDrawDistance()const;
+
 		static const std::string PLUGIN_NAME;
 
 		static const size_t type_hash;
@@ -97,6 +104,7 @@ namespace kg
 		static const std::string WINDOW_RESY;//only in windowed mode
 		static const std::string VSYNC;//
 		static const std::string WINDOW_NAME;//
+		static const std::string DRAW_DISTANCE;
 
 		static const std::string ANTIALIASING_DEFAULT;
 		static const std::string FULLSCREEN_DEFAULT;
@@ -104,5 +112,6 @@ namespace kg
 		static const std::string WINDOW_RESY_DEFAULT;
 		static const std::string VSYNC_DEFAULT;
 		static const std::string WINDOW_NAME_DEFAULT;
+		static const std::string DRAW_DISTANCE_DEFAULT;
 	};
 }
