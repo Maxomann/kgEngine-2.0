@@ -51,6 +51,8 @@
 #include <boost/container/slist.hpp>
 #include <boost/container/deque.hpp>
 
+#include <Thor/Input.hpp>
+
 #ifdef _WIN32
 #include<windows.h>
 #elif

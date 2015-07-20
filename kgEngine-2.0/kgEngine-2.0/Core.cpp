@@ -39,14 +39,17 @@ namespace kg
 			frameTime = sf::seconds( 0 );
 
 		Event event;
+		m_engine.inputManager.clearEvents();
 		while( m_engine.renderWindow.pollEvent( event ) )
 		{
 			m_world.forwardSfmlEventByImportance( m_engine, m_world, m_saveManager, event );
+			m_engine.inputManager.forwardSfmlEvent( event );
 		}
 
 		if( !m_engine.isPaused )//if engine is not paused, update entities
 			m_world.updateEntities( m_engine, m_world, frameTime );
 		m_world.updateAllSystemsByImportance( m_engine, m_world, m_saveManager, frameTime );
+		m_engine.inputManager.triggerCallbacks( m_engine.renderWindow );
 		m_world.removeEntitiesOnRemoveList();
 	}
 

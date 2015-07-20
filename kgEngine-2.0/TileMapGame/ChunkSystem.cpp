@@ -283,7 +283,7 @@ namespace kg
 			//sort chunksToEnsureLoaded
 			sort( begin( temp ), end( temp ), [&]( const Vector2i& lhs, const Vector2i& rhs )
 			{
-				return (length( rhs-position ) > length( lhs-position ));
+				return (length( rhs - position ) > length( lhs - position ));
 			} );
 			chunksToEnsureLoaded.insert( end( chunksToEnsureLoaded ), begin( temp ), end( temp ) );
 		}
@@ -346,9 +346,13 @@ namespace kg
 	void ChunkSystem::saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager )
 	{
 		for( const auto& x : m_loadedChunks )
+		{
 			for( const auto& y : x.second )
-			if( y.second )
-			saveChunkToFile( engine, world, saveManager, Vector2i( x.first, y.first ) );
+			{
+				if( y.second )
+					saveChunkToFile( engine, world, saveManager, Vector2i( x.first, y.first ) );
+			}
+		}
 	}
 
 	void ChunkSystem::m_onSavegameClosed()

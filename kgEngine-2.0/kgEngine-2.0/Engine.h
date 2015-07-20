@@ -4,6 +4,7 @@
 #include "Blueprint.h"
 #include "ResourceManager.h"
 #include "RandomNumberGenerator.h"
+#include "InputManager.h"
 
 namespace kg
 {
@@ -28,5 +29,7 @@ namespace kg
 		ResourceManager resourceManager;
 		/// RandomNumberGenerator.
 		RandomNumberGenerator randomNumberGenerator;
+		///	InputManager
+		InputManager inputManager;
 	};
 }

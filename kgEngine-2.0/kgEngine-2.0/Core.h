@@ -8,8 +8,8 @@ namespace kg
 {
 	class Core
 	{
-		/// Connect function used in DLL-Files. The function in your DLL file has to look like this:
-		/// extern "C" __declspec(dllexport) void kgConnect( kg::PluginManager& pluginManager )
+		// Connect function used in DLL-Files. The function in your DLL file has to look like this:
+		// extern "C" __declspec(dllexport) void kgConnect( kg::PluginManager& pluginManager )
 		typedef void( *CONNECT )(PluginManager&);
 
 		Engine m_engine;

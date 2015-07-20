@@ -18,7 +18,7 @@ namespace kg
 
 				LAST_ELEMENT
 			};
-		};
+		}
 
 		namespace ComponentPluginId
 		{
@@ -34,7 +34,7 @@ namespace kg
 
 				LAST_ELEMENT
 			};
-		};
+		}
 
 		namespace SpecialPluginId
 		{
@@ -64,7 +64,7 @@ namespace kg
 
 				LAST_ELEMENT
 			};
-		};
+		}
 
 		namespace ComponentUpdateImportance
 		{
@@ -80,6 +80,35 @@ namespace kg
 
 				LAST_ELEMENT
 			};
-		};
-	};
+		}
+
+		namespace Input
+		{
+			enum
+			{
+				FIRST_ELEMENT,
+
+				SHUT_DOWN,
+				RELOAD_SAVE,
+
+				MOVE_UP,
+				MOVE_DOWN,
+				MOVE_LEFT,
+				MOVE_RIGHT,
+				MOVE_UP_FAST,
+				MOVE_DOWN_FAST,
+				MOVE_LEFT_FAST,
+				MOVE_RIGHT_FAST,
+				MOVE_UP_SLOW,
+				MOVE_DOWN_SLOW,
+				MOVE_LEFT_SLOW,
+				MOVE_RIGHT_SLOW,
+
+				ZOOM_IN,
+				ZOOM_OUT,
+
+				LAST_ELEMENT
+			};
+		}
+	}
 }

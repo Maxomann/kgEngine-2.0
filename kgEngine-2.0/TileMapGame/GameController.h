@@ -8,13 +8,19 @@ namespace kg
 {
 	class GameController : public System
 	{
+		Engine* r_engine;
+		World* r_world;
+		SaveManager* r_saveManager;
 		GraphicsSystem* r_graphicsSystem;
 
-		float m_cameraZoomFactor = 1;
 		std::weak_ptr<Entity> m_camera;
+		float m_cameraZoomFactor = 1;
+
+		sf::Int32 lastFrameTimeInMilliseconds = 0;
 
 		void saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager );
-		void shutDown( Engine& engine, World& world, SaveManager& saveManager );
+
+		void movePlayer( sf::Vector2i distance );
 
 	public:
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );
@@ -34,5 +40,30 @@ namespace kg
 		static const std::string PLUGIN_NAME;
 
 		static const size_t type_hash;
+
+		//Input Callbacks
+	private:
+		void registerInputCallbacks( InputManager& inputManager );
+
+		void shutDown();
+		void reloadSave();
+
+		void pause();
+
+		void moveUp();
+		void moveDown();
+		void moveLeft();
+		void moveRight();
+		void moveUpFast();
+		void moveDownFast();
+		void moveLeftFast();
+		void moveRightFast();
+		void moveUpSlow();
+		void moveDownSlow();
+		void moveLeftSlow();
+		void moveRightSlow();
+
+		void zoomIn();
+		void zoomOut();
 	};
 }

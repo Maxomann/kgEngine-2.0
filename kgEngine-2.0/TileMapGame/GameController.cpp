@@ -1,23 +1,20 @@
 #include "GameController.h"
 using namespace std;
 using namespace sf;
+using namespace thor;
 
 namespace kg
 {
 	void GameController::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
+		r_engine = &engine;
+		r_world = &world;
+		r_saveManager = &saveManager;
 		r_graphicsSystem = world.getSystem<GraphicsSystem>();
 
-		saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
-		//saveManager.loadEntitiesFromFile( engine, world, "EntitiesInHere" );
+		registerInputCallbacks( engine.inputManager );
 
-		/*int fieldSize = 10;
-		for( int x = 0; x < fieldSize; ++x )
-		for( int y = 0; y < fieldSize; ++y )
-		{
-		auto entity = world.addEntity( world.createNewSaveableEntity( engine, 100 ) ).second;
-		entity->getComponent<Transformation>()->setPosition( sf::Vector2i( x * 64, y * 64 ) );
-		}*/
+		saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
 
 		return;
 	}
@@ -25,67 +22,17 @@ namespace kg
 	void GameController::sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent )
 	{
 		if( sfEvent.type == Event::Closed )
-			shutDown( engine, world, saveManager );
+			shutDown();
 		return;
 	}
 
 	void GameController::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
-		if( m_camera.expired() )
-			m_camera = r_graphicsSystem->getCamera( 0 );
-		auto camera = m_camera.lock();
+		lastFrameTimeInMilliseconds = frameTime.asMilliseconds();
 
-		auto frameTimeInMilliseconds = frameTime.asMilliseconds();
-
-		if( Keyboard::isKeyPressed( Keyboard::Escape ) )
-			shutDown( engine, world, saveManager );
 		if( !engine.isPaused )
 		{
-			Vector2i cameraMovement;
 
-			if( Keyboard::isKeyPressed( Keyboard::W ) )
-				cameraMovement += sf::Vector2i( 0, -10.0 / 16.0 * frameTimeInMilliseconds );
-			if( Keyboard::isKeyPressed( Keyboard::S ) )
-				cameraMovement += sf::Vector2i( 0, 10.0 / 16.0 * frameTimeInMilliseconds );
-			if( Keyboard::isKeyPressed( Keyboard::A ) )
-				cameraMovement += sf::Vector2i( -10.0 / 16.0 * frameTimeInMilliseconds, 0 );
-			if( Keyboard::isKeyPressed( Keyboard::D ) )
-				cameraMovement += sf::Vector2i( 10.0 / 16.0 * frameTimeInMilliseconds, 0 );
-			if( Keyboard::isKeyPressed( Keyboard::Add ) )
-				m_cameraZoomFactor -= 0.01*frameTimeInMilliseconds;
-			if( Keyboard::isKeyPressed( Keyboard::Subtract ) )
-				m_cameraZoomFactor += 0.01*frameTimeInMilliseconds;
-			if( Keyboard::isKeyPressed( Keyboard::O ) )
-			{
-				if( Keyboard::isKeyPressed( Keyboard::LShift ) )
-					r_graphicsSystem->setDrawDistance( r_graphicsSystem->getDrawDistance() - 10 );
-				else
-					r_graphicsSystem->setDrawDistance( r_graphicsSystem->getDrawDistance() - 1 );
-			}
-			if( Keyboard::isKeyPressed( Keyboard::P ) )
-			{
-				if( Keyboard::isKeyPressed( Keyboard::LShift ) )
-					r_graphicsSystem->setDrawDistance( r_graphicsSystem->getDrawDistance() + 10 );
-				else
-					r_graphicsSystem->setDrawDistance( r_graphicsSystem->getDrawDistance() + 1 );
-			}
-
-			if( Keyboard::isKeyPressed( Keyboard::LControl ) )
-				cameraMovement /= 2;
-			else if( Keyboard::isKeyPressed( Keyboard::Space ) )
-				cameraMovement *= 4;
-
-			camera->getComponent<Transformation>()->move( cameraMovement );
-		}
-		if( m_cameraZoomFactor < 0 )
-			m_cameraZoomFactor = 0;
-		camera->getComponent<Transformation>()->setSize( Vector2i( (double)1280.0 * m_cameraZoomFactor, (double)720.0 * m_cameraZoomFactor ) );
-
-		if( Keyboard::isKeyPressed( Keyboard::F5 ) )
-		{
-			saveOpenSavegame( engine, world, saveManager );
-
-			saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
 		}
 
 		return;
@@ -111,20 +58,202 @@ namespace kg
 		return type_hash;
 	}
 
-	void GameController::shutDown( Engine& engine, World& world, SaveManager& saveManager )
-	{
-		saveOpenSavegame( engine, world, saveManager );
-		engine.shouldTerminate = true;
-	}
-
 	void GameController::saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager )
 	{
 		world.getSystem<ChunkSystem>()->saveAllLoadedChunks( engine, world, saveManager );
 		saveManager.saveSystems( world );
 	}
 
+	void GameController::movePlayer( sf::Vector2i distance )
+	{
+		if( m_camera.expired() )
+			m_camera = r_graphicsSystem->getCamera( 0 );
+		auto camera = m_camera.lock();
+
+		camera->getComponent<Transformation>()->move( distance );
+	}
+
 	const std::string GameController::PLUGIN_NAME = "GameControllerSystem";
 
 	const size_t GameController::type_hash = getRuntimeTypeInfo<GameController>();
+
+
+	void GameController::registerInputCallbacks( InputManager& inputManager )
+	{
+		// Keys
+		Action shift( Keyboard::LShift, Action::Hold );
+		Action control( Keyboard::LControl, Action::Hold );
+
+		Action w( Keyboard::W, Action::Hold );
+		Action a( Keyboard::A, Action::Hold );
+		Action s( Keyboard::S, Action::Hold );
+		Action d( Keyboard::D, Action::Hold );
+
+		Action add( Keyboard::Add, Action::Hold );
+		Action subtract( Keyboard::Subtract, Action::Hold );
+
+		Action escapePress( Keyboard::Escape, Action::PressOnce );
+		Action f5Press( Keyboard::F5, Action::PressOnce );
+
+
+		// Events
+		Action eventClose( Event::Closed );
+
+
+		// Set the actions and register callbacks
+		inputManager.setAction( id::Input::SHUT_DOWN,
+								escapePress || eventClose,
+								bind( &GameController::shutDown, this ) );
+		inputManager.setAction( id::Input::RELOAD_SAVE, f5Press,
+								bind( &GameController::reloadSave, this ) );
+
+		inputManager.setAction( id::Input::MOVE_UP, w && !shift && !control,
+								bind( &GameController::moveUp, this ) );
+		inputManager.setAction( id::Input::MOVE_DOWN, s && !shift && !control,
+								bind( &GameController::moveDown, this ) );
+		inputManager.setAction( id::Input::MOVE_LEFT, a && !shift && !control,
+								bind( &GameController::moveLeft, this ) );
+		inputManager.setAction( id::Input::MOVE_RIGHT, d && !shift && !control,
+								bind( &GameController::moveRight, this ) );
+
+		inputManager.setAction( id::Input::MOVE_UP_FAST, w && shift && !control,
+								bind( &GameController::moveUpFast, this ) );
+		inputManager.setAction( id::Input::MOVE_DOWN_FAST, s && shift && !control,
+								bind( &GameController::moveDownFast, this ) );
+		inputManager.setAction( id::Input::MOVE_LEFT_FAST, a && shift && !control,
+								bind( &GameController::moveLeftFast, this ) );
+		inputManager.setAction( id::Input::MOVE_RIGHT_FAST, d && shift && !control,
+								bind( &GameController::moveRightFast, this ) );
+
+		inputManager.setAction( id::Input::MOVE_UP_SLOW, w && !shift && control,
+								bind( &GameController::moveUpSlow, this ) );
+		inputManager.setAction( id::Input::MOVE_DOWN_SLOW, s && !shift && control,
+								bind( &GameController::moveDownSlow, this ) );
+		inputManager.setAction( id::Input::MOVE_LEFT_SLOW, a && !shift && control,
+								bind( &GameController::moveLeftSlow, this ) );
+		inputManager.setAction( id::Input::MOVE_RIGHT_SLOW, d && !shift && control,
+								bind( &GameController::moveRightSlow, this ) );
+
+		inputManager.setAction( id::Input::ZOOM_IN, add,
+								bind( &GameController::zoomIn, this ) );
+		inputManager.setAction( id::Input::ZOOM_OUT, subtract,
+								bind( &GameController::zoomOut, this ) );
+
+	}
+
+	void GameController::shutDown()
+	{
+		saveOpenSavegame( *r_engine, *r_world, *r_saveManager );
+		r_engine->shouldTerminate = true;
+	}
+
+	void GameController::reloadSave()
+	{
+		saveOpenSavegame( *r_engine, *r_world, *r_saveManager );
+		r_saveManager->openSavegame( *r_engine, *r_world, "MyFirstSavegameEver" );
+	}
+
+	void GameController::pause()
+	{
+		r_engine->isPaused = !r_engine->isPaused;
+	}
+
+	void GameController::moveUp()
+	{
+		sf::Vector2i cameraMovement( 0, -10.0 / 16.0 * lastFrameTimeInMilliseconds );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveDown()
+	{
+		sf::Vector2i cameraMovement( 0, 10.0 / 16.0 * lastFrameTimeInMilliseconds );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveLeft()
+	{
+		sf::Vector2i cameraMovement( -10.0 / 16.0 * lastFrameTimeInMilliseconds, 0 );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveRight()
+	{
+		sf::Vector2i cameraMovement( 10.0 / 16.0 * lastFrameTimeInMilliseconds, 0 );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveUpFast()
+	{
+		sf::Vector2i cameraMovement( 0, -10.0 / 16.0 * lastFrameTimeInMilliseconds * 4 );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveDownFast()
+	{
+		sf::Vector2i cameraMovement( 0, 10.0 / 16.0 * lastFrameTimeInMilliseconds * 4 );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveLeftFast()
+	{
+		sf::Vector2i cameraMovement( -10.0 / 16.0 * lastFrameTimeInMilliseconds * 4, 0 );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveRightFast()
+	{
+		sf::Vector2i cameraMovement( 10.0 / 16.0 * lastFrameTimeInMilliseconds * 4, 0 );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveUpSlow()
+	{
+		sf::Vector2i cameraMovement( 0, -10.0 / 16.0 * lastFrameTimeInMilliseconds / 2 );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveDownSlow()
+	{
+		sf::Vector2i cameraMovement( 0, 10.0 / 16.0 * lastFrameTimeInMilliseconds / 2 );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveLeftSlow()
+	{
+		sf::Vector2i cameraMovement( -10.0 / 16.0 * lastFrameTimeInMilliseconds / 2, 0 );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::moveRightSlow()
+	{
+		sf::Vector2i cameraMovement( 10.0 / 16.0 * lastFrameTimeInMilliseconds / 2, 0 );
+		movePlayer( cameraMovement );
+	}
+
+	void GameController::zoomIn()
+	{
+		if( m_camera.expired() )
+			m_camera = r_graphicsSystem->getCamera( 0 );
+		auto camera = m_camera.lock();
+
+		m_cameraZoomFactor -= 0.01*lastFrameTimeInMilliseconds;
+
+		if( m_cameraZoomFactor < 0 )
+			m_cameraZoomFactor = 0;
+		camera->getComponent<Transformation>()->setSize( Vector2i( (double)1280.0 * m_cameraZoomFactor, (double)720.0 * m_cameraZoomFactor ) );
+	}
+
+	void GameController::zoomOut()
+	{
+		if( m_camera.expired() )
+			m_camera = r_graphicsSystem->getCamera( 0 );
+		auto camera = m_camera.lock();
+
+		m_cameraZoomFactor += 0.01*lastFrameTimeInMilliseconds;
+
+		if( m_cameraZoomFactor < 0 )
+			m_cameraZoomFactor = 0;
+		camera->getComponent<Transformation>()->setSize( Vector2i( (double)1280.0 * m_cameraZoomFactor, (double)720.0 * m_cameraZoomFactor ) );
+	}
 
 }
