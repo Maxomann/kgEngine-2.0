@@ -11,7 +11,7 @@ namespace kg
 	public:
 		void updateSyncedTimeRef( const sf::Time& time );
 		
-		virtual void load( const std::vector<std::string> lines )=0;//ignore lines.at(0)!
+		virtual void load( const std::vector<std::string> lines )=0;//ignore lines.at(0)! it is the name of the animation handler
 
 		virtual sf::IntRect getTextureRect( const std::string& state, const sf::Time& internalTime )const = 0;
 
