@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "Camera.h"
 #include "ChunkSystem.h"
 #include "GraphicsSystem.h"
 
@@ -8,6 +7,7 @@ namespace kg
 {
 	class GameController : public System, public CallbackReciever
 	{
+	private:
 		Engine* r_engine;
 		World* r_world;
 		SaveManager* r_saveManager;

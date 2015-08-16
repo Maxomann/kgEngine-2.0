@@ -187,7 +187,9 @@ namespace kg
 			returnType( className::* mem_fn_ptr ) (parameterType...) )
 		{
 			std::function<returnType( className*, parameterType... )> f1 = std::mem_fn( mem_fn_ptr );
-			signal.addCallback( std::move( easy_bind( f1, static_cast< className* >(this) ) ) );
+			auto temp = easy_bind( f1, static_cast< className* >(this) );
+			//auto temp = std::bind( f1, static_cast< className* >(this) );
+			signal.addCallback( std::move( temp ) );
 		};
 	};
 }
