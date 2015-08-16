@@ -6,7 +6,7 @@
 
 namespace kg
 {
-	class GameController : public System
+	class GameController : public System, public CallbackReciever
 	{
 		Engine* r_engine;
 		World* r_world;
@@ -21,6 +21,8 @@ namespace kg
 		void saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager );
 
 		void movePlayer( sf::Vector2i distance );
+
+		void m_onSavegameOpened( Engine& engine );
 
 	public:
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );

@@ -12,6 +12,7 @@ namespace kg
 		r_saveManager = &saveManager;
 		r_graphicsSystem = world.getSystem<GraphicsSystem>();
 
+		m_connectToSignal( saveManager.s_savegameOpened, &GameController::m_onSavegameOpened );
 		registerInputCallbacks( engine.inputManager );
 
 		saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
@@ -71,6 +72,11 @@ namespace kg
 		auto camera = m_camera.lock();
 
 		camera->getComponent<Transformation>()->move( distance );
+	}
+
+	void GameController::m_onSavegameOpened( Engine& engine )
+	{
+		m_cameraZoomFactor = 1;
 	}
 
 	const std::string GameController::PLUGIN_NAME = "GameControllerSystem";
