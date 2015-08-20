@@ -29,6 +29,9 @@
 #include <unordered_set>
 #include <atomic>
 #include <iomanip>
+#include <cstddef>
+#include <type_traits>
+#include <utility>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
@@ -50,6 +53,9 @@
 #include <boost/container/static_vector.hpp>
 #include <boost/container/slist.hpp>
 #include <boost/container/deque.hpp>
+#include <boost/signals2.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 #include <Thor/Input.hpp>
 

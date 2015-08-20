@@ -1,10 +1,15 @@
 #include "GameController.h"
 using namespace std;
 using namespace sf;
-using namespace thor;
+using Action = thor::Action;
 
 namespace kg
 {
+	void GameController::m_onSavegameOpened( Engine& engine )
+	{
+		m_cameraZoomFactor = 1;
+	}
+
 	void GameController::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
 		r_engine = &engine;
@@ -72,11 +77,6 @@ namespace kg
 		auto camera = m_camera.lock();
 
 		camera->getComponent<Transformation>()->move( distance );
-	}
-
-	void GameController::m_onSavegameOpened( Engine& engine )
-	{
-		m_cameraZoomFactor = 1;
 	}
 
 	const std::string GameController::PLUGIN_NAME = "GameControllerSystem";
