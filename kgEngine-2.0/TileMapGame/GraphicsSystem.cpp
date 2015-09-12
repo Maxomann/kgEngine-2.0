@@ -6,8 +6,9 @@ namespace kg
 {
 	void GraphicsSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
-		m_configFile = configFile;
+		r_renderWindow = &engine.renderWindow;
 
+		m_configFile = configFile;
 
 		m_connectToSignal( saveManager.s_savegameOpened, &GraphicsSystem::m_onSavegameOpened );
 		m_connectToSignal( saveManager.s_savegameClosed, &GraphicsSystem::m_onSavegameClosed );
@@ -91,9 +92,9 @@ namespace kg
 		m_addedEntities.clear();
 		m_removedEntities.clear();
 		m_drawableEntityMutex.unlock();
-		m_drawingThreadSyncMutex.lock();
-		m_drawingThreadHasToWait = false;
-		m_drawingThreadSyncMutex.unlock();
+		m_syncMutex.lock();
+		m_threadHasToWait = false;
+		m_syncMutex.unlock();
 
 		engine.renderWindow.setTitle( *m_configValues.window_name +
 									  " " +
@@ -123,9 +124,9 @@ namespace kg
 
 	std::shared_ptr<Entity> GraphicsSystem::getCamera( int index )
 	{
-		m_cameraContainerMutexA.lock();
+		m_cameraContainerMutex.lock();
 		auto retVal = m_cameras.at( index );
-		m_cameraContainerMutexA.unlock();
+		m_cameraContainerMutex.unlock();
 		return retVal;
 	}
 
@@ -133,18 +134,12 @@ namespace kg
 	{
 		if( entity->hasComponent<Graphics>() )
 			m_addedEntities.push_back( entity );
-		/*auto it = find( m_removedEntities.begin(), m_removedEntities.end(), entity );
-		if( it != m_removedEntities.end() )
-			m_removedEntities.erase( it );*/
 	}
 
 	void GraphicsSystem::m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
 	{
 		if( entity->hasComponent<Graphics>() )
 			m_removedEntities.push_back( entity );
-		/*auto it = find( m_addedEntities.begin(), m_addedEntities.end(), entity );
-		if( it != m_addedEntities.end() )
-			m_addedEntities.erase( it );*/
 	}
 
 	void GraphicsSystem::m_onSavegameOpened( Engine& engine )
@@ -154,29 +149,25 @@ namespace kg
 
 	void GraphicsSystem::m_onSavegameClosed()
 	{
-		m_cameraContainerMutexA.lock();
-		m_cameraContainerMutexB.lock();
+		m_cameraContainerMutex.lock();
 		m_cameras.clear();
-		m_cameraContainerMutexB.unlock();
-		m_cameraContainerMutexA.unlock();
+		m_cameraContainerMutex.unlock();
 	}
 
 	void GraphicsSystem::m_initCameras( Engine& engine, World& world )
 	{
 		//init camera
 		auto camera = Camera::EMPLACE_TO_WORLD( engine, world, m_drawDistanceMutex, &m_drawDistance );
-		m_cameraContainerMutexA.lock();
-		m_cameraContainerMutexB.lock();
+		m_cameraContainerMutex.lock();
 		m_cameras.push_back( camera );
-		m_cameraContainerMutexB.unlock();
-		m_cameraContainerMutexA.unlock();
+		m_cameraContainerMutex.unlock();
 	}
 
 	kg::CameraContainer GraphicsSystem::getCameras() const
 	{
-		m_cameraContainerMutexA.lock();
+		m_cameraContainerMutex.lock();
 		auto retVal = m_cameras;
-		m_cameraContainerMutexA.unlock();
+		m_cameraContainerMutex.unlock();
 		return retVal;
 	}
 
@@ -214,9 +205,9 @@ namespace kg
 	{
 		//safely terminate drawing thread
 		m_drawingShouldTerminate = true;
-		m_drawingThreadSyncMutex.lock();
-		m_drawingThreadHasToWait = false;
-		m_drawingThreadSyncMutex.unlock();
+		m_syncMutex.lock();
+		m_threadHasToWait = false;
+		m_syncMutex.unlock();
 		while( m_drawingIsActive )
 			sleep( sf::milliseconds( 1 ) );
 		sleep( sf::milliseconds( 1 ) );
@@ -228,20 +219,7 @@ namespace kg
 		m_drawingIsActive = true;
 
 		//launch drawing thread
-		thread drawingThread(
-			drawingThreadFunction,
-			std::ref( renderWindow ),
-			std::ref( m_drawableEntityMutex ),
-			std::ref( m_cameraContainerMutexB ),
-			std::ref( m_cameras ),
-			std::ref( m_addedEntitiesCopy ),
-			std::ref( m_removedEntitiesCopy ),
-			std::ref( m_drawingThreadFrameTime ),
-			std::ref( m_drawingShouldTerminate ),
-			std::ref( m_drawingIsActive ),
-			std::ref( m_drawingThreadSyncMutex ),
-			std::ref( m_drawingThreadHasToWait )
-			);
+		thread drawingThread( &GraphicsSystem::drawingThreadFunction, this );
 		drawingThread.detach();
 	}
 
@@ -254,70 +232,60 @@ namespace kg
 		return container.end();
 	};
 
-	void drawingThreadFunction( sf::RenderWindow& renderWindow,
-								boost::mutex& m_drawableEntityMutex,
-								boost::mutex& cameraContainerMutex,
-								CameraContainer& cameraContainer,
-								EntityManager::EntityContainer& addedEntitiesCopy,
-								EntityManager::EntityContainer& removedEntitiesCopy,
-								int& drawingThreadFrameTime,
-								bool& shouldTerminate,
-								bool& drawingIsActive,
-								boost::mutex& syncMutex,
-								bool& threadHasToWait )
-	{
-		renderWindow.setActive( true );
-		sf::Clock thisFrameTime;
+	void GraphicsSystem::drawingThreadFunction()
+{
+		r_renderWindow->setActive( true );
+		sf::Clock frameTimeClock;
 
 		vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>> toDrawSorted;
 
-		while( !shouldTerminate )
+		while( !m_drawingShouldTerminate )
 		{
 			while( true )
 			{
 				//lock
-				syncMutex.lock();
-				if( !threadHasToWait )
+				m_syncMutex.lock();
+				if( !m_threadHasToWait )
 				{
-					threadHasToWait = true;
+					m_threadHasToWait = true;
 					break;
 				}
 				else
-					syncMutex.unlock();
+					m_syncMutex.unlock();
 			}
 
 
-			thisFrameTime.restart().asMilliseconds();
+			frameTimeClock.restart().asMilliseconds();
 
-			renderWindow.clear( Color::Green );
+			r_renderWindow->clear( Color::Green );
 
 			//LOCK
-			cameraContainerMutex.lock();
+			m_cameraContainerMutex.lock();
 			m_drawableEntityMutex.lock();
 
 			//remove
 			toDrawSorted.erase( std::remove_if( toDrawSorted.begin(), toDrawSorted.end(), [&]( const tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>& conel )
 			{
-				for( const auto& el : removedEntitiesCopy )
+				for( const auto& el : m_removedEntitiesCopy )
 					if( get<1>( conel ) == el )
 					{
-						removedEntitiesCopy.erase( remove( removedEntitiesCopy.begin(), removedEntitiesCopy.end(), el ), removedEntitiesCopy.end() );
+						m_removedEntitiesCopy.erase( remove( m_removedEntitiesCopy.begin(), m_removedEntitiesCopy.end(), el ), m_removedEntitiesCopy.end() );
 						return true;
 					}
 				return false;
 			} ), toDrawSorted.end() );
 
 			//add
-			bool needsSort = (addedEntitiesCopy.size() != 0);
+			bool needsSort = (m_addedEntitiesCopy.size() != 0);
 
-			for( auto& el : addedEntitiesCopy )
+			for( auto& el : m_addedEntitiesCopy )
 			{
 				const auto transformationComponent = el->getComponent<Transformation>();
 				toDrawSorted.push_back( make_tuple( transformationComponent->getXYZValues(), el, el->getComponent<Graphics>() ) );
 			}
 
-			addedEntitiesCopy.clear();
-			removedEntitiesCopy.clear();
+			m_addedEntitiesCopy.clear();
+			m_removedEntitiesCopy.clear();
 
 			//sort
 			if( needsSort )
@@ -342,20 +310,20 @@ namespace kg
 
 
 			//draw
-			for( const auto& camera : cameraContainer )
-				camera->getComponent<Camera>()->drawSpritesToRenderWindow( renderWindow, toDrawSorted );
+			for( const auto& camera : m_cameras )
+				camera->getComponent<Camera>()->drawSpritesToRenderWindow( *r_renderWindow, toDrawSorted );
 
 			m_drawableEntityMutex.unlock();
-			cameraContainerMutex.unlock();
+			m_cameraContainerMutex.unlock();
 			//UNLOCK
 
-			renderWindow.display();
+			r_renderWindow->display();
 
-			drawingThreadFrameTime = thisFrameTime.getElapsedTime().asMilliseconds();
-			syncMutex.unlock();
+			m_drawingThreadFrameTime = frameTimeClock.getElapsedTime().asMilliseconds();
+			m_syncMutex.unlock();
 
 		}
-		drawingIsActive = false;
+		m_drawingIsActive = false;
 		return;
 	}
 
