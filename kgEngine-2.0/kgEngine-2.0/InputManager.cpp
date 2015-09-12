@@ -22,7 +22,7 @@ namespace kg
 
 	void InputManager::forwardSfmlEvent( const sf::Event& sfEvent )
 	{
-		//gui.handleEvent( sfEvent );
+		gui.handleEvent( sfEvent );//If null exception here: have you passed the gui a reference to the RenderWindow?
 		m_actionMap.pushEvent( sfEvent );
 	}
 

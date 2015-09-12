@@ -37,6 +37,7 @@ namespace kg
 
 			GLuint m_vbo = 0;
 			bool m_isVBOinit = false;
+			bool m_isBufferBound = false;
 			void initVBO();
 
 			sf::Vertex* m_bufferPtr = nullptr;

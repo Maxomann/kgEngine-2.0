@@ -16,12 +16,20 @@ namespace kg
 	private:
 		bool m_drawingShouldTerminate = false;
 
-		void drawingThreadFunction();
-
-		///////////////////////////////////
-
 		mutable boost::mutex m_syncMutex;
 		bool m_threadHasToWait = true;
+
+		EntityManager::EntityContainer m_addedEntitiesCopy;
+		EntityManager::EntityContainer m_removedEntitiesCopy;
+
+		mutable boost::mutex m_cameraContainerMutex;
+		CameraContainer m_cameras;
+
+		mutable boost::mutex m_drawableEntityMutex;
+
+		bool m_drawingIsActive = false;
+
+		void drawingThreadFunction();
 
 		///////////////////////////////////
 
@@ -38,18 +46,13 @@ namespace kg
 		}m_configValues;
 
 		sf::RenderWindow* r_renderWindow;
+		tgui::Gui* r_gui;
 
-		mutable boost::mutex m_cameraContainerMutex;
-		CameraContainer m_cameras;
 		bool m_shouldInitCameras = true;
 		void m_initCameras( Engine& engine, World& world );
 
-		mutable boost::mutex m_drawableEntityMutex;
-
 		EntityManager::EntityContainer m_addedEntities;
 		EntityManager::EntityContainer m_removedEntities;
-		EntityManager::EntityContainer m_addedEntitiesCopy;
-		EntityManager::EntityContainer m_removedEntitiesCopy;
 		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity );
 		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity );
 
@@ -58,7 +61,6 @@ namespace kg
 
 		void m_launchDrawingThread( sf::RenderWindow& renderWindow );
 		void m_terminateDrawingThread();
-		bool m_drawingIsActive = false;
 		int m_drawingThreadFrameTime = -1;
 
 		mutable boost::mutex m_drawDistanceMutex;

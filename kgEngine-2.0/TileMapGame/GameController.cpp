@@ -1,6 +1,7 @@
 #include "GameController.h"
 using namespace std;
 using namespace sf;
+using namespace tgui;
 using Action = thor::Action;
 
 namespace kg
@@ -21,6 +22,10 @@ namespace kg
 		registerInputCallbacks( engine.inputManager );
 
 		saveManager.openSavegame( engine, world, "MyFirstSavegameEver" );
+
+		auto button = make_shared<Button>();
+		button->setText( "Button" );
+		engine.inputManager.gui.add( button );
 
 		return;
 	}

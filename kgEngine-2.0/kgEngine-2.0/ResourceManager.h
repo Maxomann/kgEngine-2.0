@@ -1,5 +1,5 @@
 #pragma once
-#include"stdafx.h"
+#include "stdafx.h"
 #include "PathNotAvailableException.h"
 
 namespace kg
@@ -30,12 +30,20 @@ namespace kg
 		virtual bool loadFromFile( const std::string& path ) = 0;
 	};
 
-	/**********************************************************************************************//**
-	 * Manager for resources.
-	 *
-	 * @author	Kay
-	 * @date	26.01.2015
-	 **************************************************************************************************/
+	namespace Folder
+	{
+		const std::string ROOT = "./";
+
+		const std::string PACKAGES = "Packages/";
+		const std::string RESOURCE = "Resource/";
+		const std::string CONFIG = "Config/";
+
+		const std::string FONTS = "Fonts/";
+	}
+	namespace FileType
+	{
+		const std::string INI = ".ini";
+	}
 
 	class DLL_EXPORT ResourceManager
 	{
@@ -179,7 +187,7 @@ namespace kg
 		template< class T, class ... Args >
 		std::shared_ptr<T> getResource( const std::string& packageName, const std::string& resourcePath, Args& ... args )
 		{
-			return m_getResource<T, Args...>( "./Packages/" + packageName + "/Resource/" + resourcePath, args... );
+			return m_getResource<T, Args...>( Folder::ROOT + Folder::PACKAGES + packageName + "/" + Folder::RESOURCE + resourcePath, args... );
 		}
 
 		/**********************************************************************************************//**
@@ -200,7 +208,7 @@ namespace kg
 		template< class T, class ... Args >
 		std::shared_ptr<T> reloadResource( const std::string& packageName, const std::string& resourcePath, Args& ... args )
 		{
-			return m_reloadResource<T, Args...>( "./Packages/" + packageName + "/Resource/" + resourcePath, args... );
+			return m_reloadResource<T, Args...>( Folder::ROOT + Folder::PACKAGES + packageName + "/" + Folder::RESOURCE + resourcePath, args... );
 		}
 
 		/**********************************************************************************************//**
@@ -218,7 +226,7 @@ namespace kg
 		template< class T >
 		std::shared_ptr<T> getConfigFile( const std::string& systemName )
 		{
-			return m_getResource<T>( "./Config/" + systemName + ".ini" );
+			return m_getResource<T>( Folder::ROOT + Folder::CONFIG + systemName + FileType::INI );
 		}
 	};
 }

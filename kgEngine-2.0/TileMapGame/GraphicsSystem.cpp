@@ -7,6 +7,7 @@ namespace kg
 	void GraphicsSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
 		r_renderWindow = &engine.renderWindow;
+		r_gui = &engine.inputManager.gui;
 
 		m_configFile = configFile;
 
@@ -69,6 +70,12 @@ namespace kg
 		engine.renderWindow.setActive( false );
 
 		setDrawDistance( boost::lexical_cast< unsigned int >(*m_configValues.drawDistance) );
+
+		engine.inputManager.gui.setWindow( engine.renderWindow );
+		engine.inputManager.gui.setGlobalFont( engine.resourceManager.getResource<sf::Font>(
+			Constants::PACKAGE_NAME,
+			Folder::FONTS + "DejaVuSans.ttf"
+			) );
 
 		m_launchDrawingThread( engine.renderWindow );
 	}
@@ -216,7 +223,6 @@ namespace kg
 	void GraphicsSystem::m_launchDrawingThread( sf::RenderWindow& renderWindow )
 	{
 		m_drawingShouldTerminate = false;
-		m_drawingIsActive = true;
 
 		//launch drawing thread
 		thread drawingThread( &GraphicsSystem::drawingThreadFunction, this );
@@ -228,12 +234,16 @@ namespace kg
 	{
 		for( auto it = container.begin(); it != container.end(); ++it )
 			if( get<1>( *it ) == el )
-			return it;
+				return it;
 		return container.end();
 	};
 
 	void GraphicsSystem::drawingThreadFunction()
-{
+	{
+		glEnable( GL_SCISSOR_TEST );
+		glScissor( 0, 0, r_renderWindow->getSize().x, r_renderWindow->getSize().y );
+
+		m_drawingIsActive = true;
 		r_renderWindow->setActive( true );
 		sf::Clock frameTimeClock;
 
@@ -317,6 +327,7 @@ namespace kg
 			m_cameraContainerMutex.unlock();
 			//UNLOCK
 
+			r_gui->draw();
 			r_renderWindow->display();
 
 			m_drawingThreadFrameTime = frameTimeClock.getElapsedTime().asMilliseconds();

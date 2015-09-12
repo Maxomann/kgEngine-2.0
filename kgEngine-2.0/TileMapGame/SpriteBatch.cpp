@@ -97,19 +97,21 @@ namespace kg
 				if( states.shader )
 					rt->applyShader( NULL );
 
-				m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
+				glBindBuffer( GL_ARRAY_BUFFER, 0 );
+				m_isBufferBound = false;
 			}
 		}
 
 		void SpriteBatch::initVBO()
 		{
-			rt->activate( true );
+			//rt->activate( true ); is this needed?
 			glGenBuffers( 1, &m_vbo );
-			glEnableClientState( GL_VERTEX_ARRAY );
+			//glEnableClientState( GL_VERTEX_ARRAY ); and this?
 			glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
 			glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STREAM_DRAW );
 			m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 
+			m_isBufferBound = true;
 			m_isVBOinit = true;
 		}
 
@@ -175,6 +177,12 @@ namespace kg
 		{
 			if( !m_isVBOinit )
 				initVBO();
+			if( !m_isBufferBound )
+			{
+				glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
+				m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
+				m_isBufferBound = true;
+			}
 
 			auto index = create( texture );
 
