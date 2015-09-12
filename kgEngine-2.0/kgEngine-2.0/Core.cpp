@@ -9,9 +9,6 @@ namespace kg
 {
 	void Core::init()
 	{
-		/*m_engine.renderWindow.create( sf::VideoMode( 200, 100 ), "kgEngine 2.0 - Window not initialized" );
-		m_engine.renderWindow.setVerticalSyncEnabled( true ); -now done in GraphicsSystem*/
-
 		loadPackages();
 		m_engine.blueprint.link();
 

@@ -22,6 +22,7 @@ namespace kg
 
 	void InputManager::forwardSfmlEvent( const sf::Event& sfEvent )
 	{
+		gui.handleEvent( sfEvent );
 		m_actionMap.pushEvent( sfEvent );
 	}
 

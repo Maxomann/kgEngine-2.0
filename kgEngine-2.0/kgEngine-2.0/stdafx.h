@@ -59,6 +59,8 @@
 
 #include <Thor/Input.hpp>
 
+#include <TGUI/TGUI.hpp>
+
 #ifdef _WIN32
 #include<windows.h>
 #elif

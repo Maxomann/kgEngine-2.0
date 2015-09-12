@@ -5,10 +5,17 @@ namespace kg
 {
 	class DLL_EXPORT InputManager
 	{
+
 		thor::ActionMap<int> m_actionMap;
 		thor::ActionMap<int>::CallbackSystem m_callbackSystem;
 
 	public:
+		// Has to be initialized manually in GraphicsSystem.
+		// Event forwarding is done by InputManager. DON'T forward them twice!
+		// Also gui.draw() has to be called manually. This is to enable multithreading.
+		tgui::Gui gui;
+
+
 		void setAction( const int& actionId, const thor::Action& action );
 		template<class T>
 		void setAction( const int& actionId, const thor::Action& action, const T& callback );
