@@ -91,6 +91,7 @@
     <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PluginManager.cpp" />

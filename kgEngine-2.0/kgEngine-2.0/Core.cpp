@@ -7,6 +7,11 @@ using namespace sys;
 
 namespace kg
 {
+
+	Core::Core()
+		:m_gameStateManager( m_engine, m_world, m_saveManager )
+	{ }
+
 	void Core::init()
 	{
 		loadPackages();
@@ -17,6 +22,7 @@ namespace kg
 
 		//init systems
 		m_world.initSystemsByImportance( m_engine, m_world, m_saveManager );
+		m_gameStateManager.init();
 	}
 
 	bool Core::shouldTerminate() const
@@ -43,9 +49,10 @@ namespace kg
 			m_engine.inputManager.forwardSfmlEvent( event );
 		}
 
-		if( !m_engine.isPaused )//if engine is not paused, update entities
+		if( !m_engine.isPaused )//if game is not paused, update entities
 			m_world.updateEntities( m_engine, m_world, frameTime );
 		m_world.updateAllSystemsByImportance( m_engine, m_world, m_saveManager, frameTime );
+		m_gameStateManager.onUpdate();
 		m_engine.inputManager.triggerCallbacks( m_engine.renderWindow );
 		m_world.removeEntitiesOnRemoveList();
 	}

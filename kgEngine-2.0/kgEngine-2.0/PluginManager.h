@@ -92,7 +92,7 @@ namespace kg
 			size_t genericPluginType = typeid(genericPluginType).hash_code();
 			try
 			{
-				auto& plugin = m_pluginsByGenericTypeHash.at( genericPluginType ).first.at( id );
+				auto plugin = static_pointer_cast< PluginFactoryInterface<BasePluginType> >(m_pluginsByGenericTypeHash.at( genericPluginType ).first.at( id ));
 				if( plugin == nullptr )
 					throw PluginRequestException( id );
 
@@ -144,11 +144,11 @@ namespace kg
 			size_t genericPluginType = typeid(genericPluginType).hash_code();
 			try
 			{
-				auto& plugin = m_pluginsByGenericTypeHash.at( genericPluginType ).second.at( name );
+				auto plugin = static_pointer_cast< PluginFactoryInterface<BasePluginType> >(m_pluginsByGenericTypeHash.at( genericPluginType ).second.at( name ));
 				if( plugin == nullptr )
 					throw PluginRequestException( name );
 
-				return plugin->create();
+				return std::static_pointer_cast< BasePluginType >(plugin->create());
 			}
 			catch( const std::exception& )
 			{
@@ -200,7 +200,7 @@ namespace kg
 			auto type_hash = typeid(BasePluginType).hash_code();
 
 			for( const auto& el : m_pluginsByGenericTypeHash[type_hash].first )
-				retVal.push_back( static_pointer_cast<PluginFactoryInterface<BasePluginType>>(el.second) );
+				retVal.push_back( static_pointer_cast< PluginFactoryInterface<BasePluginType> >(el.second) );
 
 			return retVal;
 		};
