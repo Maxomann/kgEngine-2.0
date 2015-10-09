@@ -5,8 +5,7 @@ namespace kg
 {
 	class Transformation : public Component, public CallbackReciever
 	{
-		mutable boost::mutex m_globalBoundsMutex;
-		mutable boost::mutex m_zValueMutex;
+		mutable boost::mutex m_mutex;
 
 		sf::FloatRect m_globalBounds;
 

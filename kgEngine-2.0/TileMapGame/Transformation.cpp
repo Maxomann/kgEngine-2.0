@@ -58,31 +58,31 @@ namespace kg
 
 	sf::FloatRect Transformation::getGlobalBounds() const
 	{
-		m_globalBoundsMutex.lock();
+		m_mutex.lock();
 
 		auto retVal = m_globalBounds;
 
-		m_globalBoundsMutex.unlock();
+		m_mutex.unlock();
 
 		return retVal;
 	}
 
 	bool Transformation::intersects( const sf::FloatRect& rect )const
 	{
-		m_globalBoundsMutex.lock();
+		m_mutex.lock();
 		bool retVal = m_globalBounds.intersects( rect );
-		m_globalBoundsMutex.unlock();
+		m_mutex.unlock();
 
 		return retVal;
 	}
 
 	sf::Vector3i Transformation::getXYZValues() const
 	{
-		m_globalBoundsMutex.lock();
+		m_mutex.lock();
 		auto retVal = Vector3i( m_globalBounds.left,
 								m_globalBounds.top + m_globalBounds.height,//feet position
 								m_zValue );
-		m_globalBoundsMutex.unlock();
+		m_mutex.unlock();
 		return retVal;
 	}
 
@@ -186,7 +186,7 @@ namespace kg
 
 	void Transformation::recalculateGlobalBounds()
 	{
-		m_globalBoundsMutex.lock();
+		m_mutex.lock();
 
 		RectangleShape shape;
 
@@ -197,27 +197,27 @@ namespace kg
 
 		m_globalBounds = shape.getGlobalBounds();
 
-		m_globalBoundsMutex.unlock();
+		m_mutex.unlock();
 	}
 
 	int Transformation::getZValue() const
 	{
-		m_zValueMutex.lock();
+		m_mutex.lock();
 
 		auto retVal = m_zValue;
 
-		m_zValueMutex.unlock();
+		m_mutex.unlock();
 
 		return retVal;
 	}
 
 	void Transformation::setZValue( int zValue )
 	{
-		m_zValueMutex.lock();
+		m_mutex.lock();
 
 		m_zValue = zValue;
 
-		m_zValueMutex.unlock();
+		m_mutex.unlock();
 	}
 
 	const std::string Transformation::BLUEPRINT_ZVALUE = "zValue";

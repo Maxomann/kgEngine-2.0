@@ -69,6 +69,13 @@ namespace kg
 		return type_hash;
 	}
 
+	std::shared_ptr<Entity> GameController::m_getValidCamera()
+	{
+		if( m_camera.expired() )
+			m_camera = r_graphicsSystem->getCamera( 0 );
+		return m_camera.lock();
+	}
+
 	void GameController::saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager )
 	{
 		world.getSystem<ChunkSystem>()->saveAllLoadedChunks( engine, world, saveManager );
@@ -77,9 +84,7 @@ namespace kg
 
 	void GameController::movePlayer( sf::Vector2i distance )
 	{
-		if( m_camera.expired() )
-			m_camera = r_graphicsSystem->getCamera( 0 );
-		auto camera = m_camera.lock();
+		auto camera = m_getValidCamera();
 
 		camera->getComponent<Transformation>()->move( distance );
 	}
@@ -243,28 +248,24 @@ namespace kg
 
 	void GameController::zoomIn()
 	{
-		if( m_camera.expired() )
-			m_camera = r_graphicsSystem->getCamera( 0 );
-		auto camera = m_camera.lock();
+		auto camera = m_getValidCamera();
 
 		m_cameraZoomFactor -= 0.01*lastFrameTimeInMilliseconds;
 
 		if( m_cameraZoomFactor < 0 )
 			m_cameraZoomFactor = 0;
-		camera->getComponent<Transformation>()->setSize( Vector2i( (double)1280.0 * m_cameraZoomFactor, (double)720.0 * m_cameraZoomFactor ) );
+		camera->getComponent<Camera>()->setZoomFactor( m_cameraZoomFactor );
 	}
 
 	void GameController::zoomOut()
 	{
-		if( m_camera.expired() )
-			m_camera = r_graphicsSystem->getCamera( 0 );
-		auto camera = m_camera.lock();
+		auto camera = m_getValidCamera();
 
 		m_cameraZoomFactor += 0.01*lastFrameTimeInMilliseconds;
 
 		if( m_cameraZoomFactor < 0 )
 			m_cameraZoomFactor = 0;
-		camera->getComponent<Transformation>()->setSize( Vector2i( (double)1280.0 * m_cameraZoomFactor, (double)720.0 * m_cameraZoomFactor ) );
+		camera->getComponent<Camera>()->setZoomFactor( m_cameraZoomFactor );
 	}
 
 }

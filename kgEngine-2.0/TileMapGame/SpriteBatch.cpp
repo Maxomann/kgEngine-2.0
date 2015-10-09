@@ -111,7 +111,7 @@ namespace kg
 			glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STREAM_DRAW );
 			m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 
-			m_isBufferBound = true;
+			m_isBufferBound = false;
 			m_isVBOinit = true;
 		}
 
@@ -180,6 +180,7 @@ namespace kg
 			if( !m_isBufferBound )
 			{
 				glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
+				glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STREAM_DRAW );
 				m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 				m_isBufferBound = true;
 			}

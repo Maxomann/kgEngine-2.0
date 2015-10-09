@@ -18,10 +18,13 @@ namespace kg
 		sf::View m_view;
 		sf::Vector2u m_finalSize;
 
-		void onPositionChanged( const sf::Vector2i& newPosition );
-		void onSizeChanged( const sf::Vector2i& newSize );
+		void m_onPositionChanged( const sf::Vector2i& newPosition );
+		void m_onSizeChanged( const sf::Vector2i& newSize );
+		void m_setViewSize( const sf::Vector2i& size, const float& zoomFactor );
 
 		batch::SpriteBatch m_spriteBatch;
+
+		float m_zoomFactor = 1;
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )override;
@@ -45,6 +48,9 @@ namespace kg
 		void setViewport( const sf::FloatRect& viewport );
 		sf::FloatRect getViewport()const;
 		
+		void setZoomFactor( const float& zoomFactor );
+		const float& getZoomFactor()const;
+
 		void drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
 										const std::vector<std::tuple<sf::Vector3i, std::shared_ptr<Entity>, Graphics*>>& toDrawSorted );
 

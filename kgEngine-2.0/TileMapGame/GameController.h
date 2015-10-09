@@ -15,6 +15,7 @@ namespace kg
 
 		std::weak_ptr<Entity> m_camera;
 		float m_cameraZoomFactor = 1;
+		std::shared_ptr<Entity> m_getValidCamera();
 
 		sf::Int32 lastFrameTimeInMilliseconds = 0;
 
@@ -67,5 +68,7 @@ namespace kg
 
 		void zoomIn();
 		void zoomOut();
+
+
 	};
 }

@@ -14,8 +14,8 @@ namespace kg
 	{
 		r_transformation = thisEntity.getComponent<Transformation>();
 
-		m_connectToSignal( r_transformation->s_positionChanged, &Camera::onPositionChanged );
-		m_connectToSignal( r_transformation->s_sizeChanged, &Camera::onSizeChanged );
+		m_connectToSignal( r_transformation->s_positionChanged, &Camera::m_onPositionChanged );
+		m_connectToSignal( r_transformation->s_sizeChanged, &Camera::m_onSizeChanged );
 	}
 
 	void Camera::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
@@ -43,17 +43,22 @@ namespace kg
 		return ( int )id::ComponentPluginId::CAMERA;
 	}
 
-	void Camera::onPositionChanged( const sf::Vector2i& newPosition )
+	void Camera::m_onPositionChanged( const sf::Vector2i& newPosition )
 	{
 		m_viewMutex.lock();
 		m_view.setCenter( sf::Vector2f( newPosition ) );
 		m_viewMutex.unlock();
 	}
 
-	void Camera::onSizeChanged( const sf::Vector2i& newSize )
+	void Camera::m_onSizeChanged( const sf::Vector2i& newSize )
+	{
+		m_setViewSize( newSize, m_zoomFactor );
+	}
+
+	void Camera::m_setViewSize( const sf::Vector2i& size, const float& zoomFactor )
 	{
 		m_viewMutex.lock();
-		m_view.setSize( sf::Vector2f( newSize ) );
+		m_view.setSize( (( double )size.x)*zoomFactor, (( double )size.y)*zoomFactor );
 		m_viewMutex.unlock();
 	}
 
@@ -70,6 +75,18 @@ namespace kg
 		auto retVal = m_view.getViewport();
 		m_viewMutex.unlock();
 		return retVal;
+	}
+
+	void Camera::setZoomFactor( const float& zoomFactor )
+	{
+		m_zoomFactor = zoomFactor;
+		auto size = r_transformation->getSize();
+		m_setViewSize( size, m_zoomFactor );
+	}
+
+	const float& Camera::getZoomFactor() const
+	{
+		return m_zoomFactor;
 	}
 
 	std::shared_ptr<Entity> Camera::EMPLACE_TO_WORLD( Engine& engine, World& world, boost::mutex& drawDistanceMutex, unsigned int* drawDistancePointer )
@@ -110,7 +127,7 @@ namespace kg
 			auto thisPosition = r_transformation->getPosition();
 
 			auto distanceVec = sf::Vector2i( spritePosition.x - thisPosition.x, spritePosition.y - thisPosition.y );
-			if(length(distanceVec)<=*r_drawDistance )
+			if( length( distanceVec ) <= *r_drawDistance )
 				get<2>( el )->drawToSpriteBatch( m_spriteBatch );
 		}
 
