@@ -8,6 +8,7 @@ namespace kg
 
 		thor::ActionMap<int> m_actionMap;
 		thor::ActionMap<int>::CallbackSystem m_callbackSystem;
+		std::map<int, std::vector<thor::Connection>> m_connectionsByActionId;//saved for disconnecting later
 
 	public:
 		// Has to be initialized manually in GraphicsSystem.
@@ -40,7 +41,8 @@ namespace kg
 	template<class T>
 	void kg::InputManager::connect( const int& actionId, const T& callback )
 	{
-		m_callbackSystem.connect( actionId, callback );
+		auto connection = m_callbackSystem.connect( actionId, callback );
+		m_connectionsByActionId[actionId].push_back( connection );
 	}
 
 }

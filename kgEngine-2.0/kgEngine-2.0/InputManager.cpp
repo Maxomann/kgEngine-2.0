@@ -12,6 +12,8 @@ namespace kg
 
 	void InputManager::removeAction( const int& actionId )
 	{
+		for( auto& el : m_connectionsByActionId[actionId] )
+			el.disconnect();
 		m_actionMap.removeAction( actionId );
 	}
 

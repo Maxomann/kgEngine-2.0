@@ -32,8 +32,6 @@ namespace kg
 
 	void GameController::sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent )
 	{
-		if( sfEvent.type == Event::Closed )
-			shutDown();
 		return;
 	}
 
