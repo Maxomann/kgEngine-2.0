@@ -90,6 +90,8 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="EntityManager.cpp" />
+    <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PluginManager.cpp" />
@@ -116,6 +118,8 @@
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="EntityThatHasComponentContainer.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="id_internal.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="PathNotAvailableException.h" />

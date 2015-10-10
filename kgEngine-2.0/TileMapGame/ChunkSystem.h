@@ -82,6 +82,7 @@ namespace kg
 		/*std::list<std::shared_ptr<Entity>> getEntitiesInChunk( const sf::Vector2i& from,
 															   const sf::Vector2i& to )const;*/
 
+		void saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager );
 		void saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager );
 
 		// returns the position in chunks for the position of an entity

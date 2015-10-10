@@ -3,6 +3,7 @@
 #include "World.h"
 #include "Engine.h"
 #include "SaveManager.h"
+#include "GameStateManager.h"
 
 namespace kg
 {
@@ -15,12 +16,15 @@ namespace kg
 		Engine m_engine;
 		SaveManager m_saveManager;
 		World m_world;
+		GameStateManager m_gameStateManager;
 
 		sf::Clock m_frameTimeClock;
 
 		void loadPackages();
 
 	public:
+		Core();
+
 		void init();
 
 		void update();

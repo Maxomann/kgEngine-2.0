@@ -10,5 +10,8 @@ namespace kg
 
 		//UpdateImportance
 		const double SAVE_UPDATE_IMPORTANCE = -1;
+
+		//Default GameState
+		const int DEFAULT_GAMESTATE_ID = 0;
 	}
 }

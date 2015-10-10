@@ -56,7 +56,7 @@ namespace kg
 		}
 		globalsFile.close();
 
-		s_savegameOpened( engine );//inform registered systems (even if no save information has been loaded for them!)
+		s_savegameOpened( engine, world );//inform registered systems (even if no save information has been loaded for them!)
 
 		return;
 	}

@@ -10,7 +10,7 @@ namespace kg
 {
 	class DLL_EXPORT SaveManager
 	{
-		std::string m_openSavegameName = "ErrorSavegame";
+		std::string m_openSavegameName = "dev_null";
 
 	public:
 		using SystemSaveInformationMap = std::map < int, SystemSaveInformation > ;
@@ -36,7 +36,7 @@ namespace kg
 		void saveSystems( World& world );
 
 	signals:
-		Signal<Engine&> s_savegameOpened;
+		Signal<Engine&, World&> s_savegameOpened;
 		Signal<> s_savegameClosed;
 		std::map< Plugin::Id, ReturningSignal< std::vector<std::string> > > s_writeSaveInformation;//first: systemId, second: signal
 		std::map< Plugin::Id, Signal<const std::vector<std::string>&> > s_loadSaveInformation;//first: systemId, second: signal

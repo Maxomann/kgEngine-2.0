@@ -14,7 +14,6 @@ namespace kg
 				CHUNK_SYSTEM,
 				CHUNK_GENERATOR,
 				GRAPHICS_SYSTEM,
-				GAME_CONTROLLER,
 
 				LAST_ELEMENT
 			};
@@ -36,11 +35,24 @@ namespace kg
 			};
 		}
 
-		namespace SpecialPluginId
+		namespace GameStatePluginId
 		{
 			enum
 			{
 				FIRST_ELEMENT = ComponentPluginId::LAST_ELEMENT,
+
+				//Default is 0 (defined in 'id_internal.h')
+				SINGLEPLAYER,
+
+				LAST_ELEMENT
+			};
+		}
+
+		namespace SpecialPluginId
+		{
+			enum
+			{
+				FIRST_ELEMENT = GameStatePluginId::LAST_ELEMENT,
 
 				ANIMATION_HANDLER_EASY,
 
@@ -60,7 +72,6 @@ namespace kg
 				CHUNK_GENERATOR,
 				CHUNK_SYSTEM,
 				GRAPHICS_SYSTEM,
-				GAME_CONTROLLER,
 
 				LAST_ELEMENT
 			};
@@ -88,9 +99,11 @@ namespace kg
 			{
 				FIRST_ELEMENT,
 
+				//DefaultGameState
 				SHUT_DOWN,
-				RELOAD_SAVE,
 
+				//SingleplayerGameState
+				RELOAD_SAVE,
 				MOVE_UP,
 				MOVE_DOWN,
 				MOVE_LEFT,
@@ -103,7 +116,6 @@ namespace kg
 				MOVE_DOWN_SLOW,
 				MOVE_LEFT_SLOW,
 				MOVE_RIGHT_SLOW,
-
 				ZOOM_IN,
 				ZOOM_OUT,
 

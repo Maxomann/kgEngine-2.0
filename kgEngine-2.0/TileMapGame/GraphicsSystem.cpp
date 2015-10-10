@@ -87,11 +87,6 @@ namespace kg
 
 	void GraphicsSystem::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
-		if( m_shouldInitCameras )
-		{
-			m_initCameras( engine, world );
-			m_shouldInitCameras = false;
-		}
 
 		m_drawableEntityMutex.lock();
 		m_addedEntitiesCopy.insert( end( m_addedEntitiesCopy ), begin( m_addedEntities ), end( m_addedEntities ) );
@@ -149,9 +144,9 @@ namespace kg
 			m_removedEntities.push_back( entity );
 	}
 
-	void GraphicsSystem::m_onSavegameOpened( Engine& engine )
+	void GraphicsSystem::m_onSavegameOpened( Engine& engine, World& world )
 	{
-		m_shouldInitCameras = true;
+		m_initCameras( engine, world );
 	}
 
 	void GraphicsSystem::m_onSavegameClosed()
