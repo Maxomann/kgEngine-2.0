@@ -20,7 +20,7 @@ namespace kg
 		camera->getComponent<Transformation>()->move( distance );
 	}
 
-	void SingleplayerGameState::m_onSavegameOpened( Engine& engine )
+	void SingleplayerGameState::m_onSavegameOpened( Engine& engine, World& world )
 	{
 		m_cameraZoomFactor = 1;
 	}

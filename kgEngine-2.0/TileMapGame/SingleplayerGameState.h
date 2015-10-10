@@ -15,7 +15,7 @@ namespace kg
 
 		void movePlayer( sf::Vector2i distance );
 
-		void m_onSavegameOpened( Engine& engine );
+		void m_onSavegameOpened( Engine& engine, World& world );
 
 	public:
 		virtual void onInit() override;

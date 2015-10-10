@@ -48,7 +48,6 @@ namespace kg
 		sf::RenderWindow* r_renderWindow;
 		tgui::Gui* r_gui;
 
-		bool m_shouldInitCameras = true;
 		void m_initCameras( Engine& engine, World& world );
 
 		EntityManager::EntityContainer m_addedEntities;
@@ -56,7 +55,7 @@ namespace kg
 		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity );
 		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity );
 
-		void m_onSavegameOpened( Engine& engine );
+		void m_onSavegameOpened( Engine& engine, World& world );
 		void m_onSavegameClosed();
 
 		void m_launchDrawingThread( sf::RenderWindow& renderWindow );
