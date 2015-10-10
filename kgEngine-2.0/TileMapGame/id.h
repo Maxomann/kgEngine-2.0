@@ -14,7 +14,6 @@ namespace kg
 				CHUNK_SYSTEM,
 				CHUNK_GENERATOR,
 				GRAPHICS_SYSTEM,
-				GAME_CONTROLLER,
 
 				LAST_ELEMENT
 			};
@@ -73,7 +72,6 @@ namespace kg
 				CHUNK_GENERATOR,
 				CHUNK_SYSTEM,
 				GRAPHICS_SYSTEM,
-				GAME_CONTROLLER,
 
 				LAST_ELEMENT
 			};
