@@ -1,4 +1,5 @@
 boost
 SFML
 glew
-THOR
+THOR (sfml)
+tgui
