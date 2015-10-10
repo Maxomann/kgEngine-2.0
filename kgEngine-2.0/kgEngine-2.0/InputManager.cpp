@@ -1,7 +1,6 @@
 #include "InputManager.h"
 using namespace std;
 using namespace sf;
-using namespace thor;
 
 namespace kg
 {

@@ -2,7 +2,6 @@
 using namespace std;
 using namespace sf;
 using namespace tgui;
-using Action = thor::Action;
 
 namespace kg
 {

@@ -8,6 +8,8 @@
 #include "ChunkSystem.h"
 #include "GraphicsSystem.h"
 
+#include "DefaultGameState.h"
+
 using namespace std;
 using namespace kg;
 
@@ -39,10 +41,10 @@ extern "C"
 		//Camera not registered as a plugin. A camera entity is created in the GraphicsSystem
 
 		//Systems
-		pluginManager.addPluginFactory(
+		/*pluginManager.addPluginFactory(
 			std::make_shared<PluginFactory<System, GameController>>(
 				( int )id::SystemPluginId::GAME_CONTROLLER,
-				GameController::PLUGIN_NAME ) );
+				GameController::PLUGIN_NAME ) );*/
 		pluginManager.addPluginFactory(
 			std::make_shared<PluginFactory<System, ChunkSystem>>(
 				( int )id::SystemPluginId::CHUNK_SYSTEM,
@@ -60,7 +62,13 @@ extern "C"
 				( int )id::SystemPluginId::ANIMATION_SYSTEM,
 				AnimationSystem::PLUGIN_NAME ) );
 
+		//GameStates
+		pluginManager.addPluginFactory(
+			std::make_shared<PluginFactory<GameState, DefaultGameState>>(
+				( int )id::DEFAULT_GAMESTATE_ID,
+				DefaultGameState::PLUGIN_NAME ) );
 
+		//AnimationHandlers
 		pluginManager.addPluginFactory(
 			std::make_shared<PluginFactory<AnimationHandler, EasyAnimationHandler>>(
 				( int )id::SpecialPluginId::ANIMATION_HANDLER_EASY,

@@ -40,6 +40,7 @@ namespace kg
 		}
 		if( m_engine.isPaused )
 			frameTime = sf::seconds( 0 );
+		m_gameStateManager.forwardFrameTime( frameTime );
 
 		Event event;
 		m_engine.inputManager.clearEvents();

@@ -10,7 +10,7 @@ namespace kg
 {
 	class DLL_EXPORT SaveManager
 	{
-		std::string m_openSavegameName = "ErrorSavegame";
+		std::string m_openSavegameName = "dev_null";
 
 	public:
 		using SystemSaveInformationMap = std::map < int, SystemSaveInformation > ;

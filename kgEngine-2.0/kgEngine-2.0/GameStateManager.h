@@ -16,7 +16,9 @@ namespace kg
 
 		void init();
 
-		void push( std::shared_ptr<GameState>& gameState );
+		void forwardFrameTime( const sf::Time& frameTime );
+
+		void push( const std::shared_ptr<GameState>& gameState );
 
 		void pop();
 

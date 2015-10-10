@@ -1,7 +1,6 @@
 #include "GameState.h"
 using namespace std;
 using namespace sf;
-using namespace thor;
 
 namespace kg
 {
@@ -11,6 +10,11 @@ namespace kg
 		r_engine = &engine;
 		r_world = &world;
 		r_saveManager = &saveManager;
+	}
+
+	void GameState::updateFrameTime( const sf::Time& frameTime )
+	{
+		this->frameTime = frameTime;
 	}
 
 }

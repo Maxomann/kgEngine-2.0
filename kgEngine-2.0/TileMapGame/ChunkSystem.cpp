@@ -170,6 +170,12 @@ namespace kg
 		// its a bug -.-
 	}
 
+	void ChunkSystem::saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager )
+	{
+		saveAllLoadedChunks( engine, world, saveManager );
+		saveManager.saveSystems( world );
+	}
+
 	bool ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
 	{
 		if( !m_loadedChunks[chunkPosition.x][chunkPosition.y] )
