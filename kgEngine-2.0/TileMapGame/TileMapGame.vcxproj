@@ -95,7 +95,6 @@
     <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="connect.cpp" />
-    <ClCompile Include="GameController.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="SingleplayerGameState.cpp" />
     <ClCompile Include="SpriteBatch.cpp" />
@@ -113,7 +112,6 @@
     <ClInclude Include="SpriteBatch.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="GameController.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="id.h" />
     <ClInclude Include="stdafx.h" />

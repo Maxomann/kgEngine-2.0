@@ -4,7 +4,6 @@
 #include "Transformation.h"
 #include "AnimationComponent.h"
 
-#include "GameController.h"
 #include "ChunkSystem.h"
 #include "GraphicsSystem.h"
 
@@ -41,10 +40,6 @@ extern "C"
 		//Camera not registered as a plugin. A camera entity is created in the GraphicsSystem
 
 		//Systems
-		/*pluginManager.addPluginFactory(
-			std::make_shared<PluginFactory<System, GameController>>(
-				( int )id::SystemPluginId::GAME_CONTROLLER,
-				GameController::PLUGIN_NAME ) );*/
 		pluginManager.addPluginFactory(
 			std::make_shared<PluginFactory<System, ChunkSystem>>(
 				( int )id::SystemPluginId::CHUNK_SYSTEM,
