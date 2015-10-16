@@ -39,6 +39,7 @@ namespace kg
 			bool m_isVBOinit = false;
 			bool m_isBufferBound = false;
 			void initVBO();
+			void destroyVBO();
 
 			sf::Vertex* m_bufferPtr = nullptr;
 		};

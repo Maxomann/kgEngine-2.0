@@ -33,7 +33,9 @@ namespace kg
 		}
 
 		SpriteBatch::~SpriteBatch( void )
-		{ }
+		{
+			destroyVBO();
+		}
 
 		void SpriteBatch::openGlDraw( std::size_t vertexCount,
 									  PrimitiveType type,
@@ -45,7 +47,7 @@ namespace kg
 
 			// GL_QUADS is unavailable on OpenGL ES
 #ifdef SFML_OPENGL_ES
-			if (type == Quads)
+			if( type == Quads )
 			{
 				err() << "sf::Quads primitive type is not supported on OpenGL ES platforms, drawing skipped" << std::endl;
 				return;
@@ -115,6 +117,13 @@ namespace kg
 			m_isVBOinit = true;
 		}
 
+		void SpriteBatch::destroyVBO()
+		{
+			glUnmapBuffer( GL_ARRAY_BUFFER );
+			glBindBuffer( GL_ARRAY_BUFFER, 0 );
+			glDeleteBuffers( 1, &m_vbo );
+		}
+
 		void SpriteBatch::draw( const Sprite &sprite )
 		{
 			draw( sprite.getTexture(),
@@ -177,6 +186,8 @@ namespace kg
 		{
 			if( !m_isVBOinit )
 				initVBO();
+
+			auto index = create( texture );
 			if( !m_isBufferBound )
 			{
 				glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
@@ -184,8 +195,6 @@ namespace kg
 				m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 				m_isBufferBound = true;
 			}
-
-			auto index = create( texture );
 
 			int rot = static_cast< int >(rotation / 360 * LookupSize + 0.5) & (LookupSize - 1);
 			float& _sin = getSin[rot];

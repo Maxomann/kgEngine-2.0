@@ -328,6 +328,14 @@ namespace kg
 			m_drawingThreadFrameTime = frameTimeClock.getElapsedTime().asMilliseconds();
 			m_syncMutex.unlock();
 
+			//output GL_ERROR
+			while( true )
+			{
+				GLenum err = glGetError();
+				if( err == GL_NO_ERROR )
+					break;
+				cout << err << endl;
+			}
 		}
 		m_drawingIsActive = false;
 		return;
