@@ -63,7 +63,7 @@ namespace tgui
         ///
         /// @param filename       The absolute or relative filename of the image that should be loaded
         /// @param fullyClickable This affects what happens when clicking on a transparent pixel in the image.
-        ///                       Is the click caught by the picture, or does the event pass to the widgets behind it.
+        ///                       Is the click caught by the picture, or does the event pass to the widgets behind it?
         ///
         /// @throw Exception when the image could not be loaded (probably not found)
         ///
@@ -78,8 +78,74 @@ namespace tgui
         ///
         /// Note that the texture will be copied, so any changes applied to it afterwards will not affect the picture.
         ///
+        /// @code
+        /// sf::Texture texture;
+        /// texture.loadFromFile("image.png", {10, 10, 80, 80});
+        /// auto picture = std::make_shared<tgui::Picture>(texture);
+        /// @endcode
+        ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Picture(const sf::Texture& texture);
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Constructor to create the picture from an image
+        ///
+        /// @param texture  The texture to load the picture from
+        /// @param fullyClickable This affects what happens when clicking on a transparent pixel in the image.
+        ///                       Is the click caught by the picture, or does the event pass to the widgets behind it?
+        ///
+        /// @code
+        /// auto picture = std::make_shared<tgui::Picture>(tgui::Texture{"image.png", {10, 10, 80, 80}});
+        /// @endcode
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Picture(const Texture& texture, bool fullyClickable = true);
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Change the image
+        ///
+        /// @param filename       The absolute or relative filename of the image that should be loaded
+        /// @param fullyClickable This affects what happens when clicking on a transparent pixel in the image.
+        ///                       Is the click caught by the picture, or does the event pass to the widgets behind it?
+        ///
+        /// @throw Exception when the image could not be loaded (probably not found)
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        void setTexture(const std::string& filename, bool fullyClickable = true);
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Change the image
+        ///
+        /// @param texture  The texture to load the picture from
+        ///
+        /// Note that the texture will be copied, so any changes applied to it afterwards will not affect the picture.
+        ///
+        /// @code
+        /// sf::Texture texture;
+        /// texture.loadFromFile("image.png", {10, 10, 80, 80});
+        /// picture->setTexture(texture);
+        /// @endcode
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        void setTexture(const sf::Texture& texture);
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Change the image
+        ///
+        /// @param texture  The texture to load the picture from
+        /// @param fullyClickable This affects what happens when clicking on a transparent pixel in the image.
+        ///                       Is the click caught by the picture, or does the event pass to the widgets behind it?
+        ///
+        /// @code
+        /// picture->setTexture({"image.png", {10, 10, 80, 80}});
+        /// @endcode
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        void setTexture(const Texture& texture, bool fullyClickable = true);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,16 +230,12 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the transparency of the widget.
+        /// @brief Changes the opacity of the widget.
         ///
-        /// @param transparency  The transparency of the widget.
-        ///                      0 is completely transparent, while 255 (default) means fully opaque.
-        ///
-        /// Note that this will only change the transparency of the images. The parts of the widgets that use a color will not
-        /// be changed. You must change them yourself by setting the alpha channel of the color.
+        /// @param opacity  The opacity of the widget. 0 means completely transparent, while 1 (default) means fully opaque.
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void setTransparency(unsigned char transparency) override;
+        virtual void setOpacity(float opacity) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -201,9 +263,9 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // When the elapsed time has changed then this function is called.
+        // This function is called every frame with the time passed since the last frame.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void update() override;
+        virtual void update(sf::Time elapsedTime) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

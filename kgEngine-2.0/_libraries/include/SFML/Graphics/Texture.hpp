@@ -31,6 +31,7 @@
 #include <SFML/Graphics/Export.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Window/GlResource.hpp>
+
 namespace kg
 {
 	namespace batch
@@ -516,6 +517,7 @@ private:
     bool         m_isSmooth;      ///< Status of the smooth filter
     bool         m_isRepeated;    ///< Is the texture in repeat mode?
     mutable bool m_pixelsFlipped; ///< To work around the inconsistency in Y orientation
+    bool         m_fboAttachment; ///< Is this texture owned by a framebuffer object?
     Uint64       m_cacheId;       ///< Unique number that identifies the texture to the render target's cache
 };
 

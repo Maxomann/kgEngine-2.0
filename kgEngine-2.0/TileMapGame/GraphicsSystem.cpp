@@ -72,7 +72,7 @@ namespace kg
 		setDrawDistance( boost::lexical_cast< unsigned int >(*m_configValues.drawDistance) );
 
 		engine.inputManager.gui.setWindow( engine.renderWindow );
-		engine.inputManager.gui.setGlobalFont( engine.resourceManager.getResource<sf::Font>(
+		engine.inputManager.gui.setFont( engine.resourceManager.getResource<sf::Font>(
 			Constants::PACKAGE_NAME,
 			Folder::FONTS + "DejaVuSans.ttf"
 			) );

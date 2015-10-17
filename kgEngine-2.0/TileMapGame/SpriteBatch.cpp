@@ -163,7 +163,7 @@ namespace kg
 
 		int SpriteBatch::create( const Texture *texture )
 		{
-			if( texture != state.texture )
+			if( texture != state.texture || (count+1)*4 >= MaxCapacity )
 			{
 				if( state.texture != nullptr )
 					display( false );

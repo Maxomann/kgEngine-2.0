@@ -79,41 +79,14 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the global font.
+        /// @brief Changes the font of the text in the widget and its children.
         ///
-        /// This font will be used by all widgets that are created after calling this function.
+        /// @param font  The new font.
         ///
-        /// @param filename  Path of the font file to load
-        ///
-        /// @throw Exception when loading fails
+        /// When you don't call this function then the font from the parent widget will be used.
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void setGlobalFont(const std::string& filename);
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the global font.
-        ///
-        /// This font will be used by all widgets that are created after calling this function.
-        ///
-        /// @param font  Font to use
-        ///
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void setGlobalFont(std::shared_ptr<sf::Font> font);
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns the global font.
-        ///
-        /// This is the font that is used for newly created widget by default.
-        ///
-        /// @return global font
-        ///
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::shared_ptr<sf::Font> getGlobalFont() const
-        {
-            return m_font;
-        }
+        virtual void setFont(const Font& font) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -303,16 +276,12 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the transparency of the widget.
+        /// @brief Changes the opacity of the widget.
         ///
-        /// @param transparency  The transparency of the widget.
-        ///                      0 is completely transparent, while 255 (default) means fully opaque.
-        ///
-        /// Note that this will only change the transparency of the images. The parts of the widgets that use a color will not
-        /// be changed. You must change them yourself by setting the alpha channel of the color.
+        /// @param opacity  The opacity of the widget. 0 means completely transparent, while 1 (default) means fully opaque.
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void setTransparency(unsigned char transparency) override;
+        virtual void setOpacity(float opacity) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -324,7 +293,7 @@ namespace tgui
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         virtual sf::Vector2f getWidgetsOffset() const
         {
-            return sf::Vector2f(0, 0);
+            return sf::Vector2f{0, 0};
         }
 
 
@@ -412,27 +381,20 @@ namespace tgui
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @internal
-        // Show the tooltip when the widget is located below the mouse.
-        // Returns its tooltip or the tooltip from a child widget if the mouse is on top of the widget.
-        // A nullptr is returned when the mouse is not on top of the widget or when the tooltip is empty.
+        // Show the tool tip when the widget is located below the mouse.
+        // Returns its tool tip or the tool tip from a child widget if the mouse is on top of the widget.
+        // A nullptr is returned when the mouse is not on top of the widget or when the tool tip is empty.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual std::shared_ptr<ToolTip> askToolTip(sf::Vector2f mousePos);
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @internal
-        // This function is called when the widget is added to a container.
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void initialize(Container *const container) override;
+        virtual Widget::Ptr askToolTip(sf::Vector2f mousePos) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       protected:
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // This function is called every frame.
+        // This function is called every frame with the time passed since the last frame.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void update() override;
+        virtual void update(sf::Time elapsedTime) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

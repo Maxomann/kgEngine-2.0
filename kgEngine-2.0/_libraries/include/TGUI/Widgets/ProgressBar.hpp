@@ -129,6 +129,28 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Returns the full size of the progress bar
+        ///
+        /// The size returned by this function includes the borders.
+        ///
+        /// @return Full size of the progress bar
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual sf::Vector2f getFullSize() const override;
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Changes the font of the text in the widget.
+        ///
+        /// @param font  The new font.
+        ///
+        /// When you don't call this function then the font from the parent widget will be used.
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual void setFont(const Font& font) override;
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Sets a minimum value.
         ///
         /// @param minimum  The new minimum value
@@ -279,26 +301,27 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the transparency of the widget.
+        /// @brief Changes the opacity of the widget.
         ///
-        /// @param transparency  The transparency of the widget.
-        ///                      0 is completely transparent, while 255 (default) means fully opaque.
-        ///
-        /// Note that this will only change the transparency of the images. The parts of the widgets that use a color will not
-        /// be changed. You must change them yourself by setting the alpha channel of the color.
+        /// @param opacity  The opacity of the widget. 0 means completely transparent, while 1 (default) means fully opaque.
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void setTransparency(unsigned char transparency) override;
+        virtual void setOpacity(float opacity) override;
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Returns the distance between the position where the widget is drawn and where the widget is placed
+        ///
+        /// This is basically the width and height of the optional borders drawn around widgets.
+        ///
+        /// @return Offset of the widget
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual sf::Vector2f getWidgetOffset() const override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       protected:
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // This function is called when the widget is added to a container.
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void initialize(Container *const container) override;
-
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Reload the widget
@@ -551,6 +574,9 @@ namespace tgui
 
         Texture  m_textureBack;
         Texture  m_textureFront;
+
+        sf::Color m_textColorFront;
+        sf::Color m_textColorBack;
 
         sf::Color m_backgroundColor;
         sf::Color m_foregroundColor;

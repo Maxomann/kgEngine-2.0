@@ -32,6 +32,14 @@
 #include <SFML/Graphics/BlendMode.hpp>
 #include <SFML/Graphics/Transform.hpp>
 
+namespace kg
+{
+	namespace batch
+	{
+		class SpriteBatch;
+	}
+}
+
 namespace sf
 {
 class Shader;
@@ -43,6 +51,7 @@ class Texture;
 ////////////////////////////////////////////////////////////
 class SFML_GRAPHICS_API RenderStates
 {
+	friend class kg::batch::SpriteBatch;
 public:
 
     ////////////////////////////////////////////////////////////

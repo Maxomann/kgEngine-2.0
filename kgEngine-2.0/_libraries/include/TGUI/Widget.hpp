@@ -31,16 +31,22 @@
 #include <TGUI/Signal.hpp>
 #include <TGUI/Transformable.hpp>
 #include <TGUI/Texture.hpp>
+#include <TGUI/Font.hpp>
 #include <TGUI/Loading/Deserializer.hpp>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 namespace tgui
 {
-    class ToolTip;
     class BaseTheme;
     class Container;
     class WidgetRenderer;
+
+    enum class ShowAnimationType;
+    namespace priv
+    {
+        class Animation;
+    }
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,10 +181,29 @@ namespace tgui
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Shows the widget.
         ///
-        /// The widget won't receive events nor will it be drawn when hidden. The widget is visible by default.
+        /// The widget is visible by default.
+        ///
+        /// @see hide
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         virtual void show();
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Shows the widget by introducing it with an animation.
+        ///
+        /// The animation will also be played if the widget was already visible.
+        ///
+        /// During the animation the position, size and/or opacity may change. Once the animation is done the widget will
+        /// be back in the state in which it was when this function was called.
+        ///
+        /// @param type     Type of the animation
+        /// @param duration Duration of the animation
+        ///
+        /// @see hideWithEffect
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual void showWithEffect(ShowAnimationType type, sf::Time duration);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -188,6 +213,21 @@ namespace tgui
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         virtual void hide();
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Shows the widget by introducing it with an animation.
+        ///
+        /// If the widget is already hidden then the animation will still play but you will not see it until you show the widget.
+        ///
+        /// During the animation the position, size and/or opacity may change. Once the animation is done the widget will
+        /// be back in the state in which it was when this function was called.
+        ///
+        /// @param type     Type of the animation
+        /// @param duration Duration of the animation
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual void hideWithEffect(ShowAnimationType type, sf::Time duration);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -299,29 +339,21 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the transparency of the widget.
+        /// @brief Changes the opacity of the widget.
         ///
-        /// @param transparency  The transparency of the widget.
-        ///                      0 is completely transparent, while 255 (default) means fully opaque.
-        ///
-        /// Note that this will only change the transparency of the images. The parts of the widgets that use a color will not
-        /// be changed. You must change them yourself by setting the alpha channel of the color.
+        /// @param opacity  The opacity of the widget. 0 means completely transparent, while 1 (default) means fully opaque.
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void setTransparency(unsigned char transparency)
-        {
-            m_opacity = transparency;
-        }
+        virtual void setOpacity(float opacity);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns the transparency of the widget.
+        /// @brief Returns the opacity of the widget.
         ///
-        /// @return The transparency of the widget.
-        ///         0 is completely transparent, while 255 (default) means fully opaque.
+        /// @return The opacity of the widget. 0 means completely transparent, while 1 (default) means fully opaque.
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        unsigned char getTransparency() const
+        float getOpacity() const
         {
             return m_opacity;
         }
@@ -342,28 +374,34 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Sets the tooltip that should be displayed when hovering over the widget
+        /// @brief Sets the tool tip that should be displayed when hovering over the widget
         ///
-        /// @param tooltip  The new tooltip
+        /// @param toolTip  Any widget that you want to use as a tool tip (usually a Label)
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void setToolTip(std::shared_ptr<ToolTip> tooltip);
+        void setToolTip(Widget::Ptr toolTip);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns the tooltip that is displayed when hovering over the widget
+        /// @brief Returns the tool tip that is displayed when hovering over the widget
         ///
-        /// @return The tooltip
-        ///
-        /// This function is guaranteed to return a valid tooltip. It will never return a nullptr.
-        ///
-        /// This function can be used to change the text of the tooltip.
-        /// @code
-        /// widget->getToolTip()->setText("Hello");
-        /// @endcode
+        /// @return The widget that is used as tool tip or nullptr when no tool tip has been set
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::shared_ptr<ToolTip> getToolTip();
+        Widget::Ptr getToolTip();
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Changes the font of the text in the widget.
+        ///
+        /// @param font  The new font.
+        ///
+        /// When you don't call this function then the font from the parent widget will be used.
+        ///
+        /// Some widget don't need a font and won't do anything when this function is called.
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual void setFont(const Font& font);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -372,10 +410,7 @@ namespace tgui
         /// @return Font used by widget
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        std::shared_ptr<sf::Font> getFont() const
-        {
-            return m_font;
-        }
+        std::shared_ptr<sf::Font> getFont() const;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -424,10 +459,23 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // This function is called right after the elapsed time is changed.
-        // The elapsed time is only changed when the widget has set m_animatedWidget to true.
+        /// @brief Returns the distance between the position where the widget is drawn and where the widget is placed
+        ///
+        /// This is basically the width and height of the optional borders drawn around widgets.
+        ///
+        /// @return Offset of the widget
+        ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void update();
+        virtual sf::Vector2f getWidgetOffset() const
+        {
+            return sf::Vector2f{0, 0};
+        }
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // This function is called every frame with the time passed since the last frame.
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual void update(sf::Time elapsedTime);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,18 +536,11 @@ namespace tgui
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @internal
-        // Show the tooltip when the widget is located below the mouse.
-        // Returns its tooltip or the tooltip from a child widget if the mouse is on top of the widget.
-        // A nullptr is returned when the mouse is not on top of the widget or when the tooltip is empty.
+        // Show the tool tip when the widget is located below the mouse.
+        // Returns its tool tip or the tool tip from a child widget if the mouse is on top of the widget.
+        // A nullptr is returned when the mouse is not on top of the widget or when the tool tip is empty.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual std::shared_ptr<ToolTip> askToolTip(sf::Vector2f mousePos);
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @internal
-        // This function is called when the widget is added to a container.
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void initialize(Container *const container);
+        virtual Widget::Ptr askToolTip(sf::Vector2f mousePos);
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -516,6 +557,13 @@ namespace tgui
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     protected:
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @internal
+        // This function is called when the widget is added to a container.
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual void initialize(Container *const container);
+
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Attach a theme to the widget
@@ -568,7 +616,7 @@ namespace tgui
         Container* m_parent = nullptr;
 
         // How transparent is the widget
-        unsigned char m_opacity = 255;
+        float m_opacity = 1;
 
         // Is the mouse on top of the widget? Did the mouse go down on the widget?
         bool m_mouseHover = false;
@@ -581,7 +629,6 @@ namespace tgui
         bool m_allowFocus = false;
 
         // Keep track of the elapsed time.
-        bool m_animatedWidget = false;
         sf::Time m_animationTimeElapsed;
 
         // This is set to true for widgets that have something to be dragged around (e.g. sliders and scrollbars)
@@ -590,8 +637,8 @@ namespace tgui
         // This is set to true for widgets that store other widgets inside them
         bool m_containerWidget = false;
 
-        // The tooltip connected to the widget
-        std::shared_ptr<ToolTip> m_tooltip = nullptr;
+        // The tool tip connected to the widget
+        Widget::Ptr m_toolTip = nullptr;
 
         // The font that the widget can use
         std::shared_ptr<sf::Font> m_font = nullptr;
@@ -603,6 +650,9 @@ namespace tgui
         std::shared_ptr<BaseTheme> m_theme = nullptr;
         std::string m_primaryLoadingParameter;
         std::string m_secondaryLoadingParameter;
+
+        // Show animations
+        std::vector<std::shared_ptr<priv::Animation>> m_showAnimations;
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -680,10 +730,9 @@ namespace tgui
         virtual std::shared_ptr<WidgetRenderer> clone(Widget* widget) = 0;
 
 
-        friend class Widget;
-
-
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        friend class Widget;
     };
 
 

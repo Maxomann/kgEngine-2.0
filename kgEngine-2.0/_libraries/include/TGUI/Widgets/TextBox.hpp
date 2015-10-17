@@ -160,6 +160,17 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Changes the font of the text in the widget.
+        ///
+        /// @param font  The new font.
+        ///
+        /// When you don't call this function then the font from the parent widget will be used.
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual void setFont(const Font& font) override;
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Changes the text of the text box.
         ///
         /// @param text  New text
@@ -292,16 +303,23 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the transparency of the widget.
+        /// @brief Changes the opacity of the widget.
         ///
-        /// @param transparency  The transparency of the widget.
-        ///                      0 is completely transparent, while 255 (default) means fully opaque.
-        ///
-        /// Note that this will only change the transparency of the images. The parts of the widgets that use a color will not
-        /// be changed. You must change them yourself by setting the alpha channel of the color.
+        /// @param opacity  The opacity of the widget. 0 means completely transparent, while 1 (default) means fully opaque.
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void setTransparency(unsigned char transparency) override;
+        virtual void setOpacity(float opacity) override;
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// @brief Returns the distance between the position where the widget is drawn and where the widget is placed
+        ///
+        /// This is basically the width and height of the optional borders drawn around widgets.
+        ///
+        /// @return Offset of the widget
+        ///
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        virtual sf::Vector2f getWidgetOffset() const override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -406,15 +424,9 @@ namespace tgui
     protected:
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // This function is called when the widget is added to a container.
+        // This function is called every frame with the time passed since the last frame.
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void initialize(Container *const container) override;
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // When AnimationManager changes the elapsed time then this function is called.
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void update() override;
+        virtual void update(sf::Time elapsedTime) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -452,7 +464,7 @@ namespace tgui
 
         sf::String   m_text;
         unsigned int m_textSize = 18;
-        unsigned int m_lineHeight = 40;
+        unsigned int m_lineHeight = 24;
 
         std::vector<sf::String> m_lines = std::vector<sf::String>{""}; // Did not compile in VS2013 with just braces
 
@@ -632,18 +644,6 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the font of the text.
-        ///
-        /// When you don't call this function then the global font will be use.
-        /// This global font can be changed with the setGlobalFont function from the parent.
-        ///
-        /// @param font  The new font
-        ///
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        void setTextFont(std::shared_ptr<sf::Font> font);
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// @brief Changes the padding of the text box.
         ///
         /// This padding will be scaled together with the background image.
@@ -707,6 +707,8 @@ namespace tgui
 
         Texture   m_backgroundTexture;
 
+        sf::Color m_textColor;
+        sf::Color m_selectedTextColor;
         sf::Color m_caretColor;
         sf::Color m_backgroundColor;
         sf::Color m_selectedTextBgrColor;

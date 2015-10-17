@@ -137,40 +137,23 @@ namespace tgui
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the global font.
+        /// @brief Changes the font of the text in the widget and its children.
         ///
-        /// This font will be used by all widgets that are created after calling this function.
+        /// @param font  The new font.
         ///
-        /// @param filename  Path of the font file to load
-        ///
-        /// @throw Exception when loading fails
+        /// When you don't call this function then the font from the parent widget will be used.
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void setGlobalFont(const std::string& filename) override;
+        virtual void setFont(const Font& font) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the global font.
+        /// @brief Changes the opacity of the widget.
         ///
-        /// This font will be used by all widgets that are created after calling this function.
-        ///
-        /// @param font  Font to use
+        /// @param opacity  The opacity of the widget. 0 means completely transparent, while 1 (default) means fully opaque.
         ///
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void setGlobalFont(std::shared_ptr<sf::Font> font) override;
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief Changes the transparency of the widget.
-        ///
-        /// @param transparency  The transparency of the widget.
-        ///                      0 is completely transparent, while 255 (default) means fully opaque.
-        ///
-        /// Note that this will only change the transparency of the images. The parts of the widgets that use a color will not
-        /// be changed. You must change them yourself by setting the alpha channel of the color.
-        ///
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void setTransparency(unsigned char transparency) override;
+        virtual void setOpacity(float opacity) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -337,13 +320,6 @@ namespace tgui
         /// @internal
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         virtual void mouseNoLongerDown() override;
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// @internal
-        // This function is called when the widget is added to a container.
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        virtual void initialize(Container *const container) override;
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -575,15 +551,18 @@ namespace tgui
 
         ChildWindow* m_childWindow;
 
-        float        m_titleBarHeight;
-        float        m_distanceToSide;
+        float        m_titleBarHeight = 0;
+        float        m_distanceToSide = 0;
 
         Texture      m_textureTitleBar;
 
+        sf::Color    m_titleColor;
         sf::Color    m_titleBarColor;
 
         sf::Color    m_backgroundColor;
         sf::Color    m_borderColor;
+
+        sf::String   m_closeButtonClassName = "";
 
         friend class ChildWindow;
 
