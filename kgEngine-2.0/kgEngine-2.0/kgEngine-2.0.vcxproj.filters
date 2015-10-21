@@ -83,6 +83,9 @@
     <ClCompile Include="GameStateManager.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -189,6 +192,9 @@
     </ClInclude>
     <ClInclude Include="GameStateManager.h">
       <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Headerdateien\Engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

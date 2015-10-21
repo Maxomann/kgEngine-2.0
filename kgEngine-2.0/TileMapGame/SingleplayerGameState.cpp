@@ -56,6 +56,7 @@ namespace kg
 		Action escapePress( Keyboard::Escape, Action::PressOnce );
 		Action f5Press( Keyboard::F5, Action::PressOnce );
 
+		Action strgRightPress( Keyboard::RControl, Action::PressOnce );
 
 		// Events
 		Action eventClose( Event::Closed );
@@ -96,9 +97,13 @@ namespace kg
 								bind( &SingleplayerGameState::zoomIn, this ) );
 		inputManager.setAction( id::Input::ZOOM_OUT, subtract,
 								bind( &SingleplayerGameState::zoomOut, this ) );
+		inputManager.setAction( id::Input::SWITCH_CONSOLE, strgRightPress,
+								bind( &SingleplayerGameState::switchConsole, this ) );
+
+
 	}
 
-	void SingleplayerGameState::onUpdate( GameStateManager& gameStateManager )
+	void SingleplayerGameState::onUpdate()
 	{
 		return;
 	}
@@ -124,6 +129,8 @@ namespace kg
 
 		inputManager.removeAction( id::Input::ZOOM_IN );
 		inputManager.removeAction( id::Input::ZOOM_OUT );
+
+		inputManager.removeAction( id::Input::SWITCH_CONSOLE );
 	}
 
 	void SingleplayerGameState::removeGui( tgui::Gui& gui )
@@ -151,6 +158,24 @@ namespace kg
 	{
 		r_world->getSystem<ChunkSystem>()->saveOpenSavegame( *r_engine, *r_world, *r_saveManager );
 		r_saveManager->openSavegame( *r_engine, *r_world, "MyFirstSavegameEver" );
+
+		r_engine->console.info( "Savegame reloaded successfully" );
+		r_engine->console.log( "Savegame reloaded successfully" );
+		r_engine->console.error( "Savegame reloaded successfully" );
+	}
+
+	void SingleplayerGameState::switchConsole()
+	{
+		const auto& id_console = id::GameStatePluginId::CONSOLE;
+
+		if( r_gameStateManager->hasAnyInstanceOf( id_console ) )
+		{
+			r_gameStateManager->removeAllInstancesOf( id_console );
+		}
+		else
+		{
+			r_gameStateManager->push( make_shared<ConsoleGameState>() );
+		}
 	}
 
 	void SingleplayerGameState::pause()

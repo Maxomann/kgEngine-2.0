@@ -32,6 +32,7 @@
 #include <cstddef>
 #include <type_traits>
 #include <utility>
+#include <ctime>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

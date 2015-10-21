@@ -75,6 +75,7 @@ namespace kg
 	template< class ... parameterType >
 	using SafeSignal = boost::signals2::signal < void( parameterType... ) > ;
 
+	// Callback receiver CAN be DESTROYED without unregistering
 	class SafeCallbackReciever
 	{
 		const boost::shared_ptr<bool> thisWeakPointer = boost::make_shared<bool>( false );
@@ -104,6 +105,7 @@ namespace kg
 	template<class T> class MySignal
 	{ };
 
+	// Callback receiver MOST NOT be DESTROYED without unregistering
 	template<class returnType, class ... parameterType >
 	class MySignal < returnType( parameterType... ) >
 	{

@@ -91,6 +91,7 @@
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="ChunkGenerator.cpp" />
     <ClCompile Include="ChunkSystem.cpp" />
+    <ClCompile Include="ConsoleGameState.cpp" />
     <ClCompile Include="DefaultGameState.cpp" />
     <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -105,6 +106,7 @@
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="ChunkGenerator.h" />
     <ClInclude Include="ChunkSystem.h" />
+    <ClInclude Include="ConsoleGameState.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="DefaultGameState.h" />
     <ClInclude Include="GraphicsSystem.h" />

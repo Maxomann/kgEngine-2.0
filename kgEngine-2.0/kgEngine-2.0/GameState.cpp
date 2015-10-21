@@ -4,12 +4,13 @@ using namespace sf;
 
 namespace kg
 {
-	
-	void GameState::initReferences( Engine& engine, World& world, SaveManager& saveManager )
+
+	void GameState::initReferences( Engine& engine, World& world, SaveManager& saveManager, GameStateManager& gameStateManager )
 	{
 		r_engine = &engine;
 		r_world = &world;
 		r_saveManager = &saveManager;
+		r_gameStateManager = &gameStateManager;
 	}
 
 	void GameState::updateFrameTime( const sf::Time& frameTime )

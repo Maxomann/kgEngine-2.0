@@ -100,8 +100,7 @@ namespace kg
 		const blueprint::Entity& getBlueprint()const;
 
 	signals:
-		std::map < Plugin::Id,//first: componentId, second: signal
-			ReturningSignal< std::vector<std::string> > > s_writeSaveInformation;//first:id second: saveInformation
+		std::map < Plugin::Id, ReturningSignal< std::vector<std::string> > > s_writeSaveInformation;//first:id second: saveInformation
 
 		std::map<Plugin::Id, Signal<const std::vector<std::string>&>> s_loadSaveInformation;//first: componentId, second: signal
 	};

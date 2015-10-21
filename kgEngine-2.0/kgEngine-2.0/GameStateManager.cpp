@@ -28,11 +28,11 @@ namespace kg
 
 	void GameStateManager::push( const std::shared_ptr<GameState>& gameState )
 	{
-		gameState->initReferences( engine, world, saveManager );
+		gameState->initReferences( engine, world, saveManager, *this );
 
-		gameState->onInit();
 		gameState->registerGui( engine.inputManager.gui );
 		gameState->registerInputCallbacks( engine.inputManager );
+		gameState->onInit();
 
 		m_gameStateStack.push_back( gameState );
 	}
@@ -41,9 +41,9 @@ namespace kg
 	{
 		auto& gameState = m_gameStateStack.back();
 
+		gameState->onDestroy();
 		gameState->removeInputCallbacks( engine.inputManager );
 		gameState->removeGui( engine.inputManager.gui );
-		gameState->onDestroy();
 
 		m_gameStateStack.pop_back();
 	}
@@ -62,7 +62,32 @@ namespace kg
 		for( auto& ptr : temp )
 		{
 			if(auto sptr = ptr.lock())
-				sptr->onUpdate( *this );
+				sptr->onUpdate();
 		}
 	}
+
+	bool GameStateManager::hasAnyInstanceOf( const Plugin::Id& pluginId )
+	{
+		for( const auto& el : m_gameStateStack )
+			if( el->getPluginId() == pluginId )
+				return true;
+		return false;
+	}
+
+	void GameStateManager::removeAllInstancesOf( const Plugin::Id& pluginId )
+	{
+		m_gameStateStack.erase(remove_if( m_gameStateStack.begin(), m_gameStateStack.end(), [&]( shared_ptr<GameState>& el )
+		{
+			if( el->getPluginId() == pluginId )
+			{
+				el->removeInputCallbacks( engine.inputManager );
+				el->removeGui( engine.inputManager.gui );
+				el->onDestroy();
+				return true;
+			}
+			else
+				return false;
+		} ));
+	}
+
 }

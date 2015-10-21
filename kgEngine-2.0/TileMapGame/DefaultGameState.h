@@ -7,8 +7,6 @@ namespace kg
 {
 	class DefaultGameState : public GameState
 	{
-		bool m_singleplayerGameStateLaunched = false;
-
 	public:
 		virtual void onInit() override;
 
@@ -16,7 +14,7 @@ namespace kg
 
 		virtual void registerInputCallbacks( InputManager& inputManager ) override;
 
-		virtual void onUpdate( GameStateManager& gameStateManager ) override;
+		virtual void onUpdate( ) override;
 
 		virtual void removeInputCallbacks( InputManager& inputManager ) override;
 

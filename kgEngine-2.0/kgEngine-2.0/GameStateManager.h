@@ -25,5 +25,8 @@ namespace kg
 		const std::shared_ptr<GameState>& top()const;
 
 		void onUpdate();
+
+		bool hasAnyInstanceOf( const Plugin::Id& pluginId );
+		void removeAllInstancesOf( const Plugin::Id& pluginId );
 	};
 }

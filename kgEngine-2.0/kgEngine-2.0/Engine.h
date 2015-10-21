@@ -5,6 +5,7 @@
 #include "ResourceManager.h"
 #include "RandomNumberGenerator.h"
 #include "InputManager.h"
+#include "Console.h"
 
 namespace kg
 {
@@ -15,21 +16,23 @@ namespace kg
 
 	struct DLL_EXPORT Engine
 	{
-		/// true if the program should terminate.
+		// true if the program should terminate.
 		bool shouldTerminate = false;
-		/// if true entities will not get updated.
+		// if true entities will not get updated.
 		bool isPaused = false;
-		/// The SFML RenderWindow.
+		// The SFML RenderWindow.
 		sf::RenderWindow renderWindow;
-		/// Manager for plugins.
+		// Manager for plugins.
 		PluginManager pluginManager;
-		/// The BlueprintManager.
+		// The BlueprintManager.
 		blueprint::BlueprintManager blueprint;
-		/// Manager for resources loaded from the hard drive.
+		// Manager for resources loaded from the hard drive.
 		ResourceManager resourceManager;
-		/// RandomNumberGenerator.
+		// RandomNumberGenerator.
 		RandomNumberGenerator randomNumberGenerator;
-		///	InputManager
+		// InputManager
 		InputManager inputManager;
+		// Console
+		Console console;
 	};
 }

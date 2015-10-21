@@ -59,6 +59,9 @@
     <ClCompile Include="SingleplayerGameState.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleGameState.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
@@ -101,6 +104,9 @@
       <Filter>Headerdateien\GameStates</Filter>
     </ClInclude>
     <ClInclude Include="SingleplayerGameState.h">
+      <Filter>Headerdateien\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleGameState.h">
       <Filter>Headerdateien\GameStates</Filter>
     </ClInclude>
   </ItemGroup>

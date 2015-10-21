@@ -43,6 +43,7 @@ namespace kg
 
 				//Default is 0 (defined in 'id_internal.h')
 				SINGLEPLAYER,
+				CONSOLE,
 
 				LAST_ELEMENT
 			};
@@ -104,6 +105,7 @@ namespace kg
 
 				//SingleplayerGameState
 				RELOAD_SAVE,
+				SWITCH_CONSOLE,
 				MOVE_UP,
 				MOVE_DOWN,
 				MOVE_LEFT,

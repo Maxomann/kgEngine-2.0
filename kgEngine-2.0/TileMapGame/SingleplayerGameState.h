@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "ChunkSystem.h"
 #include "GraphicsSystem.h"
+#include "ConsoleGameState.h"
 
 namespace kg
 {
@@ -24,7 +25,7 @@ namespace kg
 
 		virtual void registerInputCallbacks( InputManager& inputManager ) override;
 
-		virtual void onUpdate( GameStateManager& gameStateManager ) override;
+		virtual void onUpdate( ) override;
 
 		virtual void removeInputCallbacks( InputManager& inputManager ) override;
 
@@ -44,6 +45,7 @@ namespace kg
 		//Input Callbacks
 	private:
 		void reloadSave();
+		void switchConsole();
 
 		void pause();
 

@@ -16,19 +16,20 @@ namespace kg
 		Engine* r_engine;
 		World* r_world;
 		SaveManager* r_saveManager;
+		GameStateManager* r_gameStateManager;
 
 		sf::Time frameTime;
 
 	public:
 
-		void initReferences( Engine& engine, World& world, SaveManager& saveManager );
+		void initReferences( Engine& engine, World& world, SaveManager& saveManager, GameStateManager& gameStateManager );
 		void updateFrameTime( const sf::Time& frameTime );
 
 		virtual void onInit() = 0;
 		virtual void registerGui( tgui::Gui& gui ) = 0;
 		virtual void registerInputCallbacks( InputManager& inputManager ) = 0;
 
-		virtual void onUpdate( GameStateManager& gameStateManager ) = 0;
+		virtual void onUpdate( ) = 0;
 
 		virtual void removeInputCallbacks( InputManager& inputManager ) = 0;
 		virtual void removeGui( tgui::Gui& gui ) = 0;

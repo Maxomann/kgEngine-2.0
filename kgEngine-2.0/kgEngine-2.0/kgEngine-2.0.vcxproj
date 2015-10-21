@@ -86,6 +86,7 @@
     <ClCompile Include="Callback.cpp" />
     <ClCompile Include="ComponentManager.cpp" />
     <ClCompile Include="ConfigFile.cpp" />
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentManager.h" />
     <ClInclude Include="ComponentMissingException.h" />
+    <ClInclude Include="Console.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="ConfigFile.h" />
     <ClInclude Include="Engine.h" />

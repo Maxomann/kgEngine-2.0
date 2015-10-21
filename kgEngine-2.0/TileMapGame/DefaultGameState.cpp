@@ -7,7 +7,7 @@ namespace kg
 
 	void DefaultGameState::onInit()
 	{
-		return;
+		r_gameStateManager->push( std::make_shared<SingleplayerGameState>() );
 	}
 
 	void DefaultGameState::registerGui( tgui::Gui& gui )
@@ -26,13 +26,9 @@ namespace kg
 								bind( &DefaultGameState::shutDown, this ) );
 	}
 
-	void DefaultGameState::onUpdate( GameStateManager& gameStateManager )
+	void DefaultGameState::onUpdate()
 	{
-		if( !m_singleplayerGameStateLaunched )
-		{
-			gameStateManager.push( std::make_shared<SingleplayerGameState>() );
-			m_singleplayerGameStateLaunched = true;
-		}
+
 	}
 
 	void DefaultGameState::removeInputCallbacks( InputManager& inputManager )
