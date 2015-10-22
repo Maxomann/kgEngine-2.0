@@ -10,7 +10,8 @@ namespace kg
 	class GameStateManager;
 	using Action = thor::Action;
 
-	class DLL_EXPORT GameState : public Plugin, public CallbackReciever, public sf::NonCopyable
+	// By Design only SafeCallbackReciever, since GameState can be deleted anytime
+	class DLL_EXPORT GameState : public Plugin, public SafeCallbackReciever, public sf::NonCopyable
 	{
 	protected:
 		Engine* r_engine;

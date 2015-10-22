@@ -72,12 +72,14 @@ namespace kg
 		for( const auto& el : s_writeSaveInformation )
 		{
 			SystemSaveInformation info( el.first );
-			auto optionalVec = el.second();
-			if( optionalVec )
+			auto vec = el.second();
+			if( vec.size() == 1 )
 			{
-				info.setInformation( optionalVec.get() );
+				info.setInformation( vec.at( 0 ) );
 				saveInformationVec.push_back( info );
 			}
+			else
+				throw exception( "A save information callback in SaveManager::saveSystems had more or less than 1 object registered" );
 		}
 
 		fstream globalsFile( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + SYSTEM_SAVE_FILENAME + SAVE_FILE_EXTENSION,

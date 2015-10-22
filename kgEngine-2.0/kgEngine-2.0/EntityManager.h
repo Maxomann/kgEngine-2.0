@@ -11,12 +11,16 @@ namespace kg
 	public:
 		typedef std::vector<std::shared_ptr<Entity>> EntityContainer;
 
+		static const unsigned int EXPECTED_MAX_ENTITY_COUNT = 200000;//m_entities will reserve memory for so many objects
+
 	private:
 		EntityContainer m_entities;
 		EntityContainer m_toRemove;
 
 		EntityContainer::iterator m_findEntity( const std::shared_ptr<Entity>& entity );
 	public:
+		EntityManager();
+
 		// overwrites entity if it already exists
 		// first: returns false in that case
 		// second: EntityId of the added Entity

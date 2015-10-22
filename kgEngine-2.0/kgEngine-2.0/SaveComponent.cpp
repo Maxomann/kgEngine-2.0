@@ -246,9 +246,11 @@ namespace kg
 		for( const auto& el : s_writeSaveInformation )
 		{
 			retVal.setActiveComponentId( el.first );
-			auto optionalVec = el.second();
-			if( optionalVec )
-				retVal.addInformation( optionalVec.get() );
+			auto vec = el.second();
+			if( vec.size()==1 )
+				retVal.addInformation( vec.at(0) );
+			else
+				throw exception( "A save information callback in Save::writeSaveInformation had more or less than 1 object registered" );
 		}
 
 		return retVal;

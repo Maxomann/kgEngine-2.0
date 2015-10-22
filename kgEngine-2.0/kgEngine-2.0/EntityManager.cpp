@@ -5,6 +5,12 @@ using namespace sf;
 
 namespace kg
 {
+
+	EntityManager::EntityManager()
+	{
+		m_entities.reserve( EXPECTED_MAX_ENTITY_COUNT );
+	}
+
 	void EntityManager::addEntity( std::shared_ptr<Entity>& entity )
 	{
 		m_entities.push_back( entity );

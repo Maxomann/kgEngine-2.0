@@ -29,7 +29,7 @@ namespace kg
 	{
 		r_graphicsSystem = r_world->getSystem<GraphicsSystem>();
 
-		m_connectToSignal( r_saveManager->s_savegameOpened, &SingleplayerGameState::m_onSavegameOpened );
+		m_connectToSignal_safe( r_saveManager->s_savegameOpened, &SingleplayerGameState::m_onSavegameOpened );
 
 		r_saveManager->openSavegame( *r_engine, *r_world, "MyFirstSavegameEver" );
 	}

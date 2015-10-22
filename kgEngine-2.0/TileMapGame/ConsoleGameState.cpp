@@ -33,7 +33,7 @@ namespace kg
 
 	void ConsoleGameState::onInit()
 	{
-		m_connectToSignal( r_engine->console.s_entryAdded, &ConsoleGameState::printLogEntry );
+		m_connectToSignal_safe( r_engine->console.s_entryAdded, &ConsoleGameState::printLogEntry );
 
 		for( const auto& el : r_engine->console.getLog() )
 			printLogEntry( el );

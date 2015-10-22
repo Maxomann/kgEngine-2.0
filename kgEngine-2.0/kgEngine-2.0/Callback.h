@@ -1,12 +1,5 @@
 #pragma once
-#include <boost/signals2.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-
-#include <cstddef>
-#include <functional>
-#include <type_traits>
-#include <utility>
+#include "stdafx.h"
 
 template <std::size_t... Is>
 struct indices
@@ -18,7 +11,8 @@ struct build_indices
 { };
 
 template <std::size_t... Is>
-struct build_indices<0, Is...> : indices < Is... > { };
+struct build_indices<0, Is...> : indices < Is... >
+{ };
 
 template<int I> struct placeholder
 { };
@@ -26,7 +20,8 @@ template<int I> struct placeholder
 namespace std
 {
 	template<int I>
-	struct is_placeholder< ::placeholder<I>> : std::integral_constant < int, I > { };
+	struct is_placeholder< ::placeholder<I>> : std::integral_constant < int, I >
+	{ };
 } // std::
 
 namespace detail
@@ -72,44 +67,15 @@ namespace kg
 		}
 	};
 
-	template< class ... parameterType >
-	using SafeSignal = boost::signals2::signal < void( parameterType... ) > ;
-
-	// Callback receiver CAN be DESTROYED without unregistering
-	class SafeCallbackReciever
-	{
-		const boost::shared_ptr<bool> thisWeakPointer = boost::make_shared<bool>( false );
-
-	protected:
-		template<class returnType, class ... parameterType >
-		void m_connectToSignal(
-			boost::signals2::signal<returnType( parameterType... )>& signal,
-			std::function<returnType( parameterType... )>& function )
-		{
-			signal.connect( boost::signals2::signal<returnType( parameterType ... )>
-							::slot_type( function ).track( thisWeakPointer ) );
-		};
-
-		template<class className, class returnType, class ... parameterType >
-		void m_connectToSignal(
-			boost::signals2::signal<returnType( parameterType... )>& signal,
-			returnType( className::* mem_fn_ptr ) (parameterType...) )
-		{
-			std::function<returnType( className*, parameterType... )> f1 = std::mem_fn( mem_fn_ptr );
-			std::function<returnType( parameterType... )> f2 = easy_bind( f1, static_cast< className* >(this) );
-
-			m_connectToSignal( signal, f2 );
-		};
-	};
-
-	template<class T> class MySignal
+	template<class T> class DLL_EXPORT MySignal
 	{ };
 
 	// Callback receiver MOST NOT be DESTROYED without unregistering
 	template<class returnType, class ... parameterType >
-	class MySignal < returnType( parameterType... ) >
+	class DLL_EXPORT MySignal < returnType( parameterType... ) >
 	{
 		std::vector<std::function<returnType( parameterType... )>> m_registeredCallbacks;
+		boost::signals2::signal < returnType( parameterType... ), aggregate_values<std::vector<returnType>> > m_safeSignal;
 
 	public:
 
@@ -123,29 +89,35 @@ namespace kg
 			m_registeredCallbacks.push_back( callbackToAdd );
 		};
 
-		//returns a value ONLY if just ONE function IS REGISTERED
-		boost::optional<returnType> operator()( parameterType&... Args )const
+		void addCallback_safe( std::function<returnType( parameterType... )>& callbackToAdd, const boost::shared_ptr<bool>& pointerToTrack )
 		{
-			if( m_registeredCallbacks.size() == 1 )
-			{
-				return m_registeredCallbacks.at( 0 )(Args...);
-			}
-			else if( m_registeredCallbacks.size() > 1 )
-			{
-				for( const auto& func : m_registeredCallbacks )
-					func( Args... );
+			m_safeSignal.connect( boost::signals2::signal<returnType( parameterType ... )>
+								  ::slot_type( callbackToAdd ).track( pointerToTrack ) );
+		};
 
-				return{ };
-			}
-			else
-				return{ };
+		void addCallback_safe( std::function<returnType( parameterType... )>&& callbackToAdd, const boost::shared_ptr<bool>& pointerToTrack )
+		{
+			m_safeSignal.connect( boost::signals2::signal<returnType( parameterType ... )>
+								  ::slot_type( callbackToAdd ).track( pointerToTrack ) );
+		};
+
+		//returns a value ONLY if just ONE function IS REGISTERED
+		std::vector<returnType> operator()( parameterType&... Args )const
+		{
+			std::vector<returnType> vec = m_safeSignal( Args... );
+
+			for( const auto& el : m_registeredCallbacks )
+				vec.push_back( m_registeredCallbacks.at( 0 )(Args...) );
+
+			return vec;
 		}
 	};
 
 	template<class ... parameterType >
-	class MySignal < void( parameterType... ) >
+	class DLL_EXPORT MySignal < void( parameterType... ) >
 	{
 		std::vector<std::function<void( parameterType... )>> m_registeredCallbacks;
+		boost::signals2::signal < void( parameterType... ) > m_safeSignal;
 
 	public:
 
@@ -159,20 +131,33 @@ namespace kg
 			m_registeredCallbacks.push_back( callbackToAdd );
 		};
 
+		void addCallback_safe( std::function<void( parameterType... )>& callbackToAdd, const boost::shared_ptr<bool>& pointerToTrack )
+		{
+			m_safeSignal.connect( boost::signals2::signal<void( parameterType ... )>
+								  ::slot_type( callbackToAdd ).track( pointerToTrack ) );
+		};
+
+		void addCallback_safe( std::function<void( parameterType... )>&& callbackToAdd, const boost::shared_ptr<bool>& pointerToTrack )
+		{
+			m_safeSignal.connect( boost::signals2::signal<void( parameterType ... )>
+								  ::slot_type( callbackToAdd ).track( pointerToTrack ) );
+		};
+
 		void operator()( parameterType&... Args )const
 		{
+			m_safeSignal( Args... );
 			for( const auto& func : m_registeredCallbacks )
 				func( Args... );
 		}
 	};
 
 	template< class ... parameterType >
-	using Signal = MySignal < void( parameterType... ) > ;
+	using Signal = MySignal < void( parameterType... ) >;
 
 	template< class returnType, class ... parameterType >
-	using ReturningSignal = MySignal < returnType( parameterType... ) > ;
+	using ReturningSignal = MySignal < returnType( parameterType... ) >;
 
-	class CallbackReciever
+	class DLL_EXPORT CallbackReciever
 	{
 	public:
 		template<class returnType, class ... parameterType >
@@ -191,6 +176,32 @@ namespace kg
 			std::function<returnType( className*, parameterType... )> f1 = std::mem_fn( mem_fn_ptr );
 			//auto temp = std::bind( f1, static_cast< className* >(this) );
 			signal.addCallback( std::move( easy_bind( f1, static_cast< className* >(this) ) ) );
+		};
+	};
+
+	// Callback receiver CAN be DESTROYED without unregistering
+	class DLL_EXPORT SafeCallbackReciever
+	{
+		const boost::shared_ptr<bool> thisWeakPointer = boost::make_shared<bool>( false );
+
+	protected:
+		template<class returnType, class ... parameterType >
+		void m_connectToSignal_safe(
+			MySignal<returnType( parameterType... )>& signal,
+			std::function<returnType( parameterType... )>& function )
+		{
+			signal.addCallback_safe( function, thisWeakPointer );
+		};
+
+		template<class className, class returnType, class ... parameterType >
+		void m_connectToSignal_safe(
+			MySignal<returnType( parameterType... )>& signal,
+			returnType( className::* mem_fn_ptr ) (parameterType...) )
+		{
+			std::function<returnType( className*, parameterType... )> f1 = std::mem_fn( mem_fn_ptr );
+			std::function<returnType( parameterType... )> f2 = easy_bind( f1, static_cast< className* >(this) );
+
+			signal.addCallback_safe( std::move( f2 ), thisWeakPointer );
 		};
 	};
 }
