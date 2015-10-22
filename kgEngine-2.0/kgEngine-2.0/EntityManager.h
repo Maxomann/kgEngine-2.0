@@ -11,7 +11,7 @@ namespace kg
 	public:
 		typedef std::vector<std::shared_ptr<Entity>> EntityContainer;
 
-		static const unsigned int EXPECTED_MAX_ENTITY_COUNT = 200000;//m_entities will reserve memory for so many objects
+		static const unsigned int EXPECTED_MAX_ENTITY_COUNT = 200000u;//m_entities will reserve memory for so many objects
 
 	private:
 		EntityContainer m_entities;
