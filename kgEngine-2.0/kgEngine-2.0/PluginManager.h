@@ -3,6 +3,8 @@
 #include "PluginFactory.h"
 #include "PluginRegistrationException.h"
 #include "PluginRequestException.h"
+#include "System.h"
+#include "Component.h"
 
 // USAGE EXAMPLE:
 //
@@ -16,8 +18,6 @@
 
 namespace kg
 {
-	class Component;
-	class System;
 
 	class DLL_EXPORT PluginManager
 	{
@@ -87,7 +87,7 @@ namespace kg
 
 
 		template<class BasePluginType>
-		std::shared_ptr<BasePluginType> createPlugin( const Plugin::Id& id )const
+		std::unique_ptr<BasePluginType> createPlugin( const Plugin::Id& id )const
 		{
 			size_t genericPluginType = typeid(BasePluginType).hash_code();
 #ifndef _DEBUG
@@ -98,7 +98,7 @@ namespace kg
 				if( plugin == nullptr )
 					throw PluginRequestException( id );
 
-				return std::static_pointer_cast< BasePluginType >(plugin->create());
+				return plugin->create();
 #ifndef _DEBUG
 			}
 			catch( const std::exception& )
@@ -108,7 +108,7 @@ namespace kg
 #endif
 		}
 		template<>
-		std::shared_ptr<Component> createPlugin<Component>( const Plugin::Id& id )const
+		std::unique_ptr<Component> createPlugin<Component>( const Plugin::Id& id )const
 		{
 			try
 			{
@@ -124,7 +124,7 @@ namespace kg
 			}
 		}
 		template<>
-		std::shared_ptr<System> createPlugin<System>( const Plugin::Id& id )const
+		std::unique_ptr<System> createPlugin<System>( const Plugin::Id& id )const
 		{
 			try
 			{
@@ -141,7 +141,7 @@ namespace kg
 		}
 
 		template<class BasePluginType>
-		std::shared_ptr<BasePluginType> createPlugin( const Plugin::Name& name )const
+		std::unique_ptr<BasePluginType> createPlugin( const Plugin::Name& name )const
 		{
 			size_t genericPluginType = typeid(BasePluginType).hash_code();
 			try
@@ -150,7 +150,7 @@ namespace kg
 				if( plugin == nullptr )
 					throw PluginRequestException( name );
 
-				return std::static_pointer_cast< BasePluginType >(plugin->create());
+				return plugin->create();
 			}
 			catch( const std::exception& )
 			{
@@ -158,7 +158,7 @@ namespace kg
 			}
 		}
 		template<>
-		std::shared_ptr<Component> createPlugin<Component>( const Plugin::Name& name )const
+		std::unique_ptr<Component> createPlugin<Component>( const Plugin::Name& name )const
 		{
 			try
 			{
@@ -174,7 +174,7 @@ namespace kg
 			}
 		}
 		template<>
-		std::shared_ptr<System> createPlugin<System>( const Plugin::Name& name )const
+		std::unique_ptr<System> createPlugin<System>( const Plugin::Name& name )const
 		{
 			try
 			{
@@ -190,17 +190,17 @@ namespace kg
 			}
 		}
 
-		std::vector<std::shared_ptr<System>> createEverySystemAvailable()const;
+		std::vector<std::unique_ptr<System>> createEverySystemAvailable()const;
 
 		template<class BasePluginType>
-		const std::vector<std::shared_ptr<PluginFactoryInterface<BasePluginType>>> getEveryUserDefinedPlugin()
+		const std::vector<std::shared_ptr<PluginFactoryInterface<BasePluginType>>> getEveryUserDefinedPluginFactory()
 		{
 			std::vector<std::shared_ptr<PluginFactoryInterface<BasePluginType>>> retVal;
 
 			auto type_hash = typeid(BasePluginType).hash_code();
 
 			for( const auto& el : m_pluginsByGenericTypeHash[type_hash].first )
-				retVal.push_back( static_pointer_cast< PluginFactoryInterface<BasePluginType> >(el.second) );
+				retVal.push_back( std::static_pointer_cast< PluginFactoryInterface<BasePluginType> >(el.second) );
 
 			return retVal;
 		};

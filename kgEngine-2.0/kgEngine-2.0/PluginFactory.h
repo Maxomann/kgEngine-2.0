@@ -38,7 +38,7 @@ namespace kg
 			return m_name;
 		}
 
-		virtual std::shared_ptr<PluginType> create()const = 0;
+		virtual std::unique_ptr<PluginType> create()const = 0;
 	};
 
 	template<class PluginType, class ClassType>
@@ -49,9 +49,9 @@ namespace kg
 			: PluginFactoryInterface( pluginId, pluginName )
 		{ }
 
-		virtual std::shared_ptr<PluginType> create()const
+		virtual std::unique_ptr<PluginType> create()const
 		{
-			return std::static_pointer_cast< PluginType >(std::make_shared<ClassType>());
+			return std::make_unique<ClassType>();
 		};
 	};
 }

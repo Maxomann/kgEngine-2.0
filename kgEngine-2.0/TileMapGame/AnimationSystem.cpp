@@ -6,7 +6,7 @@ namespace kg
 {
 	void AnimationSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
-		for( const auto& el : engine.pluginManager.getEveryUserDefinedPlugin<AnimationHandler>() )
+		for( const auto& el : engine.pluginManager.getEveryUserDefinedPluginFactory<AnimationHandler>() )
 			m_AnimationHandlerPluginsbyName[el->getName()] = el;
 
 		return;

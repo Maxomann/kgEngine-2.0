@@ -63,7 +63,7 @@ namespace kg
 		return false;
 	}
 
-	const std::vector<Component*>& ComponentManager::getAllComponents() const
+	const std::vector<Component*>& ComponentManager::getAllComponentsByUpdateImportance() const
 	{
 		return m_componentsByUpdateImportance;
 	}

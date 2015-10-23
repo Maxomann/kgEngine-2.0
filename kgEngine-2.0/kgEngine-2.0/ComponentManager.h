@@ -22,10 +22,10 @@ namespace kg
 		}
 	}
 
-	class DLL_EXPORT ComponentManager
+	class DLL_EXPORT ComponentManager : boost::noncopyable
 	{
 	private:
-		std::vector<std::shared_ptr<Component>> m_components;
+		std::vector<std::unique_ptr<Component>> m_components;
 		std::vector<std::pair<size_t, Component*>> m_componentsByType;
 		std::vector<Component*> m_componentsByUpdateImportance;
 
@@ -39,15 +39,18 @@ namespace kg
 		// This function overwrites the old system with the parameter of this function
 		// component->init() will be called
 
-		void addComponent( std::shared_ptr<Component>& component )
+		//passed reference will be nullptr after function call!
+		void addComponent( std::unique_ptr<Component>& component )
 		{
 			auto typeHashCode = component->getRTTI_hash();
 
 			auto it = m_findComponentByType( typeHashCode );
+			if( it != m_componentsByType.end() )
+				throw std::exception();
 
-			m_components.emplace_back( component );
 			m_componentsByType.emplace_back( typeHashCode, component.get() );
 			m_componentsByUpdateImportance.emplace_back( component.get() );
+			m_components.emplace_back( std::move(component) );
 		}
 
 		void initComponentsByImportance( Engine& engine, World& world );
@@ -90,6 +93,6 @@ namespace kg
 
 		bool hasComponent( const Plugin::Id& componentId )const;
 
-		const std::vector<Component*>& getAllComponents()const;
+		const std::vector<Component*>& getAllComponentsByUpdateImportance()const;
 	};
 }

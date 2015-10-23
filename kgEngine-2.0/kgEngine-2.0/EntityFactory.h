@@ -5,6 +5,20 @@
 
 namespace kg
 {
+	//Workaround
+	template<class T>
+	void fill_vec(std::vector<std::unique_ptr<Component>>& vec)
+	{
+		vec.push_back( std::move(std::make_unique<T>()) );
+	}
+
+	template<class T1, class T2, class ... Tn>
+	void fill_vec( std::vector<std::unique_ptr<Component>>& vec )
+	{
+		fill_vec<T1>(vec);
+		fill_vec<T2, Tn...>(vec);
+	}
+
 	class DLL_EXPORT EntityFactory
 	{
 		Entity::Id m_highestUniqueId = 0;
@@ -32,7 +46,9 @@ namespace kg
 		std::shared_ptr<Entity> createNewTemporaryEntity( Engine& engine, World& world )
 		{
 			auto entity = std::make_shared<Entity>();
-			std::vector<std::shared_ptr<Component>> vec{ std::static_pointer_cast< Component >(std::make_shared<ComponentsType>())... };
+			std::vector<std::unique_ptr<Component>> vec;
+			fill_vec<ComponentsType...>(vec);
+
 			for( auto& el : vec )
 				entity->addComponent( el );
 			entity->initComponentsByImportance( engine, world );

@@ -51,6 +51,7 @@ namespace kg
 
 	void EntityManager::clear()
 	{
+		removeEntitiesOnRemoveList();
 		for( const auto& entity : m_entities )
 			s_entity_removed( entity );
 		m_entities.clear();

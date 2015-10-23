@@ -7,7 +7,8 @@ namespace kg
 
 	void DefaultGameState::onInit()
 	{
-		r_gameStateManager->push( std::make_shared<SingleplayerGameState>() );
+		unique_ptr<GameState> gameStatePtr = std::make_unique<SingleplayerGameState>();
+		r_gameStateManager->push( gameStatePtr );
 	}
 
 	void DefaultGameState::registerGui( tgui::Gui& gui )

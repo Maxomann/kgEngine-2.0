@@ -174,7 +174,8 @@ namespace kg
 		}
 		else
 		{
-			r_gameStateManager->push( make_shared<ConsoleGameState>() );
+			unique_ptr<GameState> gameStatePtr = make_unique<ConsoleGameState>();
+			r_gameStateManager->push( gameStatePtr );
 		}
 	}
 

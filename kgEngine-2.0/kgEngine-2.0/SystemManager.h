@@ -10,16 +10,17 @@ namespace kg
 	struct Engine;
 	class SaveManager;
 
-	class DLL_EXPORT SystemManager
+	class DLL_EXPORT SystemManager : boost::noncopyable
 	{
 		std::map<size_t, System*> m_systemsByType;
-		std::map<double, std::vector<std::shared_ptr<System>>> m_systemsByUpdateImportance;
+		std::map<double, std::vector<std::unique_ptr<System>>> m_systemsByUpdateImportance;
 	public:
 
-		void addSystem( std::shared_ptr<System>& system )
+		//passed reference will be nullptr after function call!
+		void addSystem( std::unique_ptr<System>& system )
 		{
 			m_systemsByType[system->getRTTI_hash()] = system.get();
-			m_systemsByUpdateImportance[system->getUpdateImportance()].push_back( system );
+			m_systemsByUpdateImportance[system->getUpdateImportance()].push_back( std::move(system) );
 		};
 
 		void initSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager );

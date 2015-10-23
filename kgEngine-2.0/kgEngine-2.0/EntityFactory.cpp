@@ -37,17 +37,15 @@ namespace kg
 			auto component = engine.pluginManager.createPlugin<Component>( comp.first );
 
 			component->preInit( engine, comp.second.getComponentValueReferencesByName() );
-			entity->addComponent( component );
+			entity->addComponent( move(component) );
 		}
 
-		entity->addComponent(
-			std::static_pointer_cast< Component >(
-			std::make_shared<Save>( entityBlueprintId, entityBlueprint, uniqueId )
-			) );
+		unique_ptr<Component> saveComponent = std::make_unique<Save>( entityBlueprintId, entityBlueprint, uniqueId );
+		entity->addComponent( saveComponent );
 
 		// check component requirements of each component
 		// throw exception if not all requirements are met
-		for( const auto& component : entity->getAllComponents() )
+		for( const auto& component : entity->getAllComponentsByUpdateImportance() )
 		{
 			for( const auto& requieredComponentId : component->getRequieredComponents() )
 			{

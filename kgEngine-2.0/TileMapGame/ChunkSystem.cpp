@@ -118,11 +118,14 @@ namespace kg
 
 	void ChunkSystem::m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
 	{
-		auto currentChunk = getChunkOfEntity( entity );
-		auto& chunkData = m_chunkData.at( currentChunk.x ).at( currentChunk.y );
-		auto it = std::find( chunkData.begin(), chunkData.end(), entity );
-		chunkData.erase( it );
-		m_entityData.erase( entity );
+		if(entity->hasComponent<Transformation>() )
+		{
+			auto currentChunk = getChunkOfEntity( entity );
+			auto& chunkData = m_chunkData.at( currentChunk.x ).at( currentChunk.y );
+			auto it = std::find( chunkData.begin(), chunkData.end(), entity );
+			chunkData.erase( it );
+			m_entityData.erase( entity );
+		}
 	}
 
 	const ChunkSystem::EntityContainer& ChunkSystem::getEntitiesInChunk( const sf::Vector2i& chunk ) const
