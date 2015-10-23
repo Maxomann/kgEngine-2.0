@@ -5,50 +5,27 @@ using namespace sf;
 using namespace tgui;
 using namespace placeholders;
 
+class Foo
+{
+public:
+	virtual int operation() = 0;
+};
+
+class Bar : public Foo
+{
+	virtual int operation() override
+	{
+		return 1;
+	}
+
+};
+
 int main()
 {
-	// Create the window
-	RenderWindow window{ { 1080, 720 }, "Window" };
-	Gui gui{ window };
+	unique_ptr<Foo> ptr = make_unique<Bar>();
 
-	// Load the font
-	gui.setFont( "./DejaVuSans.ttf" );
+	cout << ptr->operation() << endl;
 
-	auto childWindow = make_shared<ChildWindow>();
-	childWindow->setSize( 800, 400 );
+	system( "pause" );
 
-	auto chatBox = make_shared<ChatBox>();
-	chatBox->addLine( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
-
-	childWindow->add( chatBox );
-	gui.add( childWindow );
-
-	while( window.isOpen() )
-	{
-		Event event;
-		while( window.pollEvent( event ) )
-		{
-			if( event.type == Event::Closed )
-				window.close();
-
-			// Pass the event to all the widgets
-			gui.handleEvent( event );
-		}
-
-		window.clear();
-
-		// Draw all created widgets
-		gui.draw();
-
-		window.display();
-
-		//output GL_ERROR
-		while( true )
-		{
-			GLenum err = glGetError();
-			if( err == GL_NO_ERROR )
-				break;
-			cout << err << endl;
-		}
-	}
 }
