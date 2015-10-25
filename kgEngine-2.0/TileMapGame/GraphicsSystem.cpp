@@ -124,7 +124,7 @@ namespace kg
 		return ( int )id::SystemUpdateImportance::GRAPHICS_SYSTEM;
 	}
 
-	std::shared_ptr<Entity> GraphicsSystem::getCamera( int index )
+	Entity* GraphicsSystem::getCamera( int index )
 	{
 		m_cameraContainerMutex.lock();
 		auto retVal = m_cameras.at( index );
@@ -132,16 +132,22 @@ namespace kg
 		return retVal;
 	}
 
-	void GraphicsSystem::m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity )
+	void GraphicsSystem::m_onEntityAddedToWorld( Entity* entity )
 	{
 		if( entity->hasComponent<Graphics>() )
+		{
+			m_removedEntities.erase( remove( m_removedEntities.begin(), m_removedEntities.end(), entity ), m_removedEntities.end() );
 			m_addedEntities.push_back( entity );
+		}
 	}
 
-	void GraphicsSystem::m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
+	void GraphicsSystem::m_onEntityRemovedFromWorld( Entity* entity )
 	{
 		if( entity->hasComponent<Graphics>() )
+		{
+			m_addedEntities.erase( remove( m_addedEntities.begin(), m_addedEntities.end(), entity ), m_addedEntities.end() );
 			m_removedEntities.push_back( entity );
+		}
 	}
 
 	void GraphicsSystem::m_onSavegameOpened( Engine& engine, World& world )
@@ -159,13 +165,13 @@ namespace kg
 	void GraphicsSystem::m_initCameras( Engine& engine, World& world )
 	{
 		//init camera
-		auto camera = Camera::EMPLACE_TO_WORLD( engine, world, m_drawDistanceMutex, &m_drawDistance );
+		auto* camera = world.addEntity( Camera::CREATE( engine, world, m_drawDistanceMutex, &m_drawDistance ) );
 		m_cameraContainerMutex.lock();
 		m_cameras.push_back( camera );
 		m_cameraContainerMutex.unlock();
 	}
 
-	kg::CameraContainer GraphicsSystem::getCameras() const
+	EntityManager::EntityPointerContainer GraphicsSystem::getCameras() const
 	{
 		m_cameraContainerMutex.lock();
 		auto retVal = m_cameras;
@@ -224,8 +230,8 @@ namespace kg
 		drawingThread.detach();
 	}
 
-	vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>>::iterator findInToDraw( vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>>& container,
-																						std::shared_ptr<Entity> el )
+	vector<tuple<Vector3i, Entity*, Graphics*>>::iterator findInToDraw( vector<tuple<Vector3i, Entity*, Graphics*>>& container,
+																		Entity* el )
 	{
 		for( auto it = container.begin(); it != container.end(); ++it )
 			if( get<1>( *it ) == el )
@@ -242,7 +248,7 @@ namespace kg
 		r_renderWindow->setActive( true );
 		sf::Clock frameTimeClock;
 
-		vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>> toDrawSorted;
+		vector<tuple<Vector3i, Entity*, Graphics*>> toDrawSorted;
 
 		while( !m_drawingShouldTerminate )
 		{
@@ -269,7 +275,7 @@ namespace kg
 			m_drawableEntityMutex.lock();
 
 			//remove
-			toDrawSorted.erase( std::remove_if( toDrawSorted.begin(), toDrawSorted.end(), [&]( const tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>& conel )
+			toDrawSorted.erase( std::remove_if( toDrawSorted.begin(), toDrawSorted.end(), [&]( const tuple<Vector3i, Entity*, Graphics*>& conel )
 			{
 				for( const auto& el : m_removedEntitiesCopy )
 					if( get<1>( conel ) == el )
@@ -281,7 +287,6 @@ namespace kg
 			} ), toDrawSorted.end() );
 
 			//add
-			bool needsSort = (m_addedEntitiesCopy.size() != 0);
 
 			for( auto& el : m_addedEntitiesCopy )
 			{
@@ -293,25 +298,22 @@ namespace kg
 			m_removedEntitiesCopy.clear();
 
 			//sort
-			if( needsSort )
+			sort( begin( toDrawSorted ), end( toDrawSorted ), [](
+				const tuple<Vector3i, Entity*, Graphics*>& lhs,
+				const tuple<Vector3i, Entity*, Graphics*>& rhs )
 			{
-				sort( begin( toDrawSorted ), end( toDrawSorted ), [](
-					const tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>& lhs,
-					const tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>& rhs )
-				{
-					const auto& vecl = get<0>( lhs );
-					const auto& vecr = get<0>( rhs );
+				const auto& vecl = get<0>( lhs );
+				const auto& vecr = get<0>( rhs );
 
-					if( vecr.z > vecl.z )
-						return true;
-					else if( vecr.z == vecl.z && vecr.y > vecl.y )
-						return true;
-					else if( vecr.y == vecl.y && vecr.x > vecl.x )
-						return true;
+				if( vecr.z > vecl.z )
+					return true;
+				else if( vecr.z == vecl.z && vecr.y > vecl.y )
+					return true;
+				else if( vecr.y == vecl.y && vecr.x > vecl.x )
+					return true;
 
-					return false;
-				} );
-			}
+				return false;
+			} );
 
 
 			//draw

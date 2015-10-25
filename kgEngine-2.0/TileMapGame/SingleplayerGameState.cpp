@@ -6,11 +6,9 @@ using namespace tgui;
 namespace kg
 {
 
-	std::shared_ptr<Entity> SingleplayerGameState::m_getValidCamera()
+	Entity* SingleplayerGameState::m_getValidCamera()
 	{
-		if( m_camera.expired() )
-			m_camera = r_graphicsSystem->getCamera( 0 );
-		return m_camera.lock();
+		return r_graphicsSystem->getCamera( 0 );
 	}
 
 	void SingleplayerGameState::movePlayer( sf::Vector2i distance )

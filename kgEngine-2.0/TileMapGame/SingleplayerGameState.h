@@ -10,9 +10,8 @@ namespace kg
 	{
 		GraphicsSystem* r_graphicsSystem;
 
-		std::weak_ptr<Entity> m_camera;
 		float m_cameraZoomFactor = 1;
-		std::shared_ptr<Entity> m_getValidCamera();
+		Entity* m_getValidCamera();
 
 		void movePlayer( sf::Vector2i distance );
 

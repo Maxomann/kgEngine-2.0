@@ -50,11 +50,11 @@ namespace kg
 			m_engine.inputManager.forwardSfmlEvent( event );
 		}
 
+		m_engine.inputManager.triggerCallbacks( m_engine.renderWindow );
 		if( !m_engine.isPaused )//if game is not paused, update entities
 			m_world.updateEntities( m_engine, m_world, frameTime );
 		m_world.updateAllSystemsByImportance( m_engine, m_world, m_saveManager, frameTime );
 		m_gameStateManager.onUpdate();
-		m_engine.inputManager.triggerCallbacks( m_engine.renderWindow );
 		m_world.removeEntitiesOnRemoveList();
 	}
 

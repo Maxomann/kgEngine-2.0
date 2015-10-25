@@ -15,19 +15,20 @@ namespace kg
 		m_highestUniqueId = id;
 	}
 
-	std::shared_ptr<Entity> EntityFactory::createNewSaveableEntity( Engine& engine,
-																	World& world,
-																	const int& entityBlueprintId )
+	Entity EntityFactory::createNewSaveableEntity( Engine& engine,
+												   World& world,
+												   const int& entityBlueprintId )
 	{
-		return createNewSaveableEntity( engine, world, entityBlueprintId, getUniqueEntityId() );
+		auto temp = createNewSaveableEntity( engine, world, entityBlueprintId, getUniqueEntityId() );
+		return temp;
 	}
 
-	std::shared_ptr<Entity> EntityFactory::createNewSaveableEntity( Engine& engine,
-																	World& world,
-																	const int& entityBlueprintId,
-																	const Entity::Id& uniqueId )
+	Entity EntityFactory::createNewSaveableEntity( Engine& engine,
+												   World& world,
+												   const int& entityBlueprintId,
+												   const Entity::Id& uniqueId )
 	{
-		auto entity = std::make_shared<Entity>();
+		Entity entity;
 
 		auto& entityBlueprint = engine.blueprint.getEntityById( entityBlueprintId );
 
@@ -37,19 +38,19 @@ namespace kg
 			auto component = engine.pluginManager.createPlugin<Component>( comp.first );
 
 			component->preInit( engine, comp.second.getComponentValueReferencesByName() );
-			entity->addComponent( move(component) );
+			entity.addComponent( move( component ) );
 		}
 
 		unique_ptr<Component> saveComponent = std::make_unique<Save>( entityBlueprintId, entityBlueprint, uniqueId );
-		entity->addComponent( saveComponent );
+		entity.addComponent( saveComponent );
 
 		// check component requirements of each component
 		// throw exception if not all requirements are met
-		for( const auto& component : entity->getAllComponentsByUpdateImportance() )
+		for( const auto& component : entity.getAllComponentsByUpdateImportance() )
 		{
 			for( const auto& requieredComponentId : component->getRequieredComponents() )
 			{
-				if( !entity->hasComponent( requieredComponentId ) )
+				if( !entity.hasComponent( requieredComponentId ) )
 				{
 					throw ComponentMissingException( component->getPluginId(),
 													 requieredComponentId );
@@ -57,8 +58,8 @@ namespace kg
 			}
 		}
 
-		entity->initComponentsByImportance( engine, world );
+		entity.initComponentsByImportance( engine, world );
 
-		return entity;
+		return move( entity );
 	}
 }

@@ -52,14 +52,14 @@ namespace kg
 		const float& getZoomFactor()const;
 
 		void drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-										const std::vector<std::tuple<sf::Vector3i, std::shared_ptr<Entity>, Graphics*>>& toDrawSorted );
+										const std::vector<std::tuple<sf::Vector3i, Entity*, Graphics*>>& toDrawSorted );
 
 		static const std::string PLUGIN_NAME;
 
 		static const size_t type_hash;
 
 		//creates a new camera, adds it to the world and returns a pointer to it
-		static std::shared_ptr<Entity> EMPLACE_TO_WORLD( Engine& engine, World& world, boost::mutex& drawDistanceMutex, unsigned int* drawDistancePointer );
+		static Entity CREATE( Engine& engine, World& world, boost::mutex& drawDistanceMutex, unsigned int* drawDistancePointer );
 
 
 	};

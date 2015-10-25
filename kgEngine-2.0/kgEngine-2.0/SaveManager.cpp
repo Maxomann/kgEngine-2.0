@@ -117,24 +117,24 @@ namespace kg
 			if( el != "" )
 				information.push_back( EntitySaveInformation( el ) );
 
-		vector<shared_ptr<Entity>> entities;
+		vector<Entity> entities;
 
 		for( auto& el : information )
 		{
 			auto entity = world.createNewSaveableEntity( engine, world, el.getBlueprintEntityId(), el.getUniqueEntityId() );
-			entity->getComponent<Save>()->loadSaveInformation( el );
-			entities.push_back( entity );
+			entity.getComponent<Save>()->loadSaveInformation( el );
+			entities.push_back( move( entity ) );
 		}
 
 		for( auto& entity : entities )
-			world.addEntity( entity );
+			world.addEntity( move( entity ) );
 
 		file.close();
 		return true;
 	}
 
 	void SaveManager::saveEntitiesToFile( const std::string& path,
-										  const World::EntityContainer& entities )
+										  const World::EntityPointerContainer& entities )
 	{
 		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + path + SAVE_FILE_EXTENSION,
 					  fstream::out | fstream::trunc );

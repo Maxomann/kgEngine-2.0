@@ -89,16 +89,15 @@ namespace kg
 		return m_zoomFactor;
 	}
 
-	std::shared_ptr<Entity> Camera::EMPLACE_TO_WORLD( Engine& engine, World& world, boost::mutex& drawDistanceMutex, unsigned int* drawDistancePointer )
+	kg::Entity Camera::CREATE( Engine& engine, World& world, boost::mutex& drawDistanceMutex, unsigned int* drawDistancePointer )
 	{
 		auto camera = world.createNewTemporaryEntity<Transformation, Camera>( engine, world );
-		camera->getComponent<Transformation>()->setPosition( sf::Vector2i( 0, 0 ) );
-		camera->getComponent<Transformation>()->setSize( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
-		auto cameraComponent = camera->getComponent<Camera>();
+		camera.getComponent<Transformation>()->setPosition( sf::Vector2i( 0, 0 ) );
+		camera.getComponent<Transformation>()->setSize( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
+		auto cameraComponent = camera.getComponent<Camera>();
 		cameraComponent->setViewport( FloatRect( 0.f, 0.f, 1.f, 1.f ) );
 		cameraComponent->r_drawDistanceMutex = &drawDistanceMutex;
 		cameraComponent->r_drawDistance = drawDistancePointer;
-		world.addEntity( camera );
 		return camera;
 	}
 
@@ -108,7 +107,7 @@ namespace kg
 	}
 
 	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-											const vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>>& toDrawSorted )
+											const std::vector<std::tuple<sf::Vector3i, Entity*, Graphics*>>& toDrawSorted )
 	{
 		m_spriteBatch.setRenderTarget( renderWindow );
 

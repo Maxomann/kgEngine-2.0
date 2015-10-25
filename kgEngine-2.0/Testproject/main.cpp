@@ -5,26 +5,26 @@ using namespace sf;
 using namespace tgui;
 using namespace placeholders;
 
-class Foo
-{
-public:
-	virtual int operation() = 0;
-};
-
-class Bar : public Foo
-{
-	virtual int operation() override
-	{
-		return 1;
-	}
-
-};
-
 int main()
 {
-	unique_ptr<Foo> ptr = make_unique<Bar>();
+	vector<int> vec;
+	for( int i = 0; i < 15000; ++i )
+	{
+		vec.push_back( 1 );
+		vec.push_back( 2 );
+	}
 
-	cout << ptr->operation() << endl;
+	vector<int> vec2;
+	vec2.resize( 30000 );
+	for( int i = 0; i < 15000; ++i )
+	{
+		vec2.push_back( 1 );
+		vec2.push_back( 2 );
+	}
+
+
+
+
 
 	system( "pause" );
 

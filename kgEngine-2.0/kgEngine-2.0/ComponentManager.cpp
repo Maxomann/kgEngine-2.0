@@ -68,4 +68,17 @@ namespace kg
 		return m_componentsByUpdateImportance;
 	}
 
+	void ComponentManager::addComponent( std::unique_ptr<Component>& component )
+	{
+		auto typeHashCode = component->getRTTI_hash();
+
+		auto it = m_findComponentByType( typeHashCode );
+		if( it != m_componentsByType.end() )
+			throw std::exception();
+
+		m_componentsByType.emplace_back( typeHashCode, component.get() );
+		m_componentsByUpdateImportance.emplace_back( component.get() );
+		m_components.emplace_back( std::move( component ) );
+	}
+
 }

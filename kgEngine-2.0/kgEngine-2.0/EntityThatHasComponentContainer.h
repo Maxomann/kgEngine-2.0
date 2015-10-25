@@ -8,14 +8,14 @@ namespace kg
 	template< class ComponentType >
 	class EntityThatHasComponentContainer : public CallbackReciever
 	{
-		EntityManager::EntityContainer m_entities;
+		EntityManager::EntityPointerContainer m_entities;
 
-		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity )
+		void m_onEntityAddedToWorld( const Entity* entity )
 		{
 			if( entity->hasComponent<ComponentType>() )
 				m_entities.push_back( entity );
 		}
-		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
+		void m_onEntityRemovedFromWorld( const Entity* entity )
 		{
 			if( entity->hasComponent<ComponentType>() )
 				m_entities.erase( find( m_entities.begin(), m_entities.end(), entity ));
@@ -29,7 +29,7 @@ namespace kg
 		}
 
 	public:
-		const EntityManager::EntityContainer& getEntitiesThatHaveComponent()const
+		const EntityManager::EntityPointerContainer& getEntitiesThatHaveComponent()const
 		{
 			return m_entities;
 		}

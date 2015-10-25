@@ -12,7 +12,7 @@ namespace kg
 			for( int y = 0; y < count; ++y )
 			{
 				auto tile = world.createNewSaveableEntity( engine, world, engine.randomNumberGenerator.getRandomInt( 101, 103 ) );//grass
-				auto transform = tile->getComponent<Transformation>();
+				auto transform = tile.getComponent<Transformation>();
 
 				int chunkPositionInPixelX = chunkPositionInChunks.x*Constants::CHUNK_SIZE;
 				int chunkPositionInPixelY = chunkPositionInChunks.y*Constants::CHUNK_SIZE;
@@ -27,7 +27,7 @@ namespace kg
 				transform->setPosition( tilePosition );
 				transform->setZValue( Constants::STANDART_TILE_ZVALUE );
 
-				world.addEntity( tile );
+				world.addEntity( move( tile ) );
 			}
 	}
 
