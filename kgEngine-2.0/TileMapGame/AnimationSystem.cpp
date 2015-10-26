@@ -53,6 +53,11 @@ namespace kg
 		return el.get();
 	}
 
+	void AnimationSystem::destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile )
+	{
+		return;
+	}
+
 	const size_t& AnimationSystem::getRTTI_hash() const
 	{
 		return type_hash;

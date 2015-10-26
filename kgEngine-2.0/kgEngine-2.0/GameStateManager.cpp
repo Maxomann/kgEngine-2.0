@@ -83,4 +83,10 @@ namespace kg
 		} ));
 	}
 
+	void GameStateManager::clear()
+	{
+		while( m_gameStateStack.size() != 0 )
+			pop();
+	}
+
 }

@@ -36,6 +36,11 @@ namespace kg
 		return type_hash;
 	}
 
+	void ChunkGenerator::destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile )
+	{
+		return;
+	}
+
 	void ChunkGenerator::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
 		return;

@@ -27,6 +27,8 @@ namespace kg
 
 		void onUpdate();
 
+		void clear();
+
 		bool hasAnyInstanceOf( const Plugin::Id& pluginId );
 		void removeAllInstancesOf( const Plugin::Id& pluginId );
 	};

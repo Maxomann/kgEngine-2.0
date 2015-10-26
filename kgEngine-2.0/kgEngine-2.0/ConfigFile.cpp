@@ -54,7 +54,10 @@ namespace kg
 
 	DLL_EXPORT void ConfigFile::saveToFile()
 	{
-		saveToFile( m_path );
+		if( m_path != "ConfigFile -1" )
+			saveToFile( m_path );
+		else
+			throw exception();
 	}
 
 	DLL_EXPORT void ConfigFile::saveToFile( const std::string& path )
@@ -84,20 +87,15 @@ namespace kg
 		return str;
 	}
 
-	DLL_EXPORT const std::string& ConfigFile::setData( const std::string& identifier, const std::string& data )
+	DLL_EXPORT std::string& ConfigFile::setData( const std::string& identifier, const std::string& data )
 	{
-		m_data[identifier] = data;
-		return data;
+		auto& temp_ref = m_data[identifier];
+		temp_ref = data;
+		return temp_ref;
 	}
 
 	/*DLL_EXPORT const std::map<std::string, std::string>& ConfigFile::getAllData()
 	{
 	return m_data;
 	}*/
-
-	ConfigFile::~ConfigFile()
-	{
-		if( m_path != "ConfigFile -1" )
-			saveToFile();
-	}
 }

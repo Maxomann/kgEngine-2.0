@@ -58,6 +58,8 @@ namespace kg
 
 		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
 
+		virtual void destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile ) override;
+
 		virtual double getUpdateImportance() const;
 
 		virtual const Plugin::Name& getPluginName() const;

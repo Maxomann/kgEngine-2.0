@@ -152,6 +152,11 @@ namespace kg
 		return chunk;
 	}
 
+	void ChunkSystem::destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile )
+	{
+		return;
+	}
+
 	const size_t& ChunkSystem::getRTTI_hash() const
 	{
 		return type_hash;

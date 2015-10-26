@@ -10,16 +10,18 @@ namespace kg
 	private:
 		bool m_drawingShouldTerminate = false;
 
-		mutable boost::mutex m_syncMutex;
-		bool m_threadHasToWait = true;
+		//mutable boost::mutex m_syncMutex;
+		//bool m_threadHasToWait = true;
+
+		std::vector<std::tuple<sf::Vector3i, Entity*, Graphics*>> m_toDrawSorted;
+		boost::mutex m_toDrawSortedMutex;
 
 		EntityManager::EntityPointerContainer m_addedEntitiesCopy;
-		EntityManager::EntityPointerContainer m_removedEntitiesCopy;
 
 		mutable boost::mutex m_cameraContainerMutex;
 		EntityManager::EntityPointerContainer m_cameras;
 
-		mutable boost::mutex m_drawableEntityMutex;
+		mutable boost::mutex m_addedEntitiesCopyMutex;
 
 		bool m_drawingIsActive = false;
 
@@ -48,6 +50,7 @@ namespace kg
 		EntityManager::EntityPointerContainer m_removedEntities;
 		void m_onEntityAddedToWorld( Entity* entity );
 		void m_onEntityRemovedFromWorld( Entity* entity );
+		void m_onRemoveEntitiesFromRemoveList();
 
 		void m_onSavegameOpened( Engine& engine, World& world );
 		void m_onSavegameClosed();
@@ -61,13 +64,14 @@ namespace kg
 
 	public:
 		GraphicsSystem();
-		~GraphicsSystem();
 
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );
 
 		virtual void sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent );
 
 		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
+
+		virtual void destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile ) override;
 
 		virtual double getUpdateImportance() const;
 

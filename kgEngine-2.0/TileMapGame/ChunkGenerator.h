@@ -13,6 +13,8 @@ namespace kg
 
 		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime ) override;
 
+		virtual void destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile ) override;
+
 		virtual double getUpdateImportance() const override;
 
 		virtual const Plugin::Name& getPluginName() const override;
@@ -22,6 +24,7 @@ namespace kg
 		void generateChunk( Engine& engine, World& world, const sf::Vector2i chunkPositionInChunks );
 
 		virtual const size_t& getRTTI_hash() const override;
+
 
 		static const std::string PLUGIN_NAME;
 

@@ -15,10 +15,9 @@ namespace kg
 	void Core::init()
 	{
 		loadPackages();
-		m_engine.blueprint.link();
 
-		for( auto&& el : m_engine.pluginManager.createEverySystemAvailable() )
-			m_world.addSystem( el );
+		for( auto& el : m_engine.pluginManager.createEverySystemAvailable() )
+			m_world.addSystem( move( el ) );
 
 		//init systems
 		m_world.initSystemsByImportance( m_engine, m_world, m_saveManager );
@@ -28,6 +27,12 @@ namespace kg
 	bool Core::shouldTerminate() const
 	{
 		return m_engine.shouldTerminate;
+	}
+
+	void Core::terminate()
+	{
+		m_gameStateManager.clear();
+		m_world.destroySystemsByImportance( m_engine );
 	}
 
 	void Core::update()
@@ -77,6 +82,7 @@ namespace kg
 		//load blueprints
 		for( const auto& el : blueprintsToParse )
 			m_engine.blueprint.parse( el.string() );
+		m_engine.blueprint.link();
 
 		for( const auto& el : dllsToLoad )
 		{

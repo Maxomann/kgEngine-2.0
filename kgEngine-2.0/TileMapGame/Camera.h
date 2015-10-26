@@ -16,7 +16,6 @@ namespace kg
 		unsigned int* r_drawDistance;
 
 		sf::View m_view;
-		sf::Vector2u m_finalSize;
 
 		void m_onPositionChanged( const sf::Vector2i& newPosition );
 		void m_onSizeChanged( const sf::Vector2i& newSize );

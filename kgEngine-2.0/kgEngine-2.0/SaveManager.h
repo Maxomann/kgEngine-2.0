@@ -23,6 +23,7 @@ namespace kg
 		std::vector<std::string> getAvailableSavegameNames()const;
 		//loads systems
 		void openSavegame( Engine& engine, World& world, const std::string& savegameName );
+		void closeSavegame( Engine& engine, World& world );
 		const std::string& getOpenSavegameName()const;
 		//filename without extension!
 		bool loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename );

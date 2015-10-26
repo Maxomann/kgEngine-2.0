@@ -8,7 +8,7 @@ namespace kg
 		// this is due to sorting from low to high key values in std::Map
 		for( auto& vec : m_systemsByUpdateImportance )
 			for( auto& el : vec.second )
-			el->update( engine, world, saveManager, frameTime );
+				el->update( engine, world, saveManager, frameTime );
 	}
 
 	void SystemManager::initSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager )
@@ -22,6 +22,23 @@ namespace kg
 	{
 		for( auto& vec : m_systemsByUpdateImportance )
 			for( auto& el : vec.second )
-			el->sfmlEvent( engine, world, saveManager, sfEvent );
+				el->sfmlEvent( engine, world, saveManager, sfEvent );
+	}
+
+	void SystemManager::addSystem( std::unique_ptr<System>&& system )
+	{
+		m_systemsByType[system->getRTTI_hash()] = system.get();
+		m_systemsByUpdateImportance[system->getUpdateImportance()].push_back( std::move( system ) );
+	}
+
+	void SystemManager::destroySystemsByImportance( Engine& engine )
+	{
+		for( auto& vec : m_systemsByUpdateImportance )
+			for( auto& el : vec.second )
+			{
+				auto configFile = engine.resourceManager.getConfigFile<ConfigFile>( el->getPluginName() );
+				el->destroy( engine, configFile );
+				configFile->saveToFile();
+			}
 	}
 }

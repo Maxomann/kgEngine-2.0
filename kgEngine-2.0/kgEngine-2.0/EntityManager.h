@@ -46,5 +46,6 @@ namespace kg
 	signals:
 		Signal<Entity*> s_entity_added;
 		Signal<Entity*> s_entity_removed;
+		Signal<> s_removeEntitiesOnRemoveList;
 	};
 }

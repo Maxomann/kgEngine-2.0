@@ -33,6 +33,8 @@ namespace kg
 
 	void EntityManager::removeEntitiesOnRemoveList()
 	{
+		s_removeEntitiesOnRemoveList();
+
 		auto condition = [&]( const Entity& conel )
 		{
 			for( const auto& el : m_toRemove )
@@ -44,7 +46,7 @@ namespace kg
 			return false;
 		};
 
-		m_entities.erase( std::remove_if( m_entities.begin(), m_entities.end(), condition ), m_entities.end() );
+		m_entities.remove_if( condition );
 		if( m_toRemove.size() != 0 )
 			throw exception();
 		m_toRemove.clear();
@@ -54,11 +56,8 @@ namespace kg
 	{
 		removeEntitiesOnRemoveList();
 		for( auto& entity : m_entities )
-		{
-			auto* temp = &entity;
-			s_entity_removed( temp );
-		}
-		m_entities.clear();
+			removeEntity( &entity );
+		removeEntitiesOnRemoveList();
 	}
 
 	const EntityManager::EntityContainer& EntityManager::getAllEntities() const

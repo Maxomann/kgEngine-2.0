@@ -22,8 +22,7 @@ namespace kg
 
 	void SaveManager::openSavegame( Engine& engine, World& world, const std::string& savegameName )
 	{
-		world.clear();
-		s_savegameClosed();
+		closeSavegame( engine, world );
 
 		m_openSavegameName = savegameName;
 
@@ -59,6 +58,12 @@ namespace kg
 		s_savegameOpened( engine, world );//inform registered systems (even if no save information has been loaded for them!)
 
 		return;
+	}
+
+	void SaveManager::closeSavegame( Engine& engine, World& world )
+	{
+		world.clear();
+		s_savegameClosed();
 	}
 
 	const std::string& SaveManager::getOpenSavegameName() const

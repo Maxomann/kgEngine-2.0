@@ -157,9 +157,7 @@ namespace kg
 		r_world->getSystem<ChunkSystem>()->saveOpenSavegame( *r_engine, *r_world, *r_saveManager );
 		r_saveManager->openSavegame( *r_engine, *r_world, "MyFirstSavegameEver" );
 
-		r_engine->console.info( "Savegame reloaded successfully" );
-		r_engine->console.log( "Savegame reloaded successfully" );
-		r_engine->console.error( "Savegame reloaded successfully" );
+		r_engine->console.info( "Savegame reloaded" );
 	}
 
 	void SingleplayerGameState::switchConsole()

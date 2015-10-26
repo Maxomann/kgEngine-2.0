@@ -44,7 +44,7 @@ namespace kg
 
 	void DefaultGameState::onDestroy()
 	{
-		throw exception( "DefaultGameState should never be destroyed" );
+		return;
 	}
 
 
@@ -63,6 +63,7 @@ namespace kg
 	void DefaultGameState::shutDown()
 	{
 		r_world->getSystem<ChunkSystem>()->saveOpenSavegame( *r_engine, *r_world, *r_saveManager );
+		r_saveManager->closeSavegame( *r_engine, *r_world );
 		r_engine->shouldTerminate = true;
 	}
 

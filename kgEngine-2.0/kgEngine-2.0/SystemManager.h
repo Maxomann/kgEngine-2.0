@@ -17,11 +17,7 @@ namespace kg
 	public:
 
 		//passed reference will be nullptr after function call!
-		void addSystem( std::unique_ptr<System>& system )
-		{
-			m_systemsByType[system->getRTTI_hash()] = system.get();
-			m_systemsByUpdateImportance[system->getUpdateImportance()].push_back( std::move(system) );
-		};
+		void addSystem( std::unique_ptr<System>&& system );
 
 		void initSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager );
 
@@ -30,6 +26,8 @@ namespace kg
 		{
 			return static_cast< T* >(m_systemsByType.at( T::type_hash ));
 		};
+
+		void destroySystemsByImportance( Engine& engine );
 
 		void forwardSfmlEventByImportance( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent );
 		void updateAllSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );

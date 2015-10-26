@@ -12,8 +12,6 @@ namespace kg
 		std::string m_path = "ConfigFile -1";
 
 	public:
-		//save on close
-		~ConfigFile();
 
 		DLL_EXPORT bool loadFromFile( const std::string& path );
 
@@ -24,6 +22,6 @@ namespace kg
 		/*DLL_EXPORT const std::map<std::string, std::string>& getAllData(); - unused method*/
 		DLL_EXPORT std::string& getData( const std::string& identifier );
 		//returns a reference to parameter: const std::string& data
-		DLL_EXPORT const std::string& setData( const std::string& identifier, const std::string& data );
+		DLL_EXPORT std::string& setData( const std::string& identifier, const std::string& data );
 	};
 }
