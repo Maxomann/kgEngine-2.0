@@ -16,6 +16,7 @@ int main()
 		core.init();
 		while( !core.shouldTerminate() )
 			core.update();
+		core.terminate();
 #ifndef _DEBUG
 	}
 	catch( std::exception& e )

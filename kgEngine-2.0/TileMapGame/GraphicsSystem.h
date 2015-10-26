@@ -5,27 +5,23 @@
 
 namespace kg
 {
-
-	//cameraStates, graphicsInformations
-	//std::vector<std::shared_ptr<Entity>>
-	typedef std::vector<std::shared_ptr<Entity>> CameraContainer;
-
-
 	class GraphicsSystem : public System, public CallbackReciever
 	{
 	private:
 		bool m_drawingShouldTerminate = false;
 
-		mutable boost::mutex m_syncMutex;
-		bool m_threadHasToWait = true;
+		//mutable boost::mutex m_syncMutex;
+		//bool m_threadHasToWait = true;
 
-		EntityManager::EntityContainer m_addedEntitiesCopy;
-		EntityManager::EntityContainer m_removedEntitiesCopy;
+		std::vector<std::tuple<sf::Vector3i, Entity*, Graphics*>> m_toDrawSorted;
+		boost::mutex m_toDrawSortedMutex;
+
+		EntityManager::EntityPointerContainer m_addedEntitiesCopy;
 
 		mutable boost::mutex m_cameraContainerMutex;
-		CameraContainer m_cameras;
+		EntityManager::EntityPointerContainer m_cameras;
 
-		mutable boost::mutex m_drawableEntityMutex;
+		mutable boost::mutex m_addedEntitiesCopyMutex;
 
 		bool m_drawingIsActive = false;
 
@@ -50,10 +46,11 @@ namespace kg
 
 		void m_initCameras( Engine& engine, World& world );
 
-		EntityManager::EntityContainer m_addedEntities;
-		EntityManager::EntityContainer m_removedEntities;
-		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity );
-		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity );
+		EntityManager::EntityPointerContainer m_addedEntities;
+		EntityManager::EntityPointerContainer m_removedEntities;
+		void m_onEntityAddedToWorld( Entity* entity );
+		void m_onEntityRemovedFromWorld( Entity* entity );
+		void m_onRemoveEntitiesFromRemoveList();
 
 		void m_onSavegameOpened( Engine& engine, World& world );
 		void m_onSavegameClosed();
@@ -67,13 +64,14 @@ namespace kg
 
 	public:
 		GraphicsSystem();
-		~GraphicsSystem();
 
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );
 
 		virtual void sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent );
 
 		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
+
+		virtual void destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile ) override;
 
 		virtual double getUpdateImportance() const;
 
@@ -84,8 +82,8 @@ namespace kg
 		virtual const size_t& getRTTI_hash() const override;
 
 
-		std::shared_ptr<Entity> getCamera( int index );
-		CameraContainer getCameras()const;
+		Entity* getCamera( int index );
+		EntityManager::EntityPointerContainer getCameras()const;
 
 		void setDrawDistance( const unsigned int& drawDistance );
 		unsigned int getDrawDistance()const;

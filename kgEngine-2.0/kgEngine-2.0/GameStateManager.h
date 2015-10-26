@@ -3,13 +3,13 @@
 
 namespace kg
 {
-	class DLL_EXPORT GameStateManager
+	class DLL_EXPORT GameStateManager : boost::noncopyable
 	{
 		Engine& engine;
 		World& world;
 		SaveManager& saveManager;
 
-		std::vector<std::shared_ptr<GameState>> m_gameStateStack;
+		std::vector<std::unique_ptr<GameState>> m_gameStateStack;
 
 	public:
 		GameStateManager( Engine& engine, World& world, SaveManager& saveManager );
@@ -18,13 +18,16 @@ namespace kg
 
 		void forwardFrameTime( const sf::Time& frameTime );
 
-		void push( const std::shared_ptr<GameState>& gameState );
+		//passed reference will be nullptr after function call!
+		void push( std::unique_ptr<GameState>& gameState );
 
 		void pop();
 
-		const std::shared_ptr<GameState>& top()const;
+		const std::unique_ptr<GameState>& top()const;
 
 		void onUpdate();
+
+		void clear();
 
 		bool hasAnyInstanceOf( const Plugin::Id& pluginId );
 		void removeAllInstancesOf( const Plugin::Id& pluginId );

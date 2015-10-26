@@ -22,8 +22,7 @@ namespace kg
 
 	void SaveManager::openSavegame( Engine& engine, World& world, const std::string& savegameName )
 	{
-		world.clear();
-		s_savegameClosed();
+		closeSavegame( engine, world );
 
 		m_openSavegameName = savegameName;
 
@@ -59,6 +58,12 @@ namespace kg
 		s_savegameOpened( engine, world );//inform registered systems (even if no save information has been loaded for them!)
 
 		return;
+	}
+
+	void SaveManager::closeSavegame( Engine& engine, World& world )
+	{
+		world.clear();
+		s_savegameClosed();
 	}
 
 	const std::string& SaveManager::getOpenSavegameName() const
@@ -117,24 +122,24 @@ namespace kg
 			if( el != "" )
 				information.push_back( EntitySaveInformation( el ) );
 
-		vector<shared_ptr<Entity>> entities;
+		vector<Entity> entities;
 
 		for( auto& el : information )
 		{
 			auto entity = world.createNewSaveableEntity( engine, world, el.getBlueprintEntityId(), el.getUniqueEntityId() );
-			entity->getComponent<Save>()->loadSaveInformation( el );
-			entities.push_back( entity );
+			entity.getComponent<Save>()->loadSaveInformation( el );
+			entities.push_back( move( entity ) );
 		}
 
 		for( auto& entity : entities )
-			world.addEntity( entity );
+			world.addEntity( move( entity ) );
 
 		file.close();
 		return true;
 	}
 
 	void SaveManager::saveEntitiesToFile( const std::string& path,
-										  const World::EntityContainer& entities )
+										  const World::EntityPointerContainer& entities )
 	{
 		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + path + SAVE_FILE_EXTENSION,
 					  fstream::out | fstream::trunc );

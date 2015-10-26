@@ -63,7 +63,7 @@ namespace kg
 		return id::SystemPluginId::CHUNK_SYSTEM;
 	}
 
-	void ChunkSystem::m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity )
+	void ChunkSystem::m_onEntityAddedToWorld( Entity* entity )
 	{
 		if( entity->hasComponent<Transformation>() )
 		{
@@ -71,14 +71,14 @@ namespace kg
 							   function<void( const Vector2i& )>(
 								   bind( &ChunkSystem::m_onEntityPositionChanged,
 										 this,
-										 weak_ptr<Entity>( entity ),
+										 entity,
 										 placeholders::_1 ) ) );
 
 			m_refreshChunkInformation( entity );
 		}
 	}
 
-	void ChunkSystem::m_refreshChunkInformation( const std::shared_ptr<Entity>& entity )
+	void ChunkSystem::m_refreshChunkInformation( Entity* entity )
 	{
 		auto newChunk = calculateChunkForPosition( entity->getComponent<Transformation>()->getPosition() );
 
@@ -109,23 +109,24 @@ namespace kg
 		}
 	}
 
-	void ChunkSystem::m_onEntityPositionChanged( weak_ptr<Entity>& entity, const sf::Vector2i& newPosition )
+	void ChunkSystem::m_onEntityPositionChanged( Entity* entity, const sf::Vector2i& newPosition )
 	{
-		auto sharedEntity = entity.lock();
-		if( sharedEntity )
-			m_refreshChunkInformation( sharedEntity );
+		m_refreshChunkInformation( entity );
 	}
 
-	void ChunkSystem::m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
+	void ChunkSystem::m_onEntityRemovedFromWorld( Entity* entity )
 	{
-		auto currentChunk = getChunkOfEntity( entity );
-		auto& chunkData = m_chunkData.at( currentChunk.x ).at( currentChunk.y );
-		auto it = std::find( chunkData.begin(), chunkData.end(), entity );
-		chunkData.erase( it );
-		m_entityData.erase( entity );
+		if( entity->hasComponent<Transformation>() )
+		{
+			auto currentChunk = getChunkOfEntity( entity );
+			auto& chunkData = m_chunkData.at( currentChunk.x ).at( currentChunk.y );
+			auto it = std::find( chunkData.begin(), chunkData.end(), entity );
+			chunkData.erase( it );
+			m_entityData.erase( entity );
+		}
 	}
 
-	const ChunkSystem::EntityContainer& ChunkSystem::getEntitiesInChunk( const sf::Vector2i& chunk ) const
+	const ChunkSystem::EntityPointerContainer& ChunkSystem::getEntitiesInChunk( const sf::Vector2i& chunk ) const
 	{
 		auto findResult = m_chunkData.find( chunk.x );
 		if( findResult != m_chunkData.end() )
@@ -151,12 +152,17 @@ namespace kg
 		return chunk;
 	}
 
+	void ChunkSystem::destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile )
+	{
+		return;
+	}
+
 	const size_t& ChunkSystem::getRTTI_hash() const
 	{
 		return type_hash;
 	}
 
-	const sf::Vector2i& ChunkSystem::getChunkOfEntity( const std::shared_ptr<Entity>& entity )
+	const sf::Vector2i& ChunkSystem::getChunkOfEntity( Entity* entity )
 	{
 		auto& retVal = m_entityData.at( entity );
 		return retVal;
@@ -237,7 +243,7 @@ namespace kg
 	{
 		if( !m_loadedChunks[chunkPosition.x][chunkPosition.y] )
 			if( find( m_chunkLoadQueue.begin(), m_chunkLoadQueue.end(), chunkPosition ) == m_chunkLoadQueue.end() )
-			m_chunkLoadQueue.push_back( chunkPosition );
+				m_chunkLoadQueue.push_back( chunkPosition );
 
 		//remove from unload queue
 		auto itLoad = find( m_chunkUnloadQueue.begin(), m_chunkUnloadQueue.end(), chunkPosition );
@@ -249,7 +255,7 @@ namespace kg
 	{
 		if( m_loadedChunks[chunkPosition.x][chunkPosition.y] )
 			if( find( m_chunkUnloadQueue.begin(), m_chunkUnloadQueue.end(), chunkPosition ) == m_chunkUnloadQueue.end() )
-			m_chunkUnloadQueue.push_back( chunkPosition );
+				m_chunkUnloadQueue.push_back( chunkPosition );
 
 		//remove from load queue
 		auto itLoad = find( m_chunkLoadQueue.begin(), m_chunkLoadQueue.end(), chunkPosition );

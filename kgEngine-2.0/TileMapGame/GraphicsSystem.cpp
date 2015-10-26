@@ -15,6 +15,7 @@ namespace kg
 		m_connectToSignal( saveManager.s_savegameClosed, &GraphicsSystem::m_onSavegameClosed );
 		m_connectToSignal( world.s_entity_added, &GraphicsSystem::m_onEntityAddedToWorld );
 		m_connectToSignal( world.s_entity_removed, &GraphicsSystem::m_onEntityRemovedFromWorld );
+		m_connectToSignal( world.s_removeEntitiesOnRemoveList, &GraphicsSystem::m_onRemoveEntitiesFromRemoveList );
 
 		//get config values
 		m_configValues.antialiasing = &configFile->getData( ANTIALIASING );
@@ -88,15 +89,14 @@ namespace kg
 	void GraphicsSystem::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
 
-		m_drawableEntityMutex.lock();
+		m_addedEntitiesCopyMutex.lock();
 		m_addedEntitiesCopy.insert( end( m_addedEntitiesCopy ), begin( m_addedEntities ), end( m_addedEntities ) );
-		m_removedEntitiesCopy.insert( end( m_removedEntitiesCopy ), begin( m_removedEntities ), end( m_removedEntities ) );
 		m_addedEntities.clear();
-		m_removedEntities.clear();
-		m_drawableEntityMutex.unlock();
-		m_syncMutex.lock();
-		m_threadHasToWait = false;
-		m_syncMutex.unlock();
+		m_addedEntitiesCopyMutex.unlock();
+
+		//m_syncMutex.lock();
+		//m_threadHasToWait = false;
+		//m_syncMutex.unlock();
 
 		engine.renderWindow.setTitle( *m_configValues.window_name +
 									  " " +
@@ -124,7 +124,7 @@ namespace kg
 		return ( int )id::SystemUpdateImportance::GRAPHICS_SYSTEM;
 	}
 
-	std::shared_ptr<Entity> GraphicsSystem::getCamera( int index )
+	Entity* GraphicsSystem::getCamera( int index )
 	{
 		m_cameraContainerMutex.lock();
 		auto retVal = m_cameras.at( index );
@@ -132,16 +132,61 @@ namespace kg
 		return retVal;
 	}
 
-	void GraphicsSystem::m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity )
+	void GraphicsSystem::m_onEntityAddedToWorld( Entity* entity )
 	{
 		if( entity->hasComponent<Graphics>() )
+		{
+			m_removedEntities.erase( remove( m_removedEntities.begin(), m_removedEntities.end(), entity ), m_removedEntities.end() );
 			m_addedEntities.push_back( entity );
+		}
 	}
 
-	void GraphicsSystem::m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity )
+	void GraphicsSystem::m_onEntityRemovedFromWorld( Entity* entity )
 	{
-		if( entity->hasComponent<Graphics>() )
+		if( entity->hasComponent<Graphics>() || entity->hasComponent<Camera>() )
+		{
+			m_addedEntities.erase( remove( m_addedEntities.begin(), m_addedEntities.end(), entity ), m_addedEntities.end() );
 			m_removedEntities.push_back( entity );
+		}
+	}
+
+	void GraphicsSystem::m_onRemoveEntitiesFromRemoveList()
+	{
+		if( m_removedEntities.size() == 0 )
+			return;
+
+		//remove cameras
+		m_cameraContainerMutex.lock();
+
+		m_cameras.erase( std::remove_if( m_cameras.begin(), m_cameras.end(), [&]( const Entity* conel )
+		{
+			for( const auto& el : m_removedEntities )
+				if( conel == el )
+					return true;
+			return false;
+		} ), m_cameras.end() );
+
+		m_cameraContainerMutex.unlock();
+
+
+
+		m_toDrawSortedMutex.lock();
+
+		//remove
+		m_toDrawSorted.erase( std::remove_if( m_toDrawSorted.begin(), m_toDrawSorted.end(), [&]( const tuple<Vector3i, Entity*, Graphics*>& conel )
+		{
+			for( const auto& el : m_removedEntities )
+				if( get<1>( conel ) == el )
+				{
+					m_removedEntities.erase( remove( m_removedEntities.begin(), m_removedEntities.end(), el ), m_removedEntities.end() );
+					return true;
+				}
+			return false;
+		} ), m_toDrawSorted.end() );
+
+		m_toDrawSortedMutex.unlock();
+
+		m_removedEntities.clear();
 	}
 
 	void GraphicsSystem::m_onSavegameOpened( Engine& engine, World& world )
@@ -159,13 +204,13 @@ namespace kg
 	void GraphicsSystem::m_initCameras( Engine& engine, World& world )
 	{
 		//init camera
-		auto camera = Camera::EMPLACE_TO_WORLD( engine, world, m_drawDistanceMutex, &m_drawDistance );
 		m_cameraContainerMutex.lock();
+		auto* camera = world.addEntity( Camera::CREATE( engine, world, m_drawDistanceMutex, &m_drawDistance ) );
 		m_cameras.push_back( camera );
 		m_cameraContainerMutex.unlock();
 	}
 
-	kg::CameraContainer GraphicsSystem::getCameras() const
+	EntityManager::EntityPointerContainer GraphicsSystem::getCameras() const
 	{
 		m_cameraContainerMutex.lock();
 		auto retVal = m_cameras;
@@ -188,6 +233,11 @@ namespace kg
 		return copy;
 	}
 
+	void GraphicsSystem::destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile )
+	{
+		m_terminateDrawingThread();
+	}
+
 	const size_t& GraphicsSystem::getRTTI_hash() const
 	{
 		return type_hash;
@@ -198,18 +248,13 @@ namespace kg
 		glewInit();
 	}
 
-	GraphicsSystem::~GraphicsSystem()
-	{
-		m_terminateDrawingThread();
-	}
-
 	void GraphicsSystem::m_terminateDrawingThread()
 	{
 		//safely terminate drawing thread
 		m_drawingShouldTerminate = true;
-		m_syncMutex.lock();
-		m_threadHasToWait = false;
-		m_syncMutex.unlock();
+		//m_syncMutex.lock();
+		//m_threadHasToWait = false;
+		//m_syncMutex.unlock();
 		while( m_drawingIsActive )
 			sleep( sf::milliseconds( 1 ) );
 		sleep( sf::milliseconds( 1 ) );
@@ -224,8 +269,8 @@ namespace kg
 		drawingThread.detach();
 	}
 
-	vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>>::iterator findInToDraw( vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>>& container,
-																						std::shared_ptr<Entity> el )
+	vector<tuple<Vector3i, Entity*, Graphics*>>::iterator findInToDraw( vector<tuple<Vector3i, Entity*, Graphics*>>& container,
+																		Entity* el )
 	{
 		for( auto it = container.begin(); it != container.end(); ++it )
 			if( get<1>( *it ) == el )
@@ -242,13 +287,11 @@ namespace kg
 		r_renderWindow->setActive( true );
 		sf::Clock frameTimeClock;
 
-		vector<tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>> toDrawSorted;
-
 		while( !m_drawingShouldTerminate )
 		{
-			while( true )
+			/*while( true )
 			{
-				//lock
+				// lock
 				m_syncMutex.lock();
 				if( !m_threadHasToWait )
 				{
@@ -257,76 +300,61 @@ namespace kg
 				}
 				else
 					m_syncMutex.unlock();
-			}
+			}*/
 
 
 			frameTimeClock.restart().asMilliseconds();
 
 			r_renderWindow->clear( Color::Green );
 
-			//LOCK
-			m_cameraContainerMutex.lock();
-			m_drawableEntityMutex.lock();
+			// LOCK
+			m_toDrawSortedMutex.lock();
+			m_addedEntitiesCopyMutex.lock();
 
-			//remove
-			toDrawSorted.erase( std::remove_if( toDrawSorted.begin(), toDrawSorted.end(), [&]( const tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>& conel )
-			{
-				for( const auto& el : m_removedEntitiesCopy )
-					if( get<1>( conel ) == el )
-					{
-						m_removedEntitiesCopy.erase( remove( m_removedEntitiesCopy.begin(), m_removedEntitiesCopy.end(), el ), m_removedEntitiesCopy.end() );
-						return true;
-					}
-				return false;
-			} ), toDrawSorted.end() );
-
-			//add
-			bool needsSort = (m_addedEntitiesCopy.size() != 0);
+			// add
 
 			for( auto& el : m_addedEntitiesCopy )
 			{
 				const auto transformationComponent = el->getComponent<Transformation>();
-				toDrawSorted.push_back( make_tuple( transformationComponent->getXYZValues(), el, el->getComponent<Graphics>() ) );
+				m_toDrawSorted.push_back( make_tuple( transformationComponent->getXYZValues(), el, el->getComponent<Graphics>() ) );
 			}
 
 			m_addedEntitiesCopy.clear();
-			m_removedEntitiesCopy.clear();
+			m_addedEntitiesCopyMutex.unlock();
 
-			//sort
-			if( needsSort )
+			// sort
+			sort( begin( m_toDrawSorted ), end( m_toDrawSorted ), [](
+				const tuple<Vector3i, Entity*, Graphics*>& lhs,
+				const tuple<Vector3i, Entity*, Graphics*>& rhs )
 			{
-				sort( begin( toDrawSorted ), end( toDrawSorted ), [](
-					const tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>& lhs,
-					const tuple<Vector3i, std::shared_ptr<Entity>, Graphics*>& rhs )
-				{
-					const auto& vecl = get<0>( lhs );
-					const auto& vecr = get<0>( rhs );
+				const auto& vecl = get<0>( lhs );
+				const auto& vecr = get<0>( rhs );
 
-					if( vecr.z > vecl.z )
-						return true;
-					else if( vecr.z == vecl.z && vecr.y > vecl.y )
-						return true;
-					else if( vecr.y == vecl.y && vecr.x > vecl.x )
-						return true;
+				if( vecr.z > vecl.z )
+					return true;
+				else if( vecr.z == vecl.z && vecr.y > vecl.y )
+					return true;
+				else if( vecr.y == vecl.y && vecr.x > vecl.x )
+					return true;
 
-					return false;
-				} );
-			}
+				return false;
+			} );
 
+			m_cameraContainerMutex.lock();
 
-			//draw
+			// draw
 			for( const auto& camera : m_cameras )
-				camera->getComponent<Camera>()->drawSpritesToRenderWindow( *r_renderWindow, toDrawSorted );
+				camera->getComponent<Camera>()->drawSpritesToRenderWindow( *r_renderWindow, m_toDrawSorted );
 
-			m_drawableEntityMutex.unlock();
+			// UNLOCK
 			m_cameraContainerMutex.unlock();
-			//UNLOCK
+			m_toDrawSortedMutex.unlock();
 
 			r_gui->draw();
 			r_renderWindow->display();
 
 			m_drawingThreadFrameTime = frameTimeClock.getElapsedTime().asMilliseconds();
-			m_syncMutex.unlock();
+			//m_syncMutex.unlock();
 
 			//output GL_ERROR
 			while( true )

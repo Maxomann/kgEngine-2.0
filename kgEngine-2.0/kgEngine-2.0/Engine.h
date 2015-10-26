@@ -6,6 +6,7 @@
 #include "RandomNumberGenerator.h"
 #include "InputManager.h"
 #include "Console.h"
+#include "Callback.h"
 
 namespace kg
 {

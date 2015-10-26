@@ -6,11 +6,9 @@ using namespace tgui;
 namespace kg
 {
 
-	std::shared_ptr<Entity> SingleplayerGameState::m_getValidCamera()
+	Entity* SingleplayerGameState::m_getValidCamera()
 	{
-		if( m_camera.expired() )
-			m_camera = r_graphicsSystem->getCamera( 0 );
-		return m_camera.lock();
+		return r_graphicsSystem->getCamera( 0 );
 	}
 
 	void SingleplayerGameState::movePlayer( sf::Vector2i distance )
@@ -159,9 +157,7 @@ namespace kg
 		r_world->getSystem<ChunkSystem>()->saveOpenSavegame( *r_engine, *r_world, *r_saveManager );
 		r_saveManager->openSavegame( *r_engine, *r_world, "MyFirstSavegameEver" );
 
-		r_engine->console.info( "Savegame reloaded successfully" );
-		r_engine->console.log( "Savegame reloaded successfully" );
-		r_engine->console.error( "Savegame reloaded successfully" );
+		r_engine->console.info( "Savegame reloaded" );
 	}
 
 	void SingleplayerGameState::switchConsole()
@@ -174,7 +170,8 @@ namespace kg
 		}
 		else
 		{
-			r_gameStateManager->push( make_shared<ConsoleGameState>() );
+			unique_ptr<GameState> gameStatePtr = make_unique<ConsoleGameState>();
+			r_gameStateManager->push( gameStatePtr );
 		}
 	}
 

@@ -23,6 +23,7 @@ namespace kg
 		std::vector<std::string> getAvailableSavegameNames()const;
 		//loads systems
 		void openSavegame( Engine& engine, World& world, const std::string& savegameName );
+		void closeSavegame( Engine& engine, World& world );
 		const std::string& getOpenSavegameName()const;
 		//filename without extension!
 		bool loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename );
@@ -31,7 +32,7 @@ namespace kg
 		// PREVIOUSLY STORED INFORMATION IN FILE(filename) WILL BE DELETED!
 		// path relative to open savegame path
 		void saveEntitiesToFile( const std::string& path,
-								 const World::EntityContainer& entities );
+								 const World::EntityPointerContainer& entities );
 		//saves every system that is registered in systemManager to globals.save
 		void saveSystems( World& world );
 

@@ -6,7 +6,7 @@ namespace kg
 {
 	void AnimationSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
-		for( const auto& el : engine.pluginManager.getEveryUserDefinedPlugin<AnimationHandler>() )
+		for( const auto& el : engine.pluginManager.getEveryUserDefinedPluginFactory<AnimationHandler>() )
 			m_AnimationHandlerPluginsbyName[el->getName()] = el;
 
 		return;
@@ -51,6 +51,11 @@ namespace kg
 		}
 
 		return el.get();
+	}
+
+	void AnimationSystem::destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile )
+	{
+		return;
 	}
 
 	const size_t& AnimationSystem::getRTTI_hash() const

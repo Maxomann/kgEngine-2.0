@@ -9,29 +9,28 @@ namespace kg
 	class DLL_EXPORT EntityManager : public EntityFactory
 	{
 	public:
-		typedef std::vector<std::shared_ptr<Entity>> EntityContainer;
-
-		static const unsigned int EXPECTED_MAX_ENTITY_COUNT = 200000u;//m_entities will reserve memory for so many objects
+		typedef std::list<Entity> EntityContainer;//needs to be list, because references(pointers) must not be invalidated
+		typedef std::vector<Entity*> EntityPointerContainer;
 
 	private:
 		EntityContainer m_entities;
-		EntityContainer m_toRemove;
+		EntityPointerContainer m_toRemove;
 
-		EntityContainer::iterator m_findEntity( const std::shared_ptr<Entity>& entity );
+		EntityContainer::iterator m_findEntity( const Entity& entity );
 	public:
-		EntityManager();
 
 		// overwrites entity if it already exists
 		// first: returns false in that case
 		// second: EntityId of the added Entity
-		void addEntity( std::shared_ptr<Entity>& entity );
+		// return value: a reference to the entity in EntityManager
+		Entity* addEntity( Entity&& entity );
 
 		// ensures that the entity with id parameter:id does not exist anymore
 		// returns false if entity with id did not exist
-		void removeEntity( const std::shared_ptr<Entity>& entity );
+		void removeEntity( Entity* entity );
 
 		// returns nullptr if Entity with id does not exist
-		bool doesEntityExist( const std::shared_ptr<Entity>& entity );
+		bool doesEntityExist( const Entity* entity )const;
 
 		const EntityContainer& getAllEntities()const;
 
@@ -45,7 +44,8 @@ namespace kg
 		unsigned int getEntityCount()const;
 
 	signals:
-		Signal<const std::shared_ptr<Entity>&> s_entity_added;
-		Signal<const std::shared_ptr<Entity>&> s_entity_removed;
+		Signal<Entity*> s_entity_added;
+		Signal<Entity*> s_entity_removed;
+		Signal<> s_removeEntitiesOnRemoveList;
 	};
 }

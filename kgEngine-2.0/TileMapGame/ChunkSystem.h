@@ -8,7 +8,7 @@ namespace kg
 {
 	class ChunkSystem : public System, public CallbackReciever
 	{
-		typedef World::EntityContainer EntityContainer;
+		typedef World::EntityPointerContainer EntityPointerContainer;
 
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
@@ -39,14 +39,14 @@ namespace kg
 
 
 		// ENTITY POSITION DATA:
-		std::map< int, std::map<int, EntityContainer >> m_chunkData;//int x, int y
-		std::map< std::shared_ptr<Entity>, sf::Vector2i > m_entityData;
-		const EntityContainer m_emptyList = EntityContainer();//only for returnValue in getEntitiesInChunk()
-		void m_refreshChunkInformation( const std::shared_ptr<Entity>& entity );
+		std::map< int, std::map<int, EntityPointerContainer >> m_chunkData;//int x, int y
+		std::map< Entity*, sf::Vector2i > m_entityData;
+		const EntityPointerContainer m_emptyList = EntityPointerContainer();//only for returnValue in getEntitiesInChunk()
+		void m_refreshChunkInformation( Entity* entity );
 
-		void m_onEntityAddedToWorld( const std::shared_ptr<Entity>& entity );
-		void m_onEntityRemovedFromWorld( const std::shared_ptr<Entity>& entity );
-		void m_onEntityPositionChanged( std::weak_ptr<Entity>& entity, const sf::Vector2i& newPosition );
+		void m_onEntityAddedToWorld( Entity* entity );
+		void m_onEntityRemovedFromWorld( Entity* entity );
+		void m_onEntityPositionChanged( Entity* entity, const sf::Vector2i& newPosition );
 
 		void m_onSavegameClosed();
 
@@ -57,6 +57,8 @@ namespace kg
 		virtual void sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent );
 
 		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
+
+		virtual void destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile ) override;
 
 		virtual double getUpdateImportance() const;
 
@@ -71,16 +73,14 @@ namespace kg
 		static const size_t type_hash;
 
 
+
+
+
 		// returns a reference to the internal container
-		const EntityContainer& getEntitiesInChunk( const sf::Vector2i& chunk )const;
+		const EntityPointerContainer& getEntitiesInChunk( const sf::Vector2i& chunk )const;
 
 		//entity must be registered in world
-		const sf::Vector2i& getChunkOfEntity( const std::shared_ptr<Entity>& entity );
-
-		// get entities from every chunk between from and to
-		// returns a copy of the internal container
-		/*std::list<std::shared_ptr<Entity>> getEntitiesInChunk( const sf::Vector2i& from,
-															   const sf::Vector2i& to )const;*/
+		const sf::Vector2i& getChunkOfEntity( Entity* entity );
 
 		void saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager );
 		void saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager );

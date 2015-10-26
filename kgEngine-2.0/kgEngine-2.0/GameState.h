@@ -30,6 +30,7 @@ namespace kg
 		virtual void registerGui( tgui::Gui& gui ) = 0;
 		virtual void registerInputCallbacks( InputManager& inputManager ) = 0;
 
+		//A GameState MUST NOT delete or remove itself or other GameStates in this function
 		virtual void onUpdate( ) = 0;
 
 		virtual void removeInputCallbacks( InputManager& inputManager ) = 0;
