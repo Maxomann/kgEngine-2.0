@@ -126,9 +126,9 @@ namespace kg
 
 	Entity* GraphicsSystem::getCamera( int index )
 	{
-		m_cameraContainerMutex.lock();
+		//m_cameraContainerMutex.lock();
 		auto retVal = m_cameras.at( index );
-		m_cameraContainerMutex.unlock();
+		//m_cameraContainerMutex.unlock();
 		return retVal;
 	}
 
@@ -212,9 +212,9 @@ namespace kg
 
 	EntityManager::EntityPointerContainer GraphicsSystem::getCameras() const
 	{
-		m_cameraContainerMutex.lock();
+		//m_cameraContainerMutex.lock();
 		auto retVal = m_cameras;
-		m_cameraContainerMutex.unlock();
+		//m_cameraContainerMutex.unlock();
 		return retVal;
 	}
 
