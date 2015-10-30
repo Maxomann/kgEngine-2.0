@@ -10,6 +10,8 @@ namespace kg
 	{
 		GraphicsSystem* r_graphicsSystem;
 
+		PauseLock::Ptr m_pauseLock;
+
 		float m_cameraZoomFactor = 1;
 		Entity* m_getValidCamera();
 

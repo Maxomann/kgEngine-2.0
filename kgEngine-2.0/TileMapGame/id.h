@@ -120,6 +120,7 @@ namespace kg
 				MOVE_RIGHT_SLOW,
 				ZOOM_IN,
 				ZOOM_OUT,
+				PAUSE,
 
 				LAST_ELEMENT
 			};

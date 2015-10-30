@@ -86,6 +86,9 @@
     <ClCompile Include="Console.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="PauseLock.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -194,6 +197,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Console.h">
+      <Filter>Headerdateien\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseLock.h">
       <Filter>Headerdateien\Engine</Filter>
     </ClInclude>
   </ItemGroup>

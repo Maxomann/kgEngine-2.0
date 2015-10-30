@@ -95,6 +95,7 @@
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PauseLock.cpp" />
     <ClCompile Include="PluginManager.cpp" />
     <ClCompile Include="RandomNumberGenerator.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="id_internal.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="PathNotAvailableException.h" />
+    <ClInclude Include="PauseLock.h" />
     <ClInclude Include="Plugin.h" />
     <ClInclude Include="PluginFactory.h" />
     <ClInclude Include="PluginManager.h" />

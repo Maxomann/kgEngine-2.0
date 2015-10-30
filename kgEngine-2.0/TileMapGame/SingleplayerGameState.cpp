@@ -30,6 +30,8 @@ namespace kg
 		m_connectToSignal_safe( r_saveManager->s_savegameOpened, &SingleplayerGameState::m_onSavegameOpened );
 
 		r_saveManager->openSavegame( *r_engine, *r_world, "MyFirstSavegameEver" );
+
+		m_pauseLock = r_engine->pauseLockManager.requestLock();
 	}
 
 	void SingleplayerGameState::registerGui( tgui::Gui& gui )
@@ -53,6 +55,8 @@ namespace kg
 
 		Action escapePress( Keyboard::Escape, Action::PressOnce );
 		Action f5Press( Keyboard::F5, Action::PressOnce );
+
+		Action pPress( Keyboard::P, Action::PressOnce );
 
 		Action strgRightPress( Keyboard::RControl, Action::PressOnce );
 
@@ -98,6 +102,8 @@ namespace kg
 		inputManager.setAction( id::Input::SWITCH_CONSOLE, strgRightPress,
 								bind( &SingleplayerGameState::switchConsole, this ) );
 
+		inputManager.setAction( id::Input::PAUSE, pPress,
+								bind( &SingleplayerGameState::pause, this ) );
 
 	}
 
@@ -177,7 +183,7 @@ namespace kg
 
 	void SingleplayerGameState::pause()
 	{
-		r_engine->isPaused = !r_engine->isPaused;
+		m_pauseLock->setActive( !m_pauseLock->isActive() );
 	}
 
 	void SingleplayerGameState::moveUp()

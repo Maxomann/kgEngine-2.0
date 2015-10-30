@@ -43,7 +43,7 @@ namespace kg
 			sleep( milliseconds( MIN_FRAME_TIME_IN_MILLISECONDS ) );
 			frameTime = m_frameTimeClock.restart();
 		}
-		if( m_engine.isPaused )
+		if( m_engine.pauseLockManager.isPaused() )
 			frameTime = sf::seconds( 0 );
 		m_gameStateManager.forwardFrameTime( frameTime );
 
@@ -56,7 +56,7 @@ namespace kg
 		}
 
 		m_engine.inputManager.triggerCallbacks( m_engine.renderWindow );
-		if( !m_engine.isPaused )//if game is not paused, update entities
+		if( !m_engine.pauseLockManager.isPaused() )//if game is not paused, update entities
 			m_world.updateEntities( m_engine, m_world, frameTime );
 		m_world.updateAllSystemsByImportance( m_engine, m_world, m_saveManager, frameTime );
 		m_gameStateManager.onUpdate();
