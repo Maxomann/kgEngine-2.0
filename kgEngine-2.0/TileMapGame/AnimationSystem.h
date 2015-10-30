@@ -45,7 +45,7 @@ namespace kg
 
 		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime ) override;
 
-		virtual void destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile ) override;
+		virtual void saveChangesToConfigFile( std::shared_ptr<ConfigFile>& configFile ) override;
 
 		virtual double getUpdateImportance() const override;
 

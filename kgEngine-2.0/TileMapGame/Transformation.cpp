@@ -58,31 +58,19 @@ namespace kg
 
 	sf::FloatRect Transformation::getGlobalBounds() const
 	{
-		m_mutex.lock();
-
-		auto retVal = m_globalBounds;
-
-		m_mutex.unlock();
-
-		return retVal;
+		return m_globalBounds;
 	}
 
 	bool Transformation::intersects( const sf::FloatRect& rect )const
 	{
-		m_mutex.lock();
-		bool retVal = m_globalBounds.intersects( rect );
-		m_mutex.unlock();
-
-		return retVal;
+		return m_globalBounds.intersects( rect );
 	}
 
 	sf::Vector3i Transformation::getXYZValues() const
 	{
-		m_mutex.lock();
 		auto retVal = Vector3i( m_globalBounds.left,
 								m_globalBounds.top + m_globalBounds.height,//feet position
 								m_zValue );
-		m_mutex.unlock();
 		return retVal;
 	}
 
@@ -186,8 +174,6 @@ namespace kg
 
 	void Transformation::recalculateGlobalBounds()
 	{
-		m_mutex.lock();
-
 		RectangleShape shape;
 
 		shape.setSize( sf::Vector2f( m_size ) );
@@ -196,28 +182,18 @@ namespace kg
 		shape.setRotation( m_rotation );
 
 		m_globalBounds = shape.getGlobalBounds();
-
-		m_mutex.unlock();
 	}
 
 	int Transformation::getZValue() const
 	{
-		m_mutex.lock();
-
 		auto retVal = m_zValue;
-
-		m_mutex.unlock();
 
 		return retVal;
 	}
 
 	void Transformation::setZValue( int zValue )
 	{
-		m_mutex.lock();
-
 		m_zValue = zValue;
-
-		m_mutex.unlock();
 	}
 
 	const std::string Transformation::BLUEPRINT_ZVALUE = "zValue";

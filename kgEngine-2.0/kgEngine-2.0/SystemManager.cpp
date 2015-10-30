@@ -31,13 +31,13 @@ namespace kg
 		m_systemsByUpdateImportance[system->getUpdateImportance()].push_back( std::move( system ) );
 	}
 
-	void SystemManager::destroySystemsByImportance( Engine& engine )
+	void SystemManager::saveSystemConfigFilesByImportance( Engine& engine )
 	{
 		for( auto& vec : m_systemsByUpdateImportance )
 			for( auto& el : vec.second )
 			{
 				auto configFile = engine.resourceManager.getConfigFile<ConfigFile>( el->getPluginName() );
-				el->destroy( engine, configFile );
+				el->saveChangesToConfigFile( configFile );
 				configFile->saveToFile();
 			}
 	}

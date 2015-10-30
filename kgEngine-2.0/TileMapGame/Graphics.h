@@ -7,8 +7,6 @@ namespace kg
 
 	class Graphics : public Component, public CallbackReciever, public sf::Drawable
 	{
-		mutable boost::mutex m_mutex;
-
 		Transformation* r_transformation = nullptr;
 
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;

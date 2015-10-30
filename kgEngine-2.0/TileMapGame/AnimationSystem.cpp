@@ -53,7 +53,7 @@ namespace kg
 		return el.get();
 	}
 
-	void AnimationSystem::destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile )
+	void AnimationSystem::saveChangesToConfigFile( std::shared_ptr<ConfigFile>& configFile )
 	{
 		return;
 	}

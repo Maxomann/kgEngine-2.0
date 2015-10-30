@@ -8,24 +8,14 @@ namespace kg
 	class GraphicsSystem : public System, public CallbackReciever
 	{
 	private:
-		bool m_drawingShouldTerminate = false;
-
-		//mutable boost::mutex m_syncMutex;
-		//bool m_threadHasToWait = true;
-
 		std::vector<std::tuple<sf::Vector3i, Entity*, Graphics*>> m_toDrawSorted;
-		boost::mutex m_toDrawSortedMutex;
+		EntityManager::EntityPointerContainer m_removedEntities;
 
-		EntityManager::EntityPointerContainer m_addedEntitiesCopy;
-
-		mutable boost::mutex m_cameraContainerMutex;
 		EntityManager::EntityPointerContainer m_cameras;
 
-		mutable boost::mutex m_addedEntitiesCopyMutex;
+		unsigned int m_drawDistance=0;
 
-		bool m_drawingIsActive = false;
-
-		void drawingThreadFunction();
+		void drawFunction();
 
 		///////////////////////////////////
 
@@ -46,21 +36,12 @@ namespace kg
 
 		void m_initCameras( Engine& engine, World& world );
 
-		EntityManager::EntityPointerContainer m_addedEntities;
-		EntityManager::EntityPointerContainer m_removedEntities;
 		void m_onEntityAddedToWorld( Entity* entity );
 		void m_onEntityRemovedFromWorld( Entity* entity );
 		void m_onRemoveEntitiesFromRemoveList();
 
 		void m_onSavegameOpened( Engine& engine, World& world );
 		void m_onSavegameClosed();
-
-		void m_launchDrawingThread( sf::RenderWindow& renderWindow );
-		void m_terminateDrawingThread();
-		int m_drawingThreadFrameTime = -1;
-
-		mutable boost::mutex m_drawDistanceMutex;
-		unsigned int m_drawDistance=0;
 
 	public:
 		GraphicsSystem();
@@ -71,7 +52,7 @@ namespace kg
 
 		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );
 
-		virtual void destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile ) override;
+		virtual void saveChangesToConfigFile( std::shared_ptr<ConfigFile>& configFile ) override;
 
 		virtual double getUpdateImportance() const;
 

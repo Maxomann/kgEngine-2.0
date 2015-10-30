@@ -152,7 +152,7 @@ namespace kg
 		return chunk;
 	}
 
-	void ChunkSystem::destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile )
+	void ChunkSystem::saveChangesToConfigFile( std::shared_ptr<ConfigFile>& configFile )
 	{
 		return;
 	}

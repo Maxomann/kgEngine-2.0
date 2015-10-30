@@ -58,6 +58,7 @@ namespace kg
 			if( rt->activate( true ) )
 			{
 				glUnmapBuffer( GL_ARRAY_BUFFER );
+				m_bufferPtr = nullptr;
 
 				// First set the persistent OpenGL states if it's the very first call
 				if( !rt->m_cache.glStatesSet )
@@ -119,7 +120,8 @@ namespace kg
 
 		void SpriteBatch::destroyVBO()
 		{
-			glUnmapBuffer( GL_ARRAY_BUFFER );
+			if( m_bufferPtr != nullptr )
+				glUnmapBuffer( GL_ARRAY_BUFFER );
 			glBindBuffer( GL_ARRAY_BUFFER, 0 );
 			glDeleteBuffers( 1, &m_vbo );
 		}
@@ -163,7 +165,7 @@ namespace kg
 
 		int SpriteBatch::create( const Texture *texture )
 		{
-			if( texture != state.texture || (count+1)*4 >= MaxCapacity )
+			if( texture != state.texture || (count + 1) * 4 >= MaxCapacity )
 			{
 				if( state.texture != nullptr )
 					display( false );

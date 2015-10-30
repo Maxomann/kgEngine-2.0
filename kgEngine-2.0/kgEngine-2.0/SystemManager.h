@@ -27,7 +27,7 @@ namespace kg
 			return static_cast< T* >(m_systemsByType.at( T::type_hash ));
 		};
 
-		void destroySystemsByImportance( Engine& engine );
+		void saveSystemConfigFilesByImportance( Engine& engine );
 
 		void forwardSfmlEventByImportance( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent );
 		void updateAllSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime );

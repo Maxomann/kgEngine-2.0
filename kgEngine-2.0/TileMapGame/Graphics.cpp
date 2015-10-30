@@ -75,17 +75,13 @@ namespace kg
 
 	void Graphics::setTextureRect( const sf::IntRect& rect )
 	{
-		m_mutex.lock();
 		m_textureRect = rect;
 		recalculateTextureRect();
-		m_mutex.unlock();
 	}
 
 	sf::IntRect Graphics::getTextureRect() const
 	{
-		m_mutex.lock();
 		auto retVal = m_textureRect;
-		m_mutex.unlock();
 		return retVal;
 	}
 
@@ -96,17 +92,11 @@ namespace kg
 
 	void Graphics::centerOrigin()
 	{
-		m_mutex.lock();
-
 		m_sprite.setOrigin( sf::Vector2f( m_sprite.getGlobalBounds().width / 2.f, m_sprite.getGlobalBounds().height / 2.f ) );
-
-		m_mutex.unlock();
 	}
 
 	void Graphics::scaleToObjectSize()
 	{
-		m_mutex.lock();
-
 		auto globalBounds = m_sprite.getGlobalBounds();
 
 		auto scale = sf::Vector2f(
@@ -114,51 +104,37 @@ namespace kg
 			r_transformation->getSize().y / globalBounds.height );
 
 		m_sprite.scale( scale );
-
-		m_mutex.unlock();
 	}
 
 	void Graphics::onPositionChanged( const sf::Vector2i& newPosition )
 	{
-		m_mutex.lock();
 		m_sprite.setPosition( sf::Vector2f( newPosition ) );
-		m_mutex.unlock();
 	}
 
 	void Graphics::onRotationChanged( const float& newRotation )
 	{
-		m_mutex.lock();
 		m_sprite.setRotation( newRotation );
-		m_mutex.unlock();
 	}
 
 	void Graphics::drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const
 	{
-		m_mutex.lock();
 		spriteBatch.draw( m_sprite );
-		m_mutex.unlock();
 	}
 
 	void Graphics::draw( RenderTarget& target, RenderStates states ) const
 	{
-		m_mutex.lock();
 		target.draw( m_sprite, states );
-		m_mutex.unlock();
 	}
 
 	void Graphics::setTextureRectOffset( const sf::IntRect& rect )
 	{
-		m_mutex.lock();
 		m_textureRectOffset = rect;
 		recalculateTextureRect();
-		m_mutex.unlock();
 	}
 
 	sf::IntRect Graphics::getTextureRectOffset() const
 	{
-		m_mutex.lock();
 		auto retVal = m_textureRectOffset;
-		m_mutex.unlock();
 		return retVal;
 	}
 

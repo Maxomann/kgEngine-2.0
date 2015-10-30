@@ -67,8 +67,10 @@ namespace kg
 				contextSettings );
 		}
 
+		glEnable( GL_SCISSOR_TEST );
+		glScissor( 0, 0, engine.renderWindow.getSize().x, engine.renderWindow.getSize().y );
 		engine.renderWindow.setVerticalSyncEnabled( boost::lexical_cast< bool >(*m_configValues.vsync) );
-		engine.renderWindow.setActive( false );
+		engine.renderWindow.setActive( true );
 
 		setDrawDistance( boost::lexical_cast< unsigned int >(*m_configValues.drawDistance) );
 
@@ -77,8 +79,6 @@ namespace kg
 			Constants::PACKAGE_NAME,
 			Folder::FONTS + "DejaVuSans.ttf"
 			) );
-
-		m_launchDrawingThread( engine.renderWindow );
 	}
 
 	void GraphicsSystem::sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent )
@@ -88,23 +88,15 @@ namespace kg
 
 	void GraphicsSystem::update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime )
 	{
-
-		m_addedEntitiesCopyMutex.lock();
-		m_addedEntitiesCopy.insert( end( m_addedEntitiesCopy ), begin( m_addedEntities ), end( m_addedEntities ) );
-		m_addedEntities.clear();
-		m_addedEntitiesCopyMutex.unlock();
-
-		//m_syncMutex.lock();
-		//m_threadHasToWait = false;
-		//m_syncMutex.unlock();
+		r_renderWindow->setActive( true );
 
 		engine.renderWindow.setTitle( *m_configValues.window_name +
 									  " " +
 									  to_string( frameTime.asMilliseconds() ) +
-									  " :: " +
-									  to_string( m_drawingThreadFrameTime ) +
-									  " EntityCount: " +
+									  " | EntityCount: " +
 									  to_string( world.getEntityCount() ) );
+
+		drawFunction();
 
 		return;
 	}
@@ -126,9 +118,7 @@ namespace kg
 
 	Entity* GraphicsSystem::getCamera( int index )
 	{
-		//m_cameraContainerMutex.lock();
 		auto retVal = m_cameras.at( index );
-		//m_cameraContainerMutex.unlock();
 		return retVal;
 	}
 
@@ -136,18 +126,17 @@ namespace kg
 	{
 		if( entity->hasComponent<Graphics>() )
 		{
-			m_removedEntities.erase( remove( m_removedEntities.begin(), m_removedEntities.end(), entity ), m_removedEntities.end() );
-			m_addedEntities.push_back( entity );
+			const auto transformationComponent = entity->getComponent<Transformation>();
+			m_toDrawSorted.push_back( make_tuple( transformationComponent->getXYZValues(),
+												  entity,
+												  entity->getComponent<Graphics>() ) );
 		}
 	}
 
 	void GraphicsSystem::m_onEntityRemovedFromWorld( Entity* entity )
 	{
 		if( entity->hasComponent<Graphics>() || entity->hasComponent<Camera>() )
-		{
-			m_addedEntities.erase( remove( m_addedEntities.begin(), m_addedEntities.end(), entity ), m_addedEntities.end() );
 			m_removedEntities.push_back( entity );
-		}
 	}
 
 	void GraphicsSystem::m_onRemoveEntitiesFromRemoveList()
@@ -156,8 +145,6 @@ namespace kg
 			return;
 
 		//remove cameras
-		m_cameraContainerMutex.lock();
-
 		m_cameras.erase( std::remove_if( m_cameras.begin(), m_cameras.end(), [&]( const Entity* conel )
 		{
 			for( const auto& el : m_removedEntities )
@@ -166,11 +153,6 @@ namespace kg
 			return false;
 		} ), m_cameras.end() );
 
-		m_cameraContainerMutex.unlock();
-
-
-
-		m_toDrawSortedMutex.lock();
 
 		//remove
 		m_toDrawSorted.erase( std::remove_if( m_toDrawSorted.begin(), m_toDrawSorted.end(), [&]( const tuple<Vector3i, Entity*, Graphics*>& conel )
@@ -184,8 +166,6 @@ namespace kg
 			return false;
 		} ), m_toDrawSorted.end() );
 
-		m_toDrawSortedMutex.unlock();
-
 		m_removedEntities.clear();
 	}
 
@@ -196,46 +176,36 @@ namespace kg
 
 	void GraphicsSystem::m_onSavegameClosed()
 	{
-		m_cameraContainerMutex.lock();
 		m_cameras.clear();
-		m_cameraContainerMutex.unlock();
 	}
 
 	void GraphicsSystem::m_initCameras( Engine& engine, World& world )
 	{
 		//init camera
-		m_cameraContainerMutex.lock();
-		auto* camera = world.addEntity( Camera::CREATE( engine, world, m_drawDistanceMutex, &m_drawDistance ) );
+		auto* camera = world.addEntity( Camera::CREATE( engine, world, m_drawDistance ) );
 		m_cameras.push_back( camera );
-		m_cameraContainerMutex.unlock();
 	}
 
 	EntityManager::EntityPointerContainer GraphicsSystem::getCameras() const
 	{
-		//m_cameraContainerMutex.lock();
-		auto retVal = m_cameras;
-		//m_cameraContainerMutex.unlock();
-		return retVal;
+		return m_cameras;
 	}
 
 	void GraphicsSystem::setDrawDistance( const unsigned int& drawDistance )
 	{
-		m_drawDistanceMutex.lock();
 		m_drawDistance = drawDistance;
-		m_drawDistanceMutex.unlock();
+		for( auto& cam : m_cameras )
+			cam->getComponent<Camera>()->setDrawDistance( m_drawDistance );
 	}
 
 	unsigned int GraphicsSystem::getDrawDistance() const
 	{
-		m_drawDistanceMutex.lock();
-		auto copy = m_drawDistance;
-		m_drawDistanceMutex.unlock();
-		return copy;
+		return m_drawDistance;
 	}
 
-	void GraphicsSystem::destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile )
+	void GraphicsSystem::saveChangesToConfigFile( std::shared_ptr<ConfigFile>& configFile )
 	{
-		m_terminateDrawingThread();
+
 	}
 
 	const size_t& GraphicsSystem::getRTTI_hash() const
@@ -248,27 +218,6 @@ namespace kg
 		glewInit();
 	}
 
-	void GraphicsSystem::m_terminateDrawingThread()
-	{
-		//safely terminate drawing thread
-		m_drawingShouldTerminate = true;
-		//m_syncMutex.lock();
-		//m_threadHasToWait = false;
-		//m_syncMutex.unlock();
-		while( m_drawingIsActive )
-			sleep( sf::milliseconds( 1 ) );
-		sleep( sf::milliseconds( 1 ) );
-	}
-
-	void GraphicsSystem::m_launchDrawingThread( sf::RenderWindow& renderWindow )
-	{
-		m_drawingShouldTerminate = false;
-
-		//launch drawing thread
-		thread drawingThread( &GraphicsSystem::drawingThreadFunction, this );
-		drawingThread.detach();
-	}
-
 	vector<tuple<Vector3i, Entity*, Graphics*>>::iterator findInToDraw( vector<tuple<Vector3i, Entity*, Graphics*>>& container,
 																		Entity* el )
 	{
@@ -278,95 +227,43 @@ namespace kg
 		return container.end();
 	};
 
-	void GraphicsSystem::drawingThreadFunction()
+	void GraphicsSystem::drawFunction()
 	{
-		glEnable( GL_SCISSOR_TEST );
-		glScissor( 0, 0, r_renderWindow->getSize().x, r_renderWindow->getSize().y );
+		r_renderWindow->clear( Color::Green );
 
-		m_drawingIsActive = true;
-		r_renderWindow->setActive( true );
-		sf::Clock frameTimeClock;
-
-		while( !m_drawingShouldTerminate )
+		// sort
+		sort( begin( m_toDrawSorted ), end( m_toDrawSorted ), [](
+			const tuple<Vector3i, Entity*, Graphics*>& lhs,
+			const tuple<Vector3i, Entity*, Graphics*>& rhs )
 		{
-			/*while( true )
-			{
-				// lock
-				m_syncMutex.lock();
-				if( !m_threadHasToWait )
-				{
-					m_threadHasToWait = true;
-					break;
-				}
-				else
-					m_syncMutex.unlock();
-			}*/
+			const auto& vecl = get<0>( lhs );
+			const auto& vecr = get<0>( rhs );
 
+			if( vecr.z > vecl.z )
+				return true;
+			else if( vecr.z == vecl.z && vecr.y > vecl.y )
+				return true;
+			else if( vecr.y == vecl.y && vecr.x > vecl.x )
+				return true;
 
-			frameTimeClock.restart().asMilliseconds();
+			return false;
+		} );
 
-			r_renderWindow->clear( Color::Green );
+		// draw
+		for( const auto& camera : m_cameras )
+			camera->getComponent<Camera>()->drawSpritesToRenderWindow( *r_renderWindow, m_toDrawSorted );
 
-			// LOCK
-			m_toDrawSortedMutex.lock();
-			m_addedEntitiesCopyMutex.lock();
+		r_gui->draw();
+		r_renderWindow->display();
 
-			// add
-
-			for( auto& el : m_addedEntitiesCopy )
-			{
-				const auto transformationComponent = el->getComponent<Transformation>();
-				m_toDrawSorted.push_back( make_tuple( transformationComponent->getXYZValues(), el, el->getComponent<Graphics>() ) );
-			}
-
-			m_addedEntitiesCopy.clear();
-			m_addedEntitiesCopyMutex.unlock();
-
-			// sort
-			sort( begin( m_toDrawSorted ), end( m_toDrawSorted ), [](
-				const tuple<Vector3i, Entity*, Graphics*>& lhs,
-				const tuple<Vector3i, Entity*, Graphics*>& rhs )
-			{
-				const auto& vecl = get<0>( lhs );
-				const auto& vecr = get<0>( rhs );
-
-				if( vecr.z > vecl.z )
-					return true;
-				else if( vecr.z == vecl.z && vecr.y > vecl.y )
-					return true;
-				else if( vecr.y == vecl.y && vecr.x > vecl.x )
-					return true;
-
-				return false;
-			} );
-
-			m_cameraContainerMutex.lock();
-
-			// draw
-			for( const auto& camera : m_cameras )
-				camera->getComponent<Camera>()->drawSpritesToRenderWindow( *r_renderWindow, m_toDrawSorted );
-
-			// UNLOCK
-			m_cameraContainerMutex.unlock();
-			m_toDrawSortedMutex.unlock();
-
-			r_gui->draw();
-			r_renderWindow->display();
-
-			m_drawingThreadFrameTime = frameTimeClock.getElapsedTime().asMilliseconds();
-			//m_syncMutex.unlock();
-
-			//output GL_ERROR
-			while( true )
-			{
-				GLenum err = glGetError();
-				if( err == GL_NO_ERROR )
-					break;
-				cout << err << endl;
-			}
+		//output GL_ERROR
+		while( true )
+		{
+			GLenum err = glGetError();
+			if( err == GL_NO_ERROR )
+				break;
+			cout << err << endl;
 		}
-		m_drawingIsActive = false;
-		return;
 	}
 
 	const std::string GraphicsSystem::WINDOW_NAME_DEFAULT = "DefaultWindowName";

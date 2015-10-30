@@ -27,7 +27,7 @@ namespace kg
 		// frame time is 0 when Engine::isPaused == true
 		virtual void update( Engine& engine, World& world, SaveManager& saveManager, const sf::Time& frameTime ) = 0;
 
-		virtual void destroy( Engine& engine, std::shared_ptr<ConfigFile>& configFile ) = 0;
+		virtual void saveChangesToConfigFile( std::shared_ptr<ConfigFile>& configFile ) = 0;
 
 		// the lower the importance, the earlier this component gets updated, initialized, sfmlForwarded
 		virtual double getUpdateImportance()const = 0;

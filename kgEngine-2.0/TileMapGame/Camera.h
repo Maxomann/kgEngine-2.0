@@ -8,12 +8,9 @@ namespace kg
 
 	class Camera : public Component, public CallbackReciever
 	{
-		mutable boost::mutex m_viewMutex;
-
 		Transformation* r_transformation;
 
-		boost::mutex* r_drawDistanceMutex;
-		unsigned int* r_drawDistance;
+		unsigned int m_drawDistance;
 
 		sf::View m_view;
 
@@ -50,6 +47,9 @@ namespace kg
 		void setZoomFactor( const float& zoomFactor );
 		const float& getZoomFactor()const;
 
+		void setDrawDistance( const unsigned int& drawDistance );
+		const unsigned int& getDrawDistance()const;
+
 		void drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
 										const std::vector<std::tuple<sf::Vector3i, Entity*, Graphics*>>& toDrawSorted );
 
@@ -58,7 +58,7 @@ namespace kg
 		static const size_t type_hash;
 
 		//creates a new camera, adds it to the world and returns a pointer to it
-		static Entity CREATE( Engine& engine, World& world, boost::mutex& drawDistanceMutex, unsigned int* drawDistancePointer );
+		static Entity CREATE( Engine& engine, World& world, const unsigned int& drawDistancePointer );
 
 
 	};

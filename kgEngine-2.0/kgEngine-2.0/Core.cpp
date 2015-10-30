@@ -32,7 +32,7 @@ namespace kg
 	void Core::terminate()
 	{
 		m_gameStateManager.clear();
-		m_world.destroySystemsByImportance( m_engine );
+		m_world.saveSystemConfigFilesByImportance( m_engine );
 	}
 
 	void Core::update()
