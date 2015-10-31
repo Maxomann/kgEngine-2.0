@@ -47,19 +47,20 @@ namespace kg
 		m_consoleWindow->setSize( 800, 400 );
 		m_consoleWindow->keepInParent( true );
 		m_consoleWindow->connect( "closed", &ConsoleGameState::close, this );
+		m_consoleWindow->setTitle( "Console" );
 
-		m_clearButton = make_shared<Button>();
+		/*m_clearButton = make_shared<Button>();
 		m_clearButton->setText( "Clear" );
 		m_clearButton->setSize( 800, 50 );
-		m_clearButton->setPosition( 0, 350 );
+		m_clearButton->setPosition( 0, 350 );*/
 
 		m_chatBox = make_shared<ChatBox>();
-		m_chatBox->setSize( 800, 350 );
+		m_chatBox->setSize( 800, 400 );
 		m_chatBox->getRenderer()->setBackgroundColor( Color::Black );
 
 
 		m_consoleWindow->add( m_chatBox );
-		m_consoleWindow->add( m_clearButton );
+		//m_consoleWindow->add( m_clearButton );
 		gui.add( m_consoleWindow );
 	}
 

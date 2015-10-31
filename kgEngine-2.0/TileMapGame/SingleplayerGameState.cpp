@@ -58,8 +58,6 @@ namespace kg
 
 		Action pPress( Keyboard::P, Action::PressOnce );
 
-		Action strgRightPress( Keyboard::RControl, Action::PressOnce );
-
 		// Events
 		Action eventClose( Event::Closed );
 
@@ -99,8 +97,6 @@ namespace kg
 								bind( &SingleplayerGameState::zoomIn, this ) );
 		inputManager.setAction( id::Input::ZOOM_OUT, subtract,
 								bind( &SingleplayerGameState::zoomOut, this ) );
-		inputManager.setAction( id::Input::SWITCH_CONSOLE, strgRightPress,
-								bind( &SingleplayerGameState::switchConsole, this ) );
 
 		inputManager.setAction( id::Input::PAUSE, pPress,
 								bind( &SingleplayerGameState::pause, this ) );
@@ -133,8 +129,6 @@ namespace kg
 
 		inputManager.removeAction( id::Input::ZOOM_IN );
 		inputManager.removeAction( id::Input::ZOOM_OUT );
-
-		inputManager.removeAction( id::Input::SWITCH_CONSOLE );
 	}
 
 	void SingleplayerGameState::removeGui( tgui::Gui& gui )
@@ -164,21 +158,6 @@ namespace kg
 		r_saveManager->openSavegame( *r_engine, *r_world, "MyFirstSavegameEver" );
 
 		r_engine->console.info( "Savegame reloaded" );
-	}
-
-	void SingleplayerGameState::switchConsole()
-	{
-		const auto& id_console = id::GameStatePluginId::CONSOLE;
-
-		if( r_gameStateManager->hasAnyInstanceOf( id_console ) )
-		{
-			r_gameStateManager->removeAllInstancesOf( id_console );
-		}
-		else
-		{
-			unique_ptr<GameState> gameStatePtr = make_unique<ConsoleGameState>();
-			r_gameStateManager->push( gameStatePtr );
-		}
 	}
 
 	void SingleplayerGameState::pause()

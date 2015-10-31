@@ -33,5 +33,6 @@ namespace kg
 		//Input Callbacks
 	private:
 		void shutDown();
+		void switchConsole();
 	};
 }

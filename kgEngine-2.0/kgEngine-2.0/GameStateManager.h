@@ -19,7 +19,7 @@ namespace kg
 		void forwardFrameTime( const sf::Time& frameTime );
 
 		//passed reference will be nullptr after function call!
-		void push( std::unique_ptr<GameState>& gameState );
+		void push( std::unique_ptr<GameState>&& gameState );
 
 		void pop();
 

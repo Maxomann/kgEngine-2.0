@@ -46,7 +46,6 @@ namespace kg
 		//Input Callbacks
 	private:
 		void reloadSave();
-		void switchConsole();
 
 		void pause();
 

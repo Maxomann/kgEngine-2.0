@@ -4,11 +4,11 @@ using namespace sf;
 
 namespace kg
 {
-	
+
 	GameStateManager::GameStateManager( Engine& engine, World& world, SaveManager& saveManager )
-		: engine(engine),
-		world(world),
-		saveManager(saveManager)
+		: engine( engine ),
+		world( world ),
+		saveManager( saveManager )
 	{
 
 	}
@@ -17,7 +17,7 @@ namespace kg
 	{
 		auto defaultGameState = engine.pluginManager.createPlugin<GameState>( id::DEFAULT_GAMESTATE_ID );
 
-		push( defaultGameState );
+		push( move( defaultGameState ) );
 	}
 
 	void GameStateManager::forwardFrameTime( const sf::Time& frameTime )
@@ -26,7 +26,7 @@ namespace kg
 			el->updateFrameTime( frameTime );
 	}
 
-	void GameStateManager::push( std::unique_ptr<GameState>& gameState )
+	void GameStateManager::push( std::unique_ptr<GameState>&& gameState )
 	{
 		gameState->initReferences( engine, world, saveManager, *this );
 
@@ -34,7 +34,7 @@ namespace kg
 		gameState->registerInputCallbacks( engine.inputManager );
 		gameState->onInit();
 
-		m_gameStateStack.push_back( std::move(gameState) );
+		m_gameStateStack.push_back( std::move( gameState ) );
 	}
 
 	void GameStateManager::pop()
@@ -69,7 +69,7 @@ namespace kg
 
 	void GameStateManager::removeAllInstancesOf( const Plugin::Id& pluginId )
 	{
-		m_gameStateStack.erase(remove_if( m_gameStateStack.begin(), m_gameStateStack.end(), [&]( unique_ptr<GameState>& el )
+		m_gameStateStack.erase( remove_if( m_gameStateStack.begin(), m_gameStateStack.end(), [&]( unique_ptr<GameState>& el )
 		{
 			if( el->getPluginId() == pluginId )
 			{
@@ -80,7 +80,7 @@ namespace kg
 			}
 			else
 				return false;
-		} ));
+		} ) );
 	}
 
 	void GameStateManager::clear()
