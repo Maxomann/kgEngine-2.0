@@ -7,7 +7,7 @@ namespace kg
 	{
 		tgui::ChildWindow::Ptr m_consoleWindow;
 		tgui::ChatBox::Ptr m_chatBox;
-		//tgui::Button::Ptr m_clearButton;
+		tgui::Button::Ptr m_clearButton = std::make_shared<tgui::Button>();//Remove this line to generate an internal compiler error :)
 
 		void printLogEntry( const LogEntry& entry );
 
