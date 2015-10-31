@@ -65,7 +65,7 @@ namespace kg
 	}
 
 	std::vector<Plugin::Id> AnimationComponent::getRequieredComponents() const
-{
+	{
 		return{ id::ComponentPluginId::GRAPHICS };
 	}
 
@@ -116,5 +116,4 @@ namespace kg
 	const std::string AnimationComponent::PLUGIN_NAME = "Animation";
 
 	const size_t AnimationComponent::type_hash = getRuntimeTypeInfo<AnimationComponent>();
-
 }

@@ -33,7 +33,7 @@ namespace kg
 	{
 		for( auto it = m_componentsByType.begin(); it != m_componentsByType.end(); ++it )
 			if( it->first == hash_code )
-			return it;
+				return it;
 		return m_componentsByType.end();
 	}
 
@@ -51,7 +51,7 @@ namespace kg
 
 		for( const auto& type : componentTypes )
 			if( m_findComponentByType( type ) == entIt )
-			return false;
+				return false;
 		return true;
 	}
 
@@ -59,7 +59,7 @@ namespace kg
 	{
 		for( const auto& el : m_componentsByUpdateImportance )
 			if( el->getPluginId() == componentId )
-			return true;
+				return true;
 		return false;
 	}
 
@@ -80,5 +80,4 @@ namespace kg
 		m_componentsByUpdateImportance.emplace_back( component.get() );
 		m_components.emplace_back( std::move( component ) );
 	}
-
 }

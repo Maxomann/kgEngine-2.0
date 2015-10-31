@@ -5,7 +5,6 @@
 
 namespace kg
 {
-
 	class AnimationComponent : public Component
 	{
 		struct BlueprintValues
@@ -41,7 +40,6 @@ namespace kg
 
 		virtual const size_t& getRTTI_hash() const override;
 
-
 		//playing related:
 		const std::string& getState()const;
 		void setState( const std::string& state );
@@ -49,7 +47,6 @@ namespace kg
 		void start();
 		void stop();
 		void reset();//if m_stateSynced, m_stateTime will not be set to 0
-
 
 		static const std::string PLUGIN_NAME;
 

@@ -14,7 +14,6 @@ namespace std
 	{
 		return sf::Vector2<T>( ceil( vec.x ), ceil( vec.y ) );
 	}
-
 }
 namespace kg
 {

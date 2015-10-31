@@ -59,7 +59,7 @@ namespace kg
 	}
 
 	std::vector<Plugin::Id> Graphics::getRequieredComponents() const
-{
+	{
 		return{ id::ComponentPluginId::TRANSFORMATION };
 	}
 

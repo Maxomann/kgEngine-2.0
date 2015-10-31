@@ -71,13 +71,10 @@
 #define variadic ...
 #define DLL_EXPORT __declspec(dllexport)
 
-
-
 template< class T >
 const std::size_t getRuntimeTypeInfo()
 {
 	return typeid(T).hash_code();
 }
-
 
 #endif//STDAFX_H

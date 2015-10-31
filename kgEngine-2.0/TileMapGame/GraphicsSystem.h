@@ -13,7 +13,7 @@ namespace kg
 
 		EntityManager::EntityPointerContainer m_cameras;
 
-		unsigned int m_drawDistance=0;
+		unsigned int m_drawDistance = 0;
 
 		void drawFunction();
 
@@ -61,7 +61,6 @@ namespace kg
 		virtual Plugin::Id getPluginId()const;
 
 		virtual const size_t& getRTTI_hash() const override;
-
 
 		Entity* getCamera( int index );
 		EntityManager::EntityPointerContainer getCameras()const;

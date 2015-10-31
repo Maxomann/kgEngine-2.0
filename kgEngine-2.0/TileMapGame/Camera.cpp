@@ -133,5 +133,4 @@ namespace kg
 	const std::string Camera::PLUGIN_NAME = "Camera";
 
 	const size_t Camera::type_hash = getRuntimeTypeInfo<Camera>();
-
 }

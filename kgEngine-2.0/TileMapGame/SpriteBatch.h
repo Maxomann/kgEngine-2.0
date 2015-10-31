@@ -30,7 +30,6 @@ namespace kg
 
 			int create( const sf::Texture *texture );
 
-
 			void openGlDraw( std::size_t vertexCount,
 							 sf::PrimitiveType type,
 							 const sf::RenderStates& states );

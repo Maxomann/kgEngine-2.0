@@ -31,6 +31,5 @@ namespace kg
 
 		// the lower the importance, the earlier this component gets updated, initialized, sfmlForwarded
 		virtual double getUpdateImportance()const = 0;
-
 	};
 }

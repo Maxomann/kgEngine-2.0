@@ -5,7 +5,6 @@
 
 namespace kg
 {
-
 	class Camera : public Component, public CallbackReciever
 	{
 		Transformation* r_transformation;
@@ -39,11 +38,10 @@ namespace kg
 
 		virtual const size_t& getRTTI_hash() const override;
 
-
 		// the viewport of the camera on the screen
 		void setViewport( const sf::FloatRect& viewport );
 		sf::FloatRect getViewport()const;
-		
+
 		void setZoomFactor( const float& zoomFactor );
 		const float& getZoomFactor()const;
 
@@ -59,7 +57,5 @@ namespace kg
 
 		//creates a new camera, adds it to the world and returns a pointer to it
 		static Entity CREATE( Engine& engine, World& world, const unsigned int& drawDistancePointer );
-
-
 	};
 }

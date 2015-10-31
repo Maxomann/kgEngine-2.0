@@ -5,10 +5,9 @@ using namespace sf;
 
 namespace kg
 {
-
 	Entity* EntityManager::addEntity( Entity&& entity )
 	{
-		m_entities.push_back( move(entity) );
+		m_entities.push_back( move( entity ) );
 		Entity* temp = &m_entities.back();
 		s_entity_added( temp );
 		return &m_entities.back();

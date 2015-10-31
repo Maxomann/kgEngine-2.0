@@ -22,10 +22,5 @@ int main()
 		vec2.push_back( 2 );
 	}
 
-
-
-
-
 	system( "pause" );
-
 }

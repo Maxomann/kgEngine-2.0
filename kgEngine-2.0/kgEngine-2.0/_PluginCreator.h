@@ -2,7 +2,6 @@
 #ifndef _PLUGIN_CREATOR_H
 #define _PLUGIN_CREATOR_H
 
-
 #include "core.h"
 #include "Callback.h"
 #include "ConfigFile.h"

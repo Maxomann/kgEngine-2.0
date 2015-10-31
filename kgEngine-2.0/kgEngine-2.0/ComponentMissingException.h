@@ -12,10 +12,10 @@ namespace kg
 	public:
 		ComponentMissingException( int requieringComponentId,
 								   int missingComponentId )
-								   : m_msg(
-								   std::string( "ComponentMissingException\n" ) +
-								   std::to_string( requieringComponentId ) + std::string( "\n" ) +
-								   std::to_string( missingComponentId ) + std::string( "\n" ) )
+			: m_msg(
+				std::string( "ComponentMissingException\n" ) +
+				std::to_string( requieringComponentId ) + std::string( "\n" ) +
+				std::to_string( missingComponentId ) + std::string( "\n" ) )
 		{ }
 
 		virtual const char* what()const

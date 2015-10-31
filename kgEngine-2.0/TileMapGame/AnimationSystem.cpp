@@ -92,8 +92,6 @@ namespace kg
 		return m_animationHandler;
 	}
 
-
-
 	void EasyAnimationHandler::load( const std::vector<std::string> lines )
 	{
 		texrect_x = boost::lexical_cast< int >(lines.at( 1 ));
@@ -105,7 +103,7 @@ namespace kg
 		for( unsigned int i = 4; i < lines.size(); ++i )
 		{
 			std::vector<std::string> vec;
-			boost::split( vec, lines.at( i ), boost::is_any_of(",") );
+			boost::split( vec, lines.at( i ), boost::is_any_of( "," ) );
 
 			auto& name = vec.at( 0 );
 			auto& frames = vec.at( 1 );
@@ -162,5 +160,4 @@ namespace kg
 	}
 
 	const std::string EasyAnimationHandler::PLUGIN_NAME = "EASY";
-
 }

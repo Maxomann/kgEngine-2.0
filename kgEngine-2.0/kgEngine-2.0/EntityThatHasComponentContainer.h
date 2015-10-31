@@ -18,7 +18,7 @@ namespace kg
 		void m_onEntityRemovedFromWorld( const Entity* entity )
 		{
 			if( entity->hasComponent<ComponentType>() )
-				m_entities.erase( find( m_entities.begin(), m_entities.end(), entity ));
+				m_entities.erase( find( m_entities.begin(), m_entities.end(), entity ) );
 		}
 
 	protected:

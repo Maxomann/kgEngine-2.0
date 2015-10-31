@@ -4,7 +4,6 @@
 
 namespace kg
 {
-
 	class Graphics : public Component, public CallbackReciever, public sf::Drawable
 	{
 		Transformation* r_transformation = nullptr;
@@ -19,7 +18,6 @@ namespace kg
 		//only work when position is {0,0} and rotation is 0
 		void centerOrigin();
 		void scaleToObjectSize();
-
 
 		sf::IntRect m_textureRect;
 		sf::IntRect m_textureRectOffset;
@@ -46,15 +44,12 @@ namespace kg
 
 		virtual const size_t& getRTTI_hash() const override;
 
-
 		void setTextureRectOffset( const sf::IntRect& rect );
 		sf::IntRect getTextureRectOffset()const;
-
 
 		void drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const;
 
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const override;
-
 
 		static const std::string BLUEPRINT_TEXTURE_RECT_WIDTH;
 		static const std::string BLUEPRINT_TEXTURE_RECT_HEIGHT;

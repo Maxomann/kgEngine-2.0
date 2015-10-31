@@ -5,7 +5,6 @@ using namespace tgui;
 
 namespace kg
 {
-	
 	bool PauseLock::operator==( const PauseLock& other )
 	{
 		return this->m_id == other.m_id;
@@ -38,7 +37,7 @@ namespace kg
 
 	PauseLock::Ptr PauseLockManager::requestLock()
 	{
-		PauseLock lock(idCounter);
+		PauseLock lock( idCounter );
 		idCounter++;
 
 		m_locks.push_back( move( lock ) );
@@ -57,5 +56,4 @@ namespace kg
 				return true;
 		return false;
 	}
-
 }

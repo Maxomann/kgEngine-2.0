@@ -153,7 +153,6 @@ namespace kg
 			return false;
 		} ), m_cameras.end() );
 
-
 		//remove
 		m_toDrawSorted.erase( std::remove_if( m_toDrawSorted.begin(), m_toDrawSorted.end(), [&]( const tuple<Vector3i, Entity*, Graphics*>& conel )
 		{
@@ -204,9 +203,7 @@ namespace kg
 	}
 
 	void GraphicsSystem::saveChangesToConfigFile( std::shared_ptr<ConfigFile>& configFile )
-	{
-
-	}
+	{ }
 
 	const size_t& GraphicsSystem::getRTTI_hash() const
 	{
@@ -297,5 +294,4 @@ namespace kg
 	const std::string GraphicsSystem::PLUGIN_NAME = "GraphicsSystem";
 
 	const size_t GraphicsSystem::type_hash = getRuntimeTypeInfo<GraphicsSystem>();
-
 }

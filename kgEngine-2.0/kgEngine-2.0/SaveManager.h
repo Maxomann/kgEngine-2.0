@@ -13,7 +13,7 @@ namespace kg
 		std::string m_openSavegameName = "dev_null";
 
 	public:
-		using SystemSaveInformationMap = std::map < int, SystemSaveInformation > ;
+		using SystemSaveInformationMap = std::map < int, SystemSaveInformation >;
 
 		static const std::string PLUGIN_NAME;
 		static const std::string SAVEGAME_FOLDER;

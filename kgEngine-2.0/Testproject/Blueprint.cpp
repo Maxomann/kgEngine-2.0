@@ -514,8 +514,8 @@ namespace kg
 
 					m_componentContainersByName.emplace(
 						std::pair<ComponentContainer::Name, ComponentContainer*>(
-						name,
-						&m_blueprintsByName.at( name ) ) );
+							name,
+							&m_blueprintsByName.at( name ) ) );
 				}
 				else if( edec.canExecuteOn( file, line, lines ) )
 				{
@@ -527,8 +527,8 @@ namespace kg
 
 					m_componentContainersByName.emplace(
 						std::pair<ComponentContainer::Name, ComponentContainer*>(
-						name,
-						&m_entitiesById.at( id ) ) );
+							name,
+							&m_entitiesById.at( id ) ) );
 				}
 				else if( cced.canExecuteOn( file, line, lines ) )
 				{
@@ -539,8 +539,8 @@ namespace kg
 
 					m_componentContainersByName.emplace(
 						std::pair<ComponentContainer::Name, ComponentContainer*>(
-						name,
-						&m_componentContainerExtensionsByName.at( name ) ) );
+							name,
+							&m_componentContainerExtensionsByName.at( name ) ) );
 				}
 			}
 		}
@@ -618,8 +618,7 @@ namespace kg
 			m_isCollectingInheritReferences( move( container.m_isCollectingInheritReferences ) ),
 			m_hasCollectedInheritReferences( move( container.m_hasCollectedInheritReferences ) )
 
-		{
-		}
+		{ }
 
 		void ComponentContainer::addComponentInformation( const Component& component )
 		{
@@ -723,8 +722,7 @@ namespace kg
 			: m_name( move( component.m_name ) ),
 			m_componentValuesByName( move( component.m_componentValuesByName ) ),
 			m_componentValueReferencesByName( move( component.m_componentValueReferencesByName ) )
-		{
-		}
+		{ }
 
 		const std::string& Component::getName() const
 		{
@@ -878,8 +876,8 @@ namespace kg
 			/*intWithUnit*/
 			if( m_asDoubleWithUnit )
 				m_asIntWithUnit = std::pair<int, std::string>(
-				( int )m_asDoubleWithUnit->first,
-				m_asDoubleWithUnit->second );
+					( int )m_asDoubleWithUnit->first,
+					m_asDoubleWithUnit->second );
 
 			/*int*/
 			if( m_asIntWithUnit )
@@ -904,25 +902,21 @@ namespace kg
 
 		Blueprint::Blueprint( const ComponentContainer::Name& name )
 			:ComponentContainer( name )
-		{
-		}
+		{ }
 
 		Blueprint::Blueprint( Blueprint&& blueprint )
 			: ComponentContainer( move( blueprint ) )
-		{
-		}
+		{ }
 
 		Entity::Entity( const ComponentContainer::Name& name, const Id& id )
 			: ComponentContainer( name ),
 			m_id( id )
-		{
-		}
+		{ }
 
 		Entity::Entity( Entity&& entity )
 			: ComponentContainer( move( entity ) ),
 			m_id( move( entity.m_id ) )
-		{
-		}
+		{ }
 
 		const Entity::Id& Entity::getId() const
 		{
@@ -931,14 +925,12 @@ namespace kg
 
 		ComponentContainerExtension::ComponentContainerExtension( const ComponentContainer::Name& name )
 			:ComponentContainer( name )
-		{
-		}
+		{ }
 
 		ComponentContainerExtension::ComponentContainerExtension( ComponentContainerExtension&& componentContainerExtension )
 			: ComponentContainer( move( componentContainerExtension ) ),
 			m_destinations( move( componentContainerExtension.m_destinations ) )
-		{
-		}
+		{ }
 
 		void ComponentContainerExtension::addDestination( const ComponentContainer::Name& destination )
 		{
@@ -953,8 +945,7 @@ namespace kg
 		}
 
 		ComponentValueConversionNotAvailable::ComponentValueConversionNotAvailable()
-		{
-		}
+		{ }
 
 		const char* ComponentValueConversionNotAvailable::what() const
 		{

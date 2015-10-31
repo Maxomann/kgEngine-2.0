@@ -4,5 +4,4 @@ using namespace sf;
 
 namespace kg
 {
-
 }

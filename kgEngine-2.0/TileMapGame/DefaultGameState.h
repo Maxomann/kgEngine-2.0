@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "ChunkSystem.h"
 #include "SingleplayerGameState.h"
 
 namespace kg
@@ -14,7 +13,7 @@ namespace kg
 
 		virtual void registerInputCallbacks( InputManager& inputManager ) override;
 
-		virtual void onUpdate( ) override;
+		virtual void onUpdate() override;
 
 		virtual void removeInputCallbacks( InputManager& inputManager ) override;
 
@@ -22,11 +21,9 @@ namespace kg
 
 		virtual void onDestroy() override;
 
-
 		virtual const Plugin::Name& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId() const override;
-
 
 		static const std::string PLUGIN_NAME;
 

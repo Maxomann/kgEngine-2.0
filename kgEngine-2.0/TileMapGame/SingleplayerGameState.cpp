@@ -5,7 +5,6 @@ using namespace tgui;
 
 namespace kg
 {
-
 	Entity* SingleplayerGameState::m_getValidCamera()
 	{
 		return r_graphicsSystem->getCamera( 0 );
@@ -61,7 +60,6 @@ namespace kg
 		// Events
 		Action eventClose( Event::Closed );
 
-
 		// Set the actions and register callbacks
 		inputManager.setAction( id::Input::RELOAD_SAVE, f5Press,
 								bind( &SingleplayerGameState::reloadSave, this ) );
@@ -100,7 +98,6 @@ namespace kg
 
 		inputManager.setAction( id::Input::PAUSE, pPress,
 								bind( &SingleplayerGameState::pause, this ) );
-
 	}
 
 	void SingleplayerGameState::onUpdate()
@@ -140,7 +137,6 @@ namespace kg
 	{
 		return;
 	}
-
 
 	const Plugin::Name& SingleplayerGameState::getPluginName() const
 	{
@@ -260,5 +256,4 @@ namespace kg
 	}
 
 	const std::string SingleplayerGameState::PLUGIN_NAME = "Singleplayer GameState";
-
 }

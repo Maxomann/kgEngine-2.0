@@ -37,7 +37,6 @@ namespace kg
 		bool ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
 		void loadAndUnloadChunksFromQueue( Engine& engine, World& world, SaveManager& saveManager );
 
-
 		// ENTITY POSITION DATA:
 		std::map< int, std::map<int, EntityPointerContainer >> m_chunkData;//int x, int y
 		std::map< Entity*, sf::Vector2i > m_entityData;
@@ -72,10 +71,6 @@ namespace kg
 
 		static const size_t type_hash;
 
-
-
-
-
 		// returns a reference to the internal container
 		const EntityPointerContainer& getEntitiesInChunk( const sf::Vector2i& chunk )const;
 
@@ -88,13 +83,11 @@ namespace kg
 		// returns the position in chunks for the position of an entity
 		static sf::Vector2i calculateChunkForPosition( const sf::Vector2i& position );
 
-
 		//configuration default values:
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA;
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT;
 
 		static const std::string CHUNK_LOAD_COUNT_PER_FRAME;
 		static const std::string CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT;
-
 	};
 }

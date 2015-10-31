@@ -4,7 +4,6 @@ using namespace sf;
 
 namespace kg
 {
-
 	void DefaultGameState::onInit()
 	{
 		unique_ptr<GameState> gameStatePtr = std::make_unique<SingleplayerGameState>();
@@ -29,13 +28,10 @@ namespace kg
 
 		inputManager.setAction( id::Input::SWITCH_CONSOLE, strgRightPress,
 								bind( &DefaultGameState::switchConsole, this ) );
-
 	}
 
 	void DefaultGameState::onUpdate()
-	{
-
-	}
+	{ }
 
 	void DefaultGameState::removeInputCallbacks( InputManager& inputManager )
 	{
@@ -53,7 +49,6 @@ namespace kg
 	{
 		return;
 	}
-
 
 	const Plugin::Name& DefaultGameState::getPluginName() const
 	{
@@ -88,5 +83,4 @@ namespace kg
 			r_gameStateManager->push( move( gameStatePtr ) );
 		}
 	}
-
 }

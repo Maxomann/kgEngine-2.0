@@ -4,14 +4,11 @@ using namespace sf;
 
 namespace kg
 {
-
 	GameStateManager::GameStateManager( Engine& engine, World& world, SaveManager& saveManager )
 		: engine( engine ),
 		world( world ),
 		saveManager( saveManager )
-	{
-
-	}
+	{ }
 
 	void GameStateManager::init()
 	{
@@ -88,5 +85,4 @@ namespace kg
 		while( m_gameStateStack.size() != 0 )
 			pop();
 	}
-
 }

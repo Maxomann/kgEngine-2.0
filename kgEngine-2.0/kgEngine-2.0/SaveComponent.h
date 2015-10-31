@@ -9,7 +9,7 @@ namespace kg
 {
 	class DLL_EXPORT EntitySaveInformation
 	{
-		using InformationByComponentIdMap = std::map < int, std::vector<std::string> > ;
+		using InformationByComponentIdMap = std::map < int, std::vector<std::string> >;
 
 		unsigned int m_blueprintEntityId;
 		Entity::Id m_uniqueEntityId;
@@ -89,7 +89,6 @@ namespace kg
 		static const std::string PLUGIN_NAME;
 
 		static const size_t type_hash;
-
 
 		EntitySaveInformation writeSaveInformation()const;
 		void loadSaveInformation( EntitySaveInformation& information );

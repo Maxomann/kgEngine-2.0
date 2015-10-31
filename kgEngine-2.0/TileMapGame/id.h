@@ -61,8 +61,6 @@ namespace kg
 			};
 		}
 
-
-
 		namespace SystemUpdateImportance
 		{
 			enum

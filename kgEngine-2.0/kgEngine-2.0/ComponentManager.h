@@ -22,7 +22,7 @@ namespace kg
 		ComponentManager() = default;
 		~ComponentManager() = default;
 		ComponentManager( const ComponentManager& componentManager ) = delete;
-		ComponentManager( ComponentManager&& componentManager )=default;
+		ComponentManager( ComponentManager&& componentManager ) = default;
 		ComponentManager& operator=( const ComponentManager& componentManager ) = delete;
 		ComponentManager& operator=( ComponentManager&& componentManager ) = default;
 

@@ -7,7 +7,6 @@ using namespace sys;
 
 namespace kg
 {
-
 	Core::Core()
 		:m_gameStateManager( m_engine, m_world, m_saveManager )
 	{ }

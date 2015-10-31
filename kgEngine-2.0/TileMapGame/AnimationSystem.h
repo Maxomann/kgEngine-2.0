@@ -10,8 +10,8 @@ namespace kg
 
 	public:
 		void updateSyncedTimeRef( const sf::Time& time );
-		
-		virtual void load( const std::vector<std::string> lines )=0;//ignore lines.at(0)! it is the name of the animation handler
+
+		virtual void load( const std::vector<std::string> lines ) = 0;//ignore lines.at(0)! it is the name of the animation handler
 
 		virtual sf::IntRect getTextureRect( const std::string& state, const sf::Time& internalTime )const = 0;
 
@@ -55,17 +55,12 @@ namespace kg
 
 		virtual const size_t& getRTTI_hash() const override;
 
-
 		AnimationHandler* getAnimationHandler( Engine& engine, const std::string& package, const std::string& path );
-
-
 
 		static const std::string PLUGIN_NAME;
 
 		static const size_t type_hash;
 	};
-
-	
 
 	class EasyAnimationHandler : public AnimationHandler
 	{
@@ -87,7 +82,6 @@ namespace kg
 		virtual const Plugin::Name& getPluginName() const override;
 
 		virtual Plugin::Id getPluginId() const override;
-
 
 		static const std::string PLUGIN_NAME;
 	};

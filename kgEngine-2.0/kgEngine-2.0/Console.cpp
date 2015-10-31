@@ -5,11 +5,10 @@ using namespace tgui;
 
 namespace kg
 {
-
 	void Console::log( const std::string& message )
 	{
 		m_log.push_back( LogEntry( LOG_TYPE::LOG,
-								   chrono::system_clock::to_time_t( chrono::system_clock::now() ) ,
+								   chrono::system_clock::to_time_t( chrono::system_clock::now() ),
 								   message ) );
 		s_entryAdded( m_log.back() );
 	}
@@ -39,8 +38,5 @@ namespace kg
 		:type( type ),
 		timestamp( timestamp ),
 		message( message )
-	{
-
-	}
-
+	{ }
 }

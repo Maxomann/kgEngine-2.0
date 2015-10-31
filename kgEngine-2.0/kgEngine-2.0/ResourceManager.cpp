@@ -20,5 +20,4 @@ namespace kg
 
 		return returnValue;
 	}
-
 }

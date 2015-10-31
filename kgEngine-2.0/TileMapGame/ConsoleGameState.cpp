@@ -5,7 +5,6 @@ using namespace tgui;
 
 namespace kg
 {
-
 	void ConsoleGameState::printLogEntry( const LogEntry& entry )
 	{
 		switch( entry.type )
@@ -28,7 +27,6 @@ namespace kg
 
 		m_chatBox->addLine( to_string( time_converted ) );
 		m_chatBox->addLine( entry.message );
-
 	}
 
 	void ConsoleGameState::onInit()
@@ -57,7 +55,6 @@ namespace kg
 		m_chatBox = make_shared<ChatBox>();
 		m_chatBox->setSize( 800, 400 );
 		m_chatBox->getRenderer()->setBackgroundColor( Color::Black );
-
 
 		m_consoleWindow->add( m_chatBox );
 		//m_consoleWindow->add( m_clearButton );
@@ -105,5 +102,4 @@ namespace kg
 	{
 		r_gameStateManager->removeAllInstancesOf( id::GameStatePluginId::CONSOLE );
 	}
-
 }

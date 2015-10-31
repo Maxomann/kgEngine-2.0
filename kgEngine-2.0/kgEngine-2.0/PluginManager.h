@@ -18,7 +18,6 @@
 
 namespace kg
 {
-
 	class DLL_EXPORT PluginManager
 	{
 		// The component plugin factories sorted by ID.
@@ -26,12 +25,10 @@ namespace kg
 		// The system plugin factories sorted by ID.
 		std::map<Plugin::Id, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysById;
 
-
 		// The component plugin factories sorted by name.
 		std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<Component>>> m_componentPluginFactorysByName;
 		// The system plugin factories sorted by name.
 		std::map<Plugin::Name, std::shared_ptr<PluginFactoryInterface<System>>> m_systemPluginFactorysByName;
-
 
 		std::map < size_t, std::pair <
 			std::map<Plugin::Id, std::shared_ptr<PluginFactoryGenericInterface>>,
@@ -53,7 +50,6 @@ namespace kg
 			auto casted = std::static_pointer_cast< PluginFactoryGenericInterface >(pluginFactory);
 			first = casted;
 			second = casted;
-
 		};
 		template<>
 		void addPluginFactory<Component>( std::shared_ptr<PluginFactoryInterface<Component>>& pluginFactory )
@@ -84,7 +80,6 @@ namespace kg
 		{
 			addPluginFactory( std::dynamic_pointer_cast< PluginFactoryInterface<T> >(pluginFactory) );
 		}
-
 
 		template<class BasePluginType>
 		std::unique_ptr<BasePluginType> createPlugin( const Plugin::Id& id )const
@@ -204,7 +199,5 @@ namespace kg
 
 			return retVal;
 		};
-
 	};
-
 }

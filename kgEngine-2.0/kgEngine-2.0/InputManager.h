@@ -5,7 +5,6 @@ namespace kg
 {
 	class DLL_EXPORT InputManager
 	{
-
 		thor::ActionMap<int> m_actionMap;
 		thor::ActionMap<int>::CallbackSystem m_callbackSystem;
 		std::map<int, std::vector<thor::Connection>> m_connectionsByActionId;//saved for disconnecting later
@@ -15,7 +14,6 @@ namespace kg
 		// Event forwarding is done by InputManager. DON'T forward them twice!
 		// Also gui.draw() has to be called manually. This is to enable multithreading.
 		tgui::Gui gui;
-
 
 		void setAction( const int& actionId, const thor::Action& action );
 		template<class T>
@@ -44,5 +42,4 @@ namespace kg
 		auto connection = m_callbackSystem.connect( actionId, callback );
 		m_connectionsByActionId[actionId].push_back( connection );
 	}
-
 }

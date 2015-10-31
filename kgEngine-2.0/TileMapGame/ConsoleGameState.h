@@ -19,7 +19,7 @@ namespace kg
 
 		virtual void registerInputCallbacks( InputManager& inputManager ) override;
 
-		virtual void onUpdate( ) override;
+		virtual void onUpdate() override;
 
 		virtual void removeInputCallbacks( InputManager& inputManager ) override;
 
@@ -31,9 +31,7 @@ namespace kg
 
 		virtual Plugin::Id getPluginId() const override;
 
-
 		static const std::string PLUGIN_NAME;
-
 
 	private:
 		//Callbacks

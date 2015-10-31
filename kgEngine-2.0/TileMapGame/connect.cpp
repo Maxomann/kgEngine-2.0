@@ -13,16 +13,13 @@ using namespace std;
 using namespace kg;
 
 void testfunc()
-{
-
-}
+{ }
 
 extern "C"
 {
 	DLL_EXPORT void kgConnect( PluginManager& pluginManager )
 	{
 		//testfunc();
-
 
 		//Components
 		pluginManager.addPluginFactory(

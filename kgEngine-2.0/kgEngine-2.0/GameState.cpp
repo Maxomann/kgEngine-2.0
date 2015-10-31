@@ -4,7 +4,6 @@ using namespace sf;
 
 namespace kg
 {
-
 	void GameState::initReferences( Engine& engine, World& world, SaveManager& saveManager, GameStateManager& gameStateManager )
 	{
 		r_engine = &engine;
@@ -17,5 +16,4 @@ namespace kg
 	{
 		this->frameTime = frameTime;
 	}
-
 }

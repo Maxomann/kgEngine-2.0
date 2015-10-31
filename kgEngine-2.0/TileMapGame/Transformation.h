@@ -35,7 +35,6 @@ namespace kg
 
 		virtual const size_t& getRTTI_hash() const override;
 
-
 		//Position
 		void setPosition( const sf::Vector2i& position );
 
