@@ -158,3 +158,5 @@ $RECYCLE.BIN/
 *.save
 /kgEngine-2.0/kgEngine-2.0/TileMapGame.dll
 /kgEngine-2.0/_libraries/_download
+*.db
+*.opendb
