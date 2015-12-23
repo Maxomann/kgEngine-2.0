@@ -3,14 +3,23 @@
 
 namespace kg
 {
+	struct Position
+	{
+		int x = 0;
+		int y = 0;
+		int zValue = 0;
+		int worldLayer = 0;
+
+		Position( int x, int y, int zValue, int worldLayer );
+	};
+
 	class Transformation : public Component, public CallbackReciever
 	{
 		sf::FloatRect m_globalBounds;
 
-		sf::Vector2i m_position;
+		Position m_position;
 		float m_rotation = 0;//in degree
 		sf::Vector2i m_size;
-		int m_zValue = 0;
 
 		void onLoadSaveInformation( const std::vector<std::string>& information );
 
@@ -36,11 +45,18 @@ namespace kg
 		virtual const size_t& getRTTI_hash() const override;
 
 		//Position
-		void setPosition( const sf::Vector2i& position );
+		void setPosition( const Position& position );
+		const Position& getPosition()const;
 
-		const sf::Vector2i& getPosition()const;
+		void setPositionXY( const sf::Vector2i& position );
+		const sf::Vector2i& getPositionXY()const;
+		void moveXY( const sf::Vector2i& offsetXY );
 
-		void move( const sf::Vector2i& offset );
+		void setZValue( int zValue );
+		int getZValue()const;
+
+		int getWorldLayer()const;
+		void setWorldLayer( int layer );
 
 		//Rotation
 		void setRotation( const float rotationInDegree );
@@ -54,10 +70,6 @@ namespace kg
 
 		sf::Vector2i getSize()const;
 
-		//zValue
-		int getZValue()const;/*thread safe*/
-		void setZValue( int zValue );
-
 		//GlobalBounds
 		sf::FloatRect getGlobalBounds()const;/*thread safe*/
 		bool intersects( const sf::FloatRect& rect )const;
@@ -70,12 +82,11 @@ namespace kg
 	signals:
 		Signal<> s_transformationChanged;//any of: Position, Rotation, Size
 
-		Signal<const sf::Vector2i&> s_positionChanged;
+		Signal<const Position&> s_positionChanged;
 		Signal<const float&> s_rotationChanged;
 		Signal<const sf::Vector2i&> s_sizeChanged;
 
 		static const std::string BLUEPRINT_WIDTH;
 		static const std::string BLUEPRINT_HEIGHT;
-		static const std::string BLUEPRINT_ZVALUE;
 	};
 }

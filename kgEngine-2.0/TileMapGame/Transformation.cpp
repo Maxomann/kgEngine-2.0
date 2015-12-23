@@ -12,9 +12,6 @@ namespace kg
 		it = blueprintValues.find( BLUEPRINT_WIDTH );
 		if( it != blueprintValues.end() )
 			m_size.y = it->second->asInt();
-		it = blueprintValues.find( BLUEPRINT_ZVALUE );
-		if( it != blueprintValues.end() )
-			m_zValue = it->second->asInt();
 
 		recalculateGlobalBounds();
 	}
@@ -79,9 +76,23 @@ namespace kg
 		return type_hash;
 	}
 
-	void Transformation::setPosition( const sf::Vector2i& position )
+	void Transformation::setPosition( const Position& position )
 	{
 		m_position = position;
+
+		s_transformationChanged();
+		s_positionChanged( m_position );
+	}
+
+	const Position& Transformation::getPosition() const
+	{
+		return m_position;
+	}
+
+	void Transformation::setPositionXY( const sf::Vector2i& position )
+	{
+		m_position.x = position.x;
+		m_position.y = position.y;
 
 		recalculateGlobalBounds();
 
@@ -89,14 +100,14 @@ namespace kg
 		s_positionChanged( m_position );
 	}
 
-	const sf::Vector2i& Transformation::getPosition() const
+	const sf::Vector2i& Transformation::getPositionXY() const
 	{
 		return m_position;
 	}
 
-	void Transformation::move( const sf::Vector2i& offset )
+	void Transformation::moveXY( const sf::Vector2i& offsetXY )
 	{
-		m_position += offset;
+		m_position += offsetXY;
 
 		recalculateGlobalBounds();
 
@@ -146,18 +157,22 @@ namespace kg
 
 	void Transformation::onLoadSaveInformation( const std::vector<std::string>& information )
 	{
-		if( information.size() != 6 )
+		if( information.size() != 7 )
 			throw exception();
 		else
 		{
 			setPosition(
-				Vector2i( atoi( information.at( 0 ).c_str() ),
-						  atoi( information.at( 1 ).c_str() ) ) );
-			setRotation( static_cast< float >(atof( information.at( 2 ).c_str() )) );
+				Position(
+					atoi( information.at( 0 ).c_str() ),
+					atoi( information.at( 1 ).c_str() ),
+					atoi( information.at( 2 ).c_str() ),
+					atoi( information.at( 3 ).c_str() )
+					)
+				);
+			setRotation( static_cast< float >(atof( information.at( 4 ).c_str() )) );
 			setSize( Vector2i(
-				atoi( information.at( 3 ).c_str() ),
-				atoi( information.at( 4 ).c_str() ) ) );
-			setZValue( atoi( information.at( 5 ).c_str() ) );
+				atoi( information.at( 5 ).c_str() ),
+				atoi( information.at( 6 ).c_str() ) ) );
 		}
 	}
 
@@ -166,10 +181,11 @@ namespace kg
 		return{
 			to_string( m_position.x ),
 			to_string( m_position.y ),
+			to_string( m_position.zValue ),
+			to_string( m_position.worldLayer ),
 			to_string( m_rotation ),
 			to_string( m_size.x ),
-			to_string( m_size.y ),
-			to_string( m_zValue ) };
+			to_string( m_size.y ), };
 	}
 
 	void Transformation::recalculateGlobalBounds()
@@ -178,7 +194,7 @@ namespace kg
 
 		shape.setSize( sf::Vector2f( m_size ) );
 		shape.setOrigin( sf::Vector2f( static_cast< float >(m_size.x) / 2, static_cast< float >(m_size.y) / 2 ) );
-		shape.setPosition( sf::Vector2f( m_position ) );
+		shape.setPosition( sf::Vector2f( m_position.x, m_position.y ) );
 		shape.setRotation( m_rotation );
 
 		m_globalBounds = shape.getGlobalBounds();
@@ -186,17 +202,29 @@ namespace kg
 
 	int Transformation::getZValue() const
 	{
-		auto retVal = m_zValue;
-
-		return retVal;
+		return m_position.zValue;
 	}
 
 	void Transformation::setZValue( int zValue )
 	{
-		m_zValue = zValue;
+		m_position.zValue = zValue;
+
+		s_transformationChanged();
+		s_positionChanged( m_position );
 	}
 
-	const std::string Transformation::BLUEPRINT_ZVALUE = "zValue";
+	int Transformation::getWorldLayer() const
+	{
+		return m_position.worldLayer;
+	}
+
+	void Transformation::setWorldLayer( int layer )
+	{
+		m_position.worldLayer = layer;
+
+		s_transformationChanged();
+		s_positionChanged( m_position );
+	}
 
 	const std::string Transformation::PLUGIN_NAME = "Transformation";
 
@@ -204,4 +232,11 @@ namespace kg
 
 	const std::string Transformation::BLUEPRINT_WIDTH = "width";
 	const std::string Transformation::BLUEPRINT_HEIGHT = "height";
+
+	Position::Position( int x, int y, int zValue, int worldLayer )
+		:x( x ),
+		y( y ),
+		zValue( zValue ),
+		worldLayer( worldLayer )
+	{ }
 }
