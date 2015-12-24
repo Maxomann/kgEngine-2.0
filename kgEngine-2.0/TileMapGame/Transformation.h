@@ -49,7 +49,7 @@ namespace kg
 		const Position& getPosition()const;
 
 		void setPositionXY( const sf::Vector2i& position );
-		const sf::Vector2i& getPositionXY()const;
+		sf::Vector2i getPositionXY()const;
 		void moveXY( const sf::Vector2i& offsetXY );
 
 		void setZValue( int zValue );
@@ -83,6 +83,7 @@ namespace kg
 		Signal<> s_transformationChanged;//any of: Position, Rotation, Size
 
 		Signal<const Position&> s_positionChanged;
+		Signal<const sf::Vector2i&> s_positionXYChanged;
 		Signal<const float&> s_rotationChanged;
 		Signal<const sf::Vector2i&> s_sizeChanged;
 

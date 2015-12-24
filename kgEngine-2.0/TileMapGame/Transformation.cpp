@@ -82,6 +82,7 @@ namespace kg
 
 		s_transformationChanged();
 		s_positionChanged( m_position );
+		s_positionXYChanged( sf::Vector2i( m_position.x, m_position.y ) );
 	}
 
 	const Position& Transformation::getPosition() const
@@ -98,21 +99,24 @@ namespace kg
 
 		s_transformationChanged();
 		s_positionChanged( m_position );
+		s_positionXYChanged( sf::Vector2i( m_position.x, m_position.y ) );
 	}
 
-	const sf::Vector2i& Transformation::getPositionXY() const
+	sf::Vector2i Transformation::getPositionXY() const
 	{
-		return m_position;
+		return sf::Vector2i( m_position.x, m_position.y );
 	}
 
 	void Transformation::moveXY( const sf::Vector2i& offsetXY )
 	{
-		m_position += offsetXY;
+		m_position.x += offsetXY.x;
+		m_position.y += offsetXY.y;
 
 		recalculateGlobalBounds();
 
 		s_transformationChanged();
 		s_positionChanged( m_position );
+		s_positionXYChanged( sf::Vector2i( m_position.x, m_position.y ) );
 	}
 
 	void Transformation::setRotation( const float rotationInDegree )

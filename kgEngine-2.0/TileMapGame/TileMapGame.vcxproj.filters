@@ -21,6 +21,9 @@
     <Filter Include="Headerdateien\GameStates">
       <UniqueIdentifier>{9de7af51-7d36-4f85-abf0-f97ad439180f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\Systems\ChunkSystem">
+      <UniqueIdentifier>{ad14a26e-05af-4c7d-b5db-af41b81a5190}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="connect.cpp">
@@ -76,9 +79,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Headerdateien\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ChunkSystem.h">
-      <Filter>Headerdateien\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="Transformation.h">
       <Filter>Headerdateien\Components</Filter>
     </ClInclude>
@@ -108,6 +108,12 @@
     </ClInclude>
     <ClInclude Include="ConsoleGameState.h">
       <Filter>Headerdateien\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkSystem.h">
+      <Filter>Headerdateien\Systems\ChunkSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Chunk.h">
+      <Filter>Headerdateien\Systems\ChunkSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
