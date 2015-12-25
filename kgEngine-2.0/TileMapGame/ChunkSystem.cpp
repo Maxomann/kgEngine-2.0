@@ -271,11 +271,6 @@ namespace kg
 			m_chunkLoadQueue.erase( itLoad );
 	}
 
-	std::string ChunkSystem::getChunkSavename( const sf::Vector2i chunkPosition ) const
-	{
-		return "Chunk#" + to_string( chunkPosition.x ) + "#" + to_string( chunkPosition.y );
-	}
-
 	void ChunkSystem::ensureChunksOnLoadUnloadListAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector2i>& cameraPositions )
 	{
 		vector<Vector2i> chunksToEnsureLoaded;
@@ -377,6 +372,7 @@ namespace kg
 
 	void ChunkSystem::m_onSavegameClosed()
 	{
+		m_chunkLoadingOperationQueue.cancelOrFinishAllOperations();
 		m_chunkData.clear();
 		m_entityData.clear();
 		m_loadedChunks.clear();

@@ -89,7 +89,9 @@
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="AnimationSystem.cpp" />
+    <ClCompile Include="Chunk.cpp" />
     <ClCompile Include="ChunkGeneratorSystem.cpp" />
+    <ClCompile Include="ChunkLoadingOperation.cpp" />
     <ClCompile Include="ChunkSystem.cpp" />
     <ClCompile Include="ConsoleGameState.cpp" />
     <ClCompile Include="DefaultGameState.cpp" />

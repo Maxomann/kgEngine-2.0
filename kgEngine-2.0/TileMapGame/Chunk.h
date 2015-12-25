@@ -12,10 +12,6 @@ namespace kg
 		// IO
 		bool m_isLoaded = false;
 
-		bool canBeLoadedFromFile()const;
-		bool loadFromFile( SaveManager& saveManager )const;
-		void saveToFile( SaveManager& saveManager )const;
-
 	public:
 		Chunk( const ChunkPosition& position );
 
@@ -26,7 +22,9 @@ namespace kg
 
 		// IO
 		bool isLoaded()const;
-		void ensureIsLoaded();
-		void ensureIsUnloaded();
+		void setLoadState( bool isLoaded );
+
+		std::string getSavename()const;//return getChunkSavename(thisPostion);
+		static std::string getChunkSavename( const ChunkPosition& chunkPosition );
 	};
 }

@@ -62,8 +62,8 @@ namespace kg
 
 	void SaveManager::closeSavegame( Engine& engine, World& world )
 	{
+		s_savegameClosed();//must be before world.clear() to prevent nullptr exception
 		world.clear();
-		s_savegameClosed();
 	}
 
 	const std::string& SaveManager::getOpenSavegameName() const
@@ -101,7 +101,7 @@ namespace kg
 		return;
 	}
 
-	boost::optional<std::vector<Entity>> SaveManager::loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename )
+	boost::optional<std::vector<EntitySaveInformation>> SaveManager::loadEntitySaveInformationFromFile( const std::string& filename )
 	{
 		//return false if file does not exist
 		if( !exists( path( string( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION ) ) ) )
@@ -122,6 +122,26 @@ namespace kg
 			if( el != "" )
 				information.push_back( EntitySaveInformation( el ) );
 
+		file.close();
+
+		return information;
+	}
+
+	void SaveManager::saveEntitySaveInformationToFile( const std::string& filename,
+													   const std::vector<EntitySaveInformation>& saveInformation )
+	{
+		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION,
+					  fstream::out | fstream::trunc );
+
+		for( const auto& el : saveInformation )
+			file << el.toString() << endl;
+
+		file.close();
+		return;
+	}
+
+	std::vector<Entity> SaveManager::generateEntitiesFromSaveInformation( Engine& engine, World& world, const std::vector<EntitySaveInformation>& information )
+	{
 		vector<Entity> entities;
 
 		for( auto& el : information )
@@ -131,16 +151,12 @@ namespace kg
 			entities.push_back( move( entity ) );
 		}
 
-		file.close();
-
 		return entities;
 	}
 
-	void SaveManager::saveEntitiesToFile( const std::string& path,
-										  const World::EntityPointerContainer& entities )
+	std::vector<EntitySaveInformation> SaveManager::generateSaveInformationFromEntities( const World::EntityPointerContainer& entities )
 	{
-		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + path + SAVE_FILE_EXTENSION,
-					  fstream::out | fstream::trunc );
+		std::vector<EntitySaveInformation> retVal;
 
 		for( const auto& el : entities )
 		{
@@ -148,12 +164,11 @@ namespace kg
 			if( saveComponent )//can only be saved if it has a save component
 			{
 				auto saveInformation = saveComponent->writeSaveInformation();
-				file << saveInformation.toString() << endl;
+				retVal.push_back( saveInformation );
 			}
 		}
 
-		file.close();
-		return;
+		return retVal;
 	}
 
 	const std::string SaveManager::SAVE_FILE_EXTENSION = ".save";

@@ -3,6 +3,8 @@
 #include "Transformation.h"
 #include "ChunkGeneratorSystem.h"
 #include "GraphicsSystem.h"
+#include "Chunk.h"
+#include "ChunkLoadingOperationQueue.h"
 
 namespace kg
 {
@@ -19,8 +21,8 @@ namespace kg
 
 		// CHUNK LOAD STATE DATA:
 		int m_chunkLoadRadiusAroundCamera;
-		std::map<int, std::map<int, bool>> m_loadedChunks;
-		std::string getChunkSavename( const sf::Vector2i chunkPosition )const;
+		std::vector<Chunk> m_chunks;
+		ChunkLoadingOperationQueue m_chunkLoadingOperationQueue;
 		bool loadChunkFromFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );//returns false if file did not exist
 		void saveChunkToFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
 

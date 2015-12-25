@@ -4,8 +4,9 @@ using namespace sf;
 
 namespace kg
 {
-	void ChunkGeneratorSystem::generateChunk( Engine& engine, World& world, const ChunkPosition& chunkPositionInChunks )
+	std::vector<Entity> ChunkGeneratorSystem::generateChunk( Engine& engine, World& world, const ChunkPosition& chunkPositionInChunks )
 	{
+		std::vector<Entity> entities;
 		const auto count = Constants::CHUNK_SIZE / Constants::TILE_SIZE;
 
 		for( int x = 0; x < count; ++x )
@@ -23,13 +24,14 @@ namespace kg
 
 				Vector3i tilePosition( chunkPositionInPixelX + tilePositionRelativeToChunkInPixelX,
 									   chunkPositionInPixelY + tilePositionRelativeToChunkInPixelY,
-									   0 );
+									   Constants::STANDART_TILE_ZVALUE );
 
 				transform->setPositionXYZ( tilePosition );
-				transform->setZValue( Constants::STANDART_TILE_ZVALUE );
 
-				world.addEntity( move( tile ) );
+				entities.push_back( move( tile ) );
 			}
+
+		return entities;
 	}
 
 	const size_t& ChunkGeneratorSystem::getRTTI_hash() const
