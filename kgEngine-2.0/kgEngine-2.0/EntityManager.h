@@ -24,6 +24,7 @@ namespace kg
 		// second: EntityId of the added Entity
 		// return value: a reference to the entity in EntityManager
 		Entity* addEntity( Entity&& entity );
+		void addEntities( std::vector<Entity>&& entities );
 
 		// ensures that the entity with id parameter:id does not exist anymore
 		// returns false if entity with id did not exist

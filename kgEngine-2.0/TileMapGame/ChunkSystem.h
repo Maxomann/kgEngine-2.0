@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Transformation.h"
-#include "ChunkGenerator.h"
+#include "ChunkGeneratorSystem.h"
 #include "GraphicsSystem.h"
 
 namespace kg

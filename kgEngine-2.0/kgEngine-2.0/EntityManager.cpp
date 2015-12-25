@@ -13,6 +13,12 @@ namespace kg
 		return &m_entities.back();
 	}
 
+	void EntityManager::addEntities( std::vector<Entity>&& entities )
+	{
+		for( auto& el : entities )
+			addEntity( move( el ) );
+	}
+
 	void EntityManager::removeEntity( Entity* entity )
 	{
 		s_entity_removed( entity );

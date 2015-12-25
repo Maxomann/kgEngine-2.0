@@ -1,15 +1,9 @@
 #pragma once
 #include "stdafx.h"
+#include "ChunkPosition.h"
 
 namespace kg
 {
-	struct ChunkPosition
-	{
-		int x;
-		int y;
-		int worldLayer;
-	};
-
 	class Chunk
 	{
 		const ChunkPosition m_position;

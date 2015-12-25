@@ -209,6 +209,18 @@ namespace kg
 		return m_position.zValue;
 	}
 
+	void Transformation::setPositionXYZ( const sf::Vector3i& position )
+	{
+		m_position.x = position.x;
+		m_position.y = position.y;
+		m_position.zValue = position.z;
+
+		s_transformationChanged();
+		s_positionChanged( m_position );
+		s_positionXYChanged( sf::Vector2i( position.x, position.y ) );
+		s_positionXYZChanged( position );
+	}
+
 	void Transformation::setZValue( int zValue )
 	{
 		m_position.zValue = zValue;
@@ -228,6 +240,11 @@ namespace kg
 
 		s_transformationChanged();
 		s_positionChanged( m_position );
+	}
+
+	sf::Vector3i Transformation::getPositionXYZ() const
+	{
+		return sf::Vector3i( m_position.x, m_position.y, m_position.zValue );
 	}
 
 	const std::string Transformation::PLUGIN_NAME = "Transformation";

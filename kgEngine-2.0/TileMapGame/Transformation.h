@@ -55,6 +55,9 @@ namespace kg
 		void setZValue( int zValue );
 		int getZValue()const;
 
+		void setPositionXYZ( const sf::Vector3i& position );
+		sf::Vector3i getPositionXYZ()const;
+
 		int getWorldLayer()const;
 		void setWorldLayer( int layer );
 
@@ -84,6 +87,7 @@ namespace kg
 
 		Signal<const Position&> s_positionChanged;
 		Signal<const sf::Vector2i&> s_positionXYChanged;
+		Signal<const sf::Vector3i&> s_positionXYZChanged;
 		Signal<const float&> s_rotationChanged;
 		Signal<const sf::Vector2i&> s_sizeChanged;
 

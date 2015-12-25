@@ -26,7 +26,7 @@ namespace kg
 		void closeSavegame( Engine& engine, World& world );
 		const std::string& getOpenSavegameName()const;
 		//filename without extension!
-		bool loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename );
+		boost::optional<std::vector<Entity>> loadEntitiesFromFile( Engine& engine, World& world, const std::string& filename );
 
 		// filename without extension!
 		// PREVIOUSLY STORED INFORMATION IN FILE(filename) WILL BE DELETED!

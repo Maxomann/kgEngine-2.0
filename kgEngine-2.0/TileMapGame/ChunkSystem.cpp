@@ -189,7 +189,7 @@ namespace kg
 			// chunk not loaded
 			if( !loadChunkFromFile( engine, world, saveManager, chunkPosition ) )
 			{
-				world.getSystem<ChunkGenerator>()->generateChunk( engine, world, chunkPosition );
+				world.getSystem<ChunkGeneratorSystem>()->generateChunk( engine, world, chunkPosition );
 				// chunk loaded
 			}
 			else
@@ -213,7 +213,7 @@ namespace kg
 			// chunk loaded
 			saveChunkToFile( engine, world, saveManager, chunkPosition );
 			// remove entities in that chunk from world
-			// copy entities here!(since removal of entities causes iterator invalidation
+			// copy entities here!(since removal of entities from world causes iterator invalidation)
 			const auto temp = getEntitiesInChunk( chunkPosition );
 			for( const auto& entity : temp )
 				world.removeEntity( entity );
@@ -231,7 +231,15 @@ namespace kg
 
 	bool ChunkSystem::loadChunkFromFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
 	{
-		return saveManager.loadEntitiesFromFile( engine, world, getChunkSavename( chunkPosition ) );
+		auto entities = saveManager.loadEntitiesFromFile( engine, world, getChunkSavename( chunkPosition ) );
+
+		if( entities )//load successful
+		{
+			world.addEntities( move( *entities ) );
+			return true;
+		}
+
+		return false;
 	}
 
 	void ChunkSystem::saveChunkToFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )

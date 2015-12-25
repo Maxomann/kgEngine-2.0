@@ -24,6 +24,9 @@
     <Filter Include="Headerdateien\Systems\ChunkSystem">
       <UniqueIdentifier>{ad14a26e-05af-4c7d-b5db-af41b81a5190}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\Systems\ChunkGenerator">
+      <UniqueIdentifier>{1b053ed8-ac89-4863-af21-fc08faadd3ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="connect.cpp">
@@ -44,9 +47,6 @@
     <ClCompile Include="Transformation.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="ChunkGenerator.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="SpriteBatch.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -65,6 +65,9 @@
     <ClCompile Include="ConsoleGameState.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="ChunkGeneratorSystem.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
@@ -81,9 +84,6 @@
     </ClInclude>
     <ClInclude Include="Transformation.h">
       <Filter>Headerdateien\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ChunkGenerator.h">
-      <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
     <ClInclude Include="constants.h">
       <Filter>Headerdateien</Filter>
@@ -113,6 +113,24 @@
       <Filter>Headerdateien\Systems\ChunkSystem</Filter>
     </ClInclude>
     <ClInclude Include="Chunk.h">
+      <Filter>Headerdateien\Systems\ChunkSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkLoadingOperation.h">
+      <Filter>Headerdateien\Systems\ChunkSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkLoadingOperationQueue.h">
+      <Filter>Headerdateien\Systems\ChunkSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldGenerator.h">
+      <Filter>Headerdateien\Systems\ChunkGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldGeneratorManager.h">
+      <Filter>Headerdateien\Systems\ChunkGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkGeneratorSystem.h">
+      <Filter>Headerdateien\Systems\ChunkGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkPosition.h">
       <Filter>Headerdateien\Systems\ChunkSystem</Filter>
     </ClInclude>
   </ItemGroup>

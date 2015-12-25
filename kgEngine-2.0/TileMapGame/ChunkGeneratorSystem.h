@@ -1,10 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include "Transformation.h"
+#include "ChunkPosition.h"
 
 namespace kg
 {
-	class ChunkGenerator : public System
+	class ChunkGeneratorSystem : public System
 	{
 	public:
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile ) override;
@@ -21,7 +22,7 @@ namespace kg
 
 		virtual Plugin::Id getPluginId() const override;
 
-		void generateChunk( Engine& engine, World& world, const sf::Vector2i chunkPositionInChunks );
+		void generateChunk( Engine& engine, World& world, const ChunkPosition& chunkPositionInChunks );
 
 		virtual const size_t& getRTTI_hash() const override;
 
