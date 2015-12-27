@@ -21,8 +21,9 @@ namespace kg
 
 		void initSystemsByImportance( Engine& engine, World& world, SaveManager& saveManager );
 
+		// Thread safe
 		template<class T>
-		T* getSystem()
+		T* getSystem()const
 		{
 			return static_cast< T* >(m_systemsByType.at( T::type_hash ));
 		};

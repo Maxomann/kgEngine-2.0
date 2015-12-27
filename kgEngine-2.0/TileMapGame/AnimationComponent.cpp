@@ -27,7 +27,7 @@ namespace kg
 		}
 	}
 
-	void AnimationComponent::init( Engine& engine, World& world, ComponentManager& thisEntity )
+	void AnimationComponent::init( Engine& engine, const World& world, const ComponentManager& thisEntity )
 	{
 		//validate pointers
 		r_animationSystem = world.getSystem<AnimationSystem>();

@@ -6,17 +6,19 @@ namespace kg
 {
 	Entity::Id EntityFactory::getUniqueEntityId()
 	{
+		lock_guard<mutex> lock( m_highestUniqueIdMutex );
 		m_highestUniqueId++;
 		return m_highestUniqueId - 1;
 	}
 
 	void EntityFactory::setLowestUniqueEntityId( const Entity::Id& id )
 	{
+		lock_guard<mutex> lock( m_highestUniqueIdMutex );
 		m_highestUniqueId = id;
 	}
 
 	Entity EntityFactory::createNewSaveableEntity( Engine& engine,
-												   World& world,
+												   const World& world,
 												   const int& entityBlueprintId )
 	{
 		auto temp = createNewSaveableEntity( engine, world, entityBlueprintId, getUniqueEntityId() );
@@ -24,7 +26,7 @@ namespace kg
 	}
 
 	Entity EntityFactory::createNewSaveableEntity( Engine& engine,
-												   World& world,
+												   const World& world,
 												   const int& entityBlueprintId,
 												   const Entity::Id& uniqueId )
 	{

@@ -21,29 +21,35 @@ namespace kg
 
 	class DLL_EXPORT EntityFactory : public boost::noncopyable
 	{
-		Entity::Id m_highestUniqueId = 0;
+		std::mutex m_highestUniqueIdMutex;
+		Entity::Id m_highestUniqueId = 0;// Thread safe
 
 	public:
-		//not unique between servers/clients
+		// Thread safe
+		// not unique between servers/clients
 		Entity::Id getUniqueEntityId();
+		// Thread safe
 		void setLowestUniqueEntityId( const Entity::Id& id );
 
+		// Thread safe
 		// helper function for creating a new Entity with a unique id
 		// A Save component will be added to the entity
 		Entity createNewSaveableEntity( Engine& engine,
-										World& world,
+										const World& world,
 										const int& entityBlueprintId );
+
+		// Thread safe
 		// helper function for creating a specific unique id
 		// A Save component will be added to the entity
 		Entity createNewSaveableEntity( Engine& engine,
-										World& world,
+										const World& world,
 										const int& entityBlueprintId,
 										const Entity::Id& uniqueId );
 
 		// temporary Entities are not saveable
 		// the preInit function of its components will not be called
 		template<class variadic ComponentsType>
-		Entity createNewTemporaryEntity( Engine& engine, World& world )
+		Entity createNewTemporaryEntity( Engine& engine, const World& world )
 		{
 			Entity entity;
 			std::vector<std::unique_ptr<Component>> vec;

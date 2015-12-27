@@ -16,7 +16,7 @@ namespace kg
 		recalculateGlobalBounds();
 	}
 
-	void Transformation::init( Engine& engine, World& world, ComponentManager& thisEntity )
+	void Transformation::init( Engine& engine, const World& world, const ComponentManager& thisEntity )
 	{
 		auto saveComponent = thisEntity.getComponentTry<Save>();
 		if( saveComponent )
@@ -253,11 +253,4 @@ namespace kg
 
 	const std::string Transformation::BLUEPRINT_WIDTH = "width";
 	const std::string Transformation::BLUEPRINT_HEIGHT = "height";
-
-	Position::Position( int x, int y, int zValue, int worldLayer )
-		:x( x ),
-		y( y ),
-		zValue( zValue ),
-		worldLayer( worldLayer )
-	{ }
 }

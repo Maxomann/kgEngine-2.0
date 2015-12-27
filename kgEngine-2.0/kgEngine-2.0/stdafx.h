@@ -33,6 +33,7 @@
 #include <type_traits>
 #include <utility>
 #include <ctime>
+#include <future>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

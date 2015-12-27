@@ -29,6 +29,7 @@ namespace kg
 		// ensures that the entity with id parameter:id does not exist anymore
 		// returns false if entity with id did not exist
 		void removeEntity( Entity* entity );
+		void removeEntities( const EntityPointerContainer& entities );
 
 		// returns nullptr if Entity with id does not exist
 		bool doesEntityExist( const Entity* entity )const;

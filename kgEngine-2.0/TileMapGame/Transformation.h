@@ -1,18 +1,9 @@
 #pragma once
 #include "stdafx.h"
+#include "Position.h"
 
 namespace kg
 {
-	struct Position
-	{
-		int x = 0;
-		int y = 0;
-		int zValue = 0;
-		int worldLayer = 0;
-
-		Position( int x, int y, int zValue, int worldLayer );
-	};
-
 	class Transformation : public Component, public CallbackReciever
 	{
 		sf::FloatRect m_globalBounds;
@@ -30,7 +21,7 @@ namespace kg
 	public:
 		virtual void preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues ) override;
 
-		virtual void init( Engine& engine, World& world, ComponentManager& thisEntity ) override;
+		virtual void init( Engine& engine, const World& world, const ComponentManager& thisEntity ) override;
 
 		virtual void update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime ) override;
 

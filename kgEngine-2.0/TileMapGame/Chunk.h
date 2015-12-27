@@ -1,21 +1,21 @@
 #pragma once
 #include "stdafx.h"
-#include "ChunkPosition.h"
+#include "Position.h"
 
 namespace kg
 {
 	class Chunk
 	{
-		const ChunkPosition m_position;
+		const Position2d m_position;
 		World::EntityPointerContainer m_entities;
 
 		// IO
 		bool m_isLoaded = false;
 
 	public:
-		Chunk( const ChunkPosition& position );
+		Chunk( const Position2d& position );
 
-		const ChunkPosition& getPosition()const;
+		const Position2d& getPosition()const;
 
 		void addEntity( const Entity*& entity );
 		const World::EntityPointerContainer& getEntities()const;
@@ -24,7 +24,7 @@ namespace kg
 		bool isLoaded()const;
 		void setLoadState( bool isLoaded );
 
-		std::string getSavename()const;//return getChunkSavename(thisPostion);
-		static std::string getChunkSavename( const ChunkPosition& chunkPosition );
+		std::string getSavename()const;//return Chunk::getChunkSavename(thisPostion);
+		static std::string getChunkSavename( const Position2d& chunkPosition );
 	};
 }

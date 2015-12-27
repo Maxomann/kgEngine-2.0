@@ -90,8 +90,10 @@
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="Chunk.cpp" />
+    <ClCompile Include="ChunkContainer.cpp" />
     <ClCompile Include="ChunkGeneratorSystem.cpp" />
-    <ClCompile Include="ChunkLoadingOperation.cpp" />
+    <ClCompile Include="ChunkIOOperation.cpp" />
+    <ClCompile Include="Position.cpp" />
     <ClCompile Include="ChunkSystem.cpp" />
     <ClCompile Include="ConsoleGameState.cpp" />
     <ClCompile Include="DefaultGameState.cpp" />
@@ -107,10 +109,11 @@
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="Chunk.h" />
+    <ClInclude Include="ChunkContainer.h" />
     <ClInclude Include="ChunkGeneratorSystem.h" />
-    <ClInclude Include="ChunkLoadingOperation.h" />
-    <ClInclude Include="ChunkLoadingOperationQueue.h" />
-    <ClInclude Include="ChunkPosition.h" />
+    <ClInclude Include="ChunkIOOperation.h" />
+    <ClInclude Include="ChunkIOOperationQueue.h" />
+    <ClInclude Include="Position.h" />
     <ClInclude Include="ChunkSystem.h" />
     <ClInclude Include="ConsoleGameState.h" />
     <ClInclude Include="constants.h" />

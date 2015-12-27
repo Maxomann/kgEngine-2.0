@@ -4,7 +4,7 @@ using namespace sf;
 
 namespace kg
 {
-	std::vector<Entity> ChunkGeneratorSystem::generateChunk( Engine& engine, World& world, const ChunkPosition& chunkPositionInChunks )
+	std::vector<Entity> ChunkGeneratorSystem::generateChunk( Engine& engine, World& world, const Position2d& chunkPositionInChunks )
 	{
 		std::vector<Entity> entities;
 		const auto count = Constants::CHUNK_SIZE / Constants::TILE_SIZE;

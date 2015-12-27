@@ -4,6 +4,11 @@ using namespace sf;
 
 namespace kg
 {
+	ChunkSystem::~ChunkSystem()
+	{
+		m_chunkIOOperationQueue.finishAllOperations();
+	}
+
 	void ChunkSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
 		m_connectToSignal( world.s_entity_added, &ChunkSystem::m_onEntityAddedToWorld );
@@ -182,96 +187,7 @@ namespace kg
 		saveManager.saveSystems( world );
 	}
 
-	bool ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
-	{
-		if( !m_loadedChunks[chunkPosition.x][chunkPosition.y] )
-		{
-			// chunk not loaded
-			if( !loadChunkFromFile( engine, world, saveManager, chunkPosition ) )
-			{
-				world.getSystem<ChunkGeneratorSystem>()->generateChunk( engine, world, chunkPosition );
-				// chunk loaded
-			}
-			else
-			{
-				// chunk loaded
-			}
-			m_loadedChunks[chunkPosition.x][chunkPosition.y] = true;
-			return true;
-		}
-		else
-		{
-			// chunk loaded
-			return false;
-		}
-	}
-
-	bool ChunkSystem::ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
-	{
-		if( m_loadedChunks[chunkPosition.x][chunkPosition.y] )
-		{
-			// chunk loaded
-			saveChunkToFile( engine, world, saveManager, chunkPosition );
-			// remove entities in that chunk from world
-			// copy entities here!(since removal of entities from world causes iterator invalidation)
-			const auto temp = getEntitiesInChunk( chunkPosition );
-			for( const auto& entity : temp )
-				world.removeEntity( entity );
-
-			// chunk unloaded
-			m_loadedChunks[chunkPosition.x][chunkPosition.y] = false;
-			return true;
-		}
-		else
-		{
-			// chunk unloaded
-			return false;
-		}
-	}
-
-	bool ChunkSystem::loadChunkFromFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
-	{
-		auto entities = saveManager.loadEntitiesFromFile( engine, world, getChunkSavename( chunkPosition ) );
-
-		if( entities )//load successful
-		{
-			world.addEntities( move( *entities ) );
-			return true;
-		}
-
-		return false;
-	}
-
-	void ChunkSystem::saveChunkToFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition )
-	{
-		saveManager.saveEntitiesToFile( getChunkSavename( chunkPosition ), getEntitiesInChunk( chunkPosition ) );
-	}
-
-	void ChunkSystem::addChunkToLoadQueue( const sf::Vector2i& chunkPosition )
-	{
-		if( !m_loadedChunks[chunkPosition.x][chunkPosition.y] )
-			if( find( m_chunkLoadQueue.begin(), m_chunkLoadQueue.end(), chunkPosition ) == m_chunkLoadQueue.end() )
-				m_chunkLoadQueue.push_back( chunkPosition );
-
-		//remove from unload queue
-		auto itLoad = find( m_chunkUnloadQueue.begin(), m_chunkUnloadQueue.end(), chunkPosition );
-		if( itLoad != m_chunkUnloadQueue.end() )
-			m_chunkUnloadQueue.erase( itLoad );
-	}
-
-	void ChunkSystem::addChunkToUnloadQueue( const sf::Vector2i& chunkPosition )
-	{
-		if( m_loadedChunks[chunkPosition.x][chunkPosition.y] )
-			if( find( m_chunkUnloadQueue.begin(), m_chunkUnloadQueue.end(), chunkPosition ) == m_chunkUnloadQueue.end() )
-				m_chunkUnloadQueue.push_back( chunkPosition );
-
-		//remove from load queue
-		auto itLoad = find( m_chunkLoadQueue.begin(), m_chunkLoadQueue.end(), chunkPosition );
-		if( itLoad != m_chunkLoadQueue.end() )
-			m_chunkLoadQueue.erase( itLoad );
-	}
-
-	void ChunkSystem::ensureChunksOnLoadUnloadListAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector2i>& cameraPositions )
+	void ChunkSystem::ensureChunksOnLoadUnloadListAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector3i>& cameraPositions )
 	{
 		vector<Vector2i> chunksToEnsureLoaded;
 
@@ -305,7 +221,7 @@ namespace kg
 
 		/*unload chunks*/
 		//for every chunks that is loaded atm and is not in chunksToEnsureLoaded: unload
-		for( const auto& x : m_loadedChunks )
+		for( const auto& x : m_chunks )
 		{
 			for( const auto& y : x.second )
 			{
@@ -328,39 +244,21 @@ namespace kg
 			addChunkToLoadQueue( el );
 	}
 
-	void ChunkSystem::loadAndUnloadChunksFromQueue( Engine& engine, World& world, SaveManager& saveManager )
+	bool ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk )
 	{
-		//unload
-		for( int i = 0; i < m_chunkLoadCountPerFrame; )
-		{
-			if( m_chunkUnloadQueue.size() > 0 )
-			{
-				if( ensureChunkUnloaded( engine, world, saveManager, m_chunkUnloadQueue.front() ) )
-					i++;
-				m_chunkUnloadQueue.pop_front();
-			}
-			else break;
-		}
+		if( !chunk.isLoaded() )
+			m_chunkIOOperationQueue.addOperation( make_unique<ChunkLoadOperation>( engine, world, saveManager, chunk ) );
+	}
 
-		//load
-		for( int i = 0; i < m_chunkLoadCountPerFrame; )
-		{
-			if( m_chunkLoadQueue.size() > 0 )
-			{
-				if( ensureChunkLoaded( engine, world, saveManager, m_chunkLoadQueue.front() ) )
-					i++;
-				m_chunkLoadQueue.pop_front();
-			}
-			else break;
-		}
-
-		m_chunkLoadQueue.clear();
-		m_chunkUnloadQueue.clear();
+	bool ChunkSystem::ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk )
+	{
+		if( chunk.isLoaded() )
+			m_chunkIOOperationQueue.addOperation( make_unique<ChunkUnloadOperation>( engine, world, saveManager, chunk ) );
 	}
 
 	void ChunkSystem::saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager )
 	{
-		for( const auto& x : m_loadedChunks )
+		for( const auto& x : m_chunks )
 		{
 			for( const auto& y : x.second )
 			{
@@ -372,10 +270,10 @@ namespace kg
 
 	void ChunkSystem::m_onSavegameClosed()
 	{
-		m_chunkLoadingOperationQueue.cancelOrFinishAllOperations();
+		m_chunkIOOperationQueue.finishAllOperations();
 		m_chunkData.clear();
 		m_entityData.clear();
-		m_loadedChunks.clear();
+		m_chunks.clear();
 	}
 
 	const std::string ChunkSystem::CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT = "5";

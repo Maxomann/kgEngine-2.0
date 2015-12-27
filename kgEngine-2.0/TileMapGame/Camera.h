@@ -24,7 +24,7 @@ namespace kg
 	public:
 		virtual void preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )override;
 
-		virtual void init( Engine& engine, World& world, ComponentManager& thisEntity )override;
+		virtual void init( Engine& engine, const World& world, const ComponentManager& thisEntity )override;
 
 		virtual void update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )override;
 

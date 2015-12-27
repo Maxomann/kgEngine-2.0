@@ -210,7 +210,7 @@ namespace kg
 		throw std::exception( "should not be called since Save is an internal Component and does not get initialized through this funtion" );
 	}
 
-	void Save::init( Engine& engine, World& world, ComponentManager& thisEntity )
+	void Save::init( Engine& engine, const World& world, const ComponentManager& thisEntity )
 	{
 		return;
 	}

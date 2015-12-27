@@ -37,7 +37,7 @@ namespace kg
 		return m_componentsByType.end();
 	}
 
-	void ComponentManager::initComponentsByImportance( Engine& engine, World& world )
+	void ComponentManager::initComponentsByImportance( Engine& engine, const World& world )
 	{
 		m_checkComponentsSortedByUpdateImportance();
 

@@ -25,6 +25,12 @@ namespace kg
 		m_toRemove.push_back( entity );
 	}
 
+	void EntityManager::removeEntities( const EntityPointerContainer& entities )
+	{
+		for( auto& el : entities )
+			removeEntity( el );
+	}
+
 	bool EntityManager::doesEntityExist( const Entity* entity ) const
 	{
 		return std::find( cbegin( m_entities ), cend( m_entities ), *entity ) != m_entities.cend();

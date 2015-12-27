@@ -68,10 +68,16 @@
     <ClCompile Include="ChunkGeneratorSystem.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="ChunkLoadingOperation.cpp">
+    <ClCompile Include="Chunk.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Chunk.cpp">
+    <ClCompile Include="ChunkIOOperation.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkContainer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Position.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -121,12 +127,6 @@
     <ClInclude Include="Chunk.h">
       <Filter>Headerdateien\Systems\ChunkSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ChunkLoadingOperation.h">
-      <Filter>Headerdateien\Systems\ChunkSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="ChunkLoadingOperationQueue.h">
-      <Filter>Headerdateien\Systems\ChunkSystem</Filter>
-    </ClInclude>
     <ClInclude Include="WorldGenerator.h">
       <Filter>Headerdateien\Systems\ChunkGenerator</Filter>
     </ClInclude>
@@ -136,7 +136,16 @@
     <ClInclude Include="ChunkGeneratorSystem.h">
       <Filter>Headerdateien\Systems\ChunkGenerator</Filter>
     </ClInclude>
-    <ClInclude Include="ChunkPosition.h">
+    <ClInclude Include="ChunkIOOperation.h">
+      <Filter>Headerdateien\Systems\ChunkSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkIOOperationQueue.h">
+      <Filter>Headerdateien\Systems\ChunkSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkContainer.h">
+      <Filter>Headerdateien\Systems\ChunkSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Position.h">
       <Filter>Headerdateien\Systems\ChunkSystem</Filter>
     </ClInclude>
   </ItemGroup>

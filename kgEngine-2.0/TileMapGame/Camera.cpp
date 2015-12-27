@@ -10,7 +10,7 @@ namespace kg
 		throw new bad_function_call();
 	}
 
-	void Camera::init( Engine& engine, World& world, ComponentManager& thisEntity )
+	void Camera::init( Engine& engine, const World& world, const ComponentManager& thisEntity )
 	{
 		r_transformation = thisEntity.getComponent<Transformation>();
 

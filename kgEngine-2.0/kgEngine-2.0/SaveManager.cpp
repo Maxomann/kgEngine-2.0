@@ -105,12 +105,12 @@ namespace kg
 	{
 		//return false if file does not exist
 		if( !exists( path( string( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION ) ) ) )
-			return;
+			return boost::none;
 
 		fstream file( SAVEGAME_FOLDER + "/" + m_openSavegameName + "/" + filename + SAVE_FILE_EXTENSION,
 					  fstream::in );
 		if( !file.is_open() )
-			return;
+			return boost::none;
 
 		vector<string> lines;
 		string line;

@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Transformation.h"
-#include "ChunkPosition.h"
+#include "Position.h"
 
 namespace kg
 {
@@ -22,7 +22,7 @@ namespace kg
 
 		virtual Plugin::Id getPluginId() const override;
 
-		std::vector<Entity> generateChunk( Engine& engine, World& world, const ChunkPosition& chunkPositionInChunks );
+		std::vector<Entity> generateChunk( Engine& engine, World& world, const Position2d& chunkPositionInChunks );
 
 		virtual const size_t& getRTTI_hash() const override;
 

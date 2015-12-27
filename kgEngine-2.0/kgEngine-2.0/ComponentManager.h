@@ -33,7 +33,7 @@ namespace kg
 		//passed reference will be nullptr after function call!
 		void addComponent( std::unique_ptr<Component>& component );
 
-		void initComponentsByImportance( Engine& engine, World& world );
+		void initComponentsByImportance( Engine& engine, const World& world );
 
 		template<class T>
 		inline T* getComponent()const

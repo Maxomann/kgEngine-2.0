@@ -4,7 +4,8 @@
 #include "ChunkGeneratorSystem.h"
 #include "GraphicsSystem.h"
 #include "Chunk.h"
-#include "ChunkLoadingOperationQueue.h"
+#include "ChunkIOOperationQueue.h"
+#include "ChunkContainer.h"
 
 namespace kg
 {
@@ -20,24 +21,15 @@ namespace kg
 		}m_configValues;
 
 		// CHUNK LOAD STATE DATA:
+		ChunkIOOperationQueue m_chunkIOOperationQueue;
+		ChunkContainer m_chunks;//unloaded chunks will not be removed from this container
+
 		int m_chunkLoadRadiusAroundCamera;
-		std::vector<Chunk> m_chunks;
-		ChunkLoadingOperationQueue m_chunkLoadingOperationQueue;
-		bool loadChunkFromFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );//returns false if file did not exist
-		void saveChunkToFile( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
+		void ensureChunksOnLoadUnloadListAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector3i>& cameraPositions );
 
-		void addChunkToLoadQueue( const sf::Vector2i& chunkPosition );
-		void addChunkToUnloadQueue( const sf::Vector2i& chunkPosition );
-		void ensureChunksOnLoadUnloadListAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector2i>& cameraPositions );
-
-		int m_chunkLoadCountPerFrame;
-		std::list<sf::Vector2i> m_chunkLoadQueue;
-		std::list<sf::Vector2i> m_chunkUnloadQueue;
-		//returns true if a chunk has been loaded, false if it was already loaded
-		bool ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
+		bool ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk );
 		//returns true if a chunk has been unloaded, false if it was already unloaded
-		bool ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, const sf::Vector2i& chunkPosition );
-		void loadAndUnloadChunksFromQueue( Engine& engine, World& world, SaveManager& saveManager );
+		bool ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk );
 
 		// ENTITY POSITION DATA:
 		std::map< int, std::map<int, EntityPointerContainer >> m_chunkData;//int x, int y
@@ -52,6 +44,7 @@ namespace kg
 		void m_onSavegameClosed();
 
 	public:
+		~ChunkSystem();
 
 		virtual void init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile );
 
