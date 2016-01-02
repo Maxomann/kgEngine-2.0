@@ -6,7 +6,7 @@ namespace kg
 {
 	ChunkSystem::~ChunkSystem()
 	{
-		m_chunkIOOperationQueue.finishAllOperations();
+		m_chunkIOOperationQueue.completeAllOperations();
 	}
 
 	void ChunkSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
@@ -28,8 +28,9 @@ namespace kg
 		if( !m_configValues.chunkLoadCountPerFrame->size() )
 			*m_configValues.chunkLoadCountPerFrame = CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT;
 
+		// apply config values
 		m_chunkLoadRadiusAroundCamera = boost::lexical_cast< int >(*m_configValues.chunkLoadRadiusAroundCamera);
-		m_chunkLoadCountPerFrame = boost::lexical_cast< int >(*m_configValues.chunkLoadCountPerFrame);
+		m_chunkIOOperationQueue.setChunkIOCountPerFrame( boost::lexical_cast< int >(*m_configValues.chunkLoadCountPerFrame) );
 
 		return;
 	}
@@ -43,12 +44,12 @@ namespace kg
 	{
 		auto cameras = world.getSystem<GraphicsSystem>()->getCameras();
 
-		std::vector<sf::Vector2i> cameraPositions;
+		std::vector<Position2d> cameraPositions;
 		for( const auto& camera : cameras )
-			cameraPositions.push_back( camera->getComponent<Transformation>()->getPosition() );
-		ensureChunksOnLoadUnloadListAroundCameraPositions( engine, world, saveManager, cameraPositions );
+			cameraPositions.push_back( camera->getComponent<Transformation>()->getPosition().toPosition2d() );
+		loadUnloadChunksAroundCameraPositions( engine, world, saveManager, cameraPositions );
 
-		loadAndUnloadChunksFromQueue( engine, world, saveManager );
+		m_chunkIOOperationQueue.finishPreparedOperations();
 
 		return;
 	}
@@ -72,9 +73,9 @@ namespace kg
 	{
 		if( entity->hasComponent<Transformation>() )
 		{
-			m_connectToSignal( entity->getComponent<Transformation>()->s_positionChanged,
-							   function<void( const Vector2i& )>(
-								   bind( &ChunkSystem::m_onEntityPositionChanged,
+			m_connectToSignal( entity->getComponent<Transformation>()->s_position2dChanged,
+							   function<void( const Position2d& )>(
+								   bind( &ChunkSystem::m_onEntityPosition2dChanged,
 										 this,
 										 entity,
 										 placeholders::_1 ) ) );
@@ -85,36 +86,32 @@ namespace kg
 
 	void ChunkSystem::m_refreshChunkInformation( Entity* entity )
 	{
-		auto newChunk = calculateChunkForPosition( entity->getComponent<Transformation>()->getPosition() );
+		auto transformationComponent = entity->getComponent<Transformation>();
 
-		auto findResult = m_entityData.find( entity );
-		if( findResult != m_entityData.end() )
+		auto newChunkPosition =
+			calculateChunkPositionForPosition2d( transformationComponent->getPosition().toPosition2d() );
+
+		auto oldChunkPosition = transformationComponent->getChunkPosition();
+		if( oldChunkPosition )
 		{
 			//entity is already registered
-			auto oldChunk = findResult->second;
-			if( oldChunk != newChunk )//only update if the chunk changed
+			if( *oldChunkPosition != newChunkPosition )//only update if the chunk changed
 			{
-				//update entityData
-				m_entityData.at( entity ) = newChunk;
-
 				//remove from old chunk
-				auto& oldChunkData = m_chunkData.at( oldChunk.x ).at( oldChunk.y );
-				oldChunkData.erase( find( oldChunkData.begin(), oldChunkData.end(), entity ) );
+				m_chunks.getChunk( *oldChunkPosition ).removeEntity( entity );
 
 				//add to new chunk
-				m_chunkData[newChunk.x][newChunk.y].push_back( entity );
+				m_chunks.getChunk( newChunkPosition ).addEntity( entity );
 			}
 		}
 		else
 		{
 			//entity is going to be registered
-			m_entityData[entity] = newChunk;
-			//add to new chunk
-			m_chunkData[newChunk.x][newChunk.y].push_back( entity );
+			m_chunks.getChunk( newChunkPosition ).addEntity( entity );
 		}
 	}
 
-	void ChunkSystem::m_onEntityPositionChanged( Entity* entity, const sf::Vector2i& newPosition )
+	void ChunkSystem::m_onEntityPosition2dChanged( Entity* entity, const Position2d& newPosition )
 	{
 		m_refreshChunkInformation( entity );
 	}
@@ -123,38 +120,34 @@ namespace kg
 	{
 		if( entity->hasComponent<Transformation>() )
 		{
-			auto currentChunk = getChunkOfEntity( entity );
-			auto& chunkData = m_chunkData.at( currentChunk.x ).at( currentChunk.y );
-			auto it = std::find( chunkData.begin(), chunkData.end(), entity );
-			chunkData.erase( it );
-			m_entityData.erase( entity );
+			auto chunkPosition = entity->getComponent<Transformation>()->getChunkPosition();
+
+			if( chunkPosition )
+				m_chunks.getChunk( *chunkPosition ).removeEntity( entity );
 		}
 	}
 
-	const ChunkSystem::EntityPointerContainer& ChunkSystem::getEntitiesInChunk( const sf::Vector2i& chunk ) const
+	const ChunkSystem::EntityPointerContainer& ChunkSystem::getEntitiesInChunk( const ChunkPosition& chunkPosition )const
 	{
-		auto findResult = m_chunkData.find( chunk.x );
-		if( findResult != m_chunkData.end() )
-		{
-			auto findResultY = findResult->second.find( chunk.y );
-			if( findResultY != findResult->second.end() )
-			{
-				return findResultY->second;
-			}
-		}
-		return m_emptyList;
+		if( doesChunkExist( chunkPosition ) )
+			m_chunks.getChunk_const( chunkPosition ).getEntities();
+		else
+			return container_null;
 	}
 
-	sf::Vector2i ChunkSystem::calculateChunkForPosition( const sf::Vector2i& position )
+	ChunkPosition ChunkSystem::calculateChunkPositionForPosition2d( const Position2d& position2d )
 	{
-		auto chunk = position / Constants::CHUNK_SIZE;
-		if( position.x < 0 )
-			chunk.x -= 1;
+		ChunkPosition chunkPosition( position2d.x / Constants::CHUNK_SIZE,
+									 position2d.y / Constants::CHUNK_SIZE,
+									 position2d.worldLayer );
 
-		if( position.y < 0 )
-			chunk.y -= 1;
+		if( chunkPosition.x < 0 )
+			chunkPosition.x -= 1;
 
-		return chunk;
+		if( chunkPosition.y < 0 )
+			chunkPosition.y -= 1;
+
+		return chunkPosition;
 	}
 
 	void ChunkSystem::saveChangesToConfigFile( std::shared_ptr<ConfigFile>& configFile )
@@ -167,90 +160,79 @@ namespace kg
 		return type_hash;
 	}
 
-	const sf::Vector2i& ChunkSystem::getChunkOfEntity( Entity* entity )
-	{
-		auto& retVal = m_entityData.at( entity );
-		return retVal;
-		// out_of_range:
-		// entity is not registered in ChunkSystem
-		// possible reasons:
-		// entity has not been added to World
-		// or
-		// entity is not in world anymore
-		// or
-		// its a bug -.-
-	}
-
 	void ChunkSystem::saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager )
 	{
 		saveAllLoadedChunks( engine, world, saveManager );
 		saveManager.saveSystems( world );
 	}
 
-	void ChunkSystem::ensureChunksOnLoadUnloadListAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector3i>& cameraPositions )
+	void ChunkSystem::loadUnloadChunksAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<Position2d>& cameraPositions )
 	{
-		vector<Vector2i> chunksToEnsureLoaded;
+		vector<Position2d> chunksToEnsureLoaded;
 
-		vector<Vector2i> chunkPositions;
+		vector<Position2d> cameraChunkPositions;
 		for( const auto& el : cameraPositions )
-			chunkPositions.push_back( calculateChunkForPosition( el ) );
+			cameraChunkPositions.push_back( calculateChunkPositionForPosition2d( el ) );
 
 		//add chunks that should be ensured to be loaded
-		for( const auto& position : chunkPositions )
+		for( const auto& cameraChunkPosition : cameraChunkPositions )
 		{
-			vector<Vector2i> temp;
+			vector<ChunkPosition> chunksToEnsureLoadedForCameraPosition;
 
 			for( int x = (-1 * m_chunkLoadRadiusAroundCamera); x <= m_chunkLoadRadiusAroundCamera; ++x )
 			{
 				for( int y = (-1 * m_chunkLoadRadiusAroundCamera); y <= m_chunkLoadRadiusAroundCamera; ++y )
 				{
-					auto absoluteChunkPosition = Vector2i( position.x + x, position.y + y );
+					auto absoluteChunkPosition = ChunkPosition( cameraChunkPosition.x + x,
+																cameraChunkPosition.y + y,
+																cameraChunkPosition.worldLayer );
 
 					if( length( sf::Vector2i( x, y ) ) < m_chunkLoadRadiusAroundCamera )
-						temp.push_back( absoluteChunkPosition );
+						chunksToEnsureLoadedForCameraPosition.push_back( absoluteChunkPosition );
 				}
 			}
 
 			//sort chunksToEnsureLoaded
-			sort( begin( temp ), end( temp ), [&]( const Vector2i& lhs, const Vector2i& rhs )
+			sort( begin( chunksToEnsureLoadedForCameraPosition ),
+				  end( chunksToEnsureLoadedForCameraPosition ),
+				  [&]( const ChunkPosition& lhs,
+					   const ChunkPosition& rhs )
 			{
-				return (length( rhs - position ) > length( lhs - position ));
+				auto lengthRhs = length( rhs.toPositionXY().toVector2i() - cameraChunkPosition.toPositionXY().toVector2i() );
+				auto lengthLhs = length( lhs.toPositionXY().toVector2i() - cameraChunkPosition.toPositionXY().toVector2i() );
+
+				return lengthRhs > lengthLhs;
 			} );
-			chunksToEnsureLoaded.insert( end( chunksToEnsureLoaded ), begin( temp ), end( temp ) );
+			chunksToEnsureLoaded.insert( end( chunksToEnsureLoadedForCameraPosition ),
+										 begin( chunksToEnsureLoadedForCameraPosition ),
+										 end( chunksToEnsureLoaded ) );
 		}
 
 		/*unload chunks*/
 		//for every chunks that is loaded atm and is not in chunksToEnsureLoaded: unload
-		for( const auto& x : m_chunks )
+		for( auto& chunk : m_chunks.getAllLoadedChunks() )
 		{
-			for( const auto& y : x.second )
+			if( find( begin( chunksToEnsureLoaded ), end( chunksToEnsureLoaded ), chunk->getPosition() )
+				==
+				end( chunksToEnsureLoaded ) )
 			{
-				if( y.second == true )//if chunk is loaded atm
-				{
-					sf::Vector2i chunkPosition( x.first, y.first );
-					if( find( begin( chunksToEnsureLoaded ), end( chunksToEnsureLoaded ), chunkPosition )
-						==
-						end( chunksToEnsureLoaded ) )
-					{
-						//chunk is not on ensure loaded list
-						addChunkToUnloadQueue( chunkPosition );
-					}
-				}
+				//chunk is not on ensure loaded list
+				ensureChunkUnloaded( engine, world, saveManager, *chunk );
 			}
 		}
 
 		/*load chunks*/
-		for( const auto& el : chunksToEnsureLoaded )
-			addChunkToLoadQueue( el );
+		for( const auto& position : chunksToEnsureLoaded )
+			ensureChunkLoaded( engine, world, saveManager, m_chunks.getChunk( position ) );
 	}
 
-	bool ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk )
+	void ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk )
 	{
 		if( !chunk.isLoaded() )
 			m_chunkIOOperationQueue.addOperation( make_unique<ChunkLoadOperation>( engine, world, saveManager, chunk ) );
 	}
 
-	bool ChunkSystem::ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk )
+	void ChunkSystem::ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk )
 	{
 		if( chunk.isLoaded() )
 			m_chunkIOOperationQueue.addOperation( make_unique<ChunkUnloadOperation>( engine, world, saveManager, chunk ) );
@@ -258,21 +240,13 @@ namespace kg
 
 	void ChunkSystem::saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager )
 	{
-		for( const auto& x : m_chunks )
-		{
-			for( const auto& y : x.second )
-			{
-				if( y.second )
-					saveChunkToFile( engine, world, saveManager, Vector2i( x.first, y.first ) );
-			}
-		}
+		for( auto& chunk : m_chunks.getAllLoadedChunks() )
+			m_chunkIOOperationQueue.addOperation( make_unique<ChunkSaveOperation>( engine, world, saveManager, chunk ) );
 	}
 
 	void ChunkSystem::m_onSavegameClosed()
 	{
-		m_chunkIOOperationQueue.finishAllOperations();
-		m_chunkData.clear();
-		m_entityData.clear();
+		m_chunkIOOperationQueue.completeAllOperations();
 		m_chunks.clear();
 	}
 

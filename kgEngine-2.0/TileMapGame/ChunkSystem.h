@@ -25,21 +25,19 @@ namespace kg
 		ChunkContainer m_chunks;//unloaded chunks will not be removed from this container
 
 		int m_chunkLoadRadiusAroundCamera;
-		void ensureChunksOnLoadUnloadListAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<sf::Vector3i>& cameraPositions );
+		void loadUnloadChunksAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<Position2d>& cameraPositions );
 
-		bool ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk );
+		void ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk );
 		//returns true if a chunk has been unloaded, false if it was already unloaded
-		bool ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk );
+		void ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk );
 
 		// ENTITY POSITION DATA:
-		std::map< int, std::map<int, EntityPointerContainer >> m_chunkData;//int x, int y
-		std::map< Entity*, sf::Vector2i > m_entityData;
-		const EntityPointerContainer m_emptyList = EntityPointerContainer();//only for returnValue in getEntitiesInChunk()
+		EntityPointerContainer container_null = EntityPointerContainer();//empty container for getEntitiesInChunk
 		void m_refreshChunkInformation( Entity* entity );
 
 		void m_onEntityAddedToWorld( Entity* entity );
 		void m_onEntityRemovedFromWorld( Entity* entity );
-		void m_onEntityPositionChanged( Entity* entity, const sf::Vector2i& newPosition );
+		void m_onEntityPosition2dChanged( Entity* entity, const Position2d& newPosition );
 
 		void m_onSavegameClosed();
 
@@ -67,16 +65,13 @@ namespace kg
 		static const size_t type_hash;
 
 		// returns a reference to the internal container
-		const EntityPointerContainer& getEntitiesInChunk( const sf::Vector2i& chunk )const;
-
-		//entity must be registered in world
-		const sf::Vector2i& getChunkOfEntity( Entity* entity );
+		const EntityPointerContainer& getEntitiesInChunk( const ChunkPosition& chunkPosition )const;
 
 		void saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager );
 		void saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager );
 
 		// returns the position in chunks for the position of an entity
-		static sf::Vector2i calculateChunkForPosition( const sf::Vector2i& position );
+		static ChunkPosition calculateChunkPositionForPosition2d( const Position2d& position2d );
 
 		//configuration default values:
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA;

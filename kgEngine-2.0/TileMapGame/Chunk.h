@@ -1,23 +1,25 @@
 #pragma once
 #include "stdafx.h"
-#include "Position.h"
+#include "Transformation.h"
 
 namespace kg
 {
 	class Chunk
 	{
-		const Position2d m_position;
+		const ChunkPosition m_position;
 		World::EntityPointerContainer m_entities;
 
 		// IO
 		bool m_isLoaded = false;
 
 	public:
-		Chunk( const Position2d& position );
+		Chunk( const ChunkPosition& position );
 
-		const Position2d& getPosition()const;
+		const ChunkPosition& getPosition()const;
 
-		void addEntity( const Entity*& entity );
+		void addEntity( Entity* entity );
+		void removeEntity( Entity* entity );
+
 		const World::EntityPointerContainer& getEntities()const;
 
 		// IO
@@ -25,6 +27,6 @@ namespace kg
 		void setLoadState( bool isLoaded );
 
 		std::string getSavename()const;//return Chunk::getChunkSavename(thisPostion);
-		static std::string getChunkSavename( const Position2d& chunkPosition );
+		static std::string getChunkSavename( const ChunkPosition& chunkPosition );
 	};
 }

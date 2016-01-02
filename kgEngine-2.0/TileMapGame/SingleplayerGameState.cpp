@@ -14,7 +14,7 @@ namespace kg
 	{
 		auto camera = m_getValidCamera();
 
-		camera->getComponent<Transformation>()->move( distance );
+		camera->getComponent<Transformation>()->moveXY( distance );
 	}
 
 	void SingleplayerGameState::m_onSavegameOpened( Engine& engine, World& world )

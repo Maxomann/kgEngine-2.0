@@ -9,6 +9,7 @@ namespace kg
 		sf::FloatRect m_globalBounds;
 
 		Position m_position;
+		boost::optional<ChunkPosition> m_chunkPosition;//if not available it has not been set yet
 		float m_rotation = 0;//in degree
 		sf::Vector2i m_size;
 
@@ -39,18 +40,26 @@ namespace kg
 		void setPosition( const Position& position );
 		const Position& getPosition()const;
 
-		void setPositionXY( const sf::Vector2i& position );
-		sf::Vector2i getPositionXY()const;
+		void moveXYsetWorldLayer( const sf::Vector2i& offsetXY, int worldLayer );
+
+		void setPositionXY( const PositionXY& position );
+		PositionXY getPositionXY()const;
 		void moveXY( const sf::Vector2i& offsetXY );
 
 		void setZValue( int zValue );
 		int getZValue()const;
 
-		void setPositionXYZ( const sf::Vector3i& position );
-		sf::Vector3i getPositionXYZ()const;
+		void setPositionXYZ( const PositionXYZ& position );
+		PositionXYZ getPositionXYZ()const;
 
-		int getWorldLayer()const;
 		void setWorldLayer( int layer );
+		int getWorldLayer()const;
+
+		const boost::optional<ChunkPosition>& getChunkPosition()const;
+		//DO NOT CALL THIS. IT WILL CAUSE ERRORS. Only Chunk should call this
+		void setChunkPostion( ChunkPosition chunkPosition );
+		//DO NOT CALL THIS. IT WILL CAUSE ERRORS. Only Chunk should call this
+		void removeChunkPosition();
 
 		//Rotation
 		void setRotation( const float rotationInDegree );
@@ -67,7 +76,6 @@ namespace kg
 		//GlobalBounds
 		sf::FloatRect getGlobalBounds()const;/*thread safe*/
 		bool intersects( const sf::FloatRect& rect )const;
-		sf::Vector3i getXYZValues()const;
 
 		static const std::string PLUGIN_NAME;
 
@@ -77,8 +85,8 @@ namespace kg
 		Signal<> s_transformationChanged;//any of: Position, Rotation, Size
 
 		Signal<const Position&> s_positionChanged;
-		Signal<const sf::Vector2i&> s_positionXYChanged;
-		Signal<const sf::Vector3i&> s_positionXYZChanged;
+		Signal<const Position2d&> s_position2dChanged;
+
 		Signal<const float&> s_rotationChanged;
 		Signal<const sf::Vector2i&> s_sizeChanged;
 

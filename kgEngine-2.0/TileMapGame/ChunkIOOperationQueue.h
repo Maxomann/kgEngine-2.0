@@ -13,8 +13,11 @@ namespace kg
 		// calls ChunkIOOperation::execute_prepare()
 		void addOperation( std::unique_ptr<ChunkIOOperation>&& operation );
 
-		void finishPreparedOperations( World& world, std::vector<Chunk>& chunks );
+		// call this in ChunkSystem::update()
+		//  calls ChunkIOOperation::execute_finish()
+		void finishPreparedOperations();
 
-		void finishAllOperations( World& world, std::vector<Chunk>& chunks );
+		// may take a long time since this function may wait for many threads to finish
+		void completeAllOperations();
 	};
 }

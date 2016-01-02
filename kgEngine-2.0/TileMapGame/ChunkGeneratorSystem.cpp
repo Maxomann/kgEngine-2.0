@@ -22,11 +22,12 @@ namespace kg
 				tilePositionRelativeToChunkInPixelX += transform->getSize().x / 2;
 				tilePositionRelativeToChunkInPixelY += transform->getSize().y / 2;
 
-				Vector3i tilePosition( chunkPositionInPixelX + tilePositionRelativeToChunkInPixelX,
+				Position tilePosition( chunkPositionInPixelX + tilePositionRelativeToChunkInPixelX,
 									   chunkPositionInPixelY + tilePositionRelativeToChunkInPixelY,
-									   Constants::STANDART_TILE_ZVALUE );
+									   Constants::STANDART_TILE_ZVALUE,
+									   chunkPositionInChunks.worldLayer );
 
-				transform->setPositionXYZ( tilePosition );
+				transform->setPosition( tilePosition );
 
 				entities.push_back( move( tile ) );
 			}

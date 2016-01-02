@@ -63,14 +63,6 @@ namespace kg
 		return m_globalBounds.intersects( rect );
 	}
 
-	sf::Vector3i Transformation::getXYZValues() const
-	{
-		auto retVal = Vector3i( m_globalBounds.left,
-								m_globalBounds.top + m_globalBounds.height,//feet position
-								m_zValue );
-		return retVal;
-	}
-
 	const size_t& Transformation::getRTTI_hash() const
 	{
 		return type_hash;
@@ -82,7 +74,7 @@ namespace kg
 
 		s_transformationChanged();
 		s_positionChanged( m_position );
-		s_positionXYChanged( sf::Vector2i( m_position.x, m_position.y ) );
+		s_position2dChanged( m_position.toPosition2d() );
 	}
 
 	const Position& Transformation::getPosition() const
@@ -90,7 +82,18 @@ namespace kg
 		return m_position;
 	}
 
-	void Transformation::setPositionXY( const sf::Vector2i& position )
+	void Transformation::moveXYsetWorldLayer( const sf::Vector2i& offsetXY, int worldLayer )
+	{
+		m_position.x = offsetXY.x;
+		m_position.y = offsetXY.y;
+		m_position.worldLayer = worldLayer;
+
+		s_transformationChanged();
+		s_positionChanged( m_position );
+		s_position2dChanged( m_position.toPosition2d() );
+	}
+
+	void Transformation::setPositionXY( const PositionXY& position )
 	{
 		m_position.x = position.x;
 		m_position.y = position.y;
@@ -99,12 +102,12 @@ namespace kg
 
 		s_transformationChanged();
 		s_positionChanged( m_position );
-		s_positionXYChanged( sf::Vector2i( m_position.x, m_position.y ) );
+		s_position2dChanged( m_position.toPosition2d() );
 	}
 
-	sf::Vector2i Transformation::getPositionXY() const
+	kg::PositionXY Transformation::getPositionXY() const
 	{
-		return sf::Vector2i( m_position.x, m_position.y );
+		return m_position.toPositionXY();
 	}
 
 	void Transformation::moveXY( const sf::Vector2i& offsetXY )
@@ -116,7 +119,7 @@ namespace kg
 
 		s_transformationChanged();
 		s_positionChanged( m_position );
-		s_positionXYChanged( sf::Vector2i( m_position.x, m_position.y ) );
+		s_position2dChanged( m_position.toPosition2d() );
 	}
 
 	void Transformation::setRotation( const float rotationInDegree )
@@ -209,16 +212,15 @@ namespace kg
 		return m_position.zValue;
 	}
 
-	void Transformation::setPositionXYZ( const sf::Vector3i& position )
+	void Transformation::setPositionXYZ( const PositionXYZ& position )
 	{
 		m_position.x = position.x;
 		m_position.y = position.y;
-		m_position.zValue = position.z;
+		m_position.zValue = position.zValue;
 
 		s_transformationChanged();
 		s_positionChanged( m_position );
-		s_positionXYChanged( sf::Vector2i( position.x, position.y ) );
-		s_positionXYZChanged( position );
+		s_position2dChanged( m_position.toPosition2d() );
 	}
 
 	void Transformation::setZValue( int zValue )
@@ -240,11 +242,27 @@ namespace kg
 
 		s_transformationChanged();
 		s_positionChanged( m_position );
+		s_position2dChanged( m_position.toPosition2d() );
 	}
 
-	sf::Vector3i Transformation::getPositionXYZ() const
+	const boost::optional<ChunkPosition>& Transformation::getChunkPosition() const
 	{
-		return sf::Vector3i( m_position.x, m_position.y, m_position.zValue );
+		return m_chunkPosition;
+	}
+
+	void Transformation::setChunkPostion( ChunkPosition chunkPosition )
+	{
+		m_chunkPosition = chunkPosition;
+	}
+
+	void Transformation::removeChunkPosition()
+	{
+		m_chunkPosition = boost::none;
+	}
+
+	kg::PositionXYZ Transformation::getPositionXYZ() const
+	{
+		return m_position.toPositionXYZ();
 	}
 
 	const std::string Transformation::PLUGIN_NAME = "Transformation";
