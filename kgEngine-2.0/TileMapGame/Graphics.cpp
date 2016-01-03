@@ -38,7 +38,7 @@ namespace kg
 	{
 		r_transformation = thisEntity.getComponent<Transformation>();
 
-		m_connectToSignal( r_transformation->s_positionChanged, &Graphics::onPositionChanged );
+		m_connectToSignal( r_transformation->s_position2dChanged, &Graphics::onPositionChanged );
 		m_connectToSignal( r_transformation->s_sizeChanged, &Graphics::onSizeChanged );
 		m_connectToSignal( r_transformation->s_rotationChanged, &Graphics::onRotationChanged );
 
@@ -106,9 +106,9 @@ namespace kg
 		m_sprite.scale( scale );
 	}
 
-	void Graphics::onPositionChanged( const sf::Vector2i& newPosition )
+	void Graphics::onPositionChanged( const Position2d& newPosition )
 	{
-		m_sprite.setPosition( sf::Vector2f( newPosition ) );
+		m_sprite.setPosition( sf::Vector2f( newPosition.toPositionXY().toVector2i() ) );
 	}
 
 	void Graphics::onRotationChanged( const float& newRotation )

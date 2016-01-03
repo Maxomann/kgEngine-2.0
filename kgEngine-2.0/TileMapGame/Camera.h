@@ -13,7 +13,7 @@ namespace kg
 
 		sf::View m_view;
 
-		void m_onPositionChanged( const sf::Vector2i& newPosition );
+		void m_onPositionChanged( const Position2d& newPosition );
 		void m_onSizeChanged( const sf::Vector2i& newSize );
 		void m_setViewSize( const sf::Vector2i& size, const float& zoomFactor );
 

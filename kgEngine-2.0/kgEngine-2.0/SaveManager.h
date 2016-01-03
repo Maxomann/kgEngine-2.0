@@ -38,7 +38,7 @@ namespace kg
 											  const std::vector<EntitySaveInformation>& saveInformation );
 
 		// NOT THREAD SAFE
-		std::vector<Entity> generateEntitiesFromSaveInformation( Engine& engine, World& world, const std::vector<EntitySaveInformation>& information );
+		std::vector<Entity> generateEntitiesFromSaveInformation( Engine& engine, World& world, std::vector<EntitySaveInformation>& information );
 
 		// NOT THREAD SAFE
 		std::vector<EntitySaveInformation> generateSaveInformationFromEntities( const World::EntityPointerContainer& entities );

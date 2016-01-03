@@ -129,7 +129,7 @@ namespace kg
 
 	const ChunkSystem::EntityPointerContainer& ChunkSystem::getEntitiesInChunk( const ChunkPosition& chunkPosition )const
 	{
-		if( doesChunkExist( chunkPosition ) )
+		if( m_chunks.doesChunkExist( chunkPosition ) )
 			m_chunks.getChunk_const( chunkPosition ).getEntities();
 		else
 			return container_null;

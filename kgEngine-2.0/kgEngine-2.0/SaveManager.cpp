@@ -140,7 +140,7 @@ namespace kg
 		return;
 	}
 
-	std::vector<Entity> SaveManager::generateEntitiesFromSaveInformation( Engine& engine, World& world, const std::vector<EntitySaveInformation>& information )
+	std::vector<Entity> SaveManager::generateEntitiesFromSaveInformation( Engine& engine, World& world, std::vector<EntitySaveInformation>& information )
 	{
 		vector<Entity> entities;
 

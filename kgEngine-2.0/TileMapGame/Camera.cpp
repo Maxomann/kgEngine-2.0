@@ -14,7 +14,7 @@ namespace kg
 	{
 		r_transformation = thisEntity.getComponent<Transformation>();
 
-		m_connectToSignal( r_transformation->s_positionChanged, &Camera::m_onPositionChanged );
+		m_connectToSignal( r_transformation->s_position2dChanged, &Camera::m_onPositionChanged );
 		m_connectToSignal( r_transformation->s_sizeChanged, &Camera::m_onSizeChanged );
 	}
 
@@ -43,9 +43,9 @@ namespace kg
 		return ( int )id::ComponentPluginId::CAMERA;
 	}
 
-	void Camera::m_onPositionChanged( const sf::Vector2i& newPosition )
+	void Camera::m_onPositionChanged( const Position2d& newPosition )
 	{
-		m_view.setCenter( sf::Vector2f( newPosition ) );
+		m_view.setCenter( Vector2f( newPosition.toPositionXY().toVector2i() ) );
 	}
 
 	void Camera::m_onSizeChanged( const sf::Vector2i& newSize )
@@ -93,7 +93,7 @@ namespace kg
 	kg::Entity Camera::CREATE( Engine& engine, World& world, const unsigned int& drawDistancePointer )
 	{
 		auto camera = world.createNewTemporaryEntity<Transformation, Camera>( engine, world );
-		camera.getComponent<Transformation>()->setPosition( sf::Vector2i( 0, 0 ) );
+		//camera.getComponent<Transformation>()->setPosition( sf::Vector2i( 0, 0 ) );
 		camera.getComponent<Transformation>()->setSize( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
 		auto cameraComponent = camera.getComponent<Camera>();
 		cameraComponent->setViewport( FloatRect( 0.f, 0.f, 1.f, 1.f ) );
