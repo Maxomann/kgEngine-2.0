@@ -12,6 +12,8 @@ namespace kg
 
 	void ChunkIOOperationQueue::addOperation( std::unique_ptr<ChunkIOOperation>&& operation )
 	{
+		finishAllOperationsOnChunk( operation->getChunkToOperateOn() );
+
 		operation->execute_prepare();
 		operation->execute_main();
 		m_operations.push_back( move( operation ) );
@@ -34,7 +36,7 @@ namespace kg
 			}
 
 		for( auto el : toRemove )
-			m_operations.erase( remove( m_operations.begin(), m_operations.end(), *el ) );
+			m_operations.remove( *el );
 	}
 
 	void ChunkIOOperationQueue::completeAllOperations()

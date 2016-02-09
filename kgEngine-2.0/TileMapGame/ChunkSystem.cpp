@@ -170,12 +170,11 @@ namespace kg
 
 	void ChunkSystem::loadUnloadChunksAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<Position2d>& cameraPositions )
 	{
-		vector<Position2d> chunksToEnsureLoaded;
-
 		vector<Position2d> cameraChunkPositions;
 		for( const auto& el : cameraPositions )
 			cameraChunkPositions.push_back( calculateChunkPositionForPosition2d( el ) );
 
+		vector<Position2d> chunksToEnsureLoaded;
 		//add chunks that should be ensured to be loaded
 		for( const auto& cameraChunkPosition : cameraChunkPositions )
 		{

@@ -90,7 +90,7 @@ namespace kg
 
 	void ChunkUnloadOperation::execute_prepare()
 	{
-		auto& entities = chunkToOperateOn.getEntities();
+		auto entities = chunkToOperateOn.getEntities();
 
 		m_saveInformation = saveManager.generateSaveInformationFromEntities( entities );
 		world.removeEntities( entities );

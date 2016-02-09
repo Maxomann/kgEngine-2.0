@@ -8,8 +8,10 @@ namespace kg
 	{
 		unsigned int m_ioCountPerFrame;
 
-		typedef std::vector<std::unique_ptr<ChunkIOOperation>> OperationQueue;
+		typedef std::list<std::unique_ptr<ChunkIOOperation>> OperationQueue;
 		OperationQueue m_operations;
+
+		void finishAllOperationsOnChunk( const Chunk& chunk );
 
 	public:
 		void setChunkIOCountPerFrame( int chunkIOCount );
@@ -20,7 +22,7 @@ namespace kg
 		void addOperation( std::unique_ptr<ChunkIOOperation>&& operation );
 
 		// call this in ChunkSystem::update()
-		//  calls ChunkIOOperation::execute_finish()
+		// calls ChunkIOOperation::execute_finish()
 		void finishPreparedOperations();
 
 		// may take a long time since this function may wait for many threads to finish
