@@ -2,13 +2,14 @@
 #include "stdafx.h"
 #include "id.h"
 #include "Camera.h"
+#include "ToDrawSortedContainer.h"
 
 namespace kg
 {
 	class GraphicsSystem : public System, public CallbackReciever
 	{
 	private:
-		std::vector<std::tuple<sf::Vector3i, Entity*, Graphics*>> m_toDrawSorted;
+		ToDrawSortedContainer m_toDrawSorted;
 		EntityManager::EntityPointerContainer m_removedEntities;
 
 		EntityManager::EntityPointerContainer m_cameras;

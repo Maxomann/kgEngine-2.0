@@ -27,9 +27,9 @@ namespace kg
 		m_future = async( launch::async, bind( &ChunkIOOperation::execute_main_internal, this ) );
 	}
 
-	bool ChunkIOOperation::isReadyToFinish() const
+	bool ChunkIOOperation::isReadyToFinish()
 	{
-		return m_future._Is_ready();
+		return m_future.wait_for( chrono::milliseconds( 0 ) ) == future_status::ready;
 	}
 
 	ChunkLoadOperation::ChunkLoadOperation( Engine& engine,
@@ -52,6 +52,8 @@ namespace kg
 		{
 			m_entities = chunkGenerator.generateChunk( engine, world, chunkToOperateOn.getPosition() );
 		}
+
+		return;
 	}
 
 	void ChunkLoadOperation::execute_prepare()
@@ -72,7 +74,7 @@ namespace kg
 	ChunkUnloadOperation::ChunkUnloadOperation( Engine& engine,
 												World& world,
 												SaveManager& saveManager,
-												Position2d chunkPosition,
+												ChunkGeneratorSystem& chunkGenerator,
 												Chunk& chunkToUnload )
 		: ChunkIOOperation( engine,
 							world,
@@ -101,7 +103,7 @@ namespace kg
 	ChunkSaveOperation::ChunkSaveOperation( Engine& engine,
 											World& world,
 											SaveManager& saveManager,
-											Position2d chunkPosition,
+											ChunkGeneratorSystem& chunkGenerator,
 											Chunk& chunkToSave )
 		: ChunkIOOperation( engine,
 							world,

@@ -11,6 +11,8 @@ namespace kg
 
 	void ChunkSystem::init( Engine& engine, World& world, SaveManager& saveManager, std::shared_ptr<ConfigFile>& configFile )
 	{
+		r_chunkGeneratorSystem = world.getSystem<ChunkGeneratorSystem>();
+
 		m_connectToSignal( world.s_entity_added, &ChunkSystem::m_onEntityAddedToWorld );
 		m_connectToSignal( world.s_entity_removed, &ChunkSystem::m_onEntityRemovedFromWorld );
 
@@ -130,7 +132,7 @@ namespace kg
 	const ChunkSystem::EntityPointerContainer& ChunkSystem::getEntitiesInChunk( const ChunkPosition& chunkPosition )const
 	{
 		if( m_chunks.doesChunkExist( chunkPosition ) )
-			m_chunks.getChunk_const( chunkPosition ).getEntities();
+			return m_chunks.getChunk_const( chunkPosition ).getEntities();
 		else
 			return container_null;
 	}
@@ -203,9 +205,9 @@ namespace kg
 
 				return lengthRhs > lengthLhs;
 			} );
-			chunksToEnsureLoaded.insert( end( chunksToEnsureLoadedForCameraPosition ),
+			chunksToEnsureLoaded.insert( end( chunksToEnsureLoaded ),
 										 begin( chunksToEnsureLoadedForCameraPosition ),
-										 end( chunksToEnsureLoaded ) );
+										 end( chunksToEnsureLoadedForCameraPosition ) );
 		}
 
 		/*unload chunks*/
@@ -229,19 +231,19 @@ namespace kg
 	void ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk )
 	{
 		if( !chunk.isLoaded() )
-			m_chunkIOOperationQueue.addOperation( make_unique<ChunkLoadOperation>( engine, world, saveManager, chunk ) );
+			m_chunkIOOperationQueue.addOperation( make_unique<ChunkLoadOperation>( engine, world, saveManager, *r_chunkGeneratorSystem, chunk ) );
 	}
 
 	void ChunkSystem::ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk )
 	{
 		if( chunk.isLoaded() )
-			m_chunkIOOperationQueue.addOperation( make_unique<ChunkUnloadOperation>( engine, world, saveManager, chunk ) );
+			m_chunkIOOperationQueue.addOperation( make_unique<ChunkUnloadOperation>( engine, world, saveManager, *r_chunkGeneratorSystem, chunk ) );
 	}
 
 	void ChunkSystem::saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager )
 	{
-		for( auto& chunk : m_chunks.getAllLoadedChunks() )
-			m_chunkIOOperationQueue.addOperation( make_unique<ChunkSaveOperation>( engine, world, saveManager, chunk ) );
+		for( auto chunk : m_chunks.getAllLoadedChunks() )
+			m_chunkIOOperationQueue.addOperation( make_unique<ChunkSaveOperation>( engine, world, saveManager, *r_chunkGeneratorSystem, *chunk ) );
 	}
 
 	void ChunkSystem::m_onSavegameClosed()

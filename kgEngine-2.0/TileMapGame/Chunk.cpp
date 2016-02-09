@@ -10,6 +10,15 @@ namespace kg
 		return "Chunk#" + to_string( chunkPosition.x ) + "#" + to_string( chunkPosition.y ) + "#" + to_string( chunkPosition.worldLayer );
 	}
 
+	Chunk::Chunk( const ChunkPosition& position )
+		:m_position( position )
+	{ }
+
+	const ChunkPosition& Chunk::getPosition() const
+	{
+		return m_position;
+	}
+
 	void Chunk::addEntity( Entity* entity )
 	{
 		//update entityData
@@ -26,6 +35,21 @@ namespace kg
 		transformationComponent->removeChunkPosition();
 
 		m_entities.erase( std::remove( m_entities.begin(), m_entities.end(), entity ), m_entities.end() );
+	}
+
+	const World::EntityPointerContainer& Chunk::getEntities() const
+	{
+		return m_entities;
+	}
+
+	bool Chunk::isLoaded() const
+	{
+		return m_isLoaded;
+	}
+
+	void Chunk::setLoadState( bool isLoaded )
+	{
+		m_isLoaded = isLoaded;
 	}
 
 	std::string Chunk::getSavename() const

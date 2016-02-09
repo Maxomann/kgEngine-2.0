@@ -93,6 +93,7 @@
     <ClCompile Include="ChunkContainer.cpp" />
     <ClCompile Include="ChunkGeneratorSystem.cpp" />
     <ClCompile Include="ChunkIOOperation.cpp" />
+    <ClCompile Include="ChunkIOOperationQueue.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="ChunkSystem.cpp" />
     <ClCompile Include="ConsoleGameState.cpp" />
@@ -103,6 +104,7 @@
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="SingleplayerGameState.cpp" />
     <ClCompile Include="SpriteBatch.cpp" />
+    <ClCompile Include="ToDrawSortedContainer.cpp" />
     <ClCompile Include="Transformation.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +123,7 @@
     <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="SingleplayerGameState.h" />
     <ClInclude Include="SpriteBatch.h" />
+    <ClInclude Include="ToDrawSortedContainer.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Graphics.h" />

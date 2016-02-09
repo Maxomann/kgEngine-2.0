@@ -124,13 +124,7 @@ namespace kg
 
 	void GraphicsSystem::m_onEntityAddedToWorld( Entity* entity )
 	{
-		if( entity->hasComponent<Graphics>() )
-		{
-			const auto transformationComponent = entity->getComponent<Transformation>();
-			m_toDrawSorted.push_back( make_tuple( transformationComponent->getXYZValues(),
-												  entity,
-												  entity->getComponent<Graphics>() ) );
-		}
+		m_toDrawSorted.addEntities_try( { entity } );
 	}
 
 	void GraphicsSystem::m_onEntityRemovedFromWorld( Entity* entity )
@@ -153,17 +147,11 @@ namespace kg
 			return false;
 		} ), m_cameras.end() );
 
-		//remove
-		m_toDrawSorted.erase( std::remove_if( m_toDrawSorted.begin(), m_toDrawSorted.end(), [&]( const tuple<Vector3i, Entity*, Graphics*>& conel )
+		//remove entities
+		for( const auto& el : m_removedEntities )
 		{
-			for( const auto& el : m_removedEntities )
-				if( get<1>( conel ) == el )
-				{
-					m_removedEntities.erase( remove( m_removedEntities.begin(), m_removedEntities.end(), el ), m_removedEntities.end() );
-					return true;
-				}
-			return false;
-		} ), m_toDrawSorted.end() );
+			m_toDrawSorted.removeEntities_try( { el } );
+		}
 
 		m_removedEntities.clear();
 	}
@@ -227,24 +215,6 @@ namespace kg
 	void GraphicsSystem::drawFunction()
 	{
 		r_renderWindow->clear( Color::Green );
-
-		// sort
-		sort( begin( m_toDrawSorted ), end( m_toDrawSorted ), [](
-			const tuple<Vector3i, Entity*, Graphics*>& lhs,
-			const tuple<Vector3i, Entity*, Graphics*>& rhs )
-		{
-			const auto& vecl = get<0>( lhs );
-			const auto& vecr = get<0>( rhs );
-
-			if( vecr.z > vecl.z )
-				return true;
-			else if( vecr.z == vecl.z && vecr.y > vecl.y )
-				return true;
-			else if( vecr.y == vecl.y && vecr.x > vecl.x )
-				return true;
-
-			return false;
-		} );
 
 		// draw
 		for( const auto& camera : m_cameras )

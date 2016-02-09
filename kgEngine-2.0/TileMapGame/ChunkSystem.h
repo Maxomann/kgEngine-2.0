@@ -20,6 +20,8 @@ namespace kg
 			std::string* chunkLoadCountPerFrame;
 		}m_configValues;
 
+		ChunkGeneratorSystem* r_chunkGeneratorSystem;
+
 		// CHUNK LOAD STATE DATA:
 		ChunkIOOperationQueue m_chunkIOOperationQueue;
 		ChunkContainer m_chunks;//unloaded chunks will not be removed from this container

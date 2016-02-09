@@ -9,7 +9,7 @@ namespace kg
 	{
 		auto it = find_if( begin( m_chunks ), end( m_chunks ), [&]( const Chunk& chunk )
 		{
-			chunk.getPosition() == position;
+			return chunk.getPosition() == position;
 		} );
 
 		if( it != end( m_chunks ) )
@@ -25,7 +25,7 @@ namespace kg
 	{
 		auto it = find_if( begin( m_chunks ), end( m_chunks ), [&]( const Chunk& chunk )
 		{
-			chunk.getPosition() == position;
+			return chunk.getPosition() == position;
 		} );
 
 		if( it != end( m_chunks ) )
@@ -38,7 +38,7 @@ namespace kg
 	{
 		auto it = find_if( begin( m_chunks ), end( m_chunks ), [&]( const Chunk& chunk )
 		{
-			chunk.getPosition() == position;
+			return chunk.getPosition() == position;
 		} );
 
 		return (it != end( m_chunks ));

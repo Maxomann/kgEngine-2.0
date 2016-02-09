@@ -3,12 +3,15 @@
 
 namespace kg
 {
+	using PositionType = int;
+
 	struct PositionXY
 	{
-		int x = 0;
-		int y = 0;
+		PositionType x = 0;
+		PositionType y = 0;
 
-		PositionXY( int x, int y );
+		PositionXY() = default;
+		PositionXY( PositionType x, PositionType y );
 		bool operator==( const PositionXY& other )const;
 		bool operator!=( const PositionXY& other )const;
 
@@ -17,11 +20,12 @@ namespace kg
 
 	struct Position2d
 	{
-		int x = 0;
-		int y = 0;
-		int worldLayer = 0;
+		PositionType x = 0;
+		PositionType y = 0;
+		PositionType worldLayer = 0;
 
-		Position2d( int x, int y, int worldLayer );
+		Position2d() = default;
+		Position2d( PositionType x, PositionType y, PositionType worldLayer );
 		bool operator==( const Position2d& other )const;
 		bool operator!=( const Position2d& other )const;
 
@@ -32,11 +36,12 @@ namespace kg
 
 	struct PositionXYZ
 	{
-		int x = 0;
-		int y = 0;
-		int zValue = 0;
+		PositionType x = 0;
+		PositionType y = 0;
+		PositionType zValue = 0;
 
-		PositionXYZ( int x, int y, int z );
+		PositionXYZ() = default;
+		PositionXYZ( PositionType x, PositionType y, PositionType zValue );
 		bool operator==( const PositionXYZ& other )const;
 		bool operator!=( const PositionXYZ& other )const;
 
@@ -45,12 +50,13 @@ namespace kg
 
 	struct Position
 	{
-		int x = 0;
-		int y = 0;
-		int zValue = 0;
-		int worldLayer = 0;
+		PositionType x = 0;
+		PositionType y = 0;
+		PositionType zValue = 0;
+		PositionType worldLayer = 0;
 
-		Position( int x, int y, int zValue, int worldLayer );
+		Position() = default;
+		Position( PositionType x, PositionType y, PositionType zValue, PositionType worldLayer );
 		bool operator==( const Position& other )const;
 		bool operator!=( const Position& other )const;
 

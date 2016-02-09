@@ -27,6 +27,9 @@
     <Filter Include="Headerdateien\Systems\ChunkGenerator">
       <UniqueIdentifier>{1b053ed8-ac89-4863-af21-fc08faadd3ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\Systems\GraphicsSystem">
+      <UniqueIdentifier>{ef2713c7-9c4b-45cf-9e6b-8ddd45dcf38c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="connect.cpp">
@@ -80,6 +83,12 @@
     <ClCompile Include="Position.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="ToDrawSortedContainer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkIOOperationQueue.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
@@ -99,9 +108,6 @@
     </ClInclude>
     <ClInclude Include="constants.h">
       <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicsSystem.h">
-      <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
     <ClInclude Include="SpriteBatch.h">
       <Filter>Headerdateien\Other</Filter>
@@ -147,6 +153,12 @@
     </ClInclude>
     <ClInclude Include="Position.h">
       <Filter>Headerdateien\Systems\ChunkSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsSystem.h">
+      <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="ToDrawSortedContainer.h">
+      <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

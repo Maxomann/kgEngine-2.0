@@ -32,7 +32,7 @@ namespace kg
 		void execute_main();// runs execute_main_internal in a thread
 		virtual void execute_finish() = 0;
 
-		bool isReadyToFinish()const;
+		bool isReadyToFinish();
 	};
 
 	class ChunkLoadOperation : public ChunkIOOperation
@@ -61,7 +61,7 @@ namespace kg
 		ChunkUnloadOperation( Engine& engine,
 							  World& world,
 							  SaveManager& saveManager,
-							  Position2d chunkPosition,
+							  ChunkGeneratorSystem& chunkGenerator,
 							  Chunk& chunkToUnload );
 
 		virtual void execute_main_internal() override;
@@ -79,7 +79,7 @@ namespace kg
 		ChunkSaveOperation( Engine& engine,
 							World& world,
 							SaveManager& saveManager,
-							Position2d chunkPosition,
+							ChunkGeneratorSystem& chunkGenerator,
 							Chunk& chunkToSave );
 
 		virtual void execute_main_internal() override;
