@@ -22,17 +22,6 @@ namespace kg
 		return chunkToOperateOn;
 	}
 
-	void ChunkIOOperation::execute_main()
-	{
-		//m_future = async( launch::async, bind( &ChunkIOOperation::execute_main_internal, this ) );
-	}
-
-	bool ChunkIOOperation::isReadyToFinish()
-	{
-		//return m_future.wait_for( chrono::milliseconds( 0 ) ) == future_status::ready;
-		return true;
-	}
-
 	ChunkLoadOperation::ChunkLoadOperation( Engine& engine,
 											World& world,
 											SaveManager& saveManager,
@@ -45,8 +34,10 @@ namespace kg
 							chunkToLoad )
 	{ }
 
-	void ChunkLoadOperation::execute_main_internal()
+	void ChunkLoadOperation::execute()
 	{
+		chunkToOperateOn.setLoadState( true );
+
 		m_saveInformation = saveManager.loadEntitySaveInformationFromFile( chunkToOperateOn.getSavename() );
 
 		if( !m_saveInformation )
@@ -54,16 +45,6 @@ namespace kg
 			m_entities = chunkGenerator.generateChunk( engine, world, chunkToOperateOn.getPosition() );
 		}
 
-		return;
-	}
-
-	void ChunkLoadOperation::execute_prepare()
-	{
-		chunkToOperateOn.setLoadState( true );
-	}
-
-	void ChunkLoadOperation::execute_finish()
-	{
 		if( m_saveInformation )
 			world.addEntities( saveManager.generateEntitiesFromSaveInformation( engine, world, *m_saveInformation ) );
 		else if( m_entities )
@@ -84,22 +65,16 @@ namespace kg
 							chunkToUnload )
 	{ }
 
-	void ChunkUnloadOperation::execute_main_internal()
-	{
-		saveManager.saveEntitySaveInformationToFile( chunkToOperateOn.getSavename(), m_saveInformation );
-	}
-
-	void ChunkUnloadOperation::execute_prepare()
+	void ChunkUnloadOperation::execute()
 	{
 		auto entities = chunkToOperateOn.getEntities();
 
 		m_saveInformation = saveManager.generateSaveInformationFromEntities( entities );
 		world.removeEntities( entities );
 		chunkToOperateOn.setLoadState( false );
-	}
 
-	void ChunkUnloadOperation::execute_finish()
-	{ }
+		saveManager.saveEntitySaveInformationToFile( chunkToOperateOn.getSavename(), m_saveInformation );
+	}
 
 	ChunkSaveOperation::ChunkSaveOperation( Engine& engine,
 											World& world,
@@ -113,16 +88,9 @@ namespace kg
 							chunkToSave )
 	{ }
 
-	void ChunkSaveOperation::execute_main_internal()
-	{
-		saveManager.saveEntitySaveInformationToFile( chunkToOperateOn.getSavename(), m_saveInformation );
-	}
-
-	void ChunkSaveOperation::execute_prepare()
+	void ChunkSaveOperation::execute()
 	{
 		m_saveInformation = saveManager.generateSaveInformationFromEntities( chunkToOperateOn.getEntities() );
+		saveManager.saveEntitySaveInformationToFile( chunkToOperateOn.getSavename(), m_saveInformation );
 	}
-
-	void ChunkSaveOperation::execute_finish()
-	{ }
 }

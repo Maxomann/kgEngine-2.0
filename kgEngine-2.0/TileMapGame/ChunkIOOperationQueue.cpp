@@ -14,16 +14,10 @@ namespace kg
 			if( (*it)->getChunkToOperateOn() == chunk )
 				operationsToFinish.push_back( it );
 
-		while( operationsToFinish.size() != 0 )
+		for( auto it = operationsToFinish.begin(); it != operationsToFinish.end(); ++it )
 		{
-			for( auto it = operationsToFinish.begin(); it != operationsToFinish.end(); ++it )
-				if( (**it)->isReadyToFinish() )
-				{
-					(**it)->execute_finish();
-					toRemove.push_back( *it );
-					operationsToFinish.erase( it );
-					break;
-				}
+			(**it)->execute();
+			toRemove.push_back( *it );
 		}
 
 		for( auto el : toRemove )
@@ -38,9 +32,6 @@ namespace kg
 	void ChunkIOOperationQueue::addOperation( std::unique_ptr<ChunkIOOperation>&& operation )
 	{
 		finishAllOperationsOnChunk( operation->getChunkToOperateOn() );
-
-		operation->execute_prepare();
-		operation->execute_main();
 		m_operations.push_back( move( operation ) );
 	}
 
@@ -50,15 +41,14 @@ namespace kg
 		vector<OperationQueue::iterator> toRemove;
 
 		for( auto it = m_operations.begin(); it != m_operations.end(); ++it )
-			if( (*it)->isReadyToFinish() )
-			{
-				if( ioCount > m_ioCountPerFrame )
-					break;
+		{
+			if( ioCount > m_ioCountPerFrame )
+				break;
 
-				(*it)->execute_finish();
-				toRemove.push_back( it );
-				ioCount++;
-			}
+			(*it)->execute();
+			toRemove.push_back( it );
+			ioCount++;
+		}
 
 		for( auto el : toRemove )
 			m_operations.remove( *el );
