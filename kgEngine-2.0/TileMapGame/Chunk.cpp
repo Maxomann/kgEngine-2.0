@@ -10,6 +10,11 @@ namespace kg
 		return "Chunk#" + to_string( chunkPosition.x ) + "#" + to_string( chunkPosition.y ) + "#" + to_string( chunkPosition.worldLayer );
 	}
 
+	bool Chunk::operator==( const Chunk& rhs ) const
+	{
+		return m_position == rhs.m_position;
+	}
+
 	Chunk::Chunk( const ChunkPosition& position )
 		:m_position( position )
 	{ }

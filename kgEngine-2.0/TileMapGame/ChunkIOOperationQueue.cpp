@@ -5,6 +5,31 @@ using namespace tgui;
 
 namespace kg
 {
+	void ChunkIOOperationQueue::finishAllOperationsOnChunk( const Chunk& chunk )
+	{
+		vector<OperationQueue::iterator> toRemove;
+		list<OperationQueue::iterator> operationsToFinish;
+
+		for( auto it = m_operations.begin(); it != m_operations.end(); ++it )
+			if( (*it)->getChunkToOperateOn() == chunk )
+				operationsToFinish.push_back( it );
+
+		while( operationsToFinish.size() != 0 )
+		{
+			for( auto it = operationsToFinish.begin(); it != operationsToFinish.end(); ++it )
+				if( (**it)->isReadyToFinish() )
+				{
+					(**it)->execute_finish();
+					toRemove.push_back( *it );
+					operationsToFinish.erase( it );
+					break;
+				}
+		}
+
+		for( auto el : toRemove )
+			m_operations.remove( *el );
+	}
+
 	void ChunkIOOperationQueue::setChunkIOCountPerFrame( int chunkIOCount )
 	{
 		m_ioCountPerFrame = chunkIOCount;

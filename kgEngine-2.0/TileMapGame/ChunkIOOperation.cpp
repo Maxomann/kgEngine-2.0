@@ -24,12 +24,13 @@ namespace kg
 
 	void ChunkIOOperation::execute_main()
 	{
-		m_future = async( launch::async, bind( &ChunkIOOperation::execute_main_internal, this ) );
+		//m_future = async( launch::async, bind( &ChunkIOOperation::execute_main_internal, this ) );
 	}
 
 	bool ChunkIOOperation::isReadyToFinish()
 	{
-		return m_future.wait_for( chrono::milliseconds( 0 ) ) == future_status::ready;
+		//return m_future.wait_for( chrono::milliseconds( 0 ) ) == future_status::ready;
+		return true;
 	}
 
 	ChunkLoadOperation::ChunkLoadOperation( Engine& engine,

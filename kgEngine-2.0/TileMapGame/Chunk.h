@@ -28,5 +28,7 @@ namespace kg
 
 		std::string getSavename()const;//return Chunk::getChunkSavename(thisPostion);
 		static std::string getChunkSavename( const ChunkPosition& chunkPosition );
+
+		bool operator==( const Chunk& rhs )const;
 	};
 }
