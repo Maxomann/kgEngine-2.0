@@ -8,6 +8,8 @@ namespace kg
 {
 	class ChunkIOOperation
 	{
+		std::future<void> m_future;
+
 	protected:
 		Engine& engine;
 		World& world;
@@ -15,6 +17,10 @@ namespace kg
 		ChunkGeneratorSystem& chunkGenerator;
 
 		Chunk& chunkToOperateOn;
+
+		virtual void execute_init_internal() = 0;
+		virtual void execute_main_internal() = 0;
+		virtual void execute_finish_internal() = 0;
 
 	public:
 		ChunkIOOperation( Engine& engine,
@@ -24,8 +30,6 @@ namespace kg
 						  Chunk& chunkToOperateOn );
 
 		Chunk& getChunkToOperateOn()const;
-
-		virtual void execute() = 0;
 
 		void execute_init();
 		void execute_main();
@@ -46,7 +50,11 @@ namespace kg
 							ChunkGeneratorSystem& chunkGenerator,
 							Chunk& chunkToLoad );
 
-		virtual void execute() override;
+		virtual void execute_init_internal() override;
+
+		virtual void execute_main_internal() override;
+
+		virtual void execute_finish_internal() override;
 	};
 
 	class ChunkUnloadOperation : public ChunkIOOperation
@@ -60,7 +68,11 @@ namespace kg
 							  ChunkGeneratorSystem& chunkGenerator,
 							  Chunk& chunkToUnload );
 
-		virtual void execute() override;
+		virtual void execute_init_internal() override;
+
+		virtual void execute_main_internal() override;
+
+		virtual void execute_finish_internal() override;
 	};
 
 	class ChunkSaveOperation : public ChunkIOOperation
@@ -74,6 +86,10 @@ namespace kg
 							ChunkGeneratorSystem& chunkGenerator,
 							Chunk& chunkToSave );
 
-		virtual void execute() override;
+		virtual void execute_init_internal() override;
+
+		virtual void execute_main_internal() override;
+
+		virtual void execute_finish_internal() override;
 	};
 }

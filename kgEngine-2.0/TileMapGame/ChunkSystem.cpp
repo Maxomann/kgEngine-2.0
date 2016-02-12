@@ -214,13 +214,13 @@ namespace kg
 
 	void ChunkSystem::ensureChunkLoaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk )
 	{
-		if( !chunk.isLoaded() )
+		if( (chunk.getState() == Chunk::State::UNLOADED) || (chunk.getState() == Chunk::State::UNLOADING) )
 			m_chunkIOOperationQueue.addOperation( make_unique<ChunkLoadOperation>( engine, world, saveManager, *r_chunkGeneratorSystem, chunk ) );
 	}
 
 	void ChunkSystem::ensureChunkUnloaded( Engine& engine, World& world, SaveManager& saveManager, Chunk& chunk )
 	{
-		if( chunk.isLoaded() )
+		if( (chunk.getState() == Chunk::State::LOADED) || (chunk.getState() == Chunk::State::LOADING) )
 			m_chunkIOOperationQueue.addOperation( make_unique<ChunkUnloadOperation>( engine, world, saveManager, *r_chunkGeneratorSystem, chunk ) );
 	}
 

@@ -9,9 +9,10 @@ namespace kg
 	public:
 		enum class State
 		{
-			UNINITIALIZED,
-			LOADING,
+			UNLOADED,
+			UNLOADING,
 			LOADED,
+			LOADING,
 			ERR
 		};
 
@@ -21,7 +22,7 @@ namespace kg
 		World::EntityPointerContainer m_entities;
 
 		// IO
-		State m_state = State::UNINITIALIZED;
+		State m_state = State::UNLOADED;
 
 	public:
 		Chunk( const ChunkPosition& position );

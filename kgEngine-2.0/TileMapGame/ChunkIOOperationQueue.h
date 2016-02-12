@@ -8,11 +8,12 @@ namespace kg
 	{
 		unsigned int m_ioCountPerFrame;
 
-		typedef std::queue<std::unique_ptr<ChunkIOOperation>> OperationQueue;
+		typedef std::deque<std::unique_ptr<ChunkIOOperation>> OperationQueue;
 		typedef std::list<std::unique_ptr<ChunkIOOperation>> OperationList;
-		std::map<ChunkPosition, OperationQueue> m_addedOperations;//not running yet
-		OperationList m_runningOperations;//not finished yet
+		OperationQueue m_addedOperations;//added, but not running yet
+		OperationList m_runningOperations;//running, not finished yet
 
+		void startAllOperationsOnChunk( const Chunk& chunk );
 		void finishAllOperationsOnChunk( const Chunk& chunk );
 
 		// call this in ChunkSystem::update()

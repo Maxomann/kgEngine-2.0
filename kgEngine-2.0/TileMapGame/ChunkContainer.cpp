@@ -49,7 +49,7 @@ namespace kg
 		std::vector<Chunk*> retVal;
 
 		for( auto& el : m_chunks )
-			if( el.isLoaded() )
+			if( el.getState() == Chunk::State::LOADED )
 				retVal.push_back( &el );
 
 		return retVal;

@@ -22,6 +22,37 @@ namespace kg
 		return chunkToOperateOn;
 	}
 
+	void ChunkIOOperation::execute_init()
+	{
+		execute_init_internal();
+	}
+
+	void ChunkIOOperation::execute_main()
+	{
+		m_future = async( launch::async, bind( &ChunkIOOperation::execute_main_internal, this ) );
+	}
+
+	bool ChunkIOOperation::execute_finish_try()
+	{
+		if( isReadyToFinish() )
+		{
+			execute_finish();
+			return true;
+		}
+		else
+			return false;
+	}
+
+	void ChunkIOOperation::execute_finish()
+	{
+		execute_finish_internal();
+	}
+
+	bool ChunkIOOperation::isReadyToFinish() const
+	{
+		return m_future.wait_for( chrono::milliseconds( 0 ) ) == future_status::ready;
+	}
+
 	ChunkLoadOperation::ChunkLoadOperation( Engine& engine,
 											World& world,
 											SaveManager& saveManager,
@@ -34,19 +65,24 @@ namespace kg
 							chunkToLoad )
 	{ }
 
-	void ChunkLoadOperation::execute()
+	void ChunkLoadOperation::execute_init_internal()
 	{
-		if( chunkToOperateOn.isLoaded() )
-			return;
-		chunkToOperateOn.setLoadState( true );
+		if( chunkToOperateOn.getState() != Chunk::State::UNLOADED )
+			throw exception();
+		chunkToOperateOn.setState( Chunk::State::LOADING );
+	}
 
+	void ChunkLoadOperation::execute_main_internal()
+	{
 		m_saveInformation = saveManager.loadEntitySaveInformationFromFile( chunkToOperateOn.getSavename() );
-
 		if( !m_saveInformation )
 		{
 			m_entities = chunkGenerator.generateChunk( engine, world, chunkToOperateOn.getPosition() );
 		}
+	}
 
+	void ChunkLoadOperation::execute_finish_internal()
+	{
 		if( m_saveInformation )
 			world.addEntities( saveManager.generateEntitiesFromSaveInformation( engine, world, *m_saveInformation ) );
 		else if( m_entities )
@@ -56,6 +92,8 @@ namespace kg
 		}
 		else
 			throw exception();
+
+		chunkToOperateOn.setState( Chunk::State::LOADED );
 	}
 
 	ChunkUnloadOperation::ChunkUnloadOperation( Engine& engine,
@@ -70,18 +108,26 @@ namespace kg
 							chunkToUnload )
 	{ }
 
-	void ChunkUnloadOperation::execute()
+	void ChunkUnloadOperation::execute_init_internal()
 	{
-		if( !chunkToOperateOn.isLoaded() )
-			return;
+		if( chunkToOperateOn.getState() != Chunk::State::LOADED )
+			throw exception();
 
 		auto entities = chunkToOperateOn.getEntities();
-
 		m_saveInformation = saveManager.generateSaveInformationFromEntities( entities );
 		world.removeEntities( entities );
-		chunkToOperateOn.setLoadState( false );
 
+		chunkToOperateOn.setState( Chunk::State::UNLOADING );
+	}
+
+	void ChunkUnloadOperation::execute_main_internal()
+	{
 		saveManager.saveEntitySaveInformationToFile( chunkToOperateOn.getSavename(), m_saveInformation );
+	}
+
+	void ChunkUnloadOperation::execute_finish_internal()
+	{
+		chunkToOperateOn.setState( Chunk::State::UNLOADED );
 	}
 
 	ChunkSaveOperation::ChunkSaveOperation( Engine& engine,
@@ -96,12 +142,18 @@ namespace kg
 							chunkToSave )
 	{ }
 
-	void ChunkSaveOperation::execute()
+	void ChunkSaveOperation::execute_init_internal()
 	{
-		if( !chunkToOperateOn.isLoaded() )
-			return;
-
+		if( chunkToOperateOn.getState() != Chunk::State::LOADED )
+			throw exception();
 		m_saveInformation = saveManager.generateSaveInformationFromEntities( chunkToOperateOn.getEntities() );
+	}
+
+	void ChunkSaveOperation::execute_main_internal()
+	{
 		saveManager.saveEntitySaveInformationToFile( chunkToOperateOn.getSavename(), m_saveInformation );
 	}
+
+	void ChunkSaveOperation::execute_finish_internal()
+	{ }
 }

@@ -5,23 +5,41 @@ using namespace tgui;
 
 namespace kg
 {
+	void ChunkIOOperationQueue::startAllOperationsOnChunk( const Chunk& chunk )
+	{
+		auto condition = [&]( const std::unique_ptr<ChunkIOOperation>& el )
+		{
+			return el->getChunkToOperateOn() == chunk;
+		};
+
+		for( auto it =
+			 find_if( m_addedOperations.begin(), m_addedOperations.end(), condition );
+			 it != m_addedOperations.end();
+			 it = find_if( m_addedOperations.begin(), m_addedOperations.end(), condition ) )
+		{
+			(*it)->execute_main();
+			m_runningOperations.push_back( move( *it ) );
+			m_addedOperations.erase( remove( m_addedOperations.begin(), m_addedOperations.end(), *it ) );
+		}
+	}
+
 	void ChunkIOOperationQueue::finishAllOperationsOnChunk( const Chunk& chunk )
 	{
-		vector<OperationList::iterator> toRemove;
-		list<OperationList::iterator> operationsToFinish;
+		startAllOperationsOnChunk( chunk );
 
-		for( auto it = m_runningOperations.begin(); it != m_runningOperations.end(); ++it )
-			if( (*it)->getChunkToOperateOn() == chunk )
-				operationsToFinish.push_back( it );
-
-		for( auto it = operationsToFinish.begin(); it != operationsToFinish.end(); ++it )
+		auto condition = [&]( const std::unique_ptr<ChunkIOOperation>& el )
 		{
-			(**it)->execute();
-			toRemove.push_back( *it );
-		}
+			return el->getChunkToOperateOn() == chunk;
+		};
 
-		for( auto el : toRemove )
-			m_operations.remove( *el );
+		for( auto it =
+			 find_if( m_runningOperations.begin(), m_runningOperations.end(), condition );
+			 it != m_runningOperations.end();
+			 it = find_if( m_runningOperations.begin(), m_runningOperations.end(), condition ) )
+		{
+			(*it)->execute_finish();
+			m_runningOperations.erase( remove( m_runningOperations.begin(), m_runningOperations.end(), *it ) );
+		}
 	}
 
 	void ChunkIOOperationQueue::setChunkIOCountPerFrame( int chunkIOCount )
@@ -33,7 +51,7 @@ namespace kg
 	{
 		finishAllOperationsOnChunk( operation->getChunkToOperateOn() );
 		operation->execute_init();
-		m_addedOperations.push( move( operation ) );
+		m_addedOperations.push_back( move( operation ) );
 	}
 
 	void ChunkIOOperationQueue::finishPreparedOperations()
@@ -59,12 +77,12 @@ namespace kg
 
 	void ChunkIOOperationQueue::startAddedOperations()
 	{
-		for( int i = 0; i < m_ioCountPerFrame; ++i )
+		for( unsigned int i = 0; i < m_ioCountPerFrame && m_addedOperations.size()>0; ++i )
 		{
 			auto& operation = m_addedOperations.front();
 			operation->execute_main();
 			m_runningOperations.push_back( move( operation ) );
-			m_addedOperations.pop();
+			m_addedOperations.pop_front();
 		}
 	}
 
