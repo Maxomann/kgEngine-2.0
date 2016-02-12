@@ -26,6 +26,11 @@ namespace kg
 
 	void Chunk::addEntity( Entity* entity )
 	{
+		if( calculateChunkPositionForPosition2d( entity->getComponent<Transformation>()->getPosition().toPosition2d() ) != m_position )
+			throw exception();
+		if( m_position == Position2d( 0, 0, 0 ) )
+			int a = 0;
+
 		//update entityData
 		auto transformationComponent = entity->getComponent<Transformation>();
 		transformationComponent->setChunkPostion( m_position );
@@ -47,18 +52,33 @@ namespace kg
 		return m_entities;
 	}
 
-	bool Chunk::isLoaded() const
+	Chunk::State Chunk::getState() const
 	{
-		return m_isLoaded;
-	}
-
-	void Chunk::setLoadState( bool isLoaded )
-	{
-		m_isLoaded = isLoaded;
+		return m_state;
 	}
 
 	std::string Chunk::getSavename() const
 	{
 		return getChunkSavename( m_position );
+	}
+
+	ChunkPosition Chunk::calculateChunkPositionForPosition2d( const Position2d& position2d )
+	{
+		ChunkPosition chunkPosition( position2d.x / Constants::CHUNK_SIZE,
+									 position2d.y / Constants::CHUNK_SIZE,
+									 position2d.worldLayer );
+
+		if( position2d.x < 0 )
+			chunkPosition.x -= 1;
+
+		if( position2d.y < 0 )
+			chunkPosition.y -= 1;
+
+		return chunkPosition;
+	}
+
+	void Chunk::setState( Chunk::State state )
+	{
+		m_state = state;
 	}
 }

@@ -36,6 +36,8 @@ namespace kg
 
 	void ChunkLoadOperation::execute()
 	{
+		if( chunkToOperateOn.isLoaded() )
+			return;
 		chunkToOperateOn.setLoadState( true );
 
 		m_saveInformation = saveManager.loadEntitySaveInformationFromFile( chunkToOperateOn.getSavename() );
@@ -48,7 +50,10 @@ namespace kg
 		if( m_saveInformation )
 			world.addEntities( saveManager.generateEntitiesFromSaveInformation( engine, world, *m_saveInformation ) );
 		else if( m_entities )
-			world.addEntities( move( *m_entities ) );
+		{
+			auto temp = move( *m_entities );
+			world.addEntities( move( temp ) );
+		}
 		else
 			throw exception();
 	}
@@ -67,6 +72,9 @@ namespace kg
 
 	void ChunkUnloadOperation::execute()
 	{
+		if( !chunkToOperateOn.isLoaded() )
+			return;
+
 		auto entities = chunkToOperateOn.getEntities();
 
 		m_saveInformation = saveManager.generateSaveInformationFromEntities( entities );
@@ -90,6 +98,9 @@ namespace kg
 
 	void ChunkSaveOperation::execute()
 	{
+		if( !chunkToOperateOn.isLoaded() )
+			return;
+
 		m_saveInformation = saveManager.generateSaveInformationFromEntities( chunkToOperateOn.getEntities() );
 		saveManager.saveEntitySaveInformationToFile( chunkToOperateOn.getSavename(), m_saveInformation );
 	}

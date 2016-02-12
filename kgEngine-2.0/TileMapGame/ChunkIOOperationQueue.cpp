@@ -7,10 +7,10 @@ namespace kg
 {
 	void ChunkIOOperationQueue::finishAllOperationsOnChunk( const Chunk& chunk )
 	{
-		vector<OperationQueue::iterator> toRemove;
-		list<OperationQueue::iterator> operationsToFinish;
+		vector<OperationList::iterator> toRemove;
+		list<OperationList::iterator> operationsToFinish;
 
-		for( auto it = m_operations.begin(); it != m_operations.end(); ++it )
+		for( auto it = m_runningOperations.begin(); it != m_runningOperations.end(); ++it )
 			if( (*it)->getChunkToOperateOn() == chunk )
 				operationsToFinish.push_back( it );
 
@@ -32,31 +32,54 @@ namespace kg
 	void ChunkIOOperationQueue::addOperation( std::unique_ptr<ChunkIOOperation>&& operation )
 	{
 		finishAllOperationsOnChunk( operation->getChunkToOperateOn() );
-		m_operations.push_back( move( operation ) );
+		operation->execute_init();
+		m_addedOperations.push( move( operation ) );
 	}
 
 	void ChunkIOOperationQueue::finishPreparedOperations()
 	{
 		unsigned int ioCount = 0;
-		vector<OperationQueue::iterator> toRemove;
+		vector<OperationList::iterator> toRemove;
 
-		for( auto it = m_operations.begin(); it != m_operations.end(); ++it )
+		for( auto it = m_runningOperations.begin(); it != m_runningOperations.end(); ++it )
 		{
 			if( ioCount > m_ioCountPerFrame )
 				break;
 
-			(*it)->execute();
-			toRemove.push_back( it );
-			ioCount++;
+			if( (*it)->execute_finish_try() )
+			{
+				toRemove.push_back( it );
+				ioCount++;
+			}
 		}
 
 		for( auto el : toRemove )
-			m_operations.remove( *el );
+			m_runningOperations.remove( *el );
+	}
+
+	void ChunkIOOperationQueue::startAddedOperations()
+	{
+		for( int i = 0; i < m_ioCountPerFrame; ++i )
+		{
+			auto& operation = m_addedOperations.front();
+			operation->execute_main();
+			m_runningOperations.push_back( move( operation ) );
+			m_addedOperations.pop();
+		}
+	}
+
+	void ChunkIOOperationQueue::update()
+	{
+		finishPreparedOperations();
+		startAddedOperations();
 	}
 
 	void ChunkIOOperationQueue::completeAllOperations()
 	{
-		while( m_operations.size() != 0 )
+		while( m_addedOperations.size() != 0 || m_runningOperations.size() != 0 )
+		{
+			startAddedOperations();
 			finishPreparedOperations();
+		}
 	}
 }

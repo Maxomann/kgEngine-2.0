@@ -72,9 +72,6 @@ namespace kg
 		void saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager );
 		void saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager );
 
-		// returns the position in chunks for the position of an entity
-		static ChunkPosition calculateChunkPositionForPosition2d( const Position2d& position2d );
-
 		//configuration default values:
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA;
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT;

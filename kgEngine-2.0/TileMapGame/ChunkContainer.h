@@ -6,7 +6,7 @@ namespace kg
 {
 	class ChunkContainer
 	{
-		std::vector<Chunk> m_chunks;
+		std::list<Chunk> m_chunks;//has to be a list because of reference invalidation
 
 	public:
 		Chunk& getChunk( const ChunkPosition& position );

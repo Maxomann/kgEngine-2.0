@@ -26,6 +26,13 @@ namespace kg
 		Chunk& getChunkToOperateOn()const;
 
 		virtual void execute() = 0;
+
+		void execute_init();
+		void execute_main();
+		bool execute_finish_try();// returns true if successful
+		void execute_finish();
+
+		bool isReadyToFinish()const;
 	};
 
 	class ChunkLoadOperation : public ChunkIOOperation

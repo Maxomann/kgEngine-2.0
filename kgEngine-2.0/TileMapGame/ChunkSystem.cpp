@@ -51,7 +51,7 @@ namespace kg
 			cameraPositions.push_back( camera->getComponent<Transformation>()->getPosition().toPosition2d() );
 		loadUnloadChunksAroundCameraPositions( engine, world, saveManager, cameraPositions );
 
-		m_chunkIOOperationQueue.finishPreparedOperations();
+		m_chunkIOOperationQueue.update();
 
 		return;
 	}
@@ -91,7 +91,7 @@ namespace kg
 		auto transformationComponent = entity->getComponent<Transformation>();
 
 		auto newChunkPosition =
-			calculateChunkPositionForPosition2d( transformationComponent->getPosition().toPosition2d() );
+			Chunk::calculateChunkPositionForPosition2d( transformationComponent->getPosition().toPosition2d() );
 
 		auto oldChunkPosition = transformationComponent->getChunkPosition();
 		if( oldChunkPosition )
@@ -137,21 +137,6 @@ namespace kg
 			return container_null;
 	}
 
-	ChunkPosition ChunkSystem::calculateChunkPositionForPosition2d( const Position2d& position2d )
-	{
-		ChunkPosition chunkPosition( position2d.x / Constants::CHUNK_SIZE,
-									 position2d.y / Constants::CHUNK_SIZE,
-									 position2d.worldLayer );
-
-		if( chunkPosition.x < 0 )
-			chunkPosition.x -= 1;
-
-		if( chunkPosition.y < 0 )
-			chunkPosition.y -= 1;
-
-		return chunkPosition;
-	}
-
 	void ChunkSystem::saveChangesToConfigFile( std::shared_ptr<ConfigFile>& configFile )
 	{
 		return;
@@ -172,7 +157,7 @@ namespace kg
 	{
 		vector<Position2d> cameraChunkPositions;
 		for( const auto& el : cameraPositions )
-			cameraChunkPositions.push_back( calculateChunkPositionForPosition2d( el ) );
+			cameraChunkPositions.push_back( Chunk::calculateChunkPositionForPosition2d( el ) );
 
 		vector<Position2d> chunksToEnsureLoaded;
 		//add chunks that should be ensured to be loaded
