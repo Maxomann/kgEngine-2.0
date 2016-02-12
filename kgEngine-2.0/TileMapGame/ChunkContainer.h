@@ -14,6 +14,7 @@ namespace kg
 		bool doesChunkExist( const ChunkPosition& position )const;
 
 		std::vector<Chunk*> getAllLoadedChunks();
+		std::vector<Chunk*> getAllLoadedOrLoadingChunks();
 
 		void clear();
 	};

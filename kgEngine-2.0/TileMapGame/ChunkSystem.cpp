@@ -196,7 +196,7 @@ namespace kg
 
 		/*unload chunks*/
 		//for every chunks that is loaded atm and is not in chunksToEnsureLoaded: unload
-		for( auto& chunk : m_chunks.getAllLoadedChunks() )
+		for( auto& chunk : m_chunks.getAllLoadedOrLoadingChunks() )
 		{
 			if( find( begin( chunksToEnsureLoaded ), end( chunksToEnsureLoaded ), chunk->getPosition() )
 				==

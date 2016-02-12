@@ -21,6 +21,7 @@ namespace kg
 		virtual void execute_init_internal() = 0;
 		virtual void execute_main_internal() = 0;
 		virtual void execute_finish_internal() = 0;
+		virtual void execute_abort_internal() = 0;
 
 	public:
 		ChunkIOOperation( Engine& engine,
@@ -35,6 +36,7 @@ namespace kg
 		void execute_main();
 		bool execute_finish_try();// returns true if successful
 		void execute_finish();
+		void execute_abort();
 
 		bool isReadyToFinish()const;
 	};

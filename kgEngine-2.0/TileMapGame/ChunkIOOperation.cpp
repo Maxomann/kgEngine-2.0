@@ -45,6 +45,7 @@ namespace kg
 
 	void ChunkIOOperation::execute_finish()
 	{
+		m_future.wait();
 		execute_finish_internal();
 	}
 
@@ -113,9 +114,7 @@ namespace kg
 		if( chunkToOperateOn.getState() != Chunk::State::LOADED )
 			throw exception();
 
-		auto entities = chunkToOperateOn.getEntities();
-		m_saveInformation = saveManager.generateSaveInformationFromEntities( entities );
-		world.removeEntities( entities );
+		m_saveInformation = saveManager.generateSaveInformationFromEntities( chunkToOperateOn.getEntities() );
 
 		chunkToOperateOn.setState( Chunk::State::UNLOADING );
 	}
@@ -127,6 +126,10 @@ namespace kg
 
 	void ChunkUnloadOperation::execute_finish_internal()
 	{
+		auto entities = chunkToOperateOn.getEntities();
+		m_saveInformation = saveManager.generateSaveInformationFromEntities( entities );
+		world.removeEntities( entities );
+
 		chunkToOperateOn.setState( Chunk::State::UNLOADED );
 	}
 

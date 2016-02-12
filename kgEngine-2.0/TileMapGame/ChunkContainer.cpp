@@ -55,6 +55,17 @@ namespace kg
 		return retVal;
 	}
 
+	std::vector<Chunk*> ChunkContainer::getAllLoadedOrLoadingChunks()
+	{
+		std::vector<Chunk*> retVal;
+
+		for( auto& el : m_chunks )
+			if( el.getState() == Chunk::State::LOADED || el.getState() == Chunk::State::LOADING )
+				retVal.push_back( &el );
+
+		return retVal;
+	}
+
 	void ChunkContainer::clear()
 	{
 		m_chunks.clear();
