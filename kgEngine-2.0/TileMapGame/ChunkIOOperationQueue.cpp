@@ -5,7 +5,7 @@ using namespace tgui;
 
 namespace kg
 {
-	void ChunkIOOperationQueue::startAllOperationsOnChunk( const Chunk& chunk )
+	void ChunkIOOperationQueue::abortAllOperationsOnChunk( const Chunk& chunk )
 	{
 		auto condition = [&]( const std::unique_ptr<ChunkIOOperation>& el )
 		{
@@ -17,27 +17,16 @@ namespace kg
 			 it != m_addedOperations.end();
 			 it = find_if( m_addedOperations.begin(), m_addedOperations.end(), condition ) )
 		{
-			(*it)->execute_main();
-			m_runningOperations.push_back( move( *it ) );
+			(*it)->execute_abort();
 			m_addedOperations.erase( remove( m_addedOperations.begin(), m_addedOperations.end(), *it ) );
 		}
-	}
-
-	void ChunkIOOperationQueue::finishAllOperationsOnChunk( const Chunk& chunk )
-	{
-		startAllOperationsOnChunk( chunk );
-
-		auto condition = [&]( const std::unique_ptr<ChunkIOOperation>& el )
-		{
-			return el->getChunkToOperateOn() == chunk;
-		};
 
 		for( auto it =
 			 find_if( m_runningOperations.begin(), m_runningOperations.end(), condition );
 			 it != m_runningOperations.end();
 			 it = find_if( m_runningOperations.begin(), m_runningOperations.end(), condition ) )
 		{
-			(*it)->execute_finish();
+			(*it)->execute_abort();
 			m_runningOperations.erase( remove( m_runningOperations.begin(), m_runningOperations.end(), *it ) );
 		}
 	}
@@ -49,7 +38,7 @@ namespace kg
 
 	void ChunkIOOperationQueue::addOperation( std::unique_ptr<ChunkIOOperation>&& operation )
 	{
-		finishAllOperationsOnChunk( operation->getChunkToOperateOn() );
+		abortAllOperationsOnChunk( operation->getChunkToOperateOn() );
 		operation->execute_init();
 		m_addedOperations.push_back( move( operation ) );
 	}

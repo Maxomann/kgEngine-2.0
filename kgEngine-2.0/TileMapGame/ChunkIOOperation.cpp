@@ -49,6 +49,13 @@ namespace kg
 		execute_finish_internal();
 	}
 
+	void ChunkIOOperation::execute_abort()
+	{
+		if( m_future.valid() )
+			m_future.wait();
+		execute_abort_internal();
+	}
+
 	bool ChunkIOOperation::isReadyToFinish() const
 	{
 		return m_future.wait_for( chrono::milliseconds( 0 ) ) == future_status::ready;
@@ -97,6 +104,11 @@ namespace kg
 		chunkToOperateOn.setState( Chunk::State::LOADED );
 	}
 
+	void ChunkLoadOperation::execute_abort_internal()
+	{
+		chunkToOperateOn.setState( Chunk::State::UNLOADED );
+	}
+
 	ChunkUnloadOperation::ChunkUnloadOperation( Engine& engine,
 												World& world,
 												SaveManager& saveManager,
@@ -133,6 +145,11 @@ namespace kg
 		chunkToOperateOn.setState( Chunk::State::UNLOADED );
 	}
 
+	void ChunkUnloadOperation::execute_abort_internal()
+	{
+		chunkToOperateOn.setState( Chunk::State::LOADED );
+	}
+
 	ChunkSaveOperation::ChunkSaveOperation( Engine& engine,
 											World& world,
 											SaveManager& saveManager,
@@ -159,4 +176,9 @@ namespace kg
 
 	void ChunkSaveOperation::execute_finish_internal()
 	{ }
+
+	void ChunkSaveOperation::execute_abort_internal()
+	{
+		return;
+	}
 }

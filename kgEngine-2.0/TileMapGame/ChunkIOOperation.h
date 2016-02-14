@@ -57,6 +57,8 @@ namespace kg
 		virtual void execute_main_internal() override;
 
 		virtual void execute_finish_internal() override;
+
+		virtual void execute_abort_internal() override;
 	};
 
 	class ChunkUnloadOperation : public ChunkIOOperation
@@ -75,6 +77,8 @@ namespace kg
 		virtual void execute_main_internal() override;
 
 		virtual void execute_finish_internal() override;
+
+		virtual void execute_abort_internal() override;
 	};
 
 	class ChunkSaveOperation : public ChunkIOOperation
@@ -93,5 +97,7 @@ namespace kg
 		virtual void execute_main_internal() override;
 
 		virtual void execute_finish_internal() override;
+
+		virtual void execute_abort_internal() override;
 	};
 }

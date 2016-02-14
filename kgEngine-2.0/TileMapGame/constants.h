@@ -7,7 +7,7 @@ namespace kg
 	{
 		const std::string PACKAGE_NAME = "Testpackage";
 
-		const int CHUNK_SIZE = 640;//px
+		const int CHUNK_SIZE = 1280;//px
 		const int TILE_SIZE = 64;//px
 		const int STANDART_TILE_ZVALUE = 0;
 

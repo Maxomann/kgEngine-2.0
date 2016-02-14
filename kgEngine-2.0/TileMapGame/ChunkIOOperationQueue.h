@@ -13,9 +13,6 @@ namespace kg
 		OperationQueue m_addedOperations;//added, but not running yet
 		OperationList m_runningOperations;//running, not finished yet
 
-		void startAllOperationsOnChunk( const Chunk& chunk );
-		void finishAllOperationsOnChunk( const Chunk& chunk );
-
 		// call this in ChunkSystem::update()
 		// calls ChunkIOOperation::execute_finish()
 		void finishPreparedOperations();
@@ -29,6 +26,8 @@ namespace kg
 		// calls ChunkIOOperation::execute_prepare()
 		// calls ChunkIOOperation::execute_main()
 		void addOperation( std::unique_ptr<ChunkIOOperation>&& operation );
+
+		void abortAllOperationsOnChunk( const Chunk& chunk );
 
 		void update();
 
