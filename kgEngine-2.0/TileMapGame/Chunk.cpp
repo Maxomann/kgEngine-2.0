@@ -7,7 +7,7 @@ namespace kg
 {
 	std::string Chunk::getChunkSavename( const ChunkPosition& chunkPosition )
 	{
-		return "Chunk#" + to_string( chunkPosition.x ) + "#" + to_string( chunkPosition.y ) + "#" + to_string( chunkPosition.worldLayer );
+		return "Chunk#" + to_string( chunkPosition.worldLayer ) + "#" + to_string( chunkPosition.x ) + "#" + to_string( chunkPosition.y );
 	}
 
 	bool Chunk::operator==( const Chunk& rhs ) const
