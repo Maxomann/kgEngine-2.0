@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "SpriteBatch.h"
 #include "id.h"
 #include "Camera.h"
 #include "ToDrawSortedContainer.h"

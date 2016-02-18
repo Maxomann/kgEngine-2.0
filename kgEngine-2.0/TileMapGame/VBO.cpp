@@ -1,7 +1,6 @@
 #include "VBO.h"
 using namespace std;
 using namespace sf;
-using namespace tgui;
 
 namespace kg
 {
@@ -17,11 +16,14 @@ namespace kg
 
 	void VBO::destroy()
 	{
-		m_isGenerated = false;
+		if( m_isGenerated )
+		{
+			m_isGenerated = false;
 
-		unmap();
-		unbind();
-		glDeleteBuffers( 1, &m_glId );
+			unmap();
+			unbind();
+			glDeleteBuffers( 1, &m_glId );
+		}
 	}
 
 	VBO::VBO( unsigned int vertexCapacity, GLenum usage )
@@ -46,15 +48,36 @@ namespace kg
 		glBindBuffer( GL_ARRAY_BUFFER, 0 );
 	}
 
-	sf::Vertex* VBO::map()
+	void VBO::map()
 	{
 		m_isMapped = true;
-		return ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
+		m_ptr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 	}
 
 	void VBO::unmap()
 	{
 		m_isMapped = false;
 		glUnmapBuffer( GL_ARRAY_BUFFER );
+		m_ptr = nullptr;
+	}
+
+	Vertex* VBO::ptr()
+	{
+		return m_ptr;
+	}
+
+	bool VBO::isGenerated() const
+	{
+		return m_isGenerated;
+	}
+
+	bool VBO::isBound() const
+	{
+		return m_isBound;
+	}
+
+	bool VBO::isMapped() const
+	{
+		return m_isMapped;
 	}
 }

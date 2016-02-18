@@ -33,13 +33,11 @@ namespace kg
 		}
 
 		SpriteBatch::~SpriteBatch( void )
-		{
-			destroyVBO();
-		}
+		{ }
 
-		void SpriteBatch::openGlDraw( std::size_t vertexCount,
-									  PrimitiveType type,
-									  const RenderStates& states )
+		void SpriteBatch::openGlDrawDynamicBuffer( std::size_t vertexCount,
+												   PrimitiveType type,
+												   const RenderStates& states )
 		{
 			// Nothing to draw?
 			if( vertexCount == 0 )
@@ -57,8 +55,8 @@ namespace kg
 
 			if( rt->activate( true ) )
 			{
-				glUnmapBuffer( GL_ARRAY_BUFFER );
-				m_bufferPtr = nullptr;
+				if( m_dynamicVbo.isMapped() )
+					m_dynamicVbo.unmap();
 
 				// First set the persistent OpenGL states if it's the very first call
 				if( !rt->m_cache.glStatesSet )
@@ -100,30 +98,8 @@ namespace kg
 				if( states.shader )
 					rt->applyShader( NULL );
 
-				glBindBuffer( GL_ARRAY_BUFFER, 0 );
-				m_isDynamicBufferBound = false;
+				m_dynamicVbo.unbind();
 			}
-		}
-
-		void SpriteBatch::initVBO()
-		{
-			//rt->activate( true ); is this needed?
-			glGenBuffers( 1, &m_dynamicVbo );
-			//glEnableClientState( GL_VERTEX_ARRAY ); and this?
-			glBindBuffer( GL_ARRAY_BUFFER, m_dynamicVbo );
-			glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STREAM_DRAW );
-			m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
-
-			m_isDynamicBufferBound = false;
-			m_isDynamicVBOinit = true;
-		}
-
-		void SpriteBatch::destroyVBO()
-		{
-			if( m_bufferPtr != nullptr )
-				glUnmapBuffer( GL_ARRAY_BUFFER );
-			glBindBuffer( GL_ARRAY_BUFFER, 0 );
-			glDeleteBuffers( 1, &m_dynamicVbo );
 		}
 
 		void SpriteBatch::drawToDynamicBuffer( const Sprite &sprite )
@@ -148,32 +124,16 @@ namespace kg
 			this->rt = &rt;
 		}
 
-		void SpriteBatch::bindDynamicBuffer()
-		{
-			glBindBuffer( GL_ARRAY_BUFFER, m_dynamicVbo );
-			//glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STREAM_DRAW );
-			m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
-			m_isDynamicBufferBound = true;
-		}
-
-		void SpriteBatch::unBindDynamicBuffer()
-		{
-			glUnmapBuffer( GL_ARRAY_BUFFER );
-			glBindBuffer( GL_ARRAY_BUFFER, 0 );
-			m_bufferPtr = nullptr;
-			m_isDynamicBufferBound = false;
-		}
-
 		void SpriteBatch::display( bool reset )
 		{
-			openGlDraw( count * 4, PrimitiveType::Quads, state );
+			openGlDrawDynamicBuffer( count * 4, PrimitiveType::Quads, state );
 
 			count = 0;
 			if( reset )
 				state = RenderStates();
 		}
 
-		int SpriteBatch::create( const Texture *texture )
+		int SpriteBatch::createDynamicBuffer( const Texture *texture )
 		{
 			if( texture != state.texture || (count + 1) * 4 >= MaxCapacity )
 			{
@@ -196,12 +156,14 @@ namespace kg
 			const Vector2i &origin,
 			float rotation )
 		{
-			if( !m_isDynamicVBOinit )
-				initVBO();
+			if( !m_dynamicVbo.isGenerated() )
+				m_dynamicVbo.generate( MaxCapacity, GL_STREAM_DRAW );
 
-			auto index = create( texture );
-			if( !m_isDynamicBufferBound )
-				bindDynamicBuffer();
+			auto index = createDynamicBuffer( texture );
+			if( !m_dynamicVbo.isBound() )
+				m_dynamicVbo.bind();
+			if( !m_dynamicVbo.isMapped() )
+				m_dynamicVbo.map();
 
 			int rot = static_cast< int >(rotation / 360 * LookupSize + 0.5) & (LookupSize - 1);
 			float& _sin = getSin[rot];
@@ -210,7 +172,7 @@ namespace kg
 			auto scalex = rec.width * scale.x;
 			auto scaley = rec.height * scale.y;
 
-			Vertex *ptr = m_bufferPtr + index;
+			Vertex *ptr = m_dynamicVbo.ptr() + index;
 
 			auto pX = -origin.x * scale.x;
 			auto pY = -origin.y * scale.y;

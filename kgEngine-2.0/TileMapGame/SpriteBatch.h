@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "VBO.h"
 
 namespace kg
 {
@@ -25,21 +26,15 @@ namespace kg
 		private:
 			sf::RenderTarget *rt = nullptr;
 			sf::RenderStates state;
+
+			VBO m_dynamicVbo;
 			int count;
 
-			int create( const sf::Texture *texture );
+			int createDynamicBuffer( const sf::Texture *texture );
 
-			void openGlDraw( std::size_t vertexCount,
-							 sf::PrimitiveType type,
-							 const sf::RenderStates& states );
-
-			GLuint m_dynamicVbo = 0;
-			bool m_isDynamicVBOinit = false;
-			bool m_isDynamicBufferBound = false;
-			void initVBO();
-			void destroyVBO();
-
-			sf::Vertex* m_bufferPtr = nullptr;
+			void openGlDrawDynamicBuffer( std::size_t vertexCount,
+										  sf::PrimitiveType type,
+										  const sf::RenderStates& states );
 		};
 	}
 }
