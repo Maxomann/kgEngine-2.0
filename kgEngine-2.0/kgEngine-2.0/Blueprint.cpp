@@ -838,8 +838,9 @@ namespace kg
 				std::transform( rawValueCopy.begin(), rawValueCopy.end(), rawValueCopy.begin(), ::tolower );
 				if( rawValueCopy == "true" )
 					m_asBool = true;
+				else
+					m_asBool = false;
 			}
-			m_asBool = false;
 
 			/*doubleWithUnit*/
 			std::string number;

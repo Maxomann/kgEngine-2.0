@@ -31,6 +31,9 @@ namespace kg
 		it = blueprintValues.find( BLUEPRINT_TEXTURE_RECT_LEFT );
 		if( it != blueprintValues.end() )
 			textureRect.left = it->second->asInt();
+		it = blueprintValues.find( BLUEPRINT_STATIC );
+		if( it != blueprintValues.end() )
+			m_isStatic = it->second->asBool();
 		setTextureRect( textureRect );
 	}
 
@@ -162,6 +165,11 @@ namespace kg
 		return type_hash;
 	}
 
+	bool Graphics::isStatic() const
+	{
+		return m_isStatic;
+	}
+
 	const size_t Graphics::type_hash = getRuntimeTypeInfo<Graphics>();
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";
@@ -173,4 +181,6 @@ namespace kg
 	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_HEIGHT = "texrect_height";
 
 	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_WIDTH = "texrect_width";
+
+	const std::string Graphics::BLUEPRINT_STATIC = "static";
 }

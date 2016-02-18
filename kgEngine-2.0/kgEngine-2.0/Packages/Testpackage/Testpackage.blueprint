@@ -12,6 +12,7 @@ BLUEPRINT Tile
 	COMPONENT Graphics
 		package:"Testpackage"
 		path:"tileset.png"
+		static:0
 	END
 	
 END BLUEPRINT

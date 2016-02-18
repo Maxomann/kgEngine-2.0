@@ -11,6 +11,8 @@ namespace kg
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;
 		sf::Sprite m_sprite;
 
+		bool m_isStatic = false;
+
 		void onPositionChanged( const Position2d& newPosition );
 		void onSizeChanged( const sf::Vector2i& newSize );
 		void onRotationChanged( const float& newRotation );
@@ -47,6 +49,8 @@ namespace kg
 		void setTextureRectOffset( const sf::IntRect& rect );
 		sf::IntRect getTextureRectOffset()const;
 
+		bool isStatic()const;
+
 		void drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const;
 
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const override;
@@ -55,6 +59,7 @@ namespace kg
 		static const std::string BLUEPRINT_TEXTURE_RECT_HEIGHT;
 		static const std::string BLUEPRINT_TEXTURE_RECT_TOP;
 		static const std::string BLUEPRINT_TEXTURE_RECT_LEFT;
+		static const std::string BLUEPRINT_STATIC;
 
 		static const std::string PLUGIN_NAME;
 

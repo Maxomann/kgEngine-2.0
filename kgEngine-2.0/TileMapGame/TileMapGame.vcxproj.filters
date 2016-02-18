@@ -15,9 +15,6 @@
     <Filter Include="Headerdateien\Components">
       <UniqueIdentifier>{3f03bd40-14e7-4f6a-be7c-57dd84acbe94}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headerdateien\Other">
-      <UniqueIdentifier>{7e7edd7b-5036-41fa-b73e-4272ad3170f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headerdateien\GameStates">
       <UniqueIdentifier>{9de7af51-7d36-4f85-abf0-f97ad439180f}</UniqueIdentifier>
     </Filter>
@@ -109,9 +106,6 @@
     <ClInclude Include="constants.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteBatch.h">
-      <Filter>Headerdateien\Other</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationSystem.h">
       <Filter>Headerdateien\Systems</Filter>
     </ClInclude>
@@ -158,6 +152,9 @@
       <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
     </ClInclude>
     <ClInclude Include="ToDrawSortedContainer.h">
+      <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteBatch.h">
       <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
     </ClInclude>
   </ItemGroup>
