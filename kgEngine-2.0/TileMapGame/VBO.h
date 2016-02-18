@@ -13,18 +13,24 @@ namespace kg
 		GLuint m_glId;
 		unsigned int m_vertexCapaxity = 0;
 
-		void generate( unsigned int vertexCapacity, GLenum usage );
-		void destroy();
+		sf::Vertex* m_ptr;
 
 	public:
+		VBO() = default;
 		VBO( unsigned int vertexCapacity, GLenum usage );
 		~VBO();
+
+		void generate( unsigned int vertexCapacity, GLenum usage );
+		void destroy();
 
 		void bind();
 		void unbind();
 
-		sf::Vertex* map();
+		void map();
 		void unmap();
+
+		// retruns nullptr if !isMapped()
+		sf::Vertex* ptr();
 
 		bool isGenerated()const;
 		bool isBound()const;

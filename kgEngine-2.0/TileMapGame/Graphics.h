@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "SpriteBatch.h"
 #include "Transformation.h"
 
 namespace kg

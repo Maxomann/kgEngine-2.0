@@ -235,7 +235,7 @@ namespace kg
 
 	const std::string GraphicsSystem::WINDOW_NAME_DEFAULT = "DefaultWindowName";
 
-	const std::string GraphicsSystem::DRAW_DISTANCE_DEFAULT = "500";
+	const std::string GraphicsSystem::DRAW_DISTANCE_DEFAULT = "3000";
 
 	const std::string GraphicsSystem::VSYNC_DEFAULT = "1";
 
