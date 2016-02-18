@@ -101,21 +101,21 @@ namespace kg
 					rt->applyShader( NULL );
 
 				glBindBuffer( GL_ARRAY_BUFFER, 0 );
-				m_isBufferBound = false;
+				m_isDynamicBufferBound = false;
 			}
 		}
 
 		void SpriteBatch::initVBO()
 		{
 			//rt->activate( true ); is this needed?
-			glGenBuffers( 1, &m_vbo );
+			glGenBuffers( 1, &m_dynamicVbo );
 			//glEnableClientState( GL_VERTEX_ARRAY ); and this?
-			glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
+			glBindBuffer( GL_ARRAY_BUFFER, m_dynamicVbo );
 			glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STREAM_DRAW );
 			m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 
-			m_isBufferBound = false;
-			m_isVBOinit = true;
+			m_isDynamicBufferBound = false;
+			m_isDynamicVBOinit = true;
 		}
 
 		void SpriteBatch::destroyVBO()
@@ -123,23 +123,18 @@ namespace kg
 			if( m_bufferPtr != nullptr )
 				glUnmapBuffer( GL_ARRAY_BUFFER );
 			glBindBuffer( GL_ARRAY_BUFFER, 0 );
-			glDeleteBuffers( 1, &m_vbo );
+			glDeleteBuffers( 1, &m_dynamicVbo );
 		}
 
-		void SpriteBatch::draw( const Sprite &sprite )
+		void SpriteBatch::drawToDynamicBuffer( const Sprite &sprite )
 		{
-			draw( sprite.getTexture(),
-				  ( Vector2i )sprite.getPosition(),
-				  sprite.getTextureRect(),
-				  sprite.getColor(),
-				  ( Vector2i )sprite.getScale(),
-				  ( Vector2i )sprite.getOrigin(),
-				  sprite.getRotation() );
-		}
-
-		void SpriteBatch::flush()
-		{
-			count = 0;
+			drawToDynamicBuffer( sprite.getTexture(),
+								 ( Vector2i )sprite.getPosition(),
+								 sprite.getTextureRect(),
+								 sprite.getColor(),
+								 ( Vector2i )sprite.getScale(),
+								 ( Vector2i )sprite.getOrigin(),
+								 sprite.getRotation() );
 		}
 
 		void SpriteBatch::setRenderStates( const sf::RenderStates &states )
@@ -153,12 +148,27 @@ namespace kg
 			this->rt = &rt;
 		}
 
-		void SpriteBatch::display( bool reset, bool flush )
+		void SpriteBatch::bindDynamicBuffer()
+		{
+			glBindBuffer( GL_ARRAY_BUFFER, m_dynamicVbo );
+			//glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STREAM_DRAW );
+			m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
+			m_isDynamicBufferBound = true;
+		}
+
+		void SpriteBatch::unBindDynamicBuffer()
+		{
+			glUnmapBuffer( GL_ARRAY_BUFFER );
+			glBindBuffer( GL_ARRAY_BUFFER, 0 );
+			m_bufferPtr = nullptr;
+			m_isDynamicBufferBound = false;
+		}
+
+		void SpriteBatch::display( bool reset )
 		{
 			openGlDraw( count * 4, PrimitiveType::Quads, state );
 
-			if( flush )
-				count = 0;
+			count = 0;
 			if( reset )
 				state = RenderStates();
 		}
@@ -177,7 +187,7 @@ namespace kg
 			return 4 * count++;
 		}
 
-		void SpriteBatch::draw(
+		void SpriteBatch::drawToDynamicBuffer(
 			const Texture *texture,
 			const Vector2i &position,
 			const IntRect &rec,
@@ -186,17 +196,12 @@ namespace kg
 			const Vector2i &origin,
 			float rotation )
 		{
-			if( !m_isVBOinit )
+			if( !m_isDynamicVBOinit )
 				initVBO();
 
 			auto index = create( texture );
-			if( !m_isBufferBound )
-			{
-				glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-				glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*MaxCapacity, NULL, GL_STREAM_DRAW );
-				m_bufferPtr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
-				m_isBufferBound = true;
-			}
+			if( !m_isDynamicBufferBound )
+				bindDynamicBuffer();
 
 			int rot = static_cast< int >(rotation / 360 * LookupSize + 0.5) & (LookupSize - 1);
 			float& _sin = getSin[rot];
@@ -241,14 +246,14 @@ namespace kg
 			ptr->color = color;
 		}
 
-		void SpriteBatch::draw( const Texture *texture, const FloatRect &dest, const IntRect &rec, const Color &color )
+		void SpriteBatch::drawToDynamicBuffer( const Texture *texture, const FloatRect &dest, const IntRect &rec, const Color &color )
 		{
-			draw( texture,
-				  Vector2i( dest.left, dest.top ),
-				  rec,
-				  color,
-				  Vector2i( 1, 1 ),
-				  Vector2i( 0, 0 ), 0 );
+			drawToDynamicBuffer( texture,
+								 Vector2i( dest.left, dest.top ),
+								 rec,
+								 color,
+								 Vector2i( 1, 1 ),
+								 Vector2i( 0, 0 ), 0 );
 		}
 	}
 }

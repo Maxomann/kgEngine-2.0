@@ -106,6 +106,7 @@
     <ClCompile Include="SpriteBatch.cpp" />
     <ClCompile Include="ToDrawSortedContainer.cpp" />
     <ClCompile Include="Transformation.cpp" />
+    <ClCompile Include="VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
@@ -129,6 +130,7 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="id.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="VBO.h" />
     <ClInclude Include="WorldGenerator.h" />
     <ClInclude Include="WorldGeneratorManager.h" />
   </ItemGroup>
