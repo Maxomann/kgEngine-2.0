@@ -86,6 +86,9 @@
     <ClCompile Include="ChunkIOOperationQueue.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="VBO.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="id.h">
@@ -155,6 +158,9 @@
       <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
     </ClInclude>
     <ClInclude Include="SpriteBatch.h">
+      <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="VBO.h">
       <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
     </ClInclude>
   </ItemGroup>

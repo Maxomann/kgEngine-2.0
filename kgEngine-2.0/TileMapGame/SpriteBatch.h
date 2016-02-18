@@ -11,15 +11,14 @@ namespace kg
 			SpriteBatch( void );
 			~SpriteBatch( void );
 
-			void display( bool reset = true, bool flush = true );
-			void draw( const sf::Sprite &sprite );
-			void draw( const sf::Texture *texture, const sf::Vector2i &position,
-					   const sf::IntRect &rec, const sf::Color &color, const sf::Vector2i &scale,
-					   const sf::Vector2i &origin, float rotation = 0 );
+			void display( bool reset = true );
+			void drawToDynamicBuffer( const sf::Sprite &sprite );
+			void drawToDynamicBuffer( const sf::Texture *texture, const sf::Vector2i &position,
+									  const sf::IntRect &rec, const sf::Color &color, const sf::Vector2i &scale,
+									  const sf::Vector2i &origin, float rotation = 0 );
 
-			void draw( const sf::Texture *texture, const sf::FloatRect &dest, const sf::IntRect &rec, const sf::Color &color );
+			void drawToDynamicBuffer( const sf::Texture *texture, const sf::FloatRect &dest, const sf::IntRect &rec, const sf::Color &color );
 
-			void flush();
 			void setRenderStates( const sf::RenderStates &states );
 			void setRenderTarget( sf::RenderTarget &rt );
 
@@ -34,9 +33,9 @@ namespace kg
 							 sf::PrimitiveType type,
 							 const sf::RenderStates& states );
 
-			GLuint m_vbo = 0;
-			bool m_isVBOinit = false;
-			bool m_isBufferBound = false;
+			GLuint m_dynamicVbo = 0;
+			bool m_isDynamicVBOinit = false;
+			bool m_isDynamicBufferBound = false;
 			void initVBO();
 			void destroyVBO();
 

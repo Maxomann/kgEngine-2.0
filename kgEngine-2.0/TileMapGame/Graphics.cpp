@@ -121,7 +121,7 @@ namespace kg
 
 	void Graphics::drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const
 	{
-		spriteBatch.draw( m_sprite );
+		spriteBatch.drawToDynamicBuffer( m_sprite );
 	}
 
 	void Graphics::draw( RenderTarget& target, RenderStates states ) const
