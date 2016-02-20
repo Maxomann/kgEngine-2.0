@@ -119,9 +119,9 @@ namespace kg
 		m_sprite.setRotation( newRotation );
 	}
 
-	void Graphics::drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const
+	void Graphics::drawToSpriteBatch( batch::SpriteBatch& spriteBatch )
 	{
-		spriteBatch.drawToDynamicBuffer( m_sprite );
+		spriteBatch.drawToDynamicBuffer( { &m_sprite } );
 	}
 
 	void Graphics::draw( RenderTarget& target, RenderStates states ) const

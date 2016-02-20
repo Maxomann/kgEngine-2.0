@@ -20,8 +20,10 @@ namespace kg
 		{
 			m_isGenerated = false;
 
-			unmap();
-			unbind();
+			if( isMapped() )
+				unmap();
+			if( isBound() )
+				unbind();
 			glDeleteBuffers( 1, &m_glId );
 		}
 	}
@@ -86,7 +88,7 @@ namespace kg
 		return m_vertexCapaxity;
 	}
 
-	void VBO::draw( sf::RenderTarget &rt, const RenderStates& states, std::size_t vertexCount )
+	void VBO::draw( sf::RenderTarget &rt, const sf::RenderStates& states, std::size_t vertexCount )
 	{
 		// Nothing to draw?
 		if( vertexCount == 0 )
@@ -98,7 +100,7 @@ namespace kg
 		{
 			err() << "sf::Quads primitive type is not supported on OpenGL ES platforms, drawing skipped" << std::endl;
 			return;
-		}
+	}
 #define GL_QUADS 0
 #endif
 
@@ -146,7 +148,7 @@ namespace kg
 
 			unbind();
 		}
-	}
+}
 
 	unsigned int SpriteVBO::calculatePtrOffsetToNewElement() const
 	{
@@ -197,8 +199,8 @@ namespace kg
 	{
 		auto offset = calculatePtrOffsetToNewElement();
 
-		float _sin = sin( rotation );
-		float _cos = cos( rotation );;
+		float _sin = sin( rotation * boost::math::constants::pi<float>() / 180 );
+		float _cos = cos( rotation * boost::math::constants::pi<float>() / 180 );
 
 		auto scalex = rec.width * scale.x;
 		auto scaley = rec.height * scale.y;
@@ -248,12 +250,13 @@ namespace kg
 		return m_texture;
 	}
 
-	void SpriteVBO::draw( sf::RenderTarget &rt, const RenderStates& states )
+	void SpriteVBO::draw( sf::RenderTarget &rt, sf::RenderStates& states )
 	{
+		states.texture = m_texture;
 		VBO::draw( rt, states, m_sprites.size()*VERTEX_COUNT_PER_SPRITE );
 	}
 
-	void SpriteVBO::addSprites( const std::vector<sf::Sprite*> sprites )
+	void SpriteVBO::addSprites( const std::vector<sf::Sprite*>& sprites )
 	{
 		bind();
 		map();
@@ -269,7 +272,7 @@ namespace kg
 		unbind();
 	}
 
-	void SpriteVBO::removeSprites( const std::vector<sf::Sprite*> sprites )
+	void SpriteVBO::removeSprites( const std::vector<sf::Sprite*>& sprites )
 	{
 		auto condition = [&]( const sf::Sprite* el )
 		{
