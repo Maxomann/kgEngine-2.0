@@ -55,7 +55,7 @@ namespace sf
 	class SFML_GRAPHICS_API Texture : GlResource
 	{
 		friend class kg::batch::SpriteBatch;
-		friend class VBO;
+		friend class kg::VBO;
 	public:
 
 		////////////////////////////////////////////////////////////

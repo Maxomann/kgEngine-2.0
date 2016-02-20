@@ -52,7 +52,7 @@ namespace kg
 
 		bool isStatic()const;
 
-		void drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const;
+		void drawToSpriteBatch( batch::SpriteBatch& spriteBatch );
 
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const override;
 

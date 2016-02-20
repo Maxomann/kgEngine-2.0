@@ -37,7 +37,7 @@ namespace kg
 		bool isMapped()const;
 		unsigned int getVertexCapacity()const;
 
-		void draw( sf::RenderTarget &rt, const RenderStates& states, std::size_t vertexCount );
+		void draw( sf::RenderTarget &rt, const sf::RenderStates& states, std::size_t vertexCount );
 	};
 
 	class SpriteVBO : public VBO
@@ -62,12 +62,12 @@ namespace kg
 		SpriteVBO( unsigned int vertexCapacity, GLenum usage );
 		~SpriteVBO() = default;
 
-		void addSprites( const std::vector<sf::Sprite*> sprites );
-		void removeSprites( const std::vector<sf::Sprite*> sprites );
+		void addSprites( const std::vector<sf::Sprite*>& sprites );
+		void removeSprites( const std::vector<sf::Sprite*>& sprites );
 		void clear();
 
 		const sf::Texture* getTexture()const;
 
-		void draw( sf::RenderTarget &rt, const RenderStates& states );
+		void draw( sf::RenderTarget &rt, sf::RenderStates& states );
 	};
 }
