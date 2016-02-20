@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Graphics.h"
 #include "SpriteBatch.h"
-#include "ToDrawSortedContainer.h"
+#include "ToDrawContainer.h"
 
 namespace kg
 {
@@ -50,7 +50,7 @@ namespace kg
 		const unsigned int& getDrawDistance()const;
 
 		void drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-										ToDrawSortedContainer& toDrawSorted );
+										ToDrawContainer& toDrawSorted );
 
 		static const std::string PLUGIN_NAME;
 

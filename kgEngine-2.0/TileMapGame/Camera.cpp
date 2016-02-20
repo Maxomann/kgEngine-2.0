@@ -107,7 +107,7 @@ namespace kg
 	}
 
 	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-											ToDrawSortedContainer& toDrawSorted )
+											ToDrawContainer& toDrawSorted )
 	{
 		m_spriteBatch.setRenderTarget( renderWindow );
 
@@ -116,14 +116,18 @@ namespace kg
 		renderWindow.setView( m_view );
 
 		auto thisPosition = r_transformation->getPosition();
+
+		std::vector<sf::Sprite*> toDrawFinal;
 		for( const auto& el : toDrawSorted.getEntitiesFromWorldLayer( thisPosition.worldLayer ) )
 		{
 			auto spritePosition = el->getComponent<Transformation>()->getPosition();
 
 			auto distanceVec = sf::Vector2i( spritePosition.x - thisPosition.x, spritePosition.y - thisPosition.y );
 			if( length( distanceVec ) <= m_drawDistance )
-				el->getComponent<Graphics>()->drawToSpriteBatch( m_spriteBatch );
+				toDrawFinal.push_back( el->getComponent<Graphics>()->getSprite() );
 		}
+
+		m_spriteBatch.drawToDynamicBuffer( toDrawFinal );
 
 		m_spriteBatch.display();
 

@@ -5,17 +5,17 @@
 
 namespace kg
 {
-	struct ToDrawSortedContainerWorldLayerElement
+	struct ToDrawContainerWorldLayerElement
 	{
 		bool isSorted = false;
 		EntityManager::EntityPointerContainer entities;
 	};
 
-	class ToDrawSortedContainer
+	class ToDrawContainer
 	{
-		std::map<PositionType, ToDrawSortedContainerWorldLayerElement> m_entitiesByWorldLayer;
+		std::map<PositionType, ToDrawContainerWorldLayerElement> m_entitiesByWorldLayer;
 
-		void sortContainer( ToDrawSortedContainerWorldLayerElement& toSort );
+		void sortContainer( ToDrawContainerWorldLayerElement& toSort );
 
 	public:
 
