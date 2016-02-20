@@ -170,6 +170,11 @@ namespace kg
 		return m_isStatic;
 	}
 
+	Sprite* Graphics::getSprite()
+	{
+		return &m_sprite;
+	}
+
 	const size_t Graphics::type_hash = getRuntimeTypeInfo<Graphics>();
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";

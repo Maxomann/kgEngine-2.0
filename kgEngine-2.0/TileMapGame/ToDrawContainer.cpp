@@ -1,11 +1,11 @@
-#include "ToDrawSortedContainer.h"
+#include "ToDrawContainer.h"
 using namespace std;
 using namespace sf;
 using namespace tgui;
 
 namespace kg
 {
-	void ToDrawSortedContainer::sortContainer( ToDrawSortedContainerWorldLayerElement& toSort )
+	void ToDrawContainer::sortContainer( ToDrawContainerWorldLayerElement& toSort )
 	{
 		auto& toSortEntities = toSort.entities;
 
@@ -29,7 +29,7 @@ namespace kg
 		toSort.isSorted = true;
 	}
 
-	void ToDrawSortedContainer::addEntities( const EntityManager::EntityPointerContainer& entities )
+	void ToDrawContainer::addEntities( const EntityManager::EntityPointerContainer& entities )
 	{
 		for( auto& entity : entities )
 		{
@@ -40,7 +40,7 @@ namespace kg
 		}
 	}
 
-	void ToDrawSortedContainer::removeEntities( const EntityManager::EntityPointerContainer& entities )
+	void ToDrawContainer::removeEntities( const EntityManager::EntityPointerContainer& entities )
 	{
 		for( auto& entity : entities )
 		{
@@ -52,7 +52,7 @@ namespace kg
 		}
 	}
 
-	void ToDrawSortedContainer::addEntities_try( const EntityManager::EntityPointerContainer& entities )
+	void ToDrawContainer::addEntities_try( const EntityManager::EntityPointerContainer& entities )
 	{
 		EntityManager::EntityPointerContainer validEntities;
 
@@ -63,7 +63,7 @@ namespace kg
 		addEntities( validEntities );
 	}
 
-	void ToDrawSortedContainer::removeEntities_try( const EntityManager::EntityPointerContainer& entities )
+	void ToDrawContainer::removeEntities_try( const EntityManager::EntityPointerContainer& entities )
 	{
 		EntityManager::EntityPointerContainer validEntities;
 
@@ -74,7 +74,7 @@ namespace kg
 		removeEntities( validEntities );
 	}
 
-	EntityManager::EntityPointerContainer& ToDrawSortedContainer::getEntitiesFromWorldLayer( const PositionType worldLayer )
+	EntityManager::EntityPointerContainer& ToDrawContainer::getEntitiesFromWorldLayer( const PositionType worldLayer )
 	{
 		auto& el = m_entitiesByWorldLayer[worldLayer];
 

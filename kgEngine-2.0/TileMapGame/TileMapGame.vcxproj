@@ -104,7 +104,7 @@
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="SingleplayerGameState.cpp" />
     <ClCompile Include="SpriteBatch.cpp" />
-    <ClCompile Include="ToDrawSortedContainer.cpp" />
+    <ClCompile Include="ToDrawContainer.cpp" />
     <ClCompile Include="Transformation.cpp" />
     <ClCompile Include="VBO.cpp" />
   </ItemGroup>
@@ -124,7 +124,7 @@
     <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="SingleplayerGameState.h" />
     <ClInclude Include="SpriteBatch.h" />
-    <ClInclude Include="ToDrawSortedContainer.h" />
+    <ClInclude Include="ToDrawContainer.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Graphics.h" />
