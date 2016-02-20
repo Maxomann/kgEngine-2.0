@@ -34,6 +34,7 @@
 #include <utility>
 #include <ctime>
 #include <future>
+#include <cmath>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>

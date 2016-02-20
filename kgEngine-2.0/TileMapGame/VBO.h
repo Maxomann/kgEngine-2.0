@@ -35,23 +35,30 @@ namespace kg
 		bool isGenerated()const;
 		bool isBound()const;
 		bool isMapped()const;
+		unsigned int getVertexCapacity()const;
 
-		void draw( const RenderStates& states, std::size_t vertexCount );
+		void draw( sf::RenderTarget &rt, const RenderStates& states, std::size_t vertexCount );
 	};
 
 	class SpriteVBO : public VBO
 	{
-		static const sf::Uint8 m_vertexCountPerSprite = 4;
+		static const sf::Uint8 VERTEX_COUNT_PER_SPRITE = 4;
 		std::vector<sf::Sprite*> m_sprites;
 
-		sf::Texture* texture = nullptr;
+		const sf::Texture* m_texture = nullptr;
 
-		void push_back_sprite( const sf::Sprite* sprite );// buffer has to be bound and mapped
+		unsigned int calculatePtrOffsetToNewElement()const;
+
+		void checkTexture( const sf::Sprite& sprite );
 
 		void recreateChache();
-		void chacheSprite( const sf::Sprite& sprite );
+		void chacheSprite( const sf::Sprite& sprite );// buffer has to be bound and mapped
+		void chacheSprite( const sf::Texture *texture, const sf::Vector2i &position,
+						   const sf::IntRect &rec, const sf::Color &color, const sf::Vector2i &scale,
+						   const sf::Vector2i &origin, float rotation = 0 );// buffer has to be bound and mapped
+
 	public:
-		SpriteVBO();
+		SpriteVBO() = default;
 		SpriteVBO( unsigned int vertexCapacity, GLenum usage );
 		~SpriteVBO() = default;
 
@@ -59,6 +66,8 @@ namespace kg
 		void removeSprites( const std::vector<sf::Sprite*> sprites );
 		void clear();
 
-		void draw( const RenderStates& states );
+		const sf::Texture* getTexture()const;
+
+		void draw( sf::RenderTarget &rt, const RenderStates& states );
 	};
 }
