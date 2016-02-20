@@ -9,14 +9,14 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Headerdateien\Exceptions">
-      <UniqueIdentifier>{dfeb575d-eba1-4e2d-9982-0c6c06d43b54}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headerdateien\Engine">
       <UniqueIdentifier>{9ac4b11d-d367-4f22-8427-cffd45b0cceb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headerdateien\Toolset">
       <UniqueIdentifier>{80d96a5c-3d9e-44eb-a705-71f938d6bf7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Toolset\Exceptions">
+      <UniqueIdentifier>{dfeb575d-eba1-4e2d-9982-0c6c06d43b54}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -125,10 +125,10 @@
       <Filter>Headerdateien\Engine</Filter>
     </ClInclude>
     <ClInclude Include="PluginRegistrationException.h">
-      <Filter>Headerdateien\Exceptions</Filter>
+      <Filter>Headerdateien\Toolset\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="PluginRequestException.h">
-      <Filter>Headerdateien\Exceptions</Filter>
+      <Filter>Headerdateien\Toolset\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="_PluginCreator.h">
       <Filter>Headerdateien</Filter>
@@ -137,13 +137,13 @@
       <Filter>Headerdateien\Toolset</Filter>
     </ClInclude>
     <ClInclude Include="ComponentMissingException.h">
-      <Filter>Headerdateien\Exceptions</Filter>
+      <Filter>Headerdateien\Toolset\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="PathNotAvailableException.h">
-      <Filter>Headerdateien\Exceptions</Filter>
+      <Filter>Headerdateien\Toolset\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="WrongCallbackSignatureException.h">
-      <Filter>Headerdateien\Exceptions</Filter>
+      <Filter>Headerdateien\Toolset\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="ConfigFile.h">
       <Filter>Headerdateien\Toolset</Filter>
@@ -170,7 +170,7 @@
       <Filter>Headerdateien\Engine</Filter>
     </ClInclude>
     <ClInclude Include="BlueprintValueReadErrorException.h">
-      <Filter>Headerdateien\Exceptions</Filter>
+      <Filter>Headerdateien\Toolset\Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="SwapContainer.h">
       <Filter>Headerdateien\Toolset</Filter>

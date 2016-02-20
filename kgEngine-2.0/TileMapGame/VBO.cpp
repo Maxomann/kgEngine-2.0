@@ -80,4 +80,213 @@ namespace kg
 	{
 		return m_isMapped;
 	}
+
+	unsigned int VBO::getVertexCapacity() const
+	{
+		return m_vertexCapaxity;
+	}
+
+	void VBO::draw( sf::RenderTarget &rt, const RenderStates& states, std::size_t vertexCount )
+	{
+		// Nothing to draw?
+		if( vertexCount == 0 )
+			return;
+
+		// GL_QUADS is unavailable on OpenGL ES
+#ifdef SFML_OPENGL_ES
+		if( type == Quads )
+		{
+			err() << "sf::Quads primitive type is not supported on OpenGL ES platforms, drawing skipped" << std::endl;
+			return;
+		}
+#define GL_QUADS 0
+#endif
+
+		if( rt.activate( true ) )
+		{
+			if( !isBound() )
+				bind();
+			if( isMapped() )
+				unmap();
+
+			// First set the persistent OpenGL states if it's the very first call
+			if( !rt.m_cache.glStatesSet )
+				rt.resetGLStates();
+
+			rt.applyTransform( states.transform );
+
+			// Apply the view
+			if( rt.m_cache.viewChanged )
+				rt.applyCurrentView();
+
+			// Apply the blend mode
+			if( states.blendMode != rt.m_cache.lastBlendMode )
+				rt.applyBlendMode( states.blendMode );
+
+			// Apply the texture
+			Uint64 textureId = states.texture ? states.texture->m_cacheId : 0;
+			if( textureId != rt.m_cache.lastTextureId )
+				rt.applyTexture( states.texture );
+
+			// Apply the shader
+			if( states.shader )
+				rt.applyShader( states.shader );
+
+			// Setup the pointers to the vertices components
+			glVertexPointer( 2, GL_FLOAT, sizeof( Vertex ), ( const void* )0 );
+			glColorPointer( 4, GL_UNSIGNED_BYTE, sizeof( Vertex ), ( const void* )8 );
+			glTexCoordPointer( 2, GL_FLOAT, sizeof( Vertex ), ( const void* )12 );
+
+			// Draw the primitives
+			glDrawArrays( GL_QUADS, 0, vertexCount );
+
+			// Unbind the shader, if any
+			if( states.shader )
+				rt.applyShader( NULL );
+
+			unbind();
+		}
+	}
+
+	unsigned int SpriteVBO::calculatePtrOffsetToNewElement() const
+	{
+		if( m_sprites.size() * VERTEX_COUNT_PER_SPRITE >= getVertexCapacity() )
+			throw exception();
+
+		return m_sprites.size() * VERTEX_COUNT_PER_SPRITE;
+	}
+
+	void SpriteVBO::checkTexture( const sf::Sprite& sprite )
+	{
+		if( m_texture == nullptr || m_sprites.size() == 0 )
+			m_texture = sprite.getTexture();
+		if( m_texture != sprite.getTexture() )
+			throw exception();
+	}
+
+	void SpriteVBO::recreateChache()
+	{
+		bind();
+		map();
+
+		for( auto& el : m_sprites )
+			chacheSprite( *el );
+
+		unmap();
+		unbind();
+	}
+
+	void SpriteVBO::chacheSprite( const sf::Sprite& sprite )
+	{
+		chacheSprite( sprite.getTexture(),
+					  ( Vector2i )sprite.getPosition(),
+					  sprite.getTextureRect(),
+					  sprite.getColor(),
+					  ( Vector2i )sprite.getScale(),
+					  ( Vector2i )sprite.getOrigin(),
+					  sprite.getRotation() );
+	}
+
+	void SpriteVBO::chacheSprite( const sf::Texture *texture,
+								  const sf::Vector2i &position,
+								  const sf::IntRect &rec,
+								  const sf::Color &color,
+								  const sf::Vector2i &scale,
+								  const sf::Vector2i &origin,
+								  float rotation )
+	{
+		auto offset = calculatePtrOffsetToNewElement();
+
+		float _sin = sin( rotation );
+		float _cos = cos( rotation );;
+
+		auto scalex = rec.width * scale.x;
+		auto scaley = rec.height * scale.y;
+
+		Vertex *ptr = VBO::ptr() + offset;
+
+		auto pX = -origin.x * scale.x;
+		auto pY = -origin.y * scale.y;
+
+		ptr->position.x = pX * _cos - pY * _sin + position.x;
+		ptr->position.y = pX * _sin + pY * _cos + position.y;
+		ptr->texCoords.x = rec.left + 0.0075;
+		ptr->texCoords.y = rec.top + 0.0075;
+		ptr->color = color;
+		ptr++;
+
+		pX += scalex;
+		ptr->position.x = pX * _cos - pY * _sin + position.x;
+		ptr->position.y = pX * _sin + pY * _cos + position.y;
+		ptr->texCoords.x = rec.left + rec.width - 0.0075;
+		ptr->texCoords.y = rec.top + 0.0075;
+		ptr->color = color;
+		ptr++;
+
+		pY += scaley;
+		ptr->position.x = pX * _cos - pY * _sin + position.x;
+		ptr->position.y = pX * _sin + pY * _cos + position.y;
+		ptr->texCoords.x = rec.left + rec.width - 0.0075;
+		ptr->texCoords.y = rec.top + rec.height - 0.0075;
+		ptr->color = color;
+		ptr++;
+
+		pX -= scalex;
+		ptr->position.x = pX * _cos - pY * _sin + position.x;
+		ptr->position.y = pX * _sin + pY * _cos + position.y;
+		ptr->texCoords.x = rec.left + 0.0075;
+		ptr->texCoords.y = rec.top + rec.height - 0.0075;
+		ptr->color = color;
+	}
+
+	SpriteVBO::SpriteVBO( unsigned int vertexCapacity, GLenum usage )
+		: VBO( vertexCapacity, usage )
+	{ }
+
+	const sf::Texture* SpriteVBO::getTexture() const
+	{
+		return m_texture;
+	}
+
+	void SpriteVBO::draw( sf::RenderTarget &rt, const RenderStates& states )
+	{
+		VBO::draw( rt, states, m_sprites.size()*VERTEX_COUNT_PER_SPRITE );
+	}
+
+	void SpriteVBO::addSprites( const std::vector<sf::Sprite*> sprites )
+	{
+		bind();
+		map();
+
+		for( auto& el : sprites )
+		{
+			checkTexture( *el );
+			m_sprites.push_back( el );
+			chacheSprite( *el );
+		}
+
+		unmap();
+		unbind();
+	}
+
+	void SpriteVBO::removeSprites( const std::vector<sf::Sprite*> sprites )
+	{
+		auto condition = [&]( const sf::Sprite* el )
+		{
+			bool result = any_of( sprites.begin(), sprites.end(), [&]( const sf::Sprite* el2 )
+			{
+				return el == el2;
+			} );
+			return result;
+		};
+
+		remove_if( m_sprites.begin(), m_sprites.end(), condition );
+
+		recreateChache();
+	}
+
+	void SpriteVBO::clear()
+	{
+		m_sprites.clear();
+	}
 }
