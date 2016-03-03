@@ -48,7 +48,7 @@ namespace kg
 
 		std::vector<Position2d> cameraPositions;
 		for( const auto& camera : cameras )
-			cameraPositions.push_back( camera->getComponent<Transformation>()->getPosition().toPosition2d() );
+			cameraPositions.push_back( camera->getComponent<Transformation>()->getPosition() );
 		loadUnloadChunksAroundCameraPositions( engine, world, saveManager, cameraPositions );
 
 		m_chunkIOOperationQueue.update();
@@ -91,7 +91,7 @@ namespace kg
 		auto transformationComponent = entity->getComponent<Transformation>();
 
 		auto newChunkPosition =
-			Chunk::calculateChunkPositionForPosition2d( transformationComponent->getPosition().toPosition2d() );
+			Chunk::calculateChunkPositionForPosition2d( transformationComponent->getPosition() );
 
 		auto oldChunkPosition = transformationComponent->getChunkPosition();
 		if( oldChunkPosition )

@@ -3,7 +3,7 @@ using namespace std;
 
 namespace kg
 {
-	Position::Position( PositionType x, PositionType y, PositionType zValue, PositionType worldLayer )
+	/*Position::Position( PositionType x, PositionType y, PositionType zValue, PositionType worldLayer )
 		:x( x ),
 		y( y ),
 		zValue( zValue ),
@@ -39,7 +39,7 @@ namespace kg
 			return true;
 		else
 			return false;
-	}
+	}*/
 
 	Position2d::Position2d( PositionType x, PositionType y, PositionType worldLayer )
 		:x( x ),
@@ -67,7 +67,7 @@ namespace kg
 			return false;
 	}
 
-	PositionXYZ::PositionXYZ( PositionType x, PositionType y, PositionType z )
+	/*PositionXYZ::PositionXYZ( PositionType x, PositionType y, PositionType z )
 		: x( x ),
 		y( y ),
 		zValue( zValue )
@@ -91,7 +91,7 @@ namespace kg
 			return true;
 		else
 			return false;
-	}
+	}*/
 
 	PositionXY::PositionXY( PositionType x, PositionType y )
 		:x( x ),
