@@ -127,6 +127,20 @@ namespace kg
 				toDrawFinal.push_back( el->getComponent<Graphics>()->getSprite() );
 		}
 
+		//Z SORTING: REFACTOR THIS!!!
+		std::sort( toDrawFinal.begin(), toDrawFinal.end(), [](
+			const Sprite* lhs,
+			const Sprite* rhs )
+		{
+			const auto& zValueLeft = lhs->getPosition().y + (lhs->getGlobalBounds().height / 2.f);
+			const auto& zValueRight = rhs->getPosition().y + (rhs->getGlobalBounds().height / 2.f);
+
+			if( zValueRight > zValueLeft )
+				return true;
+
+			return false;
+		} );
+
 		m_spriteBatch.drawToDynamicBuffer( toDrawFinal );
 
 		m_spriteBatch.display();

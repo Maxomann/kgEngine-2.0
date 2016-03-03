@@ -9,7 +9,7 @@ namespace kg
 	{
 		auto& toSortEntities = toSort.entities;
 
-		std::sort( toSortEntities.begin(), toSortEntities.end(), [](
+		/*std::sort( toSortEntities.begin(), toSortEntities.end(), [](
 			const Entity* lhs,
 			const Entity* rhs )
 		{
@@ -20,7 +20,7 @@ namespace kg
 				return true;
 
 			return false;
-		} );
+		} );*/
 
 		toSort.isSorted = true;
 	}
