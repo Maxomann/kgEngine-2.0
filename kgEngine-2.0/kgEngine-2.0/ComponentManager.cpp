@@ -72,9 +72,11 @@ namespace kg
 	{
 		auto typeHashCode = component->getRTTI_hash();
 
+#ifdef DEBUG
 		auto it = m_findComponentByType( typeHashCode );
 		if( it != m_componentsByType.end() )
 			throw std::exception();
+#endif // DEBUG
 
 		m_componentsByType.emplace_back( typeHashCode, component.get() );
 		m_componentsByUpdateImportance.emplace_back( component.get() );
