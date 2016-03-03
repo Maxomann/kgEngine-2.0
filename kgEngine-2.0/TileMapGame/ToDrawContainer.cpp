@@ -9,22 +9,18 @@ namespace kg
 	{
 		auto& toSortEntities = toSort.entities;
 
-		/*std::sort( toSortEntities.begin(), toSortEntities.end(), [](
+		std::sort( toSortEntities.begin(), toSortEntities.end(), [](
 			const Entity* lhs,
 			const Entity* rhs )
 		{
-			const auto& positionLeft = lhs->getComponent<Transformation>()->getPosition();
-			const auto& positionRight = rhs->getComponent<Transformation>()->getPosition();
+			const auto& zValueLeft = lhs->getComponent<Graphics>()->getZValue();
+			const auto& zValueRight = rhs->getComponent<Graphics>()->getZValue();
 
-			if( positionRight.zValue > positionLeft.zValue )
-				return true;
-			else if( positionRight.zValue == positionLeft.zValue && positionRight.y > positionLeft.y )
-				return true;
-			else if( positionRight.y == positionLeft.y && positionRight.x > positionLeft.x )
+			if( zValueRight > zValueLeft )
 				return true;
 
 			return false;
-		} );*/
+		} );
 
 		toSort.isSorted = true;
 	}
