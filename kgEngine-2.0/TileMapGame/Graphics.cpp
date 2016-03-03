@@ -175,6 +175,11 @@ namespace kg
 		return &m_sprite;
 	}
 
+	float Graphics::getZValue() const
+	{
+		return (m_sprite.getPosition().y) + (m_sprite.getGlobalBounds().height / 2.f);
+	}
+
 	const size_t Graphics::type_hash = getRuntimeTypeInfo<Graphics>();
 
 	const std::string Graphics::PLUGIN_NAME = "Graphics";

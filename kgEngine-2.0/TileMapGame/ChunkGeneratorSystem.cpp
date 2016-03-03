@@ -22,10 +22,10 @@ namespace kg
 				tilePositionRelativeToChunkInPixelX += transform->getSize().x / 2;
 				tilePositionRelativeToChunkInPixelY += transform->getSize().y / 2;
 
-				Position tilePosition( chunkPositionInPixelX + tilePositionRelativeToChunkInPixelX,
-									   chunkPositionInPixelY + tilePositionRelativeToChunkInPixelY,
-									   Constants::STANDART_TILE_ZVALUE,
-									   chunkPositionInChunks.worldLayer );
+				Position2d tilePosition( chunkPositionInPixelX + tilePositionRelativeToChunkInPixelX,
+										 chunkPositionInPixelY + tilePositionRelativeToChunkInPixelY,
+										 //Constants::STANDART_TILE_ZVALUE,
+										 chunkPositionInChunks.worldLayer );
 
 				transform->setPosition( tilePosition );
 

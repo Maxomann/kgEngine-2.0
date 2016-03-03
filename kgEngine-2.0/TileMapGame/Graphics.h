@@ -54,6 +54,8 @@ namespace kg
 
 		sf::Sprite* getSprite();
 
+		float getZValue()const;
+
 		void drawToSpriteBatch( batch::SpriteBatch& spriteBatch );
 
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const override;

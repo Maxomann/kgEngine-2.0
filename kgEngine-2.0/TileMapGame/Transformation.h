@@ -8,7 +8,7 @@ namespace kg
 	{
 		sf::FloatRect m_globalBounds;
 
-		Position m_position;
+		Position2d m_position;
 		boost::optional<ChunkPosition> m_chunkPosition;//if not available it has not been set yet
 		float m_rotation = 0;//in degree
 		sf::Vector2i m_size;
@@ -37,20 +37,14 @@ namespace kg
 		virtual const size_t& getRTTI_hash() const override;
 
 		//Position
-		void setPosition( const Position& position );
-		const Position& getPosition()const;
+		void setPosition( const Position2d& position );
+		const Position2d& getPosition()const;
 
 		void moveXYsetWorldLayer( const sf::Vector2i& offsetXY, int worldLayer );
 
 		void setPositionXY( const PositionXY& position );
 		PositionXY getPositionXY()const;
 		void moveXY( const sf::Vector2i& offsetXY );
-
-		void setZValue( int zValue );
-		int getZValue()const;
-
-		void setPositionXYZ( const PositionXYZ& position );
-		PositionXYZ getPositionXYZ()const;
 
 		void setWorldLayer( int layer );
 		int getWorldLayer()const;
@@ -84,7 +78,6 @@ namespace kg
 	signals:
 		Signal<> s_transformationChanged;//any of: Position, Rotation, Size
 
-		Signal<const Position&> s_positionChanged;
 		Signal<const Position2d&> s_position2dChanged;
 
 		Signal<const float&> s_rotationChanged;

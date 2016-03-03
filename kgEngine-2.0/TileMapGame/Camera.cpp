@@ -93,7 +93,7 @@ namespace kg
 	kg::Entity Camera::CREATE( Engine& engine, World& world, const unsigned int& drawDistancePointer )
 	{
 		auto camera = world.createNewTemporaryEntity<Transformation, Camera>( engine, world );
-		//camera.getComponent<Transformation>()->setPosition( sf::Vector2i( 0, 0 ) );
+		camera.getComponent<Transformation>()->setPositionXY( PositionXY( 0, 0 ) );
 		camera.getComponent<Transformation>()->setSize( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
 		auto cameraComponent = camera.getComponent<Camera>();
 		cameraComponent->setViewport( FloatRect( 0.f, 0.f, 1.f, 1.f ) );
