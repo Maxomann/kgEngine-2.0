@@ -119,11 +119,6 @@ namespace kg
 		m_sprite.setRotation( newRotation );
 	}
 
-	void Graphics::drawToSpriteBatch( batch::SpriteBatch& spriteBatch )
-	{
-		spriteBatch.drawToDynamicBuffer( { &m_sprite } );
-	}
-
 	void Graphics::draw( RenderTarget& target, RenderStates states ) const
 	{
 		target.draw( m_sprite, states );
@@ -175,9 +170,14 @@ namespace kg
 		return &m_sprite;
 	}
 
-	float Graphics::getZValue() const
+	int Graphics::getZValue() const
 	{
-		return (m_sprite.getPosition().y) + (m_sprite.getGlobalBounds().height / 2.f);
+		return m_zValue;
+	}
+
+	void Graphics::setZValue( int zValue )
+	{
+		m_zValue = zValue;
 	}
 
 	const size_t Graphics::type_hash = getRuntimeTypeInfo<Graphics>();

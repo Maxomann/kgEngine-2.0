@@ -51,7 +51,7 @@ namespace kg
 
 		void checkTexture( const sf::Sprite& sprite );
 
-		void recreateChache();
+		bool chacheChanged = false;
 		void chacheSprite( const sf::Sprite& sprite );// buffer has to be bound and mapped
 		void chacheSprite( const sf::Texture *texture, const sf::Vector2i &position,
 						   const sf::IntRect &rec, const sf::Color &color, const sf::Vector2i &scale,
@@ -62,8 +62,10 @@ namespace kg
 		SpriteVBO( unsigned int vertexCapacity, GLenum usage );
 		~SpriteVBO() = default;
 
-		void addSprites( const std::vector<sf::Sprite*>& sprites );
-		void removeSprites( const std::vector<sf::Sprite*>& sprites );
+		void recreateChache();
+
+		void addSprite( sf::Sprite* sprite );
+		void removeSprite( sf::Sprite* sprite );
 		void clear();
 
 		const sf::Texture* getTexture()const;

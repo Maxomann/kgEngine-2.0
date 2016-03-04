@@ -100,7 +100,7 @@ namespace kg
 		{
 			err() << "sf::Quads primitive type is not supported on OpenGL ES platforms, drawing skipped" << std::endl;
 			return;
-	}
+		}
 #define GL_QUADS 0
 #endif
 
@@ -148,7 +148,7 @@ namespace kg
 
 			unbind();
 		}
-}
+	}
 
 	unsigned int SpriteVBO::calculatePtrOffsetToNewElement() const
 	{
@@ -176,6 +176,8 @@ namespace kg
 
 		unmap();
 		unbind();
+
+		chacheChanged = false;
 	}
 
 	void SpriteVBO::chacheSprite( const sf::Sprite& sprite )
@@ -252,44 +254,38 @@ namespace kg
 
 	void SpriteVBO::draw( sf::RenderTarget &rt, sf::RenderStates& states )
 	{
+		if( chacheChanged )
+			recreateChache();
+
 		states.texture = m_texture;
 		VBO::draw( rt, states, m_sprites.size()*VERTEX_COUNT_PER_SPRITE );
 	}
 
-	void SpriteVBO::addSprites( const std::vector<sf::Sprite*>& sprites )
+	void SpriteVBO::addSprite( sf::Sprite* sprite )
 	{
-		bind();
-		map();
+		chacheChanged = true;
 
-		for( auto& el : sprites )
-		{
-			checkTexture( *el );
-			m_sprites.push_back( el );
-			chacheSprite( *el );
-		}
-
-		unmap();
-		unbind();
+		checkTexture( *sprite );
+		m_sprites.push_back( sprite );
 	}
 
-	void SpriteVBO::removeSprites( const std::vector<sf::Sprite*>& sprites )
+	void SpriteVBO::removeSprite( sf::Sprite* sprite )
 	{
+		chacheChanged = true;
+
 		auto condition = [&]( const sf::Sprite* el )
 		{
-			bool result = any_of( sprites.begin(), sprites.end(), [&]( const sf::Sprite* el2 )
-			{
-				return el == el2;
-			} );
-			return result;
+			return el == sprite;
 		};
 
 		remove_if( m_sprites.begin(), m_sprites.end(), condition );
-
-		recreateChache();
 	}
 
 	void SpriteVBO::clear()
 	{
+		chacheChanged = true;
+
 		m_sprites.clear();
+		m_texture = nullptr;
 	}
 }

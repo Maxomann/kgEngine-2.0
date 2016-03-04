@@ -1,16 +1,15 @@
 #pragma once
 #include "stdafx.h"
-#include "SpriteBatch.h"
 #include "id.h"
 #include "Camera.h"
-#include "ToDrawContainer.h"
+#include "DrawingLayerContainer.h"
 
 namespace kg
 {
 	class GraphicsSystem : public System, public CallbackReciever
 	{
 	private:
-		ToDrawContainer m_toDrawContainer;
+		DrawingLayerContainer m_toDrawContainer;
 		EntityManager::EntityPointerContainer m_removedEntities;
 
 		EntityManager::EntityPointerContainer m_cameras;

@@ -2,20 +2,16 @@
 #include "stdafx.h"
 #include "Position.h"
 #include "Graphics.h"
+#include "DrawingLayer.h"
 
 namespace kg
 {
-	struct ToDrawContainerWorldLayerElement
+	class DrawingLayerContainer
 	{
-		bool isSorted = false;
-		EntityManager::EntityPointerContainer entities;
-	};
+		std::map<PositionType, std::map<PositionType, std::unique_ptr<DrawingLayer>>> m_drawingLayersByZValueByWorldLayer;
 
-	class ToDrawContainer
-	{
-		std::map<PositionType, ToDrawContainerWorldLayerElement> m_entitiesByWorldLayer;
-
-		void sortContainer( ToDrawContainerWorldLayerElement& toSort );
+		static const int DYNAMIC_DRAWING_LAYER_ZVALUE = 0;
+		void initDrawingLayerPointer( std::unique_ptr<DrawingLayer>& pointer, int zValue );
 
 	public:
 
@@ -25,6 +21,6 @@ namespace kg
 		void addEntities_try( const EntityManager::EntityPointerContainer& entities );
 		void removeEntities_try( const EntityManager::EntityPointerContainer& entities );
 
-		EntityManager::EntityPointerContainer& getEntitiesFromWorldLayer( const PositionType worldLayer );
+		virtual void draw( sf::RenderTarget& target, sf::RenderStates& states, Position2d cameraPosition, int drawDistance )const;
 	};
 }

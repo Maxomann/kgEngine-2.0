@@ -47,9 +47,6 @@
     <ClCompile Include="Transformation.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteBatch.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationSystem.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -86,7 +83,10 @@
     <ClCompile Include="VBO.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="ToDrawContainer.cpp">
+    <ClCompile Include="DrawingLayerContainer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawingLayer.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -154,13 +154,13 @@
     <ClInclude Include="GraphicsSystem.h">
       <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteBatch.h">
-      <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
-    </ClInclude>
     <ClInclude Include="VBO.h">
       <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
     </ClInclude>
-    <ClInclude Include="ToDrawContainer.h">
+    <ClInclude Include="DrawingLayerContainer.h">
+      <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawingLayer.h">
       <Filter>Headerdateien\Systems\GraphicsSystem</Filter>
     </ClInclude>
   </ItemGroup>

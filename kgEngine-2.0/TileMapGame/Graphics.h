@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "SpriteBatch.h"
 #include "Transformation.h"
 
 namespace kg
@@ -11,6 +10,8 @@ namespace kg
 
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;
 		sf::Sprite m_sprite;
+
+		int m_zValue = 0;
 
 		bool m_isStatic = false;
 
@@ -54,9 +55,8 @@ namespace kg
 
 		sf::Sprite* getSprite();
 
-		float getZValue()const;
-
-		void drawToSpriteBatch( batch::SpriteBatch& spriteBatch );
+		void setZValue( int zValue );
+		int getZValue()const;
 
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const override;
 

@@ -94,6 +94,7 @@
     <ClCompile Include="ChunkGeneratorSystem.cpp" />
     <ClCompile Include="ChunkIOOperation.cpp" />
     <ClCompile Include="ChunkIOOperationQueue.cpp" />
+    <ClCompile Include="DrawingLayer.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="ChunkSystem.cpp" />
     <ClCompile Include="ConsoleGameState.cpp" />
@@ -103,8 +104,7 @@
     <ClCompile Include="connect.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="SingleplayerGameState.cpp" />
-    <ClCompile Include="SpriteBatch.cpp" />
-    <ClCompile Include="ToDrawContainer.cpp" />
+    <ClCompile Include="DrawingLayerContainer.cpp" />
     <ClCompile Include="Transformation.cpp" />
     <ClCompile Include="VBO.cpp" />
   </ItemGroup>
@@ -116,6 +116,7 @@
     <ClInclude Include="ChunkGeneratorSystem.h" />
     <ClInclude Include="ChunkIOOperation.h" />
     <ClInclude Include="ChunkIOOperationQueue.h" />
+    <ClInclude Include="DrawingLayer.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="ChunkSystem.h" />
     <ClInclude Include="ConsoleGameState.h" />
@@ -123,8 +124,7 @@
     <ClInclude Include="DefaultGameState.h" />
     <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="SingleplayerGameState.h" />
-    <ClInclude Include="SpriteBatch.h" />
-    <ClInclude Include="ToDrawContainer.h" />
+    <ClInclude Include="DrawingLayerContainer.h" />
     <ClInclude Include="Transformation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Graphics.h" />
