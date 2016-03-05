@@ -31,6 +31,10 @@ namespace kg
 
 		void recalculateTextureRect();
 
+		//Save
+		void onLoadSaveInformation( const std::vector<std::string>& information );
+		std::vector<std::string> onWriteSaveInformation();
+
 	public:
 		virtual void preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )override;
 

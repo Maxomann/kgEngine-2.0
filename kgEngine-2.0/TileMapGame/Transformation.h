@@ -14,7 +14,6 @@ namespace kg
 		sf::Vector2i m_size;
 
 		void onLoadSaveInformation( const std::vector<std::string>& information );
-
 		std::vector<std::string> onWriteSaveInformation();
 
 		void recalculateGlobalBounds();

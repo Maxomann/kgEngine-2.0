@@ -9,8 +9,8 @@ namespace kg
 	{
 		if( pointer == nullptr )
 		{
-			if( zValue == DYNAMIC_DRAWING_LAYER_ZVALUE )
-				pointer = make_unique<DynamicDrawingLayer>();
+			if( zValue == YSORTED_DRAWING_LAYER_ZVALUE )
+				pointer = make_unique<YSortedDrawingLayer>();
 			else
 				pointer = make_unique<StandartDrawingLayer>();
 		}
@@ -64,7 +64,7 @@ namespace kg
 		removeEntities( validEntities );
 	}
 
-	void DrawingLayerContainer::draw( sf::RenderTarget& target, sf::RenderStates& states, Position2d cameraPosition, int drawDistance ) const
+	void DrawingLayerContainer::draw( sf::RenderTarget& target, sf::RenderStates& states, Position2d cameraPosition, int drawDistance )
 	{
 		auto& worldLayer = cameraPosition.worldLayer;
 

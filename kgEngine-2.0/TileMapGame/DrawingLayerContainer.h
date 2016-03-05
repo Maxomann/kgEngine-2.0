@@ -10,7 +10,7 @@ namespace kg
 	{
 		std::map<PositionType, std::map<PositionType, std::unique_ptr<DrawingLayer>>> m_drawingLayersByZValueByWorldLayer;
 
-		static const int DYNAMIC_DRAWING_LAYER_ZVALUE = 0;
+		static const int YSORTED_DRAWING_LAYER_ZVALUE = 0;
 		void initDrawingLayerPointer( std::unique_ptr<DrawingLayer>& pointer, int zValue );
 
 	public:
@@ -21,6 +21,6 @@ namespace kg
 		void addEntities_try( const EntityManager::EntityPointerContainer& entities );
 		void removeEntities_try( const EntityManager::EntityPointerContainer& entities );
 
-		virtual void draw( sf::RenderTarget& target, sf::RenderStates& states, Position2d cameraPosition, int drawDistance )const;
+		virtual void draw( sf::RenderTarget& target, sf::RenderStates& states, Position2d cameraPosition, int drawDistance );
 	};
 }

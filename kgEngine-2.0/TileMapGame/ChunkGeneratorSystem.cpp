@@ -14,6 +14,7 @@ namespace kg
 			{
 				auto tile = world.createNewSaveableEntity( engine, world, engine.randomNumberGenerator.getRandomInt( 101, 103 ) );//grass
 				auto transform = tile.getComponent<Transformation>();
+				auto graphics = tile.getComponent<Graphics>();
 
 				int chunkPositionInPixelX = chunkPositionInChunks.x*Constants::CHUNK_SIZE;
 				int chunkPositionInPixelY = chunkPositionInChunks.y*Constants::CHUNK_SIZE;
@@ -28,6 +29,7 @@ namespace kg
 										 chunkPositionInChunks.worldLayer );
 
 				transform->setPosition( tilePosition );
+				graphics->setZValue( -1 );
 
 				entities.push_back( move( tile ) );
 			}

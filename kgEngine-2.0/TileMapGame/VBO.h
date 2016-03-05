@@ -47,15 +47,15 @@ namespace kg
 
 		const sf::Texture* m_texture = nullptr;
 
-		unsigned int calculatePtrOffsetToNewElement()const;
+		unsigned int calculatePtrOffsetToNthElement( const unsigned int n )const;
 
 		void checkTexture( const sf::Sprite& sprite );
 
 		bool chacheChanged = false;
-		void chacheSprite( const sf::Sprite& sprite );// buffer has to be bound and mapped
+		void chacheSprite( const sf::Sprite& sprite, const unsigned int n );// buffer has to be bound and mapped
 		void chacheSprite( const sf::Texture *texture, const sf::Vector2i &position,
 						   const sf::IntRect &rec, const sf::Color &color, const sf::Vector2i &scale,
-						   const sf::Vector2i &origin, float rotation = 0 );// buffer has to be bound and mapped
+						   const sf::Vector2i &origin, float rotation, const unsigned int n );// buffer has to be bound and mapped
 
 	public:
 		SpriteVBO() = default;
@@ -68,7 +68,15 @@ namespace kg
 		void removeSprite( sf::Sprite* sprite );
 		void clear();
 
+		template<class T>
+		void sortSprites( const T& condition )
+		{
+			chacheChanged = true;
+			std::sort( m_sprites.begin(), m_sprites.end(), condition );
+		};
+
 		const sf::Texture* getTexture()const;
+		unsigned int getSpriteCount()const;
 
 		void draw( sf::RenderTarget &rt, sf::RenderStates& states );
 	};

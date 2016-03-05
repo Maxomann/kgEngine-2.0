@@ -48,6 +48,15 @@ namespace kg
 		centerOrigin();
 		scaleToObjectSize();
 
+		auto saveComponent = thisEntity.getComponentTry<Save>();
+		if( saveComponent )
+		{
+			m_connectToSignal( saveComponent->s_loadSaveInformation[( int )id::ComponentPluginId::GRAPHICS],
+							   &Graphics::onLoadSaveInformation );
+			m_connectToSignal( saveComponent->s_writeSaveInformation[( int )id::ComponentPluginId::GRAPHICS],
+							   &Graphics::onWriteSaveInformation );
+		}
+
 		return;
 	}
 
@@ -178,6 +187,19 @@ namespace kg
 	void Graphics::setZValue( int zValue )
 	{
 		m_zValue = zValue;
+	}
+
+	void Graphics::onLoadSaveInformation( const std::vector<std::string>& information )
+	{
+		if( information.size() != 1 )
+			throw exception();
+
+		m_zValue = atoi( information.at( 0 ).c_str() );
+	}
+
+	std::vector<std::string> Graphics::onWriteSaveInformation()
+	{
+		return{ to_string( m_zValue ) };
 	}
 
 	const size_t Graphics::type_hash = getRuntimeTypeInfo<Graphics>();

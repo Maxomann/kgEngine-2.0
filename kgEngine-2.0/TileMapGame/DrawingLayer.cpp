@@ -5,6 +5,11 @@ using namespace tgui;
 
 namespace kg
 {
+	StandartDrawingLayer::StandartDrawingLayer()
+	{
+		m_dynamicVBO.generate( EXTENDED_VERTEX_CAPACITY, DYNAMIC_VBO_USAGE );
+	}
+
 	void StandartDrawingLayer::addEntity( Entity* entity )
 	{
 		auto graphicsComponent = entity->getComponent<Graphics>();
@@ -14,18 +19,158 @@ namespace kg
 		{
 			auto chunkPosition = *entity->getComponent<Transformation>()->getChunkPosition();
 
-			auto vboChunk = m_staticVBOs[chunkPosition];
-			if( vboChunk == m_staticVBOs.end() )
-				vboChunk = m_staticVBOs.in
+			// find vbo for chunk
+			auto it = find_if( m_staticVBOs.begin(), m_staticVBOs.end(), [&]( const ChunkVBO& el )
+			{
+				if( el.getChunkPosition() == chunkPosition.toPositionXY() && el.getTexture() == sprite->getTexture() )
+					return true;
+				else
+					return false;
+			} );
 
-				auto& vbo = vboChunk[sprite->getTexture()];
-			if( !vbo.isGenerated() )
-				vbo.generate( STANDART_VERTEX_CAPACITY, GL_WRITE_ONLY );
-			vbo.addSprite( sprite );
+			//found
+			if( it != m_staticVBOs.end() )
+			{
+				it->addSprite( sprite );
+			}
+			//not found
+			else
+			{
+				ChunkVBO vbo;
+				vbo.generate( STANDART_VERTEX_CAPACITY, STATIC_VBO_USAGE );
+				vbo.setChunkPosition( chunkPosition.toPositionXY() );
+				vbo.addSprite( sprite );
+
+				m_staticVBOs.push_back( move( vbo ) );
+			}
 		}
 		else
 		{
-			m_dynamicVBO.addSprite( sprite );
+			m_dynamicSprites.push_back( sprite );
 		}
+	}
+	void StandartDrawingLayer::removeEntity( Entity* entity )
+	{
+		auto graphicsComponent = entity->getComponent<Graphics>();
+		auto sprite = graphicsComponent->getSprite();
+
+		if( graphicsComponent->isStatic() )
+		{
+			auto chunkPosition = *entity->getComponent<Transformation>()->getChunkPosition();
+
+			// find vbo for chunk
+			auto it = find_if( m_staticVBOs.begin(), m_staticVBOs.end(), [&]( const ChunkVBO& el )
+			{
+				if( el.getChunkPosition() == chunkPosition.toPositionXY() && el.getTexture() == sprite->getTexture() )
+					return true;
+				else
+					return false;
+			} );
+
+			//found
+			if( it != m_staticVBOs.end() )
+			{
+				it->removeSprite( sprite );
+			}
+			//not found
+			else
+			{
+				throw exception();
+			}
+		}
+		else
+		{
+			auto condition = [&]( const sf::Sprite* el )
+			{
+				return el == sprite;
+			};
+
+			m_dynamicSprites.erase( remove_if( m_dynamicSprites.begin(), m_dynamicSprites.end(), condition ), m_dynamicSprites.end() );
+		}
+	}
+	void StandartDrawingLayer::draw( sf::RenderTarget & target,
+									 sf::RenderStates & states,
+									 PositionXY cameraPosition,
+									 int drawDistance )
+	{
+		for( auto& el : m_staticVBOs )
+		{
+			if( el.getSpriteCount() == 0 )
+			{
+				if( el.isGenerated() )
+					el.destroy();
+			}
+			else
+				el.draw( target, states );
+		}
+
+		for( auto& sprite : m_dynamicSprites )
+		{
+			auto spritePosition = sprite->getPosition();
+
+			auto distanceVec = sf::Vector2i( spritePosition.x - cameraPosition.x, spritePosition.y - cameraPosition.y );
+			if( length( distanceVec ) <= drawDistance )
+				m_dynamicVBO.addSprite( sprite );
+		}
+		m_dynamicVBO.draw( target, states );
+		m_dynamicVBO.clear();
+	}
+
+	YSortedDrawingLayer::YSortedDrawingLayer()
+	{
+		m_dynamicVBO.generate( EXTENDED_VERTEX_CAPACITY, DYNAMIC_VBO_USAGE );
+	}
+
+	void YSortedDrawingLayer::addEntity( Entity * entity )
+	{
+		m_dynamicSprites.push_back( entity->getComponent<Graphics>()->getSprite() );
+	}
+	void YSortedDrawingLayer::removeEntity( Entity* entity )
+	{
+#ifdef _DEBUG
+		unsigned int size_before = m_dynamicSprites.size();
+#endif
+
+		Sprite* sprite = entity->getComponent<Graphics>()->getSprite();
+
+		auto condition = [&]( const sf::Sprite* el )
+		{
+			return el == sprite;
+		};
+
+		m_dynamicSprites.erase( remove_if( m_dynamicSprites.begin(), m_dynamicSprites.end(), condition ), m_dynamicSprites.end() );
+
+#ifdef _DEBUG
+		if( size_before <= m_dynamicSprites.size() )
+			throw exception();
+#endif
+	}
+	void YSortedDrawingLayer::draw( sf::RenderTarget & target, sf::RenderStates & states, PositionXY cameraPosition, int drawDistance )
+	{
+		for( auto& sprite : m_dynamicSprites )
+		{
+			auto spritePosition = sprite->getPosition();
+
+			auto distanceVec = sf::Vector2i( spritePosition.x - cameraPosition.x, spritePosition.y - cameraPosition.y );
+			if( length( distanceVec ) <= drawDistance )
+				m_dynamicVBO.addSprite( sprite );
+		}
+
+		//Y Value SORTING:
+		m_dynamicVBO.sortSprites( [](
+			const Sprite* lhs,
+			const Sprite* rhs )
+		{
+			const auto& zValueLeft = lhs->getPosition().y + (lhs->getGlobalBounds().height / 2.f);
+			const auto& zValueRight = rhs->getPosition().y + (rhs->getGlobalBounds().height / 2.f);
+
+			if( zValueRight > zValueLeft )
+				return true;
+
+			return false;
+		} );
+
+		m_dynamicVBO.draw( target, states );
+		m_dynamicVBO.clear();
 	}
 }

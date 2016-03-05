@@ -94,6 +94,7 @@
     <ClCompile Include="ChunkGeneratorSystem.cpp" />
     <ClCompile Include="ChunkIOOperation.cpp" />
     <ClCompile Include="ChunkIOOperationQueue.cpp" />
+    <ClCompile Include="ChunkVBO.cpp" />
     <ClCompile Include="DrawingLayer.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="ChunkSystem.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="ChunkGeneratorSystem.h" />
     <ClInclude Include="ChunkIOOperation.h" />
     <ClInclude Include="ChunkIOOperationQueue.h" />
+    <ClInclude Include="ChunkVBO.h" />
     <ClInclude Include="DrawingLayer.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="ChunkSystem.h" />

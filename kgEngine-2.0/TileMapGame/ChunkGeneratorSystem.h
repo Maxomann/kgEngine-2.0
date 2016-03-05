@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Transformation.h"
 #include "Position.h"
+#include "Graphics.h"
 
 namespace kg
 {

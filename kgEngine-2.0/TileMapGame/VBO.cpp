@@ -12,6 +12,7 @@ namespace kg
 		glGenBuffers( 1, &m_glId );
 		bind();
 		glBufferData( GL_ARRAY_BUFFER, sizeof( Vertex )*vertexCapacity, NULL, usage );
+		unbind();
 	}
 
 	void VBO::destroy()
@@ -52,8 +53,21 @@ namespace kg
 
 	void VBO::map()
 	{
+		GLint result;
+		glGetIntegerv( GL_ARRAY_BUFFER_BINDING, &result );
+		cout << result << endl;
+
 		m_isMapped = true;
 		m_ptr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
+		if( m_ptr == nullptr )
+		{
+			GLenum err;
+			while( (err = glGetError()) != GL_NO_ERROR )
+			{
+				cout << err << endl;
+			}
+			throw exception();
+		}
 	}
 
 	void VBO::unmap()
@@ -150,12 +164,12 @@ namespace kg
 		}
 	}
 
-	unsigned int SpriteVBO::calculatePtrOffsetToNewElement() const
+	unsigned int SpriteVBO::calculatePtrOffsetToNthElement( const unsigned int n ) const
 	{
-		if( m_sprites.size() * VERTEX_COUNT_PER_SPRITE >= getVertexCapacity() )
+		if( n * VERTEX_COUNT_PER_SPRITE >= getVertexCapacity() )
 			throw exception();
 
-		return m_sprites.size() * VERTEX_COUNT_PER_SPRITE;
+		return n * VERTEX_COUNT_PER_SPRITE;
 	}
 
 	void SpriteVBO::checkTexture( const sf::Sprite& sprite )
@@ -171,8 +185,12 @@ namespace kg
 		bind();
 		map();
 
+		int n = 0;
 		for( auto& el : m_sprites )
-			chacheSprite( *el );
+		{
+			chacheSprite( *el, n );
+			n++;
+		}
 
 		unmap();
 		unbind();
@@ -180,7 +198,8 @@ namespace kg
 		chacheChanged = false;
 	}
 
-	void SpriteVBO::chacheSprite( const sf::Sprite& sprite )
+	void SpriteVBO::chacheSprite( const sf::Sprite& sprite,
+								  const unsigned int n )
 	{
 		chacheSprite( sprite.getTexture(),
 					  ( Vector2i )sprite.getPosition(),
@@ -188,7 +207,8 @@ namespace kg
 					  sprite.getColor(),
 					  ( Vector2i )sprite.getScale(),
 					  ( Vector2i )sprite.getOrigin(),
-					  sprite.getRotation() );
+					  sprite.getRotation(),
+					  n );
 	}
 
 	void SpriteVBO::chacheSprite( const sf::Texture *texture,
@@ -197,9 +217,10 @@ namespace kg
 								  const sf::Color &color,
 								  const sf::Vector2i &scale,
 								  const sf::Vector2i &origin,
-								  float rotation )
+								  float rotation,
+								  const unsigned int n )
 	{
-		auto offset = calculatePtrOffsetToNewElement();
+		auto offset = calculatePtrOffsetToNthElement( n );
 
 		float _sin = sin( rotation * boost::math::constants::pi<float>() / 180 );
 		float _cos = cos( rotation * boost::math::constants::pi<float>() / 180 );
@@ -252,6 +273,11 @@ namespace kg
 		return m_texture;
 	}
 
+	unsigned int SpriteVBO::getSpriteCount() const
+	{
+		return m_sprites.size();
+	}
+
 	void SpriteVBO::draw( sf::RenderTarget &rt, sf::RenderStates& states )
 	{
 		if( chacheChanged )
@@ -278,7 +304,7 @@ namespace kg
 			return el == sprite;
 		};
 
-		remove_if( m_sprites.begin(), m_sprites.end(), condition );
+		m_sprites.erase( remove_if( m_sprites.begin(), m_sprites.end(), condition ), m_sprites.end() );
 	}
 
 	void SpriteVBO::clear()
