@@ -40,7 +40,7 @@ namespace kg
 		if( frameTime.asMilliseconds() < MIN_FRAME_TIME_IN_MILLISECONDS )//ensure that frameTime is bigger than MIN_FRAME_TIME_IN_MILLISECONDS
 		{
 			sleep( milliseconds( MIN_FRAME_TIME_IN_MILLISECONDS ) );
-			frameTime = m_frameTimeClock.restart();
+			frameTime += m_frameTimeClock.restart();
 		}
 		if( m_engine.pauseLockManager.isPaused() )
 			frameTime = sf::seconds( 0 );
