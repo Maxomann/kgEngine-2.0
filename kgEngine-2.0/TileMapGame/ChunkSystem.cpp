@@ -93,7 +93,7 @@ namespace kg
 		auto newChunkPosition =
 			Chunk::calculateChunkPositionForPosition2d( transformationComponent->getPosition() );
 
-		auto oldChunkPosition = transformationComponent->getChunkPosition();
+		auto oldChunkPosition = transformationComponent->getLastChunkPosition();
 		if( oldChunkPosition )
 		{
 			//entity is already registered
@@ -122,7 +122,7 @@ namespace kg
 	{
 		if( entity->hasComponent<Transformation>() )
 		{
-			auto chunkPosition = entity->getComponent<Transformation>()->getChunkPosition();
+			auto chunkPosition = entity->getComponent<Transformation>()->getLastChunkPosition();
 
 			if( chunkPosition )
 				m_chunks.getChunk( *chunkPosition ).removeEntity( entity );

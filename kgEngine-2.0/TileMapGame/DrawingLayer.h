@@ -6,13 +6,12 @@
 
 namespace kg
 {
-	//SUPPORT MULTIPLE TEXTURES
-
 	class DrawingLayer
 	{
 	public:
-		static const int STANDART_VERTEX_CAPACITY = 400'000;
-		static const int EXTENDED_VERTEX_CAPACITY = 1'000'000;
+		static const int STANDART_VERTEX_CAPACITY = 40'000;
+		static const int MEDIUM_VERTEX_CAPACITY = 400'000;
+		static const int EXTENDED_VERTEX_CAPACITY = 800'000;
 		static const int STATIC_VBO_USAGE = GL_STATIC_DRAW;
 		static const int DYNAMIC_VBO_USAGE = GL_DYNAMIC_DRAW;
 
@@ -22,10 +21,9 @@ namespace kg
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates& states, PositionXY cameraPosition, int drawDistance ) = 0;
 	};
 
-	// Sprites added in this Container MUST NOT MOVE!
 	class StandartDrawingLayer : public DrawingLayer
 	{
-		std::vector<ChunkVBO> m_staticVBOs;
+		std::list<ChunkVBO> m_staticVBOs;
 
 		std::vector<sf::Sprite*> m_dynamicSprites;
 		SpriteVBO m_dynamicVBO;

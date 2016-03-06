@@ -53,10 +53,6 @@ namespace kg
 
 	void VBO::map()
 	{
-		GLint result;
-		glGetIntegerv( GL_ARRAY_BUFFER_BINDING, &result );
-		cout << result << endl;
-
 		m_isMapped = true;
 		m_ptr = ( Vertex* )glMapBuffer( GL_ARRAY_BUFFER, GL_WRITE_ONLY );
 		if( m_ptr == nullptr )
@@ -176,7 +172,7 @@ namespace kg
 	{
 		if( m_texture == nullptr || m_sprites.size() == 0 )
 			m_texture = sprite.getTexture();
-		if( m_texture != sprite.getTexture() )
+		else if( m_texture != sprite.getTexture() )
 			throw exception();
 	}
 

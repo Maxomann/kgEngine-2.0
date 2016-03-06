@@ -48,11 +48,13 @@ namespace kg
 		void setWorldLayer( int layer );
 		int getWorldLayer()const;
 
-		const boost::optional<ChunkPosition>& getChunkPosition()const;
+		// return boost::none if it has not been initialized
+		// if an entity gets removed from world the LastChunkPositon will remain the same
+		const boost::optional<ChunkPosition>& getLastChunkPosition()const;
 		//DO NOT CALL THIS. IT WILL CAUSE ERRORS. Only Chunk should call this
 		void setChunkPostion( ChunkPosition chunkPosition );
 		//DO NOT CALL THIS. IT WILL CAUSE ERRORS. Only Chunk should call this
-		void removeChunkPosition();
+		//void removeChunkPosition();
 
 		//Rotation
 		void setRotation( const float rotationInDegree );

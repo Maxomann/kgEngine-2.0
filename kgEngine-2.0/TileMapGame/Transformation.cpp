@@ -214,7 +214,7 @@ namespace kg
 		s_position2dChanged( m_position );
 	}
 
-	const boost::optional<ChunkPosition>& Transformation::getChunkPosition() const
+	const boost::optional<ChunkPosition>& Transformation::getLastChunkPosition() const
 	{
 		return m_chunkPosition;
 	}
@@ -224,10 +224,10 @@ namespace kg
 		m_chunkPosition = chunkPosition;
 	}
 
-	void Transformation::removeChunkPosition()
+	/*void Transformation::removeChunkPosition()
 	{
 		m_chunkPosition = boost::none;
-	}
+	}*/
 
 	const std::string Transformation::PLUGIN_NAME = "Transformation";
 

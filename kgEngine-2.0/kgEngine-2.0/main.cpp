@@ -26,6 +26,6 @@ int main()
 	}
 #endif
 #ifdef _DEBUG
-	system( "pause" );
+	//system( "pause" );
 #endif
 }

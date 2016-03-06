@@ -7,7 +7,7 @@ namespace kg
 {
 	StandartDrawingLayer::StandartDrawingLayer()
 	{
-		m_dynamicVBO.generate( EXTENDED_VERTEX_CAPACITY, DYNAMIC_VBO_USAGE );
+		m_dynamicVBO.generate( MEDIUM_VERTEX_CAPACITY, DYNAMIC_VBO_USAGE );
 	}
 
 	void StandartDrawingLayer::addEntity( Entity* entity )
@@ -17,7 +17,7 @@ namespace kg
 
 		if( graphicsComponent->isStatic() )
 		{
-			auto chunkPosition = *entity->getComponent<Transformation>()->getChunkPosition();
+			auto chunkPosition = *entity->getComponent<Transformation>()->getLastChunkPosition();
 
 			// find vbo for chunk
 			auto it = find_if( m_staticVBOs.begin(), m_staticVBOs.end(), [&]( const ChunkVBO& el )
@@ -36,12 +36,12 @@ namespace kg
 			//not found
 			else
 			{
-				ChunkVBO vbo;
-				vbo.generate( STANDART_VERTEX_CAPACITY, STATIC_VBO_USAGE );
-				vbo.setChunkPosition( chunkPosition.toPositionXY() );
-				vbo.addSprite( sprite );
+				m_staticVBOs.emplace_back();
+				auto& vbo = m_staticVBOs.back();
 
-				m_staticVBOs.push_back( move( vbo ) );
+				vbo.setChunkPosition( chunkPosition.toPositionXY() );
+				vbo.generate( STANDART_VERTEX_CAPACITY, STATIC_VBO_USAGE );
+				vbo.addSprite( sprite );
 			}
 		}
 		else
@@ -56,7 +56,7 @@ namespace kg
 
 		if( graphicsComponent->isStatic() )
 		{
-			auto chunkPosition = *entity->getComponent<Transformation>()->getChunkPosition();
+			auto chunkPosition = *entity->getComponent<Transformation>()->getLastChunkPosition();
 
 			// find vbo for chunk
 			auto it = find_if( m_staticVBOs.begin(), m_staticVBOs.end(), [&]( const ChunkVBO& el )
@@ -71,6 +71,8 @@ namespace kg
 			if( it != m_staticVBOs.end() )
 			{
 				it->removeSprite( sprite );
+				if( it->getSpriteCount() == 0 )
+					m_staticVBOs.erase( it );
 			}
 			//not found
 			else
@@ -94,15 +96,7 @@ namespace kg
 									 int drawDistance )
 	{
 		for( auto& el : m_staticVBOs )
-		{
-			if( el.getSpriteCount() == 0 )
-			{
-				if( el.isGenerated() )
-					el.destroy();
-			}
-			else
-				el.draw( target, states );
-		}
+			el.draw( target, states );
 
 		for( auto& sprite : m_dynamicSprites )
 		{

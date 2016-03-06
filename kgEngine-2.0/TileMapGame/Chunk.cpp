@@ -42,7 +42,7 @@ namespace kg
 	{
 		//update entityData
 		auto transformationComponent = entity->getComponent<Transformation>();
-		transformationComponent->removeChunkPosition();
+		//transformationComponent->removeChunkPosition();
 
 		m_entities.erase( std::remove( m_entities.begin(), m_entities.end(), entity ), m_entities.end() );
 	}
