@@ -11,6 +11,8 @@ namespace kg
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;
 		sf::Sprite m_sprite;
 
+		int m_zValue = 0;
+
 		bool m_isStatic = false;
 
 		void onPositionChanged( const Position2d& newPosition );
@@ -28,6 +30,10 @@ namespace kg
 		sf::IntRect getTextureRect()const;
 
 		void recalculateTextureRect();
+
+		//Save
+		void onLoadSaveInformation( const std::vector<std::string>& information );
+		std::vector<std::string> onWriteSaveInformation();
 
 	public:
 		virtual void preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )override;
@@ -51,7 +57,10 @@ namespace kg
 
 		bool isStatic()const;
 
-		void drawToSpriteBatch( batch::SpriteBatch& spriteBatch )const;
+		sf::Sprite* getSprite();
+
+		void setZValue( int zValue );
+		int getZValue()const;
 
 		virtual void draw( sf::RenderTarget& target, sf::RenderStates states ) const override;
 

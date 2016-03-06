@@ -34,7 +34,7 @@ namespace kg
 
 	typedef Position2d ChunkPosition;
 
-	struct PositionXYZ
+	/*struct PositionXYZ
 	{
 		PositionType x = 0;
 		PositionType y = 0;
@@ -46,9 +46,9 @@ namespace kg
 		bool operator!=( const PositionXYZ& other )const;
 
 		PositionXY toPositionXY()const;
-	};
+	};*/
 
-	struct Position
+	/*struct Position
 	{
 		PositionType x = 0;
 		PositionType y = 0;
@@ -57,11 +57,11 @@ namespace kg
 
 		Position() = default;
 		Position( PositionType x, PositionType y, PositionType zValue, PositionType worldLayer );
-		bool operator==( const Position& other )const;
-		bool operator!=( const Position& other )const;
+		bool operator==( const Position2d& other )const;
+		bool operator!=( const Position2d& other )const;
 
 		Position2d toPosition2d()const;
 		PositionXY toPositionXY()const;
 		PositionXYZ toPositionXYZ()const;
-	};
+	};*/
 }

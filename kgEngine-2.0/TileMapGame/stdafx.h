@@ -6,6 +6,4 @@
 #include "constants.h"
 #include "id.h"
 
-#include "SpriteBatch.h"
-
 #endif//TILE_MAP_STDAFX_H

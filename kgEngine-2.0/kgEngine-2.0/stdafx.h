@@ -34,6 +34,7 @@
 #include <utility>
 #include <ctime>
 #include <future>
+#include <cmath>
 
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
@@ -59,6 +60,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/optional.hpp>
+#include <boost/math/constants/constants.hpp>
 
 #include <Thor/Input.hpp>
 

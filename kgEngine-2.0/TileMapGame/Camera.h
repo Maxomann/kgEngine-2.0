@@ -1,8 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Graphics.h"
-#include "SpriteBatch.h"
-#include "ToDrawSortedContainer.h"
+#include "DrawingLayerContainer.h"
 
 namespace kg
 {
@@ -17,8 +16,6 @@ namespace kg
 		void m_onPositionChanged( const Position2d& newPosition );
 		void m_onSizeChanged( const sf::Vector2i& newSize );
 		void m_setViewSize( const sf::Vector2i& size, const float& zoomFactor );
-
-		batch::SpriteBatch m_spriteBatch;
 
 		float m_zoomFactor = 1;
 
@@ -50,7 +47,7 @@ namespace kg
 		const unsigned int& getDrawDistance()const;
 
 		void drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-										ToDrawSortedContainer& toDrawSorted );
+										DrawingLayerContainer& toDrawSorted );
 
 		static const std::string PLUGIN_NAME;
 

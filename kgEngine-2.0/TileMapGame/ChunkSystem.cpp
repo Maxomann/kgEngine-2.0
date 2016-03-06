@@ -48,7 +48,7 @@ namespace kg
 
 		std::vector<Position2d> cameraPositions;
 		for( const auto& camera : cameras )
-			cameraPositions.push_back( camera->getComponent<Transformation>()->getPosition().toPosition2d() );
+			cameraPositions.push_back( camera->getComponent<Transformation>()->getPosition() );
 		loadUnloadChunksAroundCameraPositions( engine, world, saveManager, cameraPositions );
 
 		m_chunkIOOperationQueue.update();
@@ -91,9 +91,9 @@ namespace kg
 		auto transformationComponent = entity->getComponent<Transformation>();
 
 		auto newChunkPosition =
-			Chunk::calculateChunkPositionForPosition2d( transformationComponent->getPosition().toPosition2d() );
+			Chunk::calculateChunkPositionForPosition2d( transformationComponent->getPosition() );
 
-		auto oldChunkPosition = transformationComponent->getChunkPosition();
+		auto oldChunkPosition = transformationComponent->getLastChunkPosition();
 		if( oldChunkPosition )
 		{
 			//entity is already registered
@@ -122,7 +122,7 @@ namespace kg
 	{
 		if( entity->hasComponent<Transformation>() )
 		{
-			auto chunkPosition = entity->getComponent<Transformation>()->getChunkPosition();
+			auto chunkPosition = entity->getComponent<Transformation>()->getLastChunkPosition();
 
 			if( chunkPosition )
 				m_chunks.getChunk( *chunkPosition ).removeEntity( entity );

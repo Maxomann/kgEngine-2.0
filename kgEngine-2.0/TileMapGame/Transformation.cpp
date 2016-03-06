@@ -68,16 +68,15 @@ namespace kg
 		return type_hash;
 	}
 
-	void Transformation::setPosition( const Position& position )
+	void Transformation::setPosition( const Position2d& position )
 	{
 		m_position = position;
 
 		s_transformationChanged();
-		s_positionChanged( m_position );
-		s_position2dChanged( m_position.toPosition2d() );
+		s_position2dChanged( m_position );
 	}
 
-	const Position& Transformation::getPosition() const
+	const Position2d& Transformation::getPosition() const
 	{
 		return m_position;
 	}
@@ -89,8 +88,7 @@ namespace kg
 		m_position.worldLayer = worldLayer;
 
 		s_transformationChanged();
-		s_positionChanged( m_position );
-		s_position2dChanged( m_position.toPosition2d() );
+		s_position2dChanged( m_position );
 	}
 
 	void Transformation::setPositionXY( const PositionXY& position )
@@ -101,8 +99,7 @@ namespace kg
 		recalculateGlobalBounds();
 
 		s_transformationChanged();
-		s_positionChanged( m_position );
-		s_position2dChanged( m_position.toPosition2d() );
+		s_position2dChanged( m_position );
 	}
 
 	kg::PositionXY Transformation::getPositionXY() const
@@ -118,8 +115,7 @@ namespace kg
 		recalculateGlobalBounds();
 
 		s_transformationChanged();
-		s_positionChanged( m_position );
-		s_position2dChanged( m_position.toPosition2d() );
+		s_position2dChanged( m_position );
 	}
 
 	void Transformation::setRotation( const float rotationInDegree )
@@ -164,22 +160,21 @@ namespace kg
 
 	void Transformation::onLoadSaveInformation( const std::vector<std::string>& information )
 	{
-		if( information.size() != 7 )
+		if( information.size() != 6 )
 			throw exception();
 		else
 		{
 			setPosition(
-				Position(
+				Position2d(
 					atoi( information.at( 0 ).c_str() ),
 					atoi( information.at( 1 ).c_str() ),
-					atoi( information.at( 2 ).c_str() ),
-					atoi( information.at( 3 ).c_str() )
+					atoi( information.at( 2 ).c_str() )
 					)
 				);
-			setRotation( static_cast< float >(atof( information.at( 4 ).c_str() )) );
+			setRotation( static_cast< float >(atof( information.at( 3 ).c_str() )) );
 			setSize( Vector2i(
-				atoi( information.at( 5 ).c_str() ),
-				atoi( information.at( 6 ).c_str() ) ) );
+				atoi( information.at( 4 ).c_str() ),
+				atoi( information.at( 5 ).c_str() ) ) );
 		}
 	}
 
@@ -188,7 +183,6 @@ namespace kg
 		return{
 			to_string( m_position.x ),
 			to_string( m_position.y ),
-			to_string( m_position.zValue ),
 			to_string( m_position.worldLayer ),
 			to_string( m_rotation ),
 			to_string( m_size.x ),
@@ -207,30 +201,6 @@ namespace kg
 		m_globalBounds = shape.getGlobalBounds();
 	}
 
-	int Transformation::getZValue() const
-	{
-		return m_position.zValue;
-	}
-
-	void Transformation::setPositionXYZ( const PositionXYZ& position )
-	{
-		m_position.x = position.x;
-		m_position.y = position.y;
-		m_position.zValue = position.zValue;
-
-		s_transformationChanged();
-		s_positionChanged( m_position );
-		s_position2dChanged( m_position.toPosition2d() );
-	}
-
-	void Transformation::setZValue( int zValue )
-	{
-		m_position.zValue = zValue;
-
-		s_transformationChanged();
-		s_positionChanged( m_position );
-	}
-
 	int Transformation::getWorldLayer() const
 	{
 		return m_position.worldLayer;
@@ -241,11 +211,10 @@ namespace kg
 		m_position.worldLayer = layer;
 
 		s_transformationChanged();
-		s_positionChanged( m_position );
-		s_position2dChanged( m_position.toPosition2d() );
+		s_position2dChanged( m_position );
 	}
 
-	const boost::optional<ChunkPosition>& Transformation::getChunkPosition() const
+	const boost::optional<ChunkPosition>& Transformation::getLastChunkPosition() const
 	{
 		return m_chunkPosition;
 	}
@@ -255,15 +224,10 @@ namespace kg
 		m_chunkPosition = chunkPosition;
 	}
 
-	void Transformation::removeChunkPosition()
+	/*void Transformation::removeChunkPosition()
 	{
 		m_chunkPosition = boost::none;
-	}
-
-	kg::PositionXYZ Transformation::getPositionXYZ() const
-	{
-		return m_position.toPositionXYZ();
-	}
+	}*/
 
 	const std::string Transformation::PLUGIN_NAME = "Transformation";
 

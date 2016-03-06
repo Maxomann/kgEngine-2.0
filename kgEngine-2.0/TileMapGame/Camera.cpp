@@ -93,7 +93,7 @@ namespace kg
 	kg::Entity Camera::CREATE( Engine& engine, World& world, const unsigned int& drawDistancePointer )
 	{
 		auto camera = world.createNewTemporaryEntity<Transformation, Camera>( engine, world );
-		//camera.getComponent<Transformation>()->setPosition( sf::Vector2i( 0, 0 ) );
+		camera.getComponent<Transformation>()->setPositionXY( PositionXY( 0, 0 ) );
 		camera.getComponent<Transformation>()->setSize( sf::Vector2i( engine.renderWindow.getSize().x, engine.renderWindow.getSize().y ) );
 		auto cameraComponent = camera.getComponent<Camera>();
 		cameraComponent->setViewport( FloatRect( 0.f, 0.f, 1.f, 1.f ) );
@@ -107,25 +107,45 @@ namespace kg
 	}
 
 	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
-											ToDrawSortedContainer& toDrawSorted )
+											DrawingLayerContainer& drawingLayerContainer )
 	{
-		m_spriteBatch.setRenderTarget( renderWindow );
+		//m_spriteBatch.setRenderTarget( renderWindow );
 
 		const auto thisGlobalBounds = r_transformation->getGlobalBounds();
 
 		renderWindow.setView( m_view );
 
 		auto thisPosition = r_transformation->getPosition();
+
+		drawingLayerContainer.draw( renderWindow, RenderStates(), thisPosition, m_drawDistance );
+
+		/*std::vector<sf::Sprite*> toDrawFinal;
 		for( const auto& el : toDrawSorted.getEntitiesFromWorldLayer( thisPosition.worldLayer ) )
 		{
 			auto spritePosition = el->getComponent<Transformation>()->getPosition();
 
 			auto distanceVec = sf::Vector2i( spritePosition.x - thisPosition.x, spritePosition.y - thisPosition.y );
 			if( length( distanceVec ) <= m_drawDistance )
-				el->getComponent<Graphics>()->drawToSpriteBatch( m_spriteBatch );
+				toDrawFinal.push_back( el->getComponent<Graphics>()->getSprite() );
 		}
 
-		m_spriteBatch.display();
+		//Z SORTING: REFACTOR THIS!!!
+		std::sort( toDrawFinal.begin(), toDrawFinal.end(), [](
+			const Sprite* lhs,
+			const Sprite* rhs )
+		{
+			const auto& zValueLeft = lhs->getPosition().y + (lhs->getGlobalBounds().height / 2.f);
+			const auto& zValueRight = rhs->getPosition().y + (rhs->getGlobalBounds().height / 2.f);
+
+			if( zValueRight > zValueLeft )
+				return true;
+
+			return false;
+		} );
+
+		m_spriteBatch.drawToDynamicBuffer( toDrawFinal );
+
+		m_spriteBatch.display();*/
 
 		renderWindow.setView( renderWindow.getDefaultView() );
 	}

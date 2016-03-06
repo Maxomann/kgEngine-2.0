@@ -124,7 +124,7 @@ namespace kg
 
 	void GraphicsSystem::m_onEntityAddedToWorld( Entity* entity )
 	{
-		m_toDrawSorted.addEntities_try( { entity } );
+		m_toDrawContainer.addEntities_try( { entity } );
 	}
 
 	void GraphicsSystem::m_onEntityRemovedFromWorld( Entity* entity )
@@ -148,10 +148,7 @@ namespace kg
 		} ), m_cameras.end() );
 
 		//remove entities
-		for( const auto& el : m_removedEntities )
-		{
-			m_toDrawSorted.removeEntities_try( { el } );
-		}
+		m_toDrawContainer.removeEntities_try( m_removedEntities );
 
 		m_removedEntities.clear();
 	}
@@ -218,7 +215,7 @@ namespace kg
 
 		// draw
 		for( const auto& camera : m_cameras )
-			camera->getComponent<Camera>()->drawSpritesToRenderWindow( *r_renderWindow, m_toDrawSorted );
+			camera->getComponent<Camera>()->drawSpritesToRenderWindow( *r_renderWindow, m_toDrawContainer );
 
 		r_gui->draw();
 		r_renderWindow->display();
@@ -235,7 +232,7 @@ namespace kg
 
 	const std::string GraphicsSystem::WINDOW_NAME_DEFAULT = "DefaultWindowName";
 
-	const std::string GraphicsSystem::DRAW_DISTANCE_DEFAULT = "500";
+	const std::string GraphicsSystem::DRAW_DISTANCE_DEFAULT = "3000";
 
 	const std::string GraphicsSystem::VSYNC_DEFAULT = "1";
 

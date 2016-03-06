@@ -2,14 +2,14 @@
 #include "stdafx.h"
 #include "id.h"
 #include "Camera.h"
-#include "ToDrawSortedContainer.h"
+#include "DrawingLayerContainer.h"
 
 namespace kg
 {
 	class GraphicsSystem : public System, public CallbackReciever
 	{
 	private:
-		ToDrawSortedContainer m_toDrawSorted;
+		DrawingLayerContainer m_toDrawContainer;
 		EntityManager::EntityPointerContainer m_removedEntities;
 
 		EntityManager::EntityPointerContainer m_cameras;

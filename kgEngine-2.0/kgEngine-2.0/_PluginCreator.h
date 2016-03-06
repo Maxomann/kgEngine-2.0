@@ -6,7 +6,6 @@
 #include "Callback.h"
 #include "ConfigFile.h"
 #include "SwapContainer.h"
-#include "EntityThatHasComponentContainer.h"
 
 //exceptions:
 #include "BlueprintValueReadErrorException.h"
