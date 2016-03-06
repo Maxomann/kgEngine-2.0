@@ -224,11 +224,6 @@ namespace kg
 		m_chunkPosition = chunkPosition;
 	}
 
-	/*void Transformation::removeChunkPosition()
-	{
-		m_chunkPosition = boost::none;
-	}*/
-
 	const std::string Transformation::PLUGIN_NAME = "Transformation";
 
 	const size_t Transformation::type_hash = getRuntimeTypeInfo<Transformation>();

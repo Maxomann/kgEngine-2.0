@@ -53,8 +53,6 @@ namespace kg
 		const boost::optional<ChunkPosition>& getLastChunkPosition()const;
 		//DO NOT CALL THIS. IT WILL CAUSE ERRORS. Only Chunk should call this
 		void setChunkPostion( ChunkPosition chunkPosition );
-		//DO NOT CALL THIS. IT WILL CAUSE ERRORS. Only Chunk should call this
-		//void removeChunkPosition();
 
 		//Rotation
 		void setRotation( const float rotationInDegree );

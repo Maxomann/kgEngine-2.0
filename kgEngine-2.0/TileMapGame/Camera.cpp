@@ -109,8 +109,6 @@ namespace kg
 	void Camera::drawSpritesToRenderWindow( sf::RenderWindow& renderWindow,
 											DrawingLayerContainer& drawingLayerContainer )
 	{
-		//m_spriteBatch.setRenderTarget( renderWindow );
-
 		const auto thisGlobalBounds = r_transformation->getGlobalBounds();
 
 		renderWindow.setView( m_view );
@@ -118,34 +116,6 @@ namespace kg
 		auto thisPosition = r_transformation->getPosition();
 
 		drawingLayerContainer.draw( renderWindow, RenderStates(), thisPosition, m_drawDistance );
-
-		/*std::vector<sf::Sprite*> toDrawFinal;
-		for( const auto& el : toDrawSorted.getEntitiesFromWorldLayer( thisPosition.worldLayer ) )
-		{
-			auto spritePosition = el->getComponent<Transformation>()->getPosition();
-
-			auto distanceVec = sf::Vector2i( spritePosition.x - thisPosition.x, spritePosition.y - thisPosition.y );
-			if( length( distanceVec ) <= m_drawDistance )
-				toDrawFinal.push_back( el->getComponent<Graphics>()->getSprite() );
-		}
-
-		//Z SORTING: REFACTOR THIS!!!
-		std::sort( toDrawFinal.begin(), toDrawFinal.end(), [](
-			const Sprite* lhs,
-			const Sprite* rhs )
-		{
-			const auto& zValueLeft = lhs->getPosition().y + (lhs->getGlobalBounds().height / 2.f);
-			const auto& zValueRight = rhs->getPosition().y + (rhs->getGlobalBounds().height / 2.f);
-
-			if( zValueRight > zValueLeft )
-				return true;
-
-			return false;
-		} );
-
-		m_spriteBatch.drawToDynamicBuffer( toDrawFinal );
-
-		m_spriteBatch.display();*/
 
 		renderWindow.setView( renderWindow.getDefaultView() );
 	}
