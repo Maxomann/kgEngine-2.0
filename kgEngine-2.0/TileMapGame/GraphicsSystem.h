@@ -9,10 +9,8 @@ namespace kg
 	class GraphicsSystem : public System, public CallbackReciever
 	{
 	private:
-		DrawingLayerContainer m_toDrawContainer;
-		EntityManager::EntityPointerContainer m_removedEntities;
-
 		EntityManager::EntityPointerContainer m_cameras;
+		DrawingLayerContainer m_toDrawContainer;
 
 		unsigned int m_drawDistance = 0;
 
@@ -37,9 +35,8 @@ namespace kg
 
 		void m_initCameras( Engine& engine, World& world );
 
-		void m_onEntityAddedToWorld( Entity* entity );
-		void m_onEntityRemovedFromWorld( Entity* entity );
-		void m_onRemoveEntitiesFromRemoveList();
+		void m_onEntityAddedToWorld( const EntityPointerContainer& entities );
+		void m_onEntityRemovedFromWorld( const EntityPointerContainer& entities );
 
 		void m_onSavegameOpened( Engine& engine, World& world );
 		void m_onSavegameClosed();

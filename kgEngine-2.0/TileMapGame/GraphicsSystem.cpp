@@ -13,9 +13,8 @@ namespace kg
 
 		m_connectToSignal( saveManager.s_savegameOpened, &GraphicsSystem::m_onSavegameOpened );
 		m_connectToSignal( saveManager.s_savegameClosed, &GraphicsSystem::m_onSavegameClosed );
-		m_connectToSignal( world.s_entity_added, &GraphicsSystem::m_onEntityAddedToWorld );
-		m_connectToSignal( world.s_entity_removed, &GraphicsSystem::m_onEntityRemovedFromWorld );
-		m_connectToSignal( world.s_removeEntitiesOnRemoveList, &GraphicsSystem::m_onRemoveEntitiesFromRemoveList );
+		m_connectToSignal( world.s_entities_added, &GraphicsSystem::m_onEntityAddedToWorld );
+		m_connectToSignal( world.s_entities_removed, &GraphicsSystem::m_onEntityRemovedFromWorld );
 
 		//get config values
 		m_configValues.antialiasing = &configFile->getData( ANTIALIASING );
@@ -122,35 +121,32 @@ namespace kg
 		return retVal;
 	}
 
-	void GraphicsSystem::m_onEntityAddedToWorld( Entity* entity )
+	void GraphicsSystem::m_onEntityAddedToWorld( const EntityPointerContainer& entities )
 	{
-		m_toDrawContainer.addEntities_try( { entity } );
+		m_toDrawContainer.addEntities_try( entities );
 	}
 
-	void GraphicsSystem::m_onEntityRemovedFromWorld( Entity* entity )
+	void GraphicsSystem::m_onEntityRemovedFromWorld( const EntityPointerContainer& entities )
 	{
-		if( entity->hasComponent<Graphics>() || entity->hasComponent<Camera>() )
-			m_removedEntities.push_back( entity );
-	}
-
-	void GraphicsSystem::m_onRemoveEntitiesFromRemoveList()
-	{
-		if( m_removedEntities.size() == 0 )
-			return;
-
-		//remove cameras
-		m_cameras.erase( std::remove_if( m_cameras.begin(), m_cameras.end(), [&]( const Entity* conel )
+		EntityPointerContainer entitiesWithGraphics;
+		EntityPointerContainer entitiesWithCamera;
+		for( auto& el : entities )
 		{
-			for( const auto& el : m_removedEntities )
-				if( conel == el )
-					return true;
-			return false;
-		} ), m_cameras.end() );
+			if( el->hasComponent<Graphics>() )
+				entitiesWithGraphics.push_back( el );
+			if( el->hasComponent<Camera>() )
+				entitiesWithCamera.push_back( el );
+		}
 
 		//remove entities
-		m_toDrawContainer.removeEntities_try( m_removedEntities );
+		m_toDrawContainer.removeEntities_try( entitiesWithGraphics );
 
-		m_removedEntities.clear();
+		for( auto& entity : entitiesWithCamera )
+		{
+			auto it = remove( m_cameras.begin(), m_cameras.end(), entity );
+			if( it != m_cameras.end() )
+				m_cameras.erase( it );
+		}
 	}
 
 	void GraphicsSystem::m_onSavegameOpened( Engine& engine, World& world )

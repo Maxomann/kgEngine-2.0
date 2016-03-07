@@ -11,8 +11,6 @@ namespace kg
 {
 	class ChunkSystem : public System, public CallbackReciever
 	{
-		typedef World::EntityPointerContainer EntityPointerContainer;
-
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
 		{
@@ -37,8 +35,8 @@ namespace kg
 		EntityPointerContainer container_null = EntityPointerContainer();//empty container for getEntitiesInChunk
 		void m_refreshChunkInformation( Entity* entity );
 
-		void m_onEntityAddedToWorld( Entity* entity );
-		void m_onEntityRemovedFromWorld( Entity* entity );
+		void m_onEntitiesAddedToWorld( const EntityPointerContainer& entities );
+		void m_onEntitiesRemovedFromWorld( const EntityPointerContainer& entities );
 		void m_onEntityPosition2dChanged( Entity* entity, const Position2d& newPosition );
 
 		void m_onSavegameClosed();

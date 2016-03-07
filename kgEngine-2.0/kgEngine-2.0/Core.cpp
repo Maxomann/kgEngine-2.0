@@ -59,7 +59,8 @@ namespace kg
 			m_world.updateEntities( m_engine, m_world, frameTime );
 		m_world.updateAllSystemsByImportance( m_engine, m_world, m_saveManager, frameTime );
 		m_gameStateManager.onUpdate();
-		m_world.removeEntitiesOnRemoveList();
+
+		m_world.performAddRemoveActions();
 	}
 
 	void Core::loadPackages()

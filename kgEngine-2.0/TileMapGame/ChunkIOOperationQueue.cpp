@@ -48,11 +48,10 @@ namespace kg
 		unsigned int ioCount = 0;
 		vector<OperationList::iterator> toRemove;
 
-		for( auto it = m_runningOperations.begin(); it != m_runningOperations.end(); ++it )
+		for( auto it = m_runningOperations.begin();
+		(it != m_runningOperations.end()) && (ioCount < m_ioCountPerFrame);
+			++it )
 		{
-			if( ioCount > m_ioCountPerFrame )
-				break;
-
 			if( (*it)->execute_finish_try() )
 			{
 				toRemove.push_back( it );

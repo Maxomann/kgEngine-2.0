@@ -13,8 +13,8 @@ namespace kg
 	{
 		r_chunkGeneratorSystem = world.getSystem<ChunkGeneratorSystem>();
 
-		m_connectToSignal( world.s_entity_added, &ChunkSystem::m_onEntityAddedToWorld );
-		m_connectToSignal( world.s_entity_removed, &ChunkSystem::m_onEntityRemovedFromWorld );
+		m_connectToSignal( world.s_entities_added, &ChunkSystem::m_onEntitiesAddedToWorld );
+		m_connectToSignal( world.s_entities_removed, &ChunkSystem::m_onEntitiesRemovedFromWorld );
 
 		m_connectToSignal( saveManager.s_savegameClosed, &ChunkSystem::m_onSavegameClosed );
 
@@ -71,18 +71,21 @@ namespace kg
 		return id::SystemPluginId::CHUNK_SYSTEM;
 	}
 
-	void ChunkSystem::m_onEntityAddedToWorld( Entity* entity )
+	void ChunkSystem::m_onEntitiesAddedToWorld( const EntityPointerContainer& entities )
 	{
-		if( entity->hasComponent<Transformation>() )
+		for( auto& entity : entities )
 		{
-			m_connectToSignal( entity->getComponent<Transformation>()->s_position2dChanged,
-							   function<void( const Position2d& )>(
-								   bind( &ChunkSystem::m_onEntityPosition2dChanged,
-										 this,
-										 entity,
-										 placeholders::_1 ) ) );
+			if( entity->hasComponent<Transformation>() )
+			{
+				m_connectToSignal( entity->getComponent<Transformation>()->s_position2dChanged,
+								   function<void( const Position2d& )>(
+									   bind( &ChunkSystem::m_onEntityPosition2dChanged,
+											 this,
+											 entity,
+											 placeholders::_1 ) ) );
 
-			m_refreshChunkInformation( entity );
+				m_refreshChunkInformation( entity );
+			}
 		}
 	}
 
@@ -118,18 +121,21 @@ namespace kg
 		m_refreshChunkInformation( entity );
 	}
 
-	void ChunkSystem::m_onEntityRemovedFromWorld( Entity* entity )
+	void ChunkSystem::m_onEntitiesRemovedFromWorld( const EntityPointerContainer& entities )
 	{
-		if( entity->hasComponent<Transformation>() )
+		for( auto& entity : entities )
 		{
-			auto chunkPosition = entity->getComponent<Transformation>()->getLastChunkPosition();
+			if( entity->hasComponent<Transformation>() )
+			{
+				auto chunkPosition = entity->getComponent<Transformation>()->getLastChunkPosition();
 
-			if( chunkPosition )
-				m_chunks.getChunk( *chunkPosition ).removeEntity( entity );
+				if( chunkPosition )
+					m_chunks.getChunk( *chunkPosition ).removeEntity( entity );
+			}
 		}
 	}
 
-	const ChunkSystem::EntityPointerContainer& ChunkSystem::getEntitiesInChunk( const ChunkPosition& chunkPosition )const
+	const EntityPointerContainer& ChunkSystem::getEntitiesInChunk( const ChunkPosition& chunkPosition )const
 	{
 		if( m_chunks.doesChunkExist( chunkPosition ) )
 			return m_chunks.getChunk_const( chunkPosition ).getEntities();

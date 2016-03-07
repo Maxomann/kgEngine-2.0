@@ -14,31 +14,24 @@ namespace kg
 
 	private:
 		EntityContainer m_entities;
-		EntityPointerContainer m_toRemove;
+		EntityPointerContainer m_addedEntities;
+		EntityPointerContainer m_removedEntites;
 
 		EntityContainer::iterator m_findEntity( const Entity& entity );
 	public:
 
 		// overwrites entity if it already exists
-		// first: returns false in that case
-		// second: EntityId of the added Entity
-		// return value: a reference to the entity in EntityManager
+		// return value: a pointer to the added entity
 		Entity* addEntity( Entity&& entity );
 		void addEntities( std::vector<Entity>&& entities );
 
-		// ensures that the entity with id parameter:id does not exist anymore
-		// returns false if entity with id did not exist
 		void removeEntity( Entity* entity );
 		void removeEntities( const EntityPointerContainer& entities );
 
-		// returns nullptr if Entity with id does not exist
 		bool doesEntityExist( const Entity* entity )const;
 
-		const EntityContainer& getAllEntities()const;
-
 		void updateEntities( Engine& engine, World& world, const sf::Time& frameTime );
-
-		void removeEntitiesOnRemoveList();
+		void performAddRemoveActions();
 
 		//removes every entity
 		void clear();
@@ -46,8 +39,9 @@ namespace kg
 		unsigned int getEntityCount()const;
 
 	signals:
-		Signal<Entity*> s_entity_added;
-		Signal<Entity*> s_entity_removed;
-		Signal<> s_removeEntitiesOnRemoveList;
+		Signal<const EntityPointerContainer&> s_entities_added;
+		Signal<const EntityPointerContainer&> s_entities_removed;
 	};
+
+	using EntityPointerContainer = EntityManager::EntityPointerContainer;
 }

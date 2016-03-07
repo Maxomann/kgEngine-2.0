@@ -9,7 +9,7 @@ namespace kg
 	{
 		m_entities.push_back( move( entity ) );
 		Entity* temp = &m_entities.back();
-		s_entity_added( temp );
+		m_addedEntities.push_back( temp );
 		return &m_entities.back();
 	}
 
@@ -21,8 +21,14 @@ namespace kg
 
 	void EntityManager::removeEntity( Entity* entity )
 	{
-		s_entity_removed( entity );
-		m_toRemove.push_back( entity );
+		auto it = find( m_addedEntities.begin(), m_addedEntities.end(), entity );
+		if( it != m_addedEntities.end() )
+		{
+			m_addedEntities.erase( remove( m_addedEntities.begin(), m_addedEntities.end(), *it ) );
+			m_entities.erase( remove( m_entities.begin(), m_entities.end(), **it ) );
+		}
+		else
+			m_removedEntites.push_back( entity );
 	}
 
 	void EntityManager::removeEntities( const EntityPointerContainer& entities )
@@ -42,38 +48,28 @@ namespace kg
 			entity.updateAllComponentsByImportance( engine, world, frameTime );
 	}
 
-	void EntityManager::removeEntitiesOnRemoveList()
+	void EntityManager::performAddRemoveActions()
 	{
-		s_removeEntitiesOnRemoveList();
+		s_entities_removed( m_removedEntites );
+		s_entities_added( m_addedEntities );
 
-		auto condition = [&]( const Entity& conel )
+		m_entities.remove_if( [&]( const Entity& el )
 		{
-			for( const auto& el : m_toRemove )
-				if( conel == *el )
-				{
-					m_toRemove.erase( remove( m_toRemove.begin(), m_toRemove.end(), el ), m_toRemove.end() );
-					return true;
-				}
-			return false;
-		};
+			return any_of( m_removedEntites.begin(), m_removedEntites.end(), [&]( const Entity* entity )
+			{
+				return entity == &el;
+			} );
+		} );
 
-		m_entities.remove_if( condition );
-		if( m_toRemove.size() != 0 )
-			throw exception();
-		m_toRemove.clear();
+		m_addedEntities.clear();
+		m_removedEntites.clear();
 	}
 
 	void EntityManager::clear()
 	{
-		removeEntitiesOnRemoveList();
-		for( auto& entity : m_entities )
-			removeEntity( &entity );
-		removeEntitiesOnRemoveList();
-	}
-
-	const EntityManager::EntityContainer& EntityManager::getAllEntities() const
-	{
-		return m_entities;
+		for( auto& el : m_entities )
+			removeEntity( &el );
+		performAddRemoveActions();
 	}
 
 	unsigned int EntityManager::getEntityCount() const
