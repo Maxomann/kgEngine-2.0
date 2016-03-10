@@ -56,7 +56,7 @@ namespace kg
 			ptr->onUpdate();
 	}
 
-	bool GameStateManager::hasAnyInstanceOf( const Plugin::Id& pluginId )
+	bool GameStateManager::hasAnyInstanceOf( const Plugin::Id& pluginId )const
 	{
 		for( const auto& el : m_gameStateStack )
 			if( el->getPluginId() == pluginId )
@@ -84,5 +84,19 @@ namespace kg
 	{
 		while( m_gameStateStack.size() != 0 )
 			pop();
+	}
+
+	GameState* GameStateManager::getFirstInstanceOf( const Plugin::Id& pluginId )const
+	{
+		auto condition = [&]( const std::unique_ptr<GameState>& gameState )
+		{
+			return ( bool )(gameState->getPluginId() == pluginId);
+		};
+
+		auto it = std::find_if( m_gameStateStack.begin(), m_gameStateStack.end(), condition );
+		if( it != m_gameStateStack.end() )
+			return (*it).get();
+		else
+			return nullptr;
 	}
 }

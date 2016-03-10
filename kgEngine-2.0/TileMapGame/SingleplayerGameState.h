@@ -3,12 +3,15 @@
 #include "ChunkSystem.h"
 #include "GraphicsSystem.h"
 #include "ConsoleGameState.h"
+#include "DefaultGameState.h"
 
 namespace kg
 {
 	class SingleplayerGameState : public GameState
 	{
 		GraphicsSystem* r_graphicsSystem;
+
+		DefaultGameState* r_defaultGameState;
 
 		PauseLock::Ptr m_pauseLock;
 

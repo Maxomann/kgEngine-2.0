@@ -25,6 +25,7 @@ namespace kg
 	void SingleplayerGameState::onInit()
 	{
 		r_graphicsSystem = r_world->getSystem<GraphicsSystem>();
+		r_defaultGameState = static_cast< DefaultGameState* >(r_gameStateManager->getFirstInstanceOf( id::DEFAULT_GAMESTATE_ID ));
 
 		m_connectToSignal_safe( r_saveManager->s_savegameOpened, &SingleplayerGameState::m_onSavegameOpened );
 
@@ -150,7 +151,7 @@ namespace kg
 
 	void SingleplayerGameState::reloadSave()
 	{
-		r_world->getSystem<ChunkSystem>()->saveOpenSavegame( *r_engine, *r_world, *r_saveManager );
+		r_defaultGameState->saveOpenSavegame();
 		r_saveManager->openSavegame( *r_engine, *r_world, "MyFirstSavegameEver" );
 
 		r_engine->console.info( "Savegame reloaded" );
@@ -255,5 +256,5 @@ namespace kg
 		camera->getComponent<Camera>()->setZoomFactor( m_cameraZoomFactor );
 	}
 
-	const std::string SingleplayerGameState::PLUGIN_NAME = "Singleplayer GameState";
+	const std::string SingleplayerGameState::PLUGIN_NAME = "GameState Singleplayer";
 }

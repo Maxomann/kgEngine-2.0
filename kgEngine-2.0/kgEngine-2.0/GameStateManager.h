@@ -29,7 +29,8 @@ namespace kg
 
 		void clear();
 
-		bool hasAnyInstanceOf( const Plugin::Id& pluginId );
+		bool hasAnyInstanceOf( const Plugin::Id& pluginId )const;
+		GameState* getFirstInstanceOf( const Plugin::Id& pluginId )const;
 		void removeAllInstancesOf( const Plugin::Id& pluginId );
 	};
 }

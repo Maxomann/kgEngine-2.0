@@ -153,12 +153,6 @@ namespace kg
 		return type_hash;
 	}
 
-	void ChunkSystem::saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager )
-	{
-		saveAllLoadedChunks( engine, world, saveManager );
-		saveManager.saveSystems( world );
-	}
-
 	void ChunkSystem::loadUnloadChunksAroundCameraPositions( Engine& engine, World& world, SaveManager& saveManager, const std::vector<Position2d>& cameraPositions )
 	{
 		vector<Position2d> cameraChunkPositions;

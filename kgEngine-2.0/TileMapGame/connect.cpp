@@ -8,6 +8,8 @@
 #include "GraphicsSystem.h"
 
 #include "DefaultGameState.h"
+#include "SingleplayerGameState.h"
+#include "ConsoleGameState.h"
 
 using namespace std;
 using namespace kg;
@@ -59,6 +61,14 @@ extern "C"
 			std::make_shared<PluginFactory<GameState, DefaultGameState>>(
 				( int )id::DEFAULT_GAMESTATE_ID,
 				DefaultGameState::PLUGIN_NAME ) );
+		pluginManager.addPluginFactory(
+			std::make_shared<PluginFactory<GameState, SingleplayerGameState>>(
+				( int )id::GameStatePluginId::SINGLEPLAYER,
+				SingleplayerGameState::PLUGIN_NAME ) );
+		pluginManager.addPluginFactory(
+			std::make_shared<PluginFactory<GameState, ConsoleGameState>>(
+				( int )id::GameStatePluginId::CONSOLE,
+				ConsoleGameState::PLUGIN_NAME ) );
 
 		//AnimationHandlers
 		pluginManager.addPluginFactory(

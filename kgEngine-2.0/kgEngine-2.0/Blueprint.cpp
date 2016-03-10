@@ -665,6 +665,7 @@ namespace kg
 					throw CircularInheritanceError( linkingStack );
 				else
 				{
+					// inherits from
 					m_isCollectingInheritReferences = true;
 					for( const auto& name : m_inheritsFromNames )
 					{

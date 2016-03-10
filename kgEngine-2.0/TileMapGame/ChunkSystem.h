@@ -67,7 +67,6 @@ namespace kg
 		// returns a reference to the internal container
 		const EntityPointerContainer& getEntitiesInChunk( const ChunkPosition& chunkPosition )const;
 
-		void saveOpenSavegame( Engine& engine, World& world, SaveManager& saveManager );
 		void saveAllLoadedChunks( Engine& engine, World& world, SaveManager& saveManager );
 
 		//configuration default values:

@@ -6,7 +6,7 @@ namespace kg
 {
 	void DefaultGameState::onInit()
 	{
-		unique_ptr<GameState> gameStatePtr = std::make_unique<SingleplayerGameState>();
+		unique_ptr<GameState> gameStatePtr = r_engine->pluginManager.createPlugin<GameState>( ( int )id::GameStatePluginId::SINGLEPLAYER );
 		r_gameStateManager->push( move( gameStatePtr ) );
 	}
 
@@ -60,11 +60,17 @@ namespace kg
 		return id::DEFAULT_GAMESTATE_ID;
 	}
 
-	const std::string DefaultGameState::PLUGIN_NAME = "Default GameState";
+	const std::string DefaultGameState::PLUGIN_NAME = "GameState Default";
+
+	void DefaultGameState::saveOpenSavegame()
+	{
+		r_world->getSystem<ChunkSystem>()->saveAllLoadedChunks( *r_engine, *r_world, *r_saveManager );
+		r_saveManager->saveSystems( *r_world );
+	}
 
 	void DefaultGameState::shutDown()
 	{
-		r_world->getSystem<ChunkSystem>()->saveOpenSavegame( *r_engine, *r_world, *r_saveManager );
+		saveOpenSavegame();
 		r_saveManager->closeSavegame( *r_engine, *r_world );
 		r_engine->shouldTerminate = true;
 	}
@@ -79,7 +85,7 @@ namespace kg
 		}
 		else
 		{
-			unique_ptr<GameState> gameStatePtr = make_unique<ConsoleGameState>();
+			unique_ptr<GameState> gameStatePtr = r_engine->pluginManager.createPlugin<GameState>( ( int )id::GameStatePluginId::CONSOLE );
 			r_gameStateManager->push( move( gameStatePtr ) );
 		}
 	}

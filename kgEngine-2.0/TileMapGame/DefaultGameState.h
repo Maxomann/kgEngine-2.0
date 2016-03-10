@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "SingleplayerGameState.h"
+#include "ChunkSystem.h"
+#include "GraphicsSystem.h"
 
 namespace kg
 {
@@ -26,6 +27,8 @@ namespace kg
 		virtual Plugin::Id getPluginId() const override;
 
 		static const std::string PLUGIN_NAME;
+
+		void saveOpenSavegame();
 
 		//Input Callbacks
 	private:
