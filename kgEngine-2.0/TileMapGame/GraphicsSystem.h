@@ -21,13 +21,13 @@ namespace kg
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
 		{
-			std::string* antialiasing;
-			std::string* fullscreen;
-			std::string* window_resx;
-			std::string* window_resy;
-			std::string* vsync;
-			std::string* window_name;
-			std::string* drawDistance;
+			int antialiasing;
+			bool fullscreen;
+			int window_resx;
+			int window_resy;
+			bool vsync;
+			std::string window_name;
+			int drawDistance;
 		}m_configValues;
 
 		sf::RenderWindow* r_renderWindow;
@@ -79,12 +79,12 @@ namespace kg
 		static const std::string WINDOW_NAME;//
 		static const std::string DRAW_DISTANCE;
 
-		static const std::string ANTIALIASING_DEFAULT;
-		static const std::string FULLSCREEN_DEFAULT;
-		static const std::string WINDOW_RESX_DEFAULT;
-		static const std::string WINDOW_RESY_DEFAULT;
-		static const std::string VSYNC_DEFAULT;
+		static const int ANTIALIASING_DEFAULT;
+		static const bool FULLSCREEN_DEFAULT;
+		static const int WINDOW_RESX_DEFAULT;
+		static const int WINDOW_RESY_DEFAULT;
+		static const bool VSYNC_DEFAULT;
 		static const std::string WINDOW_NAME_DEFAULT;
-		static const std::string DRAW_DISTANCE_DEFAULT;
+		static const int DRAW_DISTANCE_DEFAULT;
 	};
 }

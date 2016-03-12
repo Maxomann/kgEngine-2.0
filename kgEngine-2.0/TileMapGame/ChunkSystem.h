@@ -14,8 +14,8 @@ namespace kg
 		std::shared_ptr<ConfigFile> m_configFile;
 		struct ConfigValues
 		{
-			std::string* chunkLoadRadiusAroundCamera;
-			std::string* chunkLoadCountPerFrame;
+			int chunkLoadRadiusAroundCamera;
+			int chunkLoadCountPerFrame;
 		}m_configValues;
 
 		ChunkGeneratorSystem* r_chunkGeneratorSystem;
@@ -71,9 +71,9 @@ namespace kg
 
 		//configuration default values:
 		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA;
-		static const std::string CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT;
+		static const int CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT;
 
 		static const std::string CHUNK_LOAD_COUNT_PER_FRAME;
-		static const std::string CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT;
+		static const int CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT;
 	};
 }

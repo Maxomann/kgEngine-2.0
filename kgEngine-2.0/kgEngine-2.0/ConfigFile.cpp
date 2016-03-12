@@ -7,6 +7,7 @@ namespace kg
 {
 	DLL_EXPORT bool ConfigFile::loadFromFile( const std::string& path )
 	{
+		m_dataDiffersFromTextFile = false;
 		m_data.clear();
 		m_path = path;
 
@@ -23,7 +24,7 @@ namespace kg
 			while( std::getline( file, line ) )
 			{
 				std::string identifier;
-				bool afterBreak = false; //afer ':'
+				bool afterBreak = false; //after ':'
 				bool afterFirstValueChar = false;
 				for( const auto& el : line )
 				{
@@ -47,15 +48,13 @@ namespace kg
 		return true;
 	}
 
-	DLL_EXPORT std::string& ConfigFile::getData( const std::string& identifier )
+	DLL_EXPORT void ConfigFile::saveToDefaultFile()
 	{
-		return m_data[identifier];
-	}
-
-	DLL_EXPORT void ConfigFile::saveToFile()
-	{
-		if( m_path != "ConfigFile -1" )
-			saveToFile( m_path );
+		if( m_path.size() )
+		{
+			if( m_dataDiffersFromTextFile )
+				saveToFile( m_path );
+		}
 		else
 			throw exception();
 	}
@@ -87,15 +86,12 @@ namespace kg
 		return str;
 	}
 
-	DLL_EXPORT std::string& ConfigFile::setData( const std::string& identifier, const std::string& data )
+	bool ConfigFile::isDataValid( const std::string& identifier ) const
 	{
-		auto& temp_ref = m_data[identifier];
-		temp_ref = data;
-		return temp_ref;
+		auto it = m_data.find( identifier );
+		if( it != m_data.end() )
+			return (it->first.size() != 0);
+		else
+			return false;
 	}
-
-	/*DLL_EXPORT const std::map<std::string, std::string>& ConfigFile::getAllData()
-	{
-	return m_data;
-	}*/
 }

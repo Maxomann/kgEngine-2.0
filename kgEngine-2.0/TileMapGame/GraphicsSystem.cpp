@@ -17,40 +17,24 @@ namespace kg
 		m_connectToSignal( world.s_entities_removed, &GraphicsSystem::m_onEntityRemovedFromWorld );
 
 		//get config values
-		m_configValues.antialiasing = &configFile->getData( ANTIALIASING );
-		m_configValues.fullscreen = &configFile->getData( FULLSCREEN );
-		m_configValues.window_resx = &configFile->getData( WINDOW_RESX );
-		m_configValues.window_resy = &configFile->getData( WINDOW_RESY );
-		m_configValues.vsync = &configFile->getData( VSYNC );
-		m_configValues.window_name = &configFile->getData( WINDOW_NAME );
-		m_configValues.drawDistance = &configFile->getData( DRAW_DISTANCE );
-
-		//set them if invalid ( and retrieve them a second time )
-		if( !m_configValues.antialiasing->size() )
-			*m_configValues.antialiasing = ANTIALIASING_DEFAULT;
-		if( !m_configValues.fullscreen->size() )
-			*m_configValues.fullscreen = FULLSCREEN_DEFAULT;
-		if( !m_configValues.window_resx->size() )
-			*m_configValues.window_resx = WINDOW_RESX_DEFAULT;
-		if( !m_configValues.window_resy->size() )
-			*m_configValues.window_resy = WINDOW_RESY_DEFAULT;
-		if( !m_configValues.vsync->size() )
-			*m_configValues.vsync = VSYNC_DEFAULT;
-		if( !m_configValues.window_name->size() )
-			*m_configValues.window_name = WINDOW_NAME_DEFAULT;
-		if( !m_configValues.drawDistance->size() )
-			*m_configValues.drawDistance = DRAW_DISTANCE_DEFAULT;
+		m_configValues.antialiasing = configFile->getDataReplaceIfInvalid( ANTIALIASING, ANTIALIASING_DEFAULT );
+		m_configValues.fullscreen = configFile->getDataReplaceIfInvalid( FULLSCREEN, FULLSCREEN_DEFAULT );
+		m_configValues.window_resx = configFile->getDataReplaceIfInvalid( WINDOW_RESX, WINDOW_RESX_DEFAULT );
+		m_configValues.window_resy = configFile->getDataReplaceIfInvalid( WINDOW_RESY, WINDOW_RESY_DEFAULT );
+		m_configValues.vsync = configFile->getDataReplaceIfInvalid( VSYNC, VSYNC_DEFAULT );
+		m_configValues.window_name = configFile->getDataReplaceIfInvalid( WINDOW_NAME, WINDOW_NAME_DEFAULT );
+		m_configValues.drawDistance = configFile->getDataReplaceIfInvalid( DRAW_DISTANCE, DRAW_DISTANCE_DEFAULT );
 
 		//init window
 		sf::ContextSettings contextSettings;
-		contextSettings.antialiasingLevel = boost::lexical_cast< int >(*m_configValues.antialiasing);
+		contextSettings.antialiasingLevel = m_configValues.antialiasing;
 
-		if( boost::lexical_cast< bool >(*m_configValues.fullscreen) )
+		if( m_configValues.fullscreen )
 		{
 			//fullscreen
 			engine.renderWindow.create(
 				sf::VideoMode::getDesktopMode(),//ignores: window_resx, window_resy
-				*m_configValues.window_name,
+				m_configValues.window_name,
 				sf::Style::Fullscreen,
 				contextSettings );
 		}
@@ -59,19 +43,19 @@ namespace kg
 			//no fullscreen
 			engine.renderWindow.create(
 				sf::VideoMode(
-					boost::lexical_cast< int >(*m_configValues.window_resx),
-					boost::lexical_cast< int >(*m_configValues.window_resy), 32 ),
-				*m_configValues.window_name,
+					m_configValues.window_resx,
+					m_configValues.window_resy, 32 ),
+				m_configValues.window_name,
 				sf::Style::Close,
 				contextSettings );
 		}
 
 		glEnable( GL_SCISSOR_TEST );
 		glScissor( 0, 0, engine.renderWindow.getSize().x, engine.renderWindow.getSize().y );
-		engine.renderWindow.setVerticalSyncEnabled( boost::lexical_cast< bool >(*m_configValues.vsync) );
+		engine.renderWindow.setVerticalSyncEnabled( m_configValues.vsync );
 		engine.renderWindow.setActive( true );
 
-		setDrawDistance( boost::lexical_cast< unsigned int >(*m_configValues.drawDistance) );
+		setDrawDistance( m_configValues.drawDistance );
 
 		engine.inputManager.gui.setWindow( engine.renderWindow );
 		engine.inputManager.gui.setFont( engine.resourceManager.getResource<sf::Font>(
@@ -89,7 +73,7 @@ namespace kg
 	{
 		r_renderWindow->setActive( true );
 
-		engine.renderWindow.setTitle( *m_configValues.window_name +
+		engine.renderWindow.setTitle( m_configValues.window_name +
 									  " " +
 									  to_string( frameTime.asMilliseconds() ) +
 									  " | EntityCount: " +
@@ -228,17 +212,17 @@ namespace kg
 
 	const std::string GraphicsSystem::WINDOW_NAME_DEFAULT = "DefaultWindowName";
 
-	const std::string GraphicsSystem::DRAW_DISTANCE_DEFAULT = "3000";
+	const int GraphicsSystem::DRAW_DISTANCE_DEFAULT = 3000;
 
-	const std::string GraphicsSystem::VSYNC_DEFAULT = "1";
+	const bool GraphicsSystem::VSYNC_DEFAULT = true;
 
-	const std::string GraphicsSystem::WINDOW_RESY_DEFAULT = "720";
+	const int GraphicsSystem::WINDOW_RESY_DEFAULT = 720;
 
-	const std::string GraphicsSystem::WINDOW_RESX_DEFAULT = "1280";
+	const int GraphicsSystem::WINDOW_RESX_DEFAULT = 1280;
 
-	const std::string GraphicsSystem::FULLSCREEN_DEFAULT = "0";
+	const bool GraphicsSystem::FULLSCREEN_DEFAULT = false;
 
-	const std::string GraphicsSystem::ANTIALIASING_DEFAULT = "0";
+	const int GraphicsSystem::ANTIALIASING_DEFAULT = 0;
 
 	const std::string GraphicsSystem::ANTIALIASING = "iAntialiasing";
 

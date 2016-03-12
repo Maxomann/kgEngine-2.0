@@ -38,7 +38,7 @@ namespace kg
 			{
 				auto configFile = engine.resourceManager.getConfigFile<ConfigFile>( el->getPluginName() );
 				el->saveChangesToConfigFile( configFile );
-				configFile->saveToFile();
+				configFile->saveToDefaultFile();
 			}
 	}
 }

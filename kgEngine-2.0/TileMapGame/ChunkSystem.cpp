@@ -21,18 +21,12 @@ namespace kg
 		m_configFile = configFile;
 
 		//get config values
-		m_configValues.chunkLoadRadiusAroundCamera = &configFile->getData( CHUNK_LOAD_RADIUS_AROUND_CAMERA );
-		m_configValues.chunkLoadCountPerFrame = &configFile->getData( CHUNK_LOAD_COUNT_PER_FRAME );
-
-		//set them if invalid ( and retrieve them a second time )
-		if( !m_configValues.chunkLoadRadiusAroundCamera->size() )
-			*m_configValues.chunkLoadRadiusAroundCamera = CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT;
-		if( !m_configValues.chunkLoadCountPerFrame->size() )
-			*m_configValues.chunkLoadCountPerFrame = CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT;
+		m_configValues.chunkLoadRadiusAroundCamera = configFile->getDataReplaceIfInvalid( CHUNK_LOAD_RADIUS_AROUND_CAMERA, CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT );
+		m_configValues.chunkLoadCountPerFrame = configFile->getDataReplaceIfInvalid( CHUNK_LOAD_COUNT_PER_FRAME, CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT );
 
 		// apply config values
-		m_chunkLoadRadiusAroundCamera = boost::lexical_cast< int >(*m_configValues.chunkLoadRadiusAroundCamera);
-		m_chunkIOOperationQueue.setChunkIOCountPerFrame( boost::lexical_cast< int >(*m_configValues.chunkLoadCountPerFrame) );
+		m_chunkLoadRadiusAroundCamera = m_configValues.chunkLoadRadiusAroundCamera;
+		m_chunkIOOperationQueue.setChunkIOCountPerFrame( m_configValues.chunkLoadCountPerFrame );
 
 		return;
 	}
@@ -240,13 +234,13 @@ namespace kg
 		m_chunks.clear();
 	}
 
-	const std::string ChunkSystem::CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT = "5";
+	const std::string ChunkSystem::CHUNK_LOAD_RADIUS_AROUND_CAMERA = "iChunkLoadRadiusAroundCamera";
+
+	const int ChunkSystem::CHUNK_LOAD_RADIUS_AROUND_CAMERA_DEFAULT = 4;
 
 	const std::string ChunkSystem::CHUNK_LOAD_COUNT_PER_FRAME = "iChunkLoadCountPerFrame";
 
-	const std::string ChunkSystem::CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT = "1";
-
-	const std::string ChunkSystem::CHUNK_LOAD_RADIUS_AROUND_CAMERA = "iChunkLoadRadiusAroundCamera";
+	const int ChunkSystem::CHUNK_LOAD_COUNT_PER_FRAME_DEFAULT = 1;
 
 	const std::string ChunkSystem::PLUGIN_NAME = "ChunkSystem";
 
