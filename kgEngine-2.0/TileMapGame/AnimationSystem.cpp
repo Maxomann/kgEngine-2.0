@@ -156,7 +156,7 @@ namespace kg
 
 	Plugin::Id EasyAnimationHandler::getPluginId() const
 	{
-		return id::SpecialPluginId::ANIMATION_HANDLER_EASY;
+		return id::AnimationHandlerPluginId::ANIMATION_HANDLER_EASY;
 	}
 
 	const std::string EasyAnimationHandler::PLUGIN_NAME = "EASY";

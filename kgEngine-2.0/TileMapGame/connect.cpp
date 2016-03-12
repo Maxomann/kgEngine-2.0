@@ -73,7 +73,7 @@ extern "C"
 		//AnimationHandlers
 		pluginManager.addPluginFactory(
 			std::make_shared<PluginFactory<AnimationHandler, EasyAnimationHandler>>(
-				( int )id::SpecialPluginId::ANIMATION_HANDLER_EASY,
+				( int )id::AnimationHandlerPluginId::ANIMATION_HANDLER_EASY,
 				EasyAnimationHandler::PLUGIN_NAME ) );
 	}
 }

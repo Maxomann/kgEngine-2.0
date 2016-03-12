@@ -4,6 +4,10 @@ namespace kg
 {
 	namespace id
 	{
+		////////////////////////////////////////////////////////
+		// SYSTEM / COMPONENT
+		////////////////////////////////////////////////////////
+
 		namespace SystemPluginId
 		{
 			enum
@@ -30,32 +34,6 @@ namespace kg
 				GRAPHICS,
 				ANIMATION,
 				CAMERA,
-
-				LAST_ELEMENT
-			};
-		}
-
-		namespace GameStatePluginId
-		{
-			enum
-			{
-				FIRST_ELEMENT = ComponentPluginId::LAST_ELEMENT,
-
-				//Default is 0 (defined in 'id_internal.h')
-				SINGLEPLAYER,
-				CONSOLE,
-
-				LAST_ELEMENT
-			};
-		}
-
-		namespace SpecialPluginId
-		{
-			enum
-			{
-				FIRST_ELEMENT = GameStatePluginId::LAST_ELEMENT,
-
-				ANIMATION_HANDLER_EASY,
 
 				LAST_ELEMENT
 			};
@@ -91,6 +69,52 @@ namespace kg
 				LAST_ELEMENT
 			};
 		}
+
+		////////////////////////////////////////////////////////
+		// PLUGINS
+		////////////////////////////////////////////////////////
+
+		namespace GameStatePluginId
+		{
+			enum
+			{
+				FIRST_ELEMENT = ComponentPluginId::LAST_ELEMENT,
+
+				//Default is 0 (defined in 'id_internal.h')
+				SINGLEPLAYER,
+				CONSOLE,
+
+				LAST_ELEMENT
+			};
+		}
+
+		namespace AnimationHandlerPluginId
+		{
+			enum
+			{
+				FIRST_ELEMENT = GameStatePluginId::LAST_ELEMENT,
+
+				ANIMATION_HANDLER_EASY,
+
+				LAST_ELEMENT
+			};
+		}
+
+		namespace WorldGeneratorPluginId
+		{
+			enum
+			{
+				FIRST_ELEMENT = AnimationHandlerPluginId::LAST_ELEMENT,
+
+				WORLD_GENERATOR_DEFAULT,
+
+				LAST_ELEMENT
+			};
+		}
+
+		////////////////////////////////////////////////////////
+		// OTHER
+		////////////////////////////////////////////////////////
 
 		namespace Input
 		{
