@@ -1,5 +1,0 @@
-boost
-SFML
-glew
-THOR (sfml)
-tgui

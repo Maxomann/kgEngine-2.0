@@ -160,3 +160,12 @@ $RECYCLE.BIN/
 /kgEngine-2.0/_libraries/_download
 *.db
 *.opendb
+
+# =========================
+# External Projects
+# =========================
+Project/*
+!/Project/NewBit/*
+!/Project/build.bat
+!/Project/build_dependencies.bat
+!/Project/liblist
