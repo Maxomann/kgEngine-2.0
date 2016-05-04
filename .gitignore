@@ -164,6 +164,7 @@ $RECYCLE.BIN/
 # =========================
 # External Projects
 # =========================
+Build/*
 Project/*
 !/Project/NewBit/*
 !/Project/build.bat
