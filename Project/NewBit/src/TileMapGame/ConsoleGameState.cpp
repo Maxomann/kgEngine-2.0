@@ -44,12 +44,12 @@ namespace kg
 		m_consoleWindow = make_shared<ChildWindow>();
 		m_chatBox = make_shared<ChatBox>();
 
-		m_consoleWindow->setSize( 800, 400 );
+		m_consoleWindow->setSize( Layout2d( 800, 400 ) );
 		m_consoleWindow->keepInParent( true );
 		m_consoleWindow->connect( "closed", &ConsoleGameState::close, this );
 		m_consoleWindow->setTitle( "Console" );
 
-		m_chatBox->setSize( 800, 400 );
+		m_chatBox->setSize( Layout2d( 800, 400 ) );
 		m_chatBox->getRenderer()->setBackgroundColor( sf::Color::Black );
 
 		m_consoleWindow->add( m_chatBox );
