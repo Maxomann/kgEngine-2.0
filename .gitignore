@@ -162,11 +162,28 @@ $RECYCLE.BIN/
 *.opendb
 
 # =========================
+# CMake
+# =========================
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Makefile/
+cmake_install.cmake
+install_manifest.txt
+
+# =========================
 # External Projects
 # =========================
 Build/*
-Project/*
-!/Project/NewBit/*
-!/Project/build.bat
-!/Project/build_dependencies.bat
-!/Project/liblist
+Project/boost/
+Project/glew/
+Project/SFML/
+Project/TGUI/
+Project/Thor/
+
+# =========================
+# Project Files
+# =========================
+*.vcxproj
+*.filters
+*.sln
