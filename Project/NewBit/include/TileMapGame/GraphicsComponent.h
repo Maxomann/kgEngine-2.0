@@ -1,12 +1,12 @@
 #pragma once
 #include "stdafx.h"
-#include "Transformation.h"
+#include "TransformationComponent.h"
 
 namespace kg
 {
-	class Graphics : public Component, public CallbackReciever, public sf::Drawable
+	class GraphicsComponent : public Component, public CallbackReciever, public sf::Drawable
 	{
-		Transformation* r_transformation = nullptr;
+		TransformationComponent* r_transformation = nullptr;
 
 		std::shared_ptr<sf::Texture> m_resourceManagementReference;
 		sf::Sprite m_sprite;

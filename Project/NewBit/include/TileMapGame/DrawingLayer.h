@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "VBO.h"
 #include "ChunkVBO.h"
-#include "Graphics.h"
+#include "GraphicsComponent.h"
 
 namespace kg
 {

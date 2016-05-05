@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Position.h"
-#include "Graphics.h"
+#include "GraphicsComponent.h"
 #include "DrawingLayer.h"
 
 namespace kg

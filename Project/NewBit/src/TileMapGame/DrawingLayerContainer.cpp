@@ -20,8 +20,8 @@ namespace kg
 	{
 		for( auto& entity : entities )
 		{
-			auto worldLayer = entity->getComponent<Transformation>()->getPosition().worldLayer;
-			auto zValue = entity->getComponent<Graphics>()->getZValue();
+			auto worldLayer = entity->getComponent<TransformationComponent>()->getPosition().worldLayer;
+			auto zValue = entity->getComponent<GraphicsComponent>()->getZValue();
 			auto& el = m_drawingLayersByZValueByWorldLayer[worldLayer][zValue];
 
 			initDrawingLayerPointer( el, zValue );
@@ -33,8 +33,8 @@ namespace kg
 	{
 		for( auto& entity : entities )
 		{
-			auto worldLayer = entity->getComponent<Transformation>()->getPosition().worldLayer;
-			auto zValue = entity->getComponent<Graphics>()->getZValue();
+			auto worldLayer = entity->getComponent<TransformationComponent>()->getPosition().worldLayer;
+			auto zValue = entity->getComponent<GraphicsComponent>()->getZValue();
 			auto& el = m_drawingLayersByZValueByWorldLayer[worldLayer][zValue];
 
 			//remove
@@ -47,7 +47,7 @@ namespace kg
 		EntityManager::EntityPointerContainer validEntities;
 
 		for( auto& entity : entities )
-			if( entity->hasComponent<Graphics>() )
+			if( entity->hasComponent<GraphicsComponent>() )
 				validEntities.push_back( entity );
 
 		addEntities( validEntities );
@@ -58,7 +58,7 @@ namespace kg
 		EntityManager::EntityPointerContainer validEntities;
 
 		for( auto& entity : entities )
-			if( entity->hasComponent<Graphics>() )
+			if( entity->hasComponent<GraphicsComponent>() )
 				validEntities.push_back( entity );
 
 		removeEntities( validEntities );

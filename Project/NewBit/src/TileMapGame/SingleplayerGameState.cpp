@@ -14,7 +14,7 @@ namespace kg
 	{
 		auto camera = m_getValidCamera();
 
-		camera->getComponent<Transformation>()->moveXY( distance );
+		camera->getComponent<TransformationComponent>()->moveXY( distance );
 	}
 
 	void SingleplayerGameState::m_onSavegameOpened( Engine& engine, World& world )
@@ -242,7 +242,7 @@ namespace kg
 
 		if( m_cameraZoomFactor < 0 )
 			m_cameraZoomFactor = 0;
-		camera->getComponent<Camera>()->setZoomFactor( m_cameraZoomFactor );
+		camera->getComponent<CameraComponent>()->setZoomFactor( m_cameraZoomFactor );
 	}
 
 	void SingleplayerGameState::zoomOut()
@@ -253,7 +253,7 @@ namespace kg
 
 		if( m_cameraZoomFactor < 0 )
 			m_cameraZoomFactor = 0;
-		camera->getComponent<Camera>()->setZoomFactor( m_cameraZoomFactor );
+		camera->getComponent<CameraComponent>()->setZoomFactor( m_cameraZoomFactor );
 	}
 
 	const std::string SingleplayerGameState::PLUGIN_NAME = "GameState Singleplayer";

@@ -12,12 +12,12 @@ namespace kg
 
 	void StandartDrawingLayer::addEntity( Entity* entity )
 	{
-		auto graphicsComponent = entity->getComponent<Graphics>();
+		auto graphicsComponent = entity->getComponent<GraphicsComponent>();
 		auto sprite = graphicsComponent->getSprite();
 
 		if( graphicsComponent->isStatic() )
 		{
-			auto chunkPosition = *entity->getComponent<Transformation>()->getLastChunkPosition();
+			auto chunkPosition = *entity->getComponent<TransformationComponent>()->getLastChunkPosition();
 
 			// find vbo for chunk
 			auto it = find_if( m_staticVBOs.begin(), m_staticVBOs.end(), [&]( const ChunkVBO& el )
@@ -51,12 +51,12 @@ namespace kg
 	}
 	void StandartDrawingLayer::removeEntity( Entity* entity )
 	{
-		auto graphicsComponent = entity->getComponent<Graphics>();
+		auto graphicsComponent = entity->getComponent<GraphicsComponent>();
 		auto sprite = graphicsComponent->getSprite();
 
 		if( graphicsComponent->isStatic() )
 		{
-			auto chunkPosition = *entity->getComponent<Transformation>()->getLastChunkPosition();
+			auto chunkPosition = *entity->getComponent<TransformationComponent>()->getLastChunkPosition();
 
 			// find vbo for chunk
 			auto it = find_if( m_staticVBOs.begin(), m_staticVBOs.end(), [&]( const ChunkVBO& el )
@@ -117,7 +117,7 @@ namespace kg
 
 	void YSortedDrawingLayer::addEntity( Entity * entity )
 	{
-		m_dynamicSprites.push_back( entity->getComponent<Graphics>()->getSprite() );
+		m_dynamicSprites.push_back( entity->getComponent<GraphicsComponent>()->getSprite() );
 	}
 	void YSortedDrawingLayer::removeEntity( Entity* entity )
 	{
@@ -125,7 +125,7 @@ namespace kg
 		unsigned int size_before = m_dynamicSprites.size();
 #endif
 
-		Sprite* sprite = entity->getComponent<Graphics>()->getSprite();
+		Sprite* sprite = entity->getComponent<GraphicsComponent>()->getSprite();
 
 		auto condition = [&]( const sf::Sprite* el )
 		{

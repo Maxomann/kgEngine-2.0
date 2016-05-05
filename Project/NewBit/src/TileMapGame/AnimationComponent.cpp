@@ -31,7 +31,7 @@ namespace kg
 	{
 		//validate pointers
 		r_animationSystem = world.getSystem<AnimationSystem>();
-		r_graphicsComponent = thisEntity.getComponent<Graphics>();
+		r_graphicsComponent = thisEntity.getComponent<GraphicsComponent>();
 
 		//check pointers
 		if( !r_animationSystem )

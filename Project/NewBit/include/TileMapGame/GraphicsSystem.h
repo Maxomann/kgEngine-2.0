@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "id.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 #include "DrawingLayerContainer.h"
 
 namespace kg

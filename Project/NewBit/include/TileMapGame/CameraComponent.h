@@ -1,13 +1,13 @@
 #pragma once
 #include "stdafx.h"
-#include "Graphics.h"
+#include "GraphicsComponent.h"
 #include "DrawingLayerContainer.h"
 
 namespace kg
 {
-	class Camera : public Component, public CallbackReciever
+	class CameraComponent : public Component, public CallbackReciever
 	{
-		Transformation* r_transformation;
+		TransformationComponent* r_transformation;
 
 		unsigned int m_drawDistance;
 

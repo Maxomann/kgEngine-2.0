@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Graphics.h"
+#include "GraphicsComponent.h"
 #include "AnimationSystem.h"
 
 namespace kg
@@ -15,7 +15,7 @@ namespace kg
 
 		AnimationSystem* r_animationSystem = nullptr;
 		AnimationHandler* r_animationHandler = nullptr;
-		Graphics* r_graphicsComponent = nullptr;
+		GraphicsComponent* r_graphicsComponent = nullptr;
 
 		bool m_isPlaying = true;
 		std::string m_state;

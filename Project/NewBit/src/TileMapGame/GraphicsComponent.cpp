@@ -1,10 +1,10 @@
-#include "Graphics.h"
+#include "GraphicsComponent.h"
 using namespace std;
 using namespace sf;
 
 namespace kg
 {
-	void Graphics::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
+	void GraphicsComponent::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
 	{
 		string texturePackage;
 		string texturePath;
@@ -37,13 +37,13 @@ namespace kg
 		setTextureRect( textureRect );
 	}
 
-	void Graphics::init( Engine& engine, const World& world, const ComponentManager& thisEntity )
+	void GraphicsComponent::init( Engine& engine, const World& world, const ComponentManager& thisEntity )
 	{
-		r_transformation = thisEntity.getComponent<Transformation>();
+		r_transformation = thisEntity.getComponent<TransformationComponent>();
 
-		m_connectToSignal( r_transformation->s_position2dChanged, &Graphics::onPositionChanged );
-		m_connectToSignal( r_transformation->s_sizeChanged, &Graphics::onSizeChanged );
-		m_connectToSignal( r_transformation->s_rotationChanged, &Graphics::onRotationChanged );
+		m_connectToSignal( r_transformation->s_position2dChanged, &GraphicsComponent::onPositionChanged );
+		m_connectToSignal( r_transformation->s_sizeChanged, &GraphicsComponent::onSizeChanged );
+		m_connectToSignal( r_transformation->s_rotationChanged, &GraphicsComponent::onRotationChanged );
 
 		centerOrigin();
 		scaleToObjectSize();
@@ -52,62 +52,62 @@ namespace kg
 		if( saveComponent )
 		{
 			m_connectToSignal( saveComponent->s_loadSaveInformation[( int )id::ComponentPluginId::GRAPHICS],
-							   &Graphics::onLoadSaveInformation );
+							   &GraphicsComponent::onLoadSaveInformation );
 			m_connectToSignal( saveComponent->s_writeSaveInformation[( int )id::ComponentPluginId::GRAPHICS],
-							   &Graphics::onWriteSaveInformation );
+							   &GraphicsComponent::onWriteSaveInformation );
 		}
 
 		return;
 	}
 
-	void Graphics::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
+	void GraphicsComponent::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
 	{
 		return;
 	}
 
-	double Graphics::getUpdateImportance() const
+	double GraphicsComponent::getUpdateImportance() const
 	{
 		return id::ComponentUpdateImportance::GRAPHICS;
 	}
 
-	std::vector<Plugin::Id> Graphics::getRequieredComponents() const
+	std::vector<Plugin::Id> GraphicsComponent::getRequieredComponents() const
 	{
 		return{ id::ComponentPluginId::TRANSFORMATION };
 	}
 
-	const std::string& Graphics::getPluginName() const
+	const std::string& GraphicsComponent::getPluginName() const
 	{
 		return PLUGIN_NAME;
 	}
 
-	Plugin::Id Graphics::getPluginId() const
+	Plugin::Id GraphicsComponent::getPluginId() const
 	{
 		return id::ComponentPluginId::GRAPHICS;
 	}
 
-	void Graphics::setTextureRect( const sf::IntRect& rect )
+	void GraphicsComponent::setTextureRect( const sf::IntRect& rect )
 	{
 		m_textureRect = rect;
 		recalculateTextureRect();
 	}
 
-	sf::IntRect Graphics::getTextureRect() const
+	sf::IntRect GraphicsComponent::getTextureRect() const
 	{
 		auto retVal = m_textureRect;
 		return retVal;
 	}
 
-	void Graphics::onSizeChanged( const sf::Vector2i& newSize )
+	void GraphicsComponent::onSizeChanged( const sf::Vector2i& newSize )
 	{
 		scaleToObjectSize();
 	}
 
-	void Graphics::centerOrigin()
+	void GraphicsComponent::centerOrigin()
 	{
 		m_sprite.setOrigin( sf::Vector2f( m_sprite.getGlobalBounds().width / 2.f, m_sprite.getGlobalBounds().height / 2.f ) );
 	}
 
-	void Graphics::scaleToObjectSize()
+	void GraphicsComponent::scaleToObjectSize()
 	{
 		auto globalBounds = m_sprite.getGlobalBounds();
 
@@ -118,34 +118,34 @@ namespace kg
 		m_sprite.scale( scale );
 	}
 
-	void Graphics::onPositionChanged( const Position2d& newPosition )
+	void GraphicsComponent::onPositionChanged( const Position2d& newPosition )
 	{
 		m_sprite.setPosition( sf::Vector2f( newPosition.toPositionXY().toVector2i() ) );
 	}
 
-	void Graphics::onRotationChanged( const float& newRotation )
+	void GraphicsComponent::onRotationChanged( const float& newRotation )
 	{
 		m_sprite.setRotation( newRotation );
 	}
 
-	void Graphics::draw( RenderTarget& target, RenderStates states ) const
+	void GraphicsComponent::draw( RenderTarget& target, RenderStates states ) const
 	{
 		target.draw( m_sprite, states );
 	}
 
-	void Graphics::setTextureRectOffset( const sf::IntRect& rect )
+	void GraphicsComponent::setTextureRectOffset( const sf::IntRect& rect )
 	{
 		m_textureRectOffset = rect;
 		recalculateTextureRect();
 	}
 
-	sf::IntRect Graphics::getTextureRectOffset() const
+	sf::IntRect GraphicsComponent::getTextureRectOffset() const
 	{
 		auto retVal = m_textureRectOffset;
 		return retVal;
 	}
 
-	void Graphics::recalculateTextureRect()
+	void GraphicsComponent::recalculateTextureRect()
 	{
 		sf::IntRect finalRect;
 		finalRect.left = m_textureRect.left + m_textureRectOffset.left;
@@ -164,32 +164,32 @@ namespace kg
 		m_sprite.setTextureRect( finalRect );
 	}
 
-	const size_t& Graphics::getRTTI_hash() const
+	const size_t& GraphicsComponent::getRTTI_hash() const
 	{
 		return type_hash;
 	}
 
-	bool Graphics::isStatic() const
+	bool GraphicsComponent::isStatic() const
 	{
 		return m_isStatic;
 	}
 
-	Sprite* Graphics::getSprite()
+	Sprite* GraphicsComponent::getSprite()
 	{
 		return &m_sprite;
 	}
 
-	int Graphics::getZValue() const
+	int GraphicsComponent::getZValue() const
 	{
 		return m_zValue;
 	}
 
-	void Graphics::setZValue( int zValue )
+	void GraphicsComponent::setZValue( int zValue )
 	{
 		m_zValue = zValue;
 	}
 
-	void Graphics::onLoadSaveInformation( const std::vector<std::string>& information )
+	void GraphicsComponent::onLoadSaveInformation( const std::vector<std::string>& information )
 	{
 		if( information.size() != 1 )
 			throw exception();
@@ -197,22 +197,22 @@ namespace kg
 		m_zValue = atoi( information.at( 0 ).c_str() );
 	}
 
-	std::vector<std::string> Graphics::onWriteSaveInformation()
+	std::vector<std::string> GraphicsComponent::onWriteSaveInformation()
 	{
 		return{ to_string( m_zValue ) };
 	}
 
-	const size_t Graphics::type_hash = getRuntimeTypeInfo<Graphics>();
+	const size_t GraphicsComponent::type_hash = getRuntimeTypeInfo<GraphicsComponent>();
 
-	const std::string Graphics::PLUGIN_NAME = "Graphics";
+	const std::string GraphicsComponent::PLUGIN_NAME = "Graphics";
 
-	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_LEFT = "texrect_left";
+	const std::string GraphicsComponent::BLUEPRINT_TEXTURE_RECT_LEFT = "texrect_left";
 
-	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_TOP = "texrect_top";
+	const std::string GraphicsComponent::BLUEPRINT_TEXTURE_RECT_TOP = "texrect_top";
 
-	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_HEIGHT = "texrect_height";
+	const std::string GraphicsComponent::BLUEPRINT_TEXTURE_RECT_HEIGHT = "texrect_height";
 
-	const std::string Graphics::BLUEPRINT_TEXTURE_RECT_WIDTH = "texrect_width";
+	const std::string GraphicsComponent::BLUEPRINT_TEXTURE_RECT_WIDTH = "texrect_width";
 
-	const std::string Graphics::BLUEPRINT_STATIC = "static";
+	const std::string GraphicsComponent::BLUEPRINT_STATIC = "static";
 }

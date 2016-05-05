@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "Transformation.h"
+#include "TransformationComponent.h"
 
 namespace kg
 {

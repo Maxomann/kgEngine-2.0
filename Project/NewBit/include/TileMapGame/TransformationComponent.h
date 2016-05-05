@@ -4,7 +4,7 @@
 
 namespace kg
 {
-	class Transformation : public Component, public CallbackReciever
+	class TransformationComponent : public Component, public CallbackReciever
 	{
 		sf::FloatRect m_globalBounds;
 

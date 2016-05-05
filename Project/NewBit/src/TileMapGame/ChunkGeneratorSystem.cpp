@@ -13,8 +13,8 @@ namespace kg
 			for( int y = 0; y < count; ++y )
 			{
 				auto tile = world.createNewSaveableEntity( engine, world, engine.randomNumberGenerator.getRandomInt( 101, 103 ) );//grass
-				auto transform = tile.getComponent<Transformation>();
-				auto graphics = tile.getComponent<Graphics>();
+				auto transform = tile.getComponent<TransformationComponent>();
+				auto graphics = tile.getComponent<GraphicsComponent>();
 
 				int chunkPositionInPixelX = chunkPositionInChunks.x*Constants::CHUNK_SIZE;
 				int chunkPositionInPixelY = chunkPositionInChunks.y*Constants::CHUNK_SIZE;

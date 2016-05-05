@@ -116,9 +116,9 @@ namespace kg
 		EntityPointerContainer entitiesWithCamera;
 		for( auto& el : entities )
 		{
-			if( el->hasComponent<Graphics>() )
+			if( el->hasComponent<GraphicsComponent>() )
 				entitiesWithGraphics.push_back( el );
-			if( el->hasComponent<Camera>() )
+			if( el->hasComponent<CameraComponent>() )
 				entitiesWithCamera.push_back( el );
 		}
 
@@ -146,7 +146,7 @@ namespace kg
 	void GraphicsSystem::m_initCameras( Engine& engine, World& world )
 	{
 		//init camera
-		auto* camera = world.addEntity( Camera::CREATE( engine, world, m_drawDistance ) );
+		auto* camera = world.addEntity( CameraComponent::CREATE( engine, world, m_drawDistance ) );
 		m_cameras.push_back( camera );
 	}
 
@@ -159,7 +159,7 @@ namespace kg
 	{
 		m_drawDistance = drawDistance;
 		for( auto& cam : m_cameras )
-			cam->getComponent<Camera>()->setDrawDistance( m_drawDistance );
+			cam->getComponent<CameraComponent>()->setDrawDistance( m_drawDistance );
 	}
 
 	unsigned int GraphicsSystem::getDrawDistance() const
@@ -180,8 +180,8 @@ namespace kg
 		glewInit();
 	}
 
-	vector<tuple<Vector3i, Entity*, Graphics*>>::iterator findInToDraw( vector<tuple<Vector3i, Entity*, Graphics*>>& container,
-																		Entity* el )
+	vector<tuple<Vector3i, Entity*, GraphicsComponent*>>::iterator findInToDraw( vector<tuple<Vector3i, Entity*, GraphicsComponent*>>& container,
+																				 Entity* el )
 	{
 		for( auto it = container.begin(); it != container.end(); ++it )
 			if( get<1>( *it ) == el )
@@ -195,7 +195,7 @@ namespace kg
 
 		// draw
 		for( const auto& camera : m_cameras )
-			camera->getComponent<Camera>()->drawSpritesToRenderWindow( *r_renderWindow, m_toDrawContainer );
+			camera->getComponent<CameraComponent>()->drawSpritesToRenderWindow( *r_renderWindow, m_toDrawContainer );
 
 		r_gui->draw();
 		r_renderWindow->display();

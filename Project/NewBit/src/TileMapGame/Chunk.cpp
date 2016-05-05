@@ -26,13 +26,13 @@ namespace kg
 
 	void Chunk::addEntity( Entity* entity )
 	{
-		if( calculateChunkPositionForPosition2d( entity->getComponent<Transformation>()->getPosition() ) != m_position )
+		if( calculateChunkPositionForPosition2d( entity->getComponent<TransformationComponent>()->getPosition() ) != m_position )
 			throw exception();
 		if( m_position == Position2d( 0, 0, 0 ) )
 			int a = 0;
 
 		//update entityData
-		auto transformationComponent = entity->getComponent<Transformation>();
+		auto transformationComponent = entity->getComponent<TransformationComponent>();
 		transformationComponent->setChunkPostion( m_position );
 
 		m_entities.push_back( entity );
@@ -41,7 +41,7 @@ namespace kg
 	void Chunk::removeEntity( Entity* entity )
 	{
 		//update entityData
-		auto transformationComponent = entity->getComponent<Transformation>();
+		auto transformationComponent = entity->getComponent<TransformationComponent>();
 		//transformationComponent->removeChunkPosition();
 
 		m_entities.erase( std::remove( m_entities.begin(), m_entities.end(), entity ), m_entities.end() );

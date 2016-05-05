@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "Transformation.h"
+#include "TransformationComponent.h"
 #include "Position.h"
-#include "Graphics.h"
+#include "GraphicsComponent.h"
 
 namespace kg
 {

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-#include "Graphics.h"
-#include "Transformation.h"
+#include "GraphicsComponent.h"
+#include "TransformationComponent.h"
 #include "AnimationComponent.h"
 
 #include "ChunkSystem.h"
@@ -25,13 +25,13 @@ extern "C"
 
 		//Components
 		pluginManager.addPluginFactory(
-			std::make_shared<PluginFactory<Component, Transformation>>(
+			std::make_shared<PluginFactory<Component, TransformationComponent>>(
 				( int )id::ComponentPluginId::TRANSFORMATION,
-				Transformation::PLUGIN_NAME ) );
+				TransformationComponent::PLUGIN_NAME ) );
 		pluginManager.addPluginFactory(
-			std::make_shared<PluginFactory<Component, Graphics>>(
+			std::make_shared<PluginFactory<Component, GraphicsComponent>>(
 				( int )id::ComponentPluginId::GRAPHICS,
-				Graphics::PLUGIN_NAME ) );
+				GraphicsComponent::PLUGIN_NAME ) );
 		pluginManager.addPluginFactory(
 			std::make_shared<PluginFactory<Component, AnimationComponent>>(
 				( int )id::ComponentPluginId::ANIMATION,

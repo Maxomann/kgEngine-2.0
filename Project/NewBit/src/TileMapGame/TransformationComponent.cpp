@@ -1,10 +1,10 @@
-#include "Transformation.h"
+#include "TransformationComponent.h"
 using namespace std;
 using namespace sf;
 
 namespace kg
 {
-	void Transformation::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
+	void TransformationComponent::preInit( Engine& engine, const std::map<blueprint::ComponentValue::Name, const blueprint::ComponentValue*>& blueprintValues )
 	{
 		auto it = blueprintValues.find( BLUEPRINT_HEIGHT );
 		if( it != blueprintValues.end() )
@@ -16,59 +16,59 @@ namespace kg
 		recalculateGlobalBounds();
 	}
 
-	void Transformation::init( Engine& engine, const World& world, const ComponentManager& thisEntity )
+	void TransformationComponent::init( Engine& engine, const World& world, const ComponentManager& thisEntity )
 	{
 		auto saveComponent = thisEntity.getComponentTry<Save>();
 		if( saveComponent )
 		{
 			m_connectToSignal( saveComponent->s_loadSaveInformation[( int )id::ComponentPluginId::TRANSFORMATION],
-							   &Transformation::onLoadSaveInformation );
+							   &TransformationComponent::onLoadSaveInformation );
 			m_connectToSignal( saveComponent->s_writeSaveInformation[( int )id::ComponentPluginId::TRANSFORMATION],
-							   &Transformation::onWriteSaveInformation );
+							   &TransformationComponent::onWriteSaveInformation );
 		}
 	}
 
-	void Transformation::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
+	void TransformationComponent::update( Engine& engine, World& world, ComponentManager& thisEntity, const sf::Time& frameTime )
 	{
 		return;
 	}
 
-	double Transformation::getUpdateImportance() const
+	double TransformationComponent::getUpdateImportance() const
 	{
 		return id::ComponentUpdateImportance::TRANSFORMATION;
 	}
 
-	std::vector<Plugin::Id> Transformation::getRequieredComponents() const
+	std::vector<Plugin::Id> TransformationComponent::getRequieredComponents() const
 	{
 		return{ };
 	}
 
-	const std::string& Transformation::getPluginName() const
+	const std::string& TransformationComponent::getPluginName() const
 	{
 		return PLUGIN_NAME;
 	}
 
-	Plugin::Id Transformation::getPluginId() const
+	Plugin::Id TransformationComponent::getPluginId() const
 	{
 		return id::ComponentPluginId::TRANSFORMATION;
 	}
 
-	sf::FloatRect Transformation::getGlobalBounds() const
+	sf::FloatRect TransformationComponent::getGlobalBounds() const
 	{
 		return m_globalBounds;
 	}
 
-	bool Transformation::intersects( const sf::FloatRect& rect )const
+	bool TransformationComponent::intersects( const sf::FloatRect& rect )const
 	{
 		return m_globalBounds.intersects( rect );
 	}
 
-	const size_t& Transformation::getRTTI_hash() const
+	const size_t& TransformationComponent::getRTTI_hash() const
 	{
 		return type_hash;
 	}
 
-	void Transformation::setPosition( const Position2d& position )
+	void TransformationComponent::setPosition( const Position2d& position )
 	{
 		m_position = position;
 
@@ -76,12 +76,12 @@ namespace kg
 		s_position2dChanged( m_position );
 	}
 
-	const Position2d& Transformation::getPosition() const
+	const Position2d& TransformationComponent::getPosition() const
 	{
 		return m_position;
 	}
 
-	void Transformation::moveXYsetWorldLayer( const sf::Vector2i& offsetXY, int worldLayer )
+	void TransformationComponent::moveXYsetWorldLayer( const sf::Vector2i& offsetXY, int worldLayer )
 	{
 		m_position.x = offsetXY.x;
 		m_position.y = offsetXY.y;
@@ -91,7 +91,7 @@ namespace kg
 		s_position2dChanged( m_position );
 	}
 
-	void Transformation::setPositionXY( const PositionXY& position )
+	void TransformationComponent::setPositionXY( const PositionXY& position )
 	{
 		m_position.x = position.x;
 		m_position.y = position.y;
@@ -102,12 +102,12 @@ namespace kg
 		s_position2dChanged( m_position );
 	}
 
-	kg::PositionXY Transformation::getPositionXY() const
+	kg::PositionXY TransformationComponent::getPositionXY() const
 	{
 		return m_position.toPositionXY();
 	}
 
-	void Transformation::moveXY( const sf::Vector2i& offsetXY )
+	void TransformationComponent::moveXY( const sf::Vector2i& offsetXY )
 	{
 		m_position.x += offsetXY.x;
 		m_position.y += offsetXY.y;
@@ -118,7 +118,7 @@ namespace kg
 		s_position2dChanged( m_position );
 	}
 
-	void Transformation::setRotation( const float rotationInDegree )
+	void TransformationComponent::setRotation( const float rotationInDegree )
 	{
 		m_rotation = rotationInDegree;
 
@@ -128,12 +128,12 @@ namespace kg
 		s_rotationChanged( m_rotation );
 	}
 
-	float Transformation::getRotationInDegree() const
+	float TransformationComponent::getRotationInDegree() const
 	{
 		return m_rotation;
 	}
 
-	void Transformation::rotate( const float offsetInDegree )
+	void TransformationComponent::rotate( const float offsetInDegree )
 	{
 		m_rotation += offsetInDegree;
 
@@ -143,7 +143,7 @@ namespace kg
 		s_rotationChanged( m_rotation );
 	}
 
-	void Transformation::setSize( const sf::Vector2i& size )
+	void TransformationComponent::setSize( const sf::Vector2i& size )
 	{
 		m_size = size;
 
@@ -153,12 +153,12 @@ namespace kg
 		s_sizeChanged( m_size );
 	}
 
-	sf::Vector2i Transformation::getSize() const
+	sf::Vector2i TransformationComponent::getSize() const
 	{
 		return m_size;
 	}
 
-	void Transformation::onLoadSaveInformation( const std::vector<std::string>& information )
+	void TransformationComponent::onLoadSaveInformation( const std::vector<std::string>& information )
 	{
 		if( information.size() != 6 )
 			throw exception();
@@ -178,7 +178,7 @@ namespace kg
 		}
 	}
 
-	std::vector<std::string> Transformation::onWriteSaveInformation()
+	std::vector<std::string> TransformationComponent::onWriteSaveInformation()
 	{
 		return{
 			to_string( m_position.x ),
@@ -189,7 +189,7 @@ namespace kg
 			to_string( m_size.y ), };
 	}
 
-	void Transformation::recalculateGlobalBounds()
+	void TransformationComponent::recalculateGlobalBounds()
 	{
 		RectangleShape shape;
 
@@ -201,12 +201,12 @@ namespace kg
 		m_globalBounds = shape.getGlobalBounds();
 	}
 
-	int Transformation::getWorldLayer() const
+	int TransformationComponent::getWorldLayer() const
 	{
 		return m_position.worldLayer;
 	}
 
-	void Transformation::setWorldLayer( int layer )
+	void TransformationComponent::setWorldLayer( int layer )
 	{
 		m_position.worldLayer = layer;
 
@@ -214,20 +214,20 @@ namespace kg
 		s_position2dChanged( m_position );
 	}
 
-	const boost::optional<ChunkPosition>& Transformation::getLastChunkPosition() const
+	const boost::optional<ChunkPosition>& TransformationComponent::getLastChunkPosition() const
 	{
 		return m_chunkPosition;
 	}
 
-	void Transformation::setChunkPostion( ChunkPosition chunkPosition )
+	void TransformationComponent::setChunkPostion( ChunkPosition chunkPosition )
 	{
 		m_chunkPosition = chunkPosition;
 	}
 
-	const std::string Transformation::PLUGIN_NAME = "Transformation";
+	const std::string TransformationComponent::PLUGIN_NAME = "Transformation";
 
-	const size_t Transformation::type_hash = getRuntimeTypeInfo<Transformation>();
+	const size_t TransformationComponent::type_hash = getRuntimeTypeInfo<TransformationComponent>();
 
-	const std::string Transformation::BLUEPRINT_WIDTH = "width";
-	const std::string Transformation::BLUEPRINT_HEIGHT = "height";
+	const std::string TransformationComponent::BLUEPRINT_WIDTH = "width";
+	const std::string TransformationComponent::BLUEPRINT_HEIGHT = "height";
 }
