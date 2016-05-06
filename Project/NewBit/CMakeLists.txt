@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(NewBit)
+#set_property(GLOBAL PROPERTY DEBUG_CONFIGURATIONS Debug)
 
 #NewBit
 include_directories("include/NewBit")
@@ -40,8 +41,9 @@ source_group("Header Files\\GameState" FILES ${tm}ConsoleGameState.h ${tm}Defaul
 
 
 #Link
-set ( PROJECT_LINK_LIBS sfml-audio.lib sfml-graphics.lib sfml-main.lib sfml-network.lib sfml-system.lib sfml-window.lib tgui.lib thor.lib glew32.lib OpenGL32.lib )
-set ( PROJECT_LINK_LIBS_DEBUG sfml-audio-d.lib sfml-graphics-d.lib sfml-main-d.lib sfml-network-d.lib sfml-system-d.lib sfml-window-d.lib tgui-d.lib thor-d.lib glew32.lib OpenGL32.lib )
+set ( PROJECT_LINK_LIBS optimized sfml-audio.lib optimized sfml-graphics.lib optimized sfml-main.lib optimized sfml-network.lib optimized sfml-system.lib optimized sfml-window.lib optimized tgui.lib optimized thor.lib )
+set ( PROJECT_LINK_LIBS_DEBUG debug sfml-audio-d.lib debug sfml-graphics-d.lib debug sfml-main-d.lib debug sfml-network-d.lib debug sfml-system-d.lib debug sfml-window-d.lib debug tgui-d.lib debug thor-d.lib )
+set ( PROJECT_LINK_LIBS_GENERAL general glew32.lib general OpenGL32.lib )
 
 link_directories( "./Debug" )
 link_directories( "./Release" )
@@ -74,8 +76,7 @@ link_directories( "../TGUI/lib/Debug" )
 
 #NewBit Executable
 add_executable(NewBit ${NEWBIT_SOURCES} ${NEWBIT_HEADERS})
-target_link_libraries (NewBit optimized ${PROJECT_LINK_LIBS})
-target_link_libraries (NewBit debug ${PROJECT_LINK_LIBS_DEBUG})
+target_link_libraries (NewBit ${PROJECT_LINK_LIBS_GENERAL} ${PROJECT_LINK_LIBS_DEBUG} ${PROJECT_LINK_LIBS})
 
 SET_TARGET_PROPERTIES( NewBit
 	PROPERTIES
@@ -89,8 +90,7 @@ set_target_properties( NewBit
 
 #TileMapGame Library
 add_library(TileMapGame SHARED ${TILEMAPGAME_SOURCES} ${TILEMAPGAME_HEADERS})
-target_link_libraries (TileMapGame debug ${PROJECT_LINK_LIBS_DEBUG} NewBit-d.lib)
-target_link_libraries (TileMapGame optimized ${PROJECT_LINK_LIBS} NewBit.lib)
+target_link_libraries (TileMapGame ${PROJECT_LINK_LIBS_GENERAL} ${PROJECT_LINK_LIBS_DEBUG} debug NewBit-d.lib ${PROJECT_LINK_LIBS} optimized NewBit.lib)
 
 SET_TARGET_PROPERTIES( TileMapGame
 	PROPERTIES

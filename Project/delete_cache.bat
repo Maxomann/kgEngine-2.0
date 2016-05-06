@@ -5,10 +5,10 @@
 RMDIR "SFML/CMakeFiles" /s /q
 
 ::Thor
-RMDIR "SFML/CMakeFiles" /s /q
+RMDIR "Thor/CMakeFiles" /s /q
 
 ::TGUI
-RMDIR "SFML/CMakeFiles" /s /q
+RMDIR "TGUI/CMakeFiles" /s /q
 
 ::NewBit
 RMDIR "NewBit/CMakeFiles" /s /q
