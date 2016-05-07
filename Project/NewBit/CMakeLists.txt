@@ -106,11 +106,19 @@ set_target_properties( TileMapGame
 add_custom_command(
             TARGET TileMapGame 
             POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}../../../Build/$<CONFIGURATION>/Config ${CMAKE_BINARY_DIR}/Config)
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}../../../AddToBuild/Config ${CMAKE_BINARY_DIR}/Config)
 add_custom_command(
             TARGET TileMapGame 
             POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}../../../Build/$<CONFIGURATION>/Packages ${CMAKE_BINARY_DIR}/Packages)
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}../../../AddToBuild/Packages ${CMAKE_BINARY_DIR}/Packages)
+add_custom_command(
+            TARGET TileMapGame 
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}../../../AddToBuild/Config ${CMAKE_BINARY_DIR}../../../Build/$<CONFIGURATION>/Config)
+add_custom_command(
+            TARGET TileMapGame 
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}../../../AddToBuild/Packages ${CMAKE_BINARY_DIR}../../../Build/$<CONFIGURATION>/Packages)
 add_custom_command(
             TARGET TileMapGame 
             POST_BUILD

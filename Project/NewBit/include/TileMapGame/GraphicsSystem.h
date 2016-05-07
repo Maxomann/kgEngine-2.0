@@ -41,6 +41,8 @@ namespace kg
 		void m_onSavegameOpened( Engine& engine, World& world );
 		void m_onSavegameClosed();
 
+		void initGlew();
+
 	public:
 		GraphicsSystem();
 

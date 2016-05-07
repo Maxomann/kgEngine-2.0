@@ -5,7 +5,7 @@ namespace kg
 {
 	namespace Constants
 	{
-		const std::string PACKAGE_NAME = "Testpackage";
+		const std::string PACKAGE_NAME = "TileMapGame";
 
 		const int CHUNK_SIZE = 1280;//px
 		const int TILE_SIZE = 64;//px

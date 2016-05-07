@@ -10,7 +10,7 @@ BLUEPRINT Tile
 	END
 	
 	COMPONENT Graphics
-		package:"Testpackage"
+		package:"TileMapGame"
 		path:"tileset.png"
 		static:1
 	END
@@ -26,7 +26,7 @@ INHERIT Tile
 	END
 	
 	COMPONENT Animation
-		package:"Testpackage"
+		package:"TileMapGame"
 		path:"testanimation.ani"
 	END
 

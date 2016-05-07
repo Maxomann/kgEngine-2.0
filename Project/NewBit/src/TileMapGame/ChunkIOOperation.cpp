@@ -58,7 +58,10 @@ namespace kg
 
 	bool ChunkIOOperation::isReadyToFinish() const
 	{
-		return m_future.wait_for( chrono::milliseconds( 0 ) ) == future_status::ready;
+		auto status = m_future.wait_for( chrono::milliseconds( 0 ) );
+		bool val = (status == future_status::ready);
+		//bool val = m_future._Is_ready();
+		return val;
 	}
 
 	ChunkLoadOperation::ChunkLoadOperation( Engine& engine,

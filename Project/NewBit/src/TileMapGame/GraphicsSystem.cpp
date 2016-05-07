@@ -49,6 +49,7 @@ namespace kg
 				sf::Style::Close,
 				contextSettings );
 		}
+		initGlew();//call after sf::RenderWindow.create() has been called to ensure valid opengl context
 
 		glEnable( GL_SCISSOR_TEST );
 		glScissor( 0, 0, engine.renderWindow.getSize().x, engine.renderWindow.getSize().y );
@@ -58,10 +59,21 @@ namespace kg
 		setDrawDistance( m_configValues.drawDistance );
 
 		engine.inputManager.gui.setWindow( engine.renderWindow );
-		engine.inputManager.gui.setFont( engine.resourceManager.getResource<sf::Font>(
+		auto dejaVuSans = engine.resourceManager.getResource<sf::Font>(
 			Constants::PACKAGE_NAME,
 			Folder::FONTS + "DejaVuSans.ttf"
-			) );
+			);
+		//engine.inputManager.gui.setFont( dejaVuSans );
+	}
+
+	void GraphicsSystem::initGlew()
+	{
+		GLenum err = glewInit();
+		if( err != GLEW_OK )
+		{
+			//Problem: glewInit failed, something is seriously wrong.
+			cout << "glewInit failed, aborting." << endl;
+		}
 	}
 
 	void GraphicsSystem::sfmlEvent( Engine& engine, World& world, SaveManager& saveManager, const sf::Event& sfEvent )
@@ -176,9 +188,7 @@ namespace kg
 	}
 
 	GraphicsSystem::GraphicsSystem()
-	{
-		glewInit();
-	}
+	{ }
 
 	vector<tuple<Vector3i, Entity*, GraphicsComponent*>>::iterator findInToDraw( vector<tuple<Vector3i, Entity*, GraphicsComponent*>>& container,
 																				 Entity* el )
