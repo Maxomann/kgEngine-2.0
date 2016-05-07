@@ -101,3 +101,17 @@ set_target_properties( TileMapGame
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}../../../Build"
 )
+
+#Custom Commands
+add_custom_command(
+            TARGET TileMapGame 
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}../../../Build/$<CONFIGURATION>/Config ${CMAKE_BINARY_DIR}/Config)
+add_custom_command(
+            TARGET TileMapGame 
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_BINARY_DIR}../../../Build/$<CONFIGURATION>/Packages ${CMAKE_BINARY_DIR}/Packages)
+add_custom_command(
+            TARGET TileMapGame 
+            POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}../../../Build/$<CONFIGURATION>/$<TARGET_FILE_NAME:TileMapGame> ${CMAKE_BINARY_DIR}/TileMapGame_temp.dll)

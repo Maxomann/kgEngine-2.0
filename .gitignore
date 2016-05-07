@@ -156,8 +156,6 @@ $RECYCLE.BIN/
 # Mac desktop service store files
 .DS_Store
 *.save
-/kgEngine-2.0/kgEngine-2.0/TileMapGame.dll
-/kgEngine-2.0/_libraries/_download
 *.db
 *.opendb
 
@@ -180,6 +178,10 @@ Project/glew/
 Project/SFML/
 Project/TGUI/
 Project/Thor/
+Project/NewBit/Config
+Project/NewBit/Packages
+Project/NewBit/Saves
+Project/NewBit/TileMapGame_temp.dll
 
 # =========================
 # Project Files
