@@ -189,3 +189,5 @@ Project/NewBit/TileMapGame_temp.dll
 *.vcxproj
 *.filters
 *.sln
+
+_local/
